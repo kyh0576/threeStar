@@ -33,10 +33,13 @@
     }
 
     .sidebar-logo {
-        width: 50px;
-        height: 50px;
-        margin-bottom: 20px;
+      display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+        width: 100%;
     }
+    
 
     .sidebar-menu {
         display: flex;
@@ -103,7 +106,9 @@
     <!-- 상단 로고 + 메뉴 -->
     <div>
         <div class="sidebar-logo">
-              <img src="${pageContext.request.contextPath}/resources/asset/logo.png" alt="팀로고">
+        	<a href="${pageContext.request.contextPath}/common/mainPage" class="menu-item">
+              <img src="${pageContext.request.contextPath}/resources/asset/smalllogo.png" alt="팀로고">
+        	</a>
         </div>
         <div class="sidebar-menu">
             <a href="${pageContext.request.contextPath}/common/mainPage" class="menu-item">
