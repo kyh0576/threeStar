@@ -382,6 +382,7 @@
   <jsp:include page="../common/mainMenu.jsp"/>
 
   <!-- 왼쪽 사이드바 -->
+  <div style="border: 1px solid f8f9fa; " class=""border">
   <div class="left-sidebar">
     <div class="sidebar-inner">
       <div class="sidebar-top">
@@ -473,11 +474,12 @@
         <span>K - Class</span>
         <span class="dropdown-arrow">▼</span>
       </div>
+    </div>
       
       <div class="weather-section">
         <div class="weather-icon">☀️</div>
         <div class="temperature">21.8°</div>
-        <div class="weather-info">어제보다 2도켜 높음</div>
+        <div class="weather-info">어제보다 2도 높은 맑은 날씨</div>
       </div>
       
     </div>
@@ -607,7 +609,6 @@
     
     <br>
     <br>
-
 
       <div style="border: 1px solid f8f9fa;" class="border">
         <div class="hclass-info-title">H class 일정</div>
