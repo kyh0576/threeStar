@@ -14,4 +14,10 @@ public class CommonController  {
 	public String showMessageMainForm() {
 	    return "message/messageMainForm";  // => /WEB-INF/views/message/messageMainForm.jsp
 	}
+ 
+
+ @RequestMapping("/member/chat")
+	public String chatForm() {
+	    return "member/chat";  // => /WEB-INF/views/message/messageMainForm.jsp
+	}
 }
