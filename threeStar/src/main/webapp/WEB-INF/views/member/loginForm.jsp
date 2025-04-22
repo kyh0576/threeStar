@@ -174,7 +174,7 @@
 </style>
 </head>
 <body>
-    <form class="login-container" action="login.me" method="GET">
+    <form class="login-container" action="login.me" method="POST">
         <h1>Login</h1>
         
         <div class="input-group">
