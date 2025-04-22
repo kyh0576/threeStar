@@ -7,9 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<button onclick="location.href='loginForm.me'">로그인</button>
-	<button onclick="location.href='signinForm.me'">회원가입</button>
-	
-	<jsp:forward page="WEB-INF/views/common/mainMenu.jsp" />
+	<jsp:forward page="WEB-INF/views/common/mainPage.jsp"></jsp:forward>
 </body>
 </html>

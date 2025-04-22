@@ -143,7 +143,7 @@ body {
         <h1>회원가입</h1>
         <p>회원이 되어 다양한 혜택을 경험해 보세요!</p>
         
-        <form id="signup-form">
+        <form id="signup-form" action="insert.me" method="POST">
             <div class="form-group">
                 <label for="userid">
                     아이디 <span class="required">*</span>
@@ -194,6 +194,14 @@ body {
                 </div>
             </div>
             
+             <div class="form-group">
+                <label for="class_code">
+                    초대코드 <span class="required">*</span>
+                </label>
+                <input type="text" id="class_code" name="memClassCode" placeholder="휴대폰 번호 입력 (- 제외 11자리 입력)" required>
+            </div>
+            
+            
             <div class="btn-group">
                 <button type="submit" class="btn btn-primary">가입하기</button>
                 <button type="button" class="btn btn-secondary">가입취소</button>
@@ -220,6 +228,7 @@ body {
                 }
             });
             
+            /*
             // 폼 제출 이벤트
             signupForm.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -233,6 +242,7 @@ body {
                 alert('회원가입이 완료되었습니다!');
                 // 여기에 실제 회원가입 처리 로직 추가
             });
+            */
             
             // 가입취소 버튼
             document.querySelector('.btn-secondary').addEventListener('click', function() {

@@ -47,6 +47,8 @@ public class MemberController {
 		return mv;
 	}
 	
+    
+    // 메인페이지 연동되면 로그아웃 만들거임
 	@RequestMapping("logout.me")
 	public String logoutMember(HttpSession session) {
 		session.invalidate(); // 프로그램에 설정돼있는 모든 세션 무력화
@@ -76,16 +78,32 @@ public class MemberController {
 		
 		m.setMemPwd(encPwd); // Member 객체의 userPwd에 평문이 아닌 암호문으로 변경
 		
-		int result = mService.insertMember(m);
 		
-		if(result > 0) { // 성공 => 메인페이지 url 재요청
+		
+		int classCode = mService.selectClassCode(m.getMemClassCode());
+		System.out.println(classCode);
+		if(classCode > 0) { // 유효한 초대코드를 입력됐을때
+			System.out.println("클래스 코드가 유효합니다.");
 			
-			session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
-			return "redirect:/";
+			int result = mService.insertMember(m);
 			
-		}else { // 실패 => 에러문구 담아서 에러페이지
-			model.addAttribute("errorMsg", "회원가입실패");
+			if(result > 0) { // 성공 => 메인페이지 url 재요청
+				System.out.println("회원가입 성공");
+				//session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
+				return "redirect:/";
+				
+			}else { // 실패 => 에러문구 담아서 에러페이지
+				System.out.println("회원가입 실패");
+				//model.addAttribute("errorMsg", "회원가입실패");
+				return "common/errorPage";
+			}
+		}else { // 유효하지 않는 초대코드를 입력했을때
+			System.out.println("초대코드가 다릅니다. 다시 입력해 주세요");
+			
 			return "common/errorPage";
 		}
+		
+		
+		
 	}
 }

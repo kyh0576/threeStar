@@ -17,4 +17,7 @@ public interface MemberService {
 
     // 아이디 중복체크 서비스(select)
     int idCheck(String userId);
+    
+    // 초대코드 유호한지 확인(select)
+    int selectClassCode(String classCode);
 }
