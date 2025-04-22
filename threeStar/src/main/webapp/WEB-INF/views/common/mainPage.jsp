@@ -36,21 +36,6 @@
       align-items: center;
     }
     
-    .sidebar-logo {
-      width: 30px;
-      height: 30px;
-      margin-right: 10px;
-      background-color: #5bc7f8;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .sidebar-logo img {
-      width: 18px;
-      height: 18px;
-    }
     
     .sidebar-title {
       font-size: 16px;
