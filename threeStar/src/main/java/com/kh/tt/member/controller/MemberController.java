@@ -32,12 +32,12 @@ public class MemberController {
     @RequestMapping("login.me")
 	public ModelAndView loginMember(Member m, HttpSession session, ModelAndView mv) {
 		
-		Member loginMem = mService.loginMember(m);
+		Member loginMember = mService.loginMember(m);
 		
-		if(loginMem != null && bcryptPasswordEncoder.matches(m.getMemPwd(), loginMem.getMemPwd())) {
+		if(loginMember != null && bcryptPasswordEncoder.matches(m.getMemPwd(), loginMember.getMemPwd())) {
 			// 로그인 성공
-			session.setAttribute("loginUser", loginMem);
-			mv.setViewName("redirect:/");
+			session.setAttribute("loginMember", loginMember);
+			mv.setViewName("common/mainPage");
 		}else {
 			// 로그인 실패
 			mv.addObject("errorMsg", "로그인 실패!");
