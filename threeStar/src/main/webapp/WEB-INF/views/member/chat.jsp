@@ -31,7 +31,6 @@
     }
     
     .sidebar-top {
-      padding: 20px;
       padding-bottom: 15px;
       display: flex;
       align-items: center;
@@ -379,11 +378,13 @@
   </style>
 </head>
 <body>
+  <!-- 이쪽에 메뉴바 포함 할꺼임 -->
+  <jsp:include page="../common/mainMenu.jsp"/>
+
   <!-- 왼쪽 사이드바 -->
   <div class="left-sidebar">
     <div class="sidebar-inner">
       <div class="sidebar-top">
-        <div class="sidebar-logo">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
           </svg>
