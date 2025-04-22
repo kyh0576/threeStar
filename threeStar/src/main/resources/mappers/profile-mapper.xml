@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="profileMapper">
+
+	<resultMap id="profileResult" type="Profile">
+		<result column="MEM_ID" property="memId" />
+		<result column="MEM_NAME" property="memName" />
+		<result column="PHONE" property="phone" />
+		<result column="EMAIL" property="email" />
+		<result column="MEM_PWD" property="memPwd" />
+	</resultMap>
+	
+	<select id="selectProfile" resultType="string">
+		select
+			  MEM_ID
+			, MEM_NAME
+		from MEMBER
+		where status='Y'
+		and MEM_NO = #{memNo}
+	</select>
+	
+	<select id="selectProfileDetail" resultMap="profileResult">
+		select
+			  MEM_ID
+			, MEM_NAME
+			, PHONE
+			, EMAIL
+			, MEM_PWD
+		from MEMBER
+		where MEM_ID = #{memId}
+	</select>
+	
+	<update id="updateProfile">
+		update
+			  MEMBER
+		  set
+		  	  MEM_NAME = #{memName}
+			  PHONE = #{phone}
+			  EMAIL = #{email}
+			  MEM_PWD = #{memPwd}
+		where MEM_ID = #{memId}
+	</update>
+
+</mapper>
