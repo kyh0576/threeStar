@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>로그인</title>
 <style>
      * {
          margin: 0;
@@ -91,7 +91,7 @@
          color: white;
          background-color: #53a2dd;
          cursor: pointer;
-         margin-bottom: 30px;
+         margin-bottom: 20px;
          transition: background-color 0.3s;
      }
      
@@ -99,8 +99,28 @@
          background-color: #4590c7;
      }
      
+     .signup-btn {
+         width: 100%;
+         padding: 15px;
+         border: none;
+         border-radius: 50px;
+         font-size: 16px;
+         font-weight: bold;
+         color: #53a2dd;
+         background-color: white;
+         cursor: pointer;
+         margin-bottom: 30px;
+         transition: all 0.3s;
+         border: 2px solid #53a2dd;
+     }
+     
+     .signup-btn:hover {
+         background-color: #f0f7fc;
+     }
+     
      .social-login {
          text-align: center;
+         margin-top: 20px;
      }
      
      .social-login p {
@@ -109,44 +129,49 @@
          font-size: 14px;
      }
      
-     .social-icons {
-         display: flex;
-         justify-content: center;
-         gap: 15px;
-     }
-     
      .social-icon {
-         width: 40px;
-         height: 40px;
-         border-radius: 50%;
+         width: 100%;
+         height: 45px;
+         border-radius: 50px;
          display: flex;
          align-items: center;
          justify-content: center;
          color: white;
          cursor: pointer;
          transition: transform 0.3s ease;
+         background-color: #ea4335;
+         font-weight: bold;
+         font-size: 16px;
      }
      
      .social-icon:hover {
-         transform: scale(1.1);
-     }
-     
-     .facebook {
-         background-color: #3b5998;
-     }
-     
-     .twitter {
-         background-color: #1da1f2;
+         transform: scale(1.03);
      }
      
      .google {
          background-color: #ea4335;
      }
      
-     .apple {
-         background-color: #53a2dd;
+     .divider {
+         display: flex;
+         align-items: center;
+         text-align: center;
+         margin: 30px 0;
      }
- </style>
+     
+     .divider::before,
+     .divider::after {
+         content: '';
+         flex: 1;
+         border-bottom: 1px solid #ddd;
+     }
+     
+     .divider span {
+         padding: 0 10px;
+         color: #777;
+         font-size: 14px;
+     }
+</style>
 </head>
 <body>
     <form class="login-container" action="login.me" method="GET">
@@ -167,15 +192,16 @@
             <a href="#" id="find-password">비밀번호 찾기</a>
         </div>
         
-        <button class="login-btn">LOGIN</button>
+        <button type="submit" class="login-btn">LOGIN</button>
+        <button type="button" id="signup-btn" class="signup-btn">회원가입</button>
+        
+        <div class="divider">
+            <span>OR</span>
+        </div>
         
         <div class="social-login">
-            <p>Or Sign Up Using</p>
-            <div class="social-icons">
-                <div class="social-icon facebook"></div>
-                <div class="social-icon twitter"></div>
-                <div class="social-icon google"></div>
-                <div class="social-icon apple"></div>
+            <div class="social-icon google" id="google-login">
+               Google 계정으로 로그인
             </div>
         </div>
     </form>
@@ -183,10 +209,12 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const loginBtn = document.querySelector('.login-btn');
+            const signupBtn = document.getElementById('signup-btn');
             const usernameInput = document.querySelector('input[type="text"]');
             const passwordInput = document.querySelector('input[type="password"]');
             const findIdLink = document.getElementById('find-id');
             const findPasswordLink = document.getElementById('find-password');
+            const googleLogin = document.getElementById('google-login');
             
             findIdLink.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -198,6 +226,19 @@
                 e.preventDefault();
                 alert('비밀번호 찾기 페이지로 이동합니다.');
                 // 비밀번호 찾기 페이지로 이동하는 로직
+            });
+            
+            signupBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // 회원가입 페이지로 이동하는 로직
+                window.location.href = 'signinForm.me';
+            });
+            
+            googleLogin.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('구글 로그인으로 진행합니다.');
+                // 구글 로그인 로직 실행
+                // OAuth 연동 코드 필요
             });
         });
     </script>

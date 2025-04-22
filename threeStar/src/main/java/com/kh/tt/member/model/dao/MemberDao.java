@@ -18,6 +18,10 @@ public class MemberDao {
         return sqlSession.insert("memberMapper.insertMember", m);
     }
 
+    public int selectClassCode(SqlSessionTemplate sqlSession, String classCode) {
+		return sqlSession.selectOne("memberMapper.selectClassCode", classCode);
+	}
+    
     public int updateMember(SqlSessionTemplate sqlSession, Member m) {
 
         return sqlSession.update("memberMapper.updateMember", m);
@@ -30,4 +34,6 @@ public class MemberDao {
     public int idCheck(SqlSessionTemplate sqlSession, String checkId) {
         return sqlSession.selectOne("memberMapper.idCheck", checkId);
     }
+
+	
 }

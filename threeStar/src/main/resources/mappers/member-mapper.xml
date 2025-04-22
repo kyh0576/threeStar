@@ -52,27 +52,32 @@
 		insert
 		  into member
 		  	 (
-		       user_id
-		     , user_pwd
-		     , user_name
-		     , email
-		     , gender
-		     , age
+		  	   mem_no
+		     , mem_id
+		     , mem_pwd
+		     , mem_name
 		     , phone
-		     , address
+		     , email
+		     , mem_class_code
 		     )
 		values
 			 (
-			   #{userId}
-			 , #{userPwd}
-			 , #{userName}
-			 , #{email}
-			 , #{gender}
-			 , #{age}
+			   seq_mem_no.nextval
+			 , #{memId}
+			 , #{memPwd}
+			 , #{memName}
 			 , #{phone}
-			 , #{address}
+			 , #{email}
+			 , #{memClassCode}
 			 )
 	</insert>
+	
+	<select id="selectClassCode" resultType="_int">
+		select
+		       count(*)
+		  from class
+		 where class_code = #{classCode}
+	</select>
 	
 	<update id="updateMember">
 		update member
