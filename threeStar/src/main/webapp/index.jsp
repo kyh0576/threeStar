@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	씨발 영훈님!
+	<button onclick="location.href='loginForm.me'">로그인</button>
+	<button onclick="location.href='signinForm.me'">회원가입</button>
 </body>
 </html>
