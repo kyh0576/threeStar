@@ -33,10 +33,13 @@
     }
 
     .sidebar-logo {
-        width: 50px;
-        height: 50px;
-        margin-bottom: 20px;
+      display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+        width: 100%;
     }
+    
 
     .sidebar-menu {
         display: flex;
@@ -103,18 +106,16 @@
     <!-- 상단 로고 + 메뉴 -->
     <div>
         <div class="sidebar-logo">
-            <svg viewBox="0 0 24 24" fill="#4a8cff">
-                <path d="M12,2C6.486,2,2,6.486,2,12s4.486,10,10,10s10-4.486,10-10S17.514,2,12,2z M12,20c-4.411,0-8-3.589-8-8s3.589-8,8-8 s8,3.589,8,8S16.411,20,12,20z"/>
-                <path d="M13,7h-2v6h2V7z"/>
-                <path d="M12,17L12,17c0.552,0,1-0.448,1-1v0c0-0.552-0.448-1-1-1h0c-0.552,0-1,0.448-1,1v0C11,16.552,11.448,17,12,17z"/>
-            </svg>
+        	<a href="${pageContext.request.contextPath}/common/mainPage" class="menu-item">
+              <img src="${pageContext.request.contextPath}/resources/asset/smalllogo.png" alt="팀로고">
+        	</a>
         </div>
         <div class="sidebar-menu">
-            <a href="#" class="menu-item">
+            <a href="${pageContext.request.contextPath}/common/mainPage" class="menu-item">
                 <div class="menu-icon">🏠</div>
                 <div>홈</div>
             </a>
-            <a href="#" class="menu-item active">
+            <a href="${pageContext.request.contextPath}/message/mainForm" class="menu-item active">
                 <div class="menu-icon">💬</div>
                 <div>채팅</div>
             </a>
@@ -149,9 +150,10 @@
         icon.classList.toggle('fa-bell');
         icon.classList.toggle('fa-bell-slash');
 
-        alert(isOn ? "알림 껐습니다." : "알림 켰습니다.");
+       
     }
 </script>
+
 
 </body>
 </html>
