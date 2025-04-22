@@ -149,7 +149,7 @@
         icon.classList.toggle('fa-bell');
         icon.classList.toggle('fa-bell-slash');
 
-        alert(isOn ? "알림 껐습니다." : "알림 켰습니다.");
+       
     }
 </script>
 
