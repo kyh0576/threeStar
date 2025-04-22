@@ -37,7 +37,7 @@ public class MemberController {
 		if(loginMember != null && bcryptPasswordEncoder.matches(m.getMemPwd(), loginMember.getMemPwd())) {
 			// 로그인 성공
 			session.setAttribute("loginMember", loginMember);
-			mv.setViewName("common/mainPage");
+			mv.setViewName("redirect:/main.me");
 		}else {
 			// 로그인 실패
 			mv.addObject("errorMsg", "로그인 실패!");
@@ -47,6 +47,10 @@ public class MemberController {
 		return mv;
 	}
 	
+    @RequestMapping("main.me")
+    public String mainPage() {
+        return "common/mainPage";
+    }
     
     // 메인페이지 연동되면 로그아웃 만들거임
 	@RequestMapping("logout.me")
