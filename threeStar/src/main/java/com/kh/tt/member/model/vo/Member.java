@@ -24,3 +24,6 @@ public class Member {
 	private String onlineSt;
 	private String adminYN;
 }
+
+
+
