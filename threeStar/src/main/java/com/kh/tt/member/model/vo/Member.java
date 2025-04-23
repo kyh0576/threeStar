@@ -22,4 +22,5 @@ public class Member {
 	private String snsKey;
 	private String status;
 	private String onlineSt;
+	private String adminYN;
 }

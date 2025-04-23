@@ -139,6 +139,37 @@ body {
     white-space: nowrap;
     min-width: 100px;
 }
+
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    margin-left: 5px;
+}
+
+.radio-label {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+.form-select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+    background-color: white;
+    cursor: pointer;
+}
+
+.form-select:focus {
+    border-color: #53a2dd;
+    box-shadow: 0 0 0 2px rgba(83, 162, 221, 0.2);
+}
 </style>
 </head>
 <body>
@@ -207,11 +238,50 @@ body {
             </div>
             
              <div class="form-group">
-                <label for="class_code">
-                    초대코드 <span class="required">*</span>
-                </label>
-                <input type="text" id="class_code" name="memClassCode" placeholder="초대코드를 입력해주세요" required>
-            </div>
+			    <label for="user_type">
+			        회원 유형 <span class="required">*</span>
+			    </label>
+			 </div>
+			   <div class="radio-group">
+				    <input type="radio" id="admin-type" name="userType" value="admin">
+				    <label for="admin-type" class="radio-label">관리자</label>
+				    
+				    <input type="radio" id="member-type" name="userType" value="member" checked>
+				    <label for="member-type" class="radio-label">일반회원</label>
+				</div>
+				
+				<div class="form-group" id="admin-class-container" style="display:none;">
+				    <label for="admin_class">
+				        클래스 선택 <span class="required">*</span>
+				    </label>
+				    <select id="admin_class" name="memClassCode" class="form-select">
+				        <option value="" disabled selected>클래스를 선택해주세요</option>
+				        <option value="A-Class">A-Class</option>
+				        <option value="B-Class">B-Class</option>
+				        <option value="C-Class">C-Class</option>
+				        <option value="D-Class">D-Class</option>
+				        <option value="E-Class">E-Class</option>
+				        <option value="F-Class">F-Class</option>
+				        <option value="G-Class">G-Class</option>
+				        <option value="qwe246">H-Class</option>
+				        <option value="dfe145">I-Class</option>
+				        <option value="pdf567">J-Class</option>
+				        <option value="odn356">K-Class</option>
+				    </select>
+				    
+				    <div id="admin-class-container">
+				        <input type="hidden" id="adminYN" name="adminYN" value="N">
+				    </div>
+				</div>
+			
+			<div class="form-group" id="member-code-container">
+			    <label for="class_code">
+			        초대코드 <span class="required">*</span>
+			    </label>
+			    <input type="text" id="class_code" name="memClassCode" placeholder="초대코드를 입력해주세요" required>
+			</div>
+            
+            
             
             <input type="hidden" id="is-password-valid" value="false">
             <input type="hidden" id="is-id-valid" value="false">
@@ -327,6 +397,56 @@ body {
                 }
             });
         });
+        
+        function updateFormByUserType() {
+            const adminRadio = document.getElementById('admin-type');
+            const memberRadio = document.getElementById('member-type');
+
+            const adminClassContainer = document.getElementById('admin-class-container');
+            const adminClass = document.getElementById('admin_class');
+
+            const memberCodeContainer = document.getElementById('member-code-container');
+            const memberCodeInput = document.getElementById('class_code');
+
+            const hiddenAdminYN = document.getElementById('adminYN'); // 새로운 hidden input 필요
+
+            if (adminRadio.checked) {
+                // 관리자일 경우
+                adminClassContainer.style.display = 'block';
+                memberCodeContainer.style.display = 'none';
+
+                adminClass.disabled = false;
+                adminClass.setAttribute('required', 'required');
+                adminClass.setAttribute('name', 'memClassCode');
+
+                memberCodeInput.disabled = true;
+                memberCodeInput.removeAttribute('required');
+                memberCodeInput.removeAttribute('name');
+
+                hiddenAdminYN.value = 'Y';
+            } else {
+                // 일반회원일 경우
+                adminClassContainer.style.display = 'none';
+                memberCodeContainer.style.display = 'block';
+
+                memberCodeInput.disabled = false;
+                memberCodeInput.setAttribute('required', 'required');
+                memberCodeInput.setAttribute('name', 'memClassCode');
+
+                adminClass.disabled = true;
+                adminClass.removeAttribute('required');
+                adminClass.removeAttribute('name');
+
+                hiddenAdminYN.value = 'N';
+            }
+        }
+
+        // 이벤트 연결
+        document.getElementById('admin-type').addEventListener('change', updateFormByUserType);
+        document.getElementById('member-type').addEventListener('change', updateFormByUserType);
+
+        // 페이지 로딩 시에도 초기화
+        document.addEventListener('DOMContentLoaded', updateFormByUserType);
     </script>
 </body>
 </html>

@@ -59,6 +59,7 @@
 		     , phone
 		     , email
 		     , mem_class_code
+		     , admin_yn
 		     )
 		values
 			 (
@@ -69,6 +70,7 @@
 			 , #{phone}
 			 , #{email}
 			 , #{memClassCode}
+			 , #{adminYN}
 			 )
 	</insert>
 	
