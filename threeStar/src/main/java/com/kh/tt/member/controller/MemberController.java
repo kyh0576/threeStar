@@ -40,8 +40,8 @@ public class MemberController {
 			mv.setViewName("redirect:/main.me");
 		}else {
 			// 로그인 실패
-			mv.addObject("errorMsg", "로그인 실패!");
-			mv.setViewName("common/errorPage");
+			mv.addObject("alertMsg", "로그인 실패!");
+			mv.setViewName("member/loginForm");
 		}
 		
 		return mv;
