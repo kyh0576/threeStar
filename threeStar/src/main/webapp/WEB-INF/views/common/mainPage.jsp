@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %> 
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="ko">
@@ -400,16 +400,16 @@
       }
     }
 
-    .border{
-      background-color: #f8f9fa;
-      padding: 16px;
-      border-radius: 10px;
-    }
-  </style>
+.border {
+	background-color: #f8f9fa;
+	padding: 16px;
+	border-radius: 10px;
+}
+</style>
 </head>
 <body>
-  <!-- 이쪽에 메뉴바 포함 할꺼임 -->
-  <jsp:include page="../common/mainMenu.jsp"/>
+	<!-- 이쪽에 메뉴바 포함 할꺼임 -->
+	<jsp:include page="../common/mainMenu.jsp" />
 
   <!-- 왼쪽 사이드바 -->
   <div style="border: 1px solid #f8f9fa; padding-left:0px" class="border">
@@ -492,80 +492,95 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
-          </div>
-          <div class="chat-menu-icon">⋯</div>
-        </div>
-      </div>
-      
-      <div class="chat-item">
-        <div class="chat-avatar avatar-purple">동</div>
-        <div class="chat-info">
-          <div class="chat-name">동진이 형</div>
-        </div>
-        <div class="chat-actions">
-          <div class="chat-message-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+					</div>
+					<div class="chat-menu-icon">⋯</div>
+				</div>
+			</div>
+
+			<div class="chat-item">
+				<div class="chat-avatar avatar-purple">동</div>
+				<div class="chat-info">
+					<div class="chat-name">동진이 형</div>
+				</div>
+				<div class="chat-actions">
+					<div class="chat-message-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+							viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2"
+							stroke-linecap="round" stroke-linejoin="round">
+              <path
+								d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
-          </div>
-          <div class="chat-menu-icon">⋯</div>
-        </div>
-      </div>
-      
-      <div class="chat-item">
-        <div class="chat-avatar avatar-purple">고</div>
-        <div class="chat-info">
-          <div class="chat-name">고조장</div>
-        </div>
-        <div class="chat-actions">
-          <div class="chat-message-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+					</div>
+					<div class="chat-menu-icon">⋯</div>
+				</div>
+			</div>
+
+			<div class="chat-item">
+				<div class="chat-avatar avatar-purple">고</div>
+				<div class="chat-info">
+					<div class="chat-name">고조장</div>
+				</div>
+				<div class="chat-actions">
+					<div class="chat-message-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+							viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2"
+							stroke-linecap="round" stroke-linejoin="round">
+              <path
+								d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
-          </div>
-          <div class="chat-menu-icon">⋯</div>
-        </div>
-      </div>
-      
-      <div class="chat-item">
-        <div class="chat-avatar avatar-purple">용</div>
-        <div class="chat-info">
-          <div class="chat-name">용훈 형님</div>
-        </div>
-        <div class="chat-actions">
-          <div class="chat-message-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+					</div>
+					<div class="chat-menu-icon">⋯</div>
+				</div>
+			</div>
+
+			<div class="chat-item">
+				<div class="chat-avatar avatar-purple">용</div>
+				<div class="chat-info">
+					<div class="chat-name">용훈 형님</div>
+				</div>
+				<div class="chat-actions">
+					<div class="chat-message-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+							viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2"
+							stroke-linecap="round" stroke-linejoin="round">
+              <path
+								d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
-          </div>
-          <div class="chat-menu-icon">⋯</div>
-        </div>
-      </div>
-      
-      <div class="chat-item">
-        <div class="chat-avatar avatar-orange">전</div>
-        <div class="chat-info">
-          <div class="chat-name">전창용</div>
-        </div>
-        <div class="chat-actions">
-          <div class="chat-message-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+					</div>
+					<div class="chat-menu-icon">⋯</div>
+				</div>
+			</div>
+
+			<div class="chat-item">
+				<div class="chat-avatar avatar-orange">전</div>
+				<div class="chat-info">
+					<div class="chat-name">전창용</div>
+				</div>
+				<div class="chat-actions">
+					<div class="chat-message-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+							viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2"
+							stroke-linecap="round" stroke-linejoin="round">
+              <path
+								d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
-          </div>
-          <div class="chat-menu-icon">⋯</div>
-        </div>
-      </div>
-      
-      <div class="chat-item">
-        <div class="chat-avatar avatar-purple">현</div>
-        <div class="chat-info">
-          <div class="chat-name">현정 누나</div>
-        </div>
-        <div class="chat-actions">
-          <div class="chat-message-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+					</div>
+					<div class="chat-menu-icon">⋯</div>
+				</div>
+			</div>
+
+			<div class="chat-item">
+				<div class="chat-avatar avatar-purple">현</div>
+				<div class="chat-info">
+					<div class="chat-name">현정 누나</div>
+				</div>
+				<div class="chat-actions">
+					<div class="chat-message-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+							viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2"
+							stroke-linecap="round" stroke-linejoin="round">
+              <path
+								d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
           </div>
           <div class="chat-menu-icon">⋯</div>
@@ -753,5 +768,122 @@
 	  }
     });
   </script>
+  // 부모 페이지의 JavaScript
+	function openProfileModal(memId) {
+	    // 모달 컨테이너 생성
+	    const modalContainer = document.createElement('div');
+	    modalContainer.id = 'modalContainer';
+	    modalContainer.style.cssText = `
+	        position: fixed;
+	        top: 0;
+	        left: 0;
+	        width: 100%;
+	        height: 100%;
+	        background-color: rgba(0, 0, 0, 0.5);
+	        display: flex;
+	        justify-content: center;
+	        align-items: center;
+	        z-index: 1000;
+	    `;
+	    
+	    // iframe 생성
+	    const modalIframe = document.createElement('iframe');
+	    modalIframe.src = `profile.do?memNo=${memNo}`;
+	    // modalIframe.src = "profile.do";
+	    modalIframe.style.cssText = `
+	        width: 500px;
+	        height: 392.33px;
+	    	align-items : center;
+	        border: none;
+	        border-radius: 30px;
+	        background: transparent;
+	    `;
+	    
+	    // 모달 컨테이너에 iframe 추가
+	    modalContainer.appendChild(modalIframe);
+	    
+	    // body에 모달 컨테이너 추가
+	    document.body.appendChild(modalContainer);
+	    
+	    // 모달 외부 클릭 시 닫기
+	    modalContainer.addEventListener('click', function(event) {
+	        if (event.target === modalContainer) {
+	            closeModal();
+	        }
+	    });
+	    
+	    // 스크롤 방지
+	    document.body.style.overflow = 'hidden';
+	}
+	
+	// 모달 닫기 함수 (iframe에서도 접근 가능하도록 전역 함수로 선언)
+	function closeModal() {
+	    const modalContainer = document.getElementById('modalContainer');
+	    if (modalContainer) {
+	        document.body.removeChild(modalContainer);
+	        document.body.style.overflow = 'auto';
+	    }
+	}
+  
+	// 프로필 요소에 클릭 이벤트 추가
+	document.addEventListener('DOMContentLoaded', function() {
+	    const profileElements = document.querySelectorAll('#profile-item');
+	    
+	    profileElements.forEach(function(element) {
+	        element.addEventListener('click', function() {
+	            const memId = this.getAttribute('MEM_ID');
+	            openProfileModal(memId);
+	        });
+	    });
+	});
+	
+	</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  fetch('/tt/weather/today')
+    .then(res => res.json())
+    .then(data => {
+      const items = data?.response?.body?.items?.item;
+      if (!items) throw new Error("예보 데이터 없음");
+
+      const tempObj = items.find(i => i.category === "TMP");
+      const skyObj = items.find(i => i.category === "SKY");
+      const ptyObj = items.find(i => i.category === "PTY");
+
+      const temp = tempObj?.fcstValue ?? "N/A";
+      const sky = skyObj?.fcstValue;
+      const pty = ptyObj?.fcstValue;
+      const fcstTime = tempObj?.fcstTime ?? "1200";
+      const hour = parseInt(fcstTime.substring(0, 2));
+      const isNight = hour >= 18 || hour < 6;
+
+      // 날씨 아이콘 결정
+      let icon = "🌤️";
+      if (pty === "1") icon = "🌧️";
+      else if (pty === "2" || pty === "6") icon = "🌦️";
+      else if (pty === "3" || pty === "7") icon = "❄️";
+      else {
+        if (sky === "1") icon = isNight ? "🌕" : "☀️";
+        else if (sky === "3") icon = isNight ? "🌙☁️" : "⛅";
+        else if (sky === "4") icon = "☁️";
+      }
+
+      // 삽입
+      document.getElementById("weatherTemp").textContent = `\${temp}°C`;
+      document.getElementById("weatherIcon").textContent = icon;
+      document.querySelector(".weather-info").textContent = "기상청 기준 단기예보";
+    })
+    .catch(err => {
+      console.error("🌩️ 날씨 정보 로딩 실패:", err);
+      document.querySelector(".weather-info").textContent = "날씨 불러오기 실패";
+    });
+});
+</script>
+
+
+
+
 </body>
 </html>
