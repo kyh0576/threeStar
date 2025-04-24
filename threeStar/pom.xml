@@ -216,6 +216,13 @@
 		    <version>2.11.0</version>
 		</dependency>
 		
+		<!-- json추가 -->
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>20231013</version>
+		</dependency>
+		
 	</dependencies>
 	
 	

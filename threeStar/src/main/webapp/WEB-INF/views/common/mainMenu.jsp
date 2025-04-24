@@ -78,7 +78,7 @@
         padding-bottom: 20px;
     }
 
-    .profile-img {
+    .profile-img-me {
         width: 40px;
         height: 40px;
         border-radius: 50%;
@@ -111,19 +111,19 @@
         	</a>
         </div>
         <div class="sidebar-menu">
-            <a href="${pageContext.request.contextPath}/common/mainPage" class="menu-item">
+            <a href="${pageContext.request.contextPath}/common/mainPage" class="menu-item ${page eq 'home' ? 'active' : ''}">
                 <div class="menu-icon">🏠</div>
                 <div>홈</div>
             </a>
-            <a href="${pageContext.request.contextPath}/message/mainForm" class="menu-item active">
+            <a href="${pageContext.request.contextPath}/message/mainForm"  class="menu-item ${page eq 'chat' ? 'active' : ''}">
                 <div class="menu-icon">💬</div>
                 <div>채팅</div>
             </a>
-            <a href="${pageContext.request.contextPath}/drawer/drawerAll" class="menu-item">
+            <a href="${pageContext.request.contextPath}/drawerAll/main" class="menu-item ${page eq 'tdrawer' ? 'active' : ''}">
                 <div class="menu-icon">📚</div>
                 <div>티서랍</div>
             </a>
-            <a href="${pageContext.request.contextPath}/calendar/calendarDetail" class="menu-item">
+            <a href="${pageContext.request.contextPath}/calendarDetail/main" class="menu-item ${page eq 'calendar' ? 'active' : ''}">
                 <div class="menu-icon">📅</div>
                 <div>캘린더</div>
             </a>
@@ -138,7 +138,7 @@
         <div class="logout-icon" onclick="location.href='logout.me'">
             <i class="fas fa-right-from-bracket fa-lg"></i>
         </div>
-        <img src="59dc3eec-fd50-4286-b086-11fc490dec87.png" alt="프로필" class="profile-img">
+        <img src="59dc3eec-fd50-4286-b086-11fc490dec87.png" alt="프로필" class="profile-img-me">
     </div>
 </div>
 
