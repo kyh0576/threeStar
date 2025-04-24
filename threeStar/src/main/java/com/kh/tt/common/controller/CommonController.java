@@ -17,15 +17,15 @@ public class CommonController  {
 	    return "common/mainPage";  // => /WEB-INF/views/message/messageMainForm.jsp
 	}
  
- @RequestMapping("/tdrawer/main")
+ @RequestMapping("/drawerAll/main")
  public String tdrawerPage(Model model) {
      model.addAttribute("page", "tdrawer");
-     return "tdrawer/main"; // 실제 JSP 경로에 맞게 수정
+     return "drawer/drawerAll"; // 실제 JSP 경로에 맞게 수정
  }
 
- @RequestMapping("/calendar/main")
+ @RequestMapping("/calendarDetail/main")
  public String calendarPage(Model model) {
      model.addAttribute("page", "calendar");
-     return "calendar/main"; // 실제 JSP 경로에 맞게 수정
+     return "calendar/calendarDetail"; // 실제 JSP 경로에 맞게 수정
  }
 }
