@@ -27,7 +27,7 @@
 			, EMAIL
 			, MEM_PWD
 		from MEMBER
-		where MEM_ID = #{memId}
+		where MEM_NO = #{memNo}
 	</select>
 	
 	<update id="updateProfile">
@@ -38,7 +38,7 @@
 			  PHONE = #{phone}
 			  EMAIL = #{email}
 			  MEM_PWD = #{memPwd}
-		where MEM_ID = #{memId}
+		where MEM_NO = #{memNo}
 	</update>
 
 </mapper>

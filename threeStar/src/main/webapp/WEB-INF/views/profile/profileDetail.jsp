@@ -1,138 +1,147 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!-- jQuery 라이브러리 -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>프로필 편집</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-        
-        body {
-            background-color: #f5f5f5;
-        }
-        
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            overflow: hidden;
-        }
-        
-        .profile-header {
-            background-color: #86e0f9;
-            height: 150px;
-            position: relative;
-        }
-        
-        .profile-content {
-            background-color: #9f9fd6;
-            padding: 70px 20px 20px;
-        }
-        
-        .profile-image {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            position: absolute;
-            left: 50%;
-            top: 120px;
-            transform: translateX(-50%);
-            border: 3px solid white;
-            overflow: hidden;
-        }
-        
-        .profile-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .profile-name {
-            text-align: center;
-            color: white;
-            font-size: 24px;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .edit-form {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .form-title {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
-        
-        .form-title svg {
-            margin-right: 10px;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #666;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        
-        .form-row {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .form-row .form-group {
-            flex: 1;
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-        
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        
-        .btn-primary {
-            background-color: #02c8fa;
-            color: white;
-        }
-        
-        .btn-cancel {
-            background-color: white;
-            color: #333;
-            border: 1px solid #ddd;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>프로필 편집</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Noto Sans KR', sans-serif;
+    }
+    
+    body {
+        background-color: #f5f5f5;
+        align-items: center;
+    }
+    
+    .container {
+    	align: center;
+        max-width: 600px;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    
+    .profile-header {
+        background-color: #86e0f9;
+        height: 150px;
+        position: relative;
+    }
+    
+    .profile-content {
+        background-color: #9f9fd6;
+        padding: 70px 20px 20px;
+    }
+    
+    .profile-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        position: absolute;
+        left: 50%;
+        top: 120px;
+        transform: translateX(-50%);
+        border: 3px solid white;
+        overflow: hidden;
+    }
+    
+    .profile-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .profile-name {
+        text-align: center;
+        color: white;
+        font-size: 24px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .edit-form {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .form-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+    
+    .form-title svg {
+        margin-right: 10px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #666;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    
+    .form-row {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .form-row .form-group {
+        flex: 1;
+    }
+    
+    .button-group {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    
+    .btn-primary {
+        background-color: #02c8fa;
+        color: white;
+    }
+    
+    .btn-cancel {
+        background-color: white;
+        color: #333;
+        border: 1px solid #ddd;
+    }
+</style>
 </head>
 <body>
     <div class="container">
@@ -184,7 +193,7 @@
                 
                 <div class="button-group">
                     <button type="button" class="btn btn-primary" id="saveBtn">수정</button>
-                    <button type="button" class="btn btn-cancel" id="cancelBtn">취소</button>
+                    <button type="reset" class="btn btn-cancel" id="cancelBtn">초기화</button>
                 </div>
             </div>
         </div>
@@ -207,7 +216,7 @@
             function loadProfileData() {
                 // 실제 구현에서는 AJAX 요청을 통해 서버에서 데이터를 가져옵니다.
                 $.ajax({
-                    url:detail.do,
+                    url:"detail.do",
                     data:{
                         name:$("name").val(),
                         contact:$("contact").val(),
@@ -218,7 +227,7 @@
                         status:$("status").val()
                     },
                     success:function(result){
-                        cosole.log(result)
+						console.log(result)
                     },
                     error:function(){
                         console.log("Ajax 실패")
@@ -243,12 +252,14 @@
                 }
             });
             
+            /*
             // 취소 버튼 클릭 이벤트
             cancelBtn.addEventListener('click', function() {
                 if (confirm('변경사항을 취소하시겠습니까?')) {
                     window.history.back();
                 }
             });
+            */
             
             // 폼 유효성 검사
             function validateForm() {
@@ -295,7 +306,7 @@
                 alert('프로필이 성공적으로 수정되었습니다.');
                 
                 // 프로필 페이지로 이동 (JSP 환경에 따라 경로 조정 필요)
-                // window.location.href = 'profile.jsp';
+                location.href = "WEB-INF/views/index.jsp";
             }
         });
     </script>

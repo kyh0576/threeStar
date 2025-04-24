@@ -17,13 +17,15 @@ public class ProfileServiceImpl implements ProfileService {
 	private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public Profile selectProfile(int memNo) {
-		return pDao.selectProfile(sqlSession, memNo);
+	public int selectProfile(int memNo) {
+		int result = pDao.selectProfile(sqlSession, memNo);
+		System.out.println("service : " + result);
+		return result;
 	}
 	
 	@Override
-	public Profile selectProfileDetail(String memId) {
-		return pDao.selectProfileDetail(sqlSession, memId);
+	public int selectProfileDetail(int memNo) {
+		return pDao.selectProfileDetail(sqlSession, memNo);
 	}
 	
 	@Override
