@@ -1,10 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %> 
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>채팅 메신저</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -413,189 +415,56 @@
   <div style="border: 1px solid #f8f9fa; padding-left:0px" class="border">
     <div class="left-sidebar">
       <div class="sidebar-inner">
+      
         <div class="sidebar-top">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
           </svg>
           <div class="sidebar-title" style="padding-left: 16px;">KH - Class</div>
         </div>
         
-        <!-- H-Class 섹션 -->
-        <div class="class-section">
-          <div class="class-header" onclick="toggleClass(this)">
-            <span>H - Class</span>
-            <span class="dropdown-arrow">▼</span>
-          </div>
-          <ul class="class-list">
-            <li class="class-item">
-              <div class="avatar avatar-red" id="profile-item">김</div>
-              <span class="member-name">김시연</span>
-            </li>
-            <li class="class-item">
-              <div class="avatar avatar-purple">동</div>
-              <span class="member-name">동진이 형</span>
-            </li>
-            <li class="class-item">
-              <div class="avatar avatar-purple">고</div>
-              <span class="member-name">고조장</span>
-            </li>
-            <li class="class-item">
-              <div class="avatar avatar-purple">용</div>
-              <span class="member-name">용훈 형님</span>
-            </li>
-            <li class="class-item">
-              <div class="avatar avatar-orange">전</div>
-              <span class="member-name">전창용</span>
-            </li>
-            <li class="class-item">
-              <div class="avatar avatar-orange">김</div>
-              <span class="member-name">김준서</span>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- A-Class 섹션 -->
-        <div class="class-section">
-          <div class="class-header" onclick="toggleClass(this)">
-            <span>A - Class</span>
-            <span class="dropdown-arrow">▼</span>
-          </div>
-          <ul class="class-list">
-            <li class="class-item">
-              <div class="avatar avatar-green">이</div>
-              <span class="member-name">이승우</span>
-            </li>
-            <li class="class-item">
-              <div class="avatar avatar-red">박</div>
-              <span class="member-name">박지성</span>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- B-Class 섹션 -->
-        <div class="class-section">
-          <div class="class-header" onclick="toggleClass(this)">
-            <span>B - Class</span>
-            <span class="dropdown-arrow">▼</span>
-          </div>
-          <ul class="class-list">
-            <li class="class-item">
-              <div class="avatar avatar-purple">최</div>
-              <span class="member-name">최지원</span>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- C-Class 섹션 -->
-        <div class="class-section">
-          <div class="class-header" onclick="toggleClass(this)">
-            <span>C - Class</span>
-            <span class="dropdown-arrow">▼</span>
-          </div>
-          <ul class="class-list">
-            <li class="class-item">
-              <div class="avatar avatar-orange">정</div>
-              <span class="member-name">정민수</span>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- D-Class 섹션 -->
-        <div class="class-section">
-          <div class="class-header" onclick="toggleClass(this)">
-            <span>D - Class</span>
-            <span class="dropdown-arrow">▼</span>
-          </div>
-          <ul class="class-list">
-            <li class="class-item">
-              <div class="avatar avatar-purple">김</div>
-              <span class="member-name">김민지</span>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- E-Class 섹션 -->
-        <div class="class-section">
-          <div class="class-header" onclick="toggleClass(this)">
-            <span>E - Class</span>
-            <span class="dropdown-arrow">▼</span>
-          </div>
-          <ul class="class-list">
-            <li class="class-item">
-              <div class="avatar avatar-red">이</div>
-              <span class="member-name">이영희</span>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- F-Class 섹션 -->
-        <div class="class-section">
-          <div class="class-header" onclick="toggleClass(this)">
-            <span>F - Class</span>
-            <span class="dropdown-arrow">▼</span>
-          </div>
-          <ul class="class-list">
-            <li class="class-item">
-              <div class="avatar avatar-purple">장</div>
-              <span class="member-name">장현우</span>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- G-Class 섹션 -->
-        <div class="class-section">
-          <div class="class-header" onclick="toggleClass(this)">
-            <span>G - Class</span>
-            <span class="dropdown-arrow">▼</span>
-          </div>
-          <ul class="class-list">
-            <li class="class-item">
-              <div class="avatar avatar-orange">서</div>
-              <span class="member-name">서지수</span>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- I-Class 섹션 -->
-        <div class="class-section">
-          <div class="class-header" onclick="toggleClass(this)">
-            <span>I - Class</span>
-            <span class="dropdown-arrow">▼</span>
-          </div>
-          <ul class="class-list">
-            <li class="class-item">
-              <div class="avatar avatar-green">강</div>
-              <span class="member-name">강동원</span>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- J-Class 섹션 -->
-        <div class="class-section">
-          <div class="class-header" onclick="toggleClass(this)">
-            <span>J - Class</span>
-            <span class="dropdown-arrow">▼</span>
-          </div>
-          <ul class="class-list">
-            <li class="class-item">
-              <div class="avatar avatar-red">한</div>
-              <span class="member-name">한지민</span>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- K-Class 섹션 -->
-        <div class="class-section">
-          <div class="class-header" onclick="toggleClass(this)">
-            <span>K - Class</span>
-            <span class="dropdown-arrow">▼</span>
-          </div>
-          <ul class="class-list">
-            <li class="class-item">
-              <div class="avatar avatar-purple">유</div>
-              <span class="member-name">유재석</span>
-            </li>
-          </ul>
-        </div>
+        <c:set var="myClassCode" value="${loginMember.memClassCode}" />
+		
+		<!-- 본인 클래스 먼저 출력 -->
+		<c:forEach var="c" items="${cList}">
+		  <c:if test="${c.classCode == myClassCode}">
+		    <div class="class-section">
+		      <div class="class-header active" 
+		           onclick="toggleClass(this)" 
+		           data-classcode="${c.classCode}">
+		        <span>${c.className} - Class</span>
+		        <span class="dropdown-arrow">▼</span>
+		        <input type="hidden" id="classCode" name="classCode" value="${c.classCode}">
+		      </div>
+		      <ul class="class-list active">
+		        <li class="class-item">
+		          <div class="avatar avatar-red" id="profile-item">김</div>
+		          <span class="member-name">김시연1</span>
+		        </li>
+		      </ul>
+		    </div>
+		  </c:if>
+		</c:forEach>
+		
+		<!-- 나머지 클래스 출력 -->
+		<c:forEach var="c" items="${cList}">
+		  <c:if test="${c.classCode != myClassCode}">
+		    <div class="class-section">
+		      <div class="class-header" 
+		           onclick="toggleClass(this)" 
+		           data-classcode="${c.classCode}">
+		        <span>${c.className} - Class</span>
+		        <span class="dropdown-arrow">▼</span>
+		      </div>
+		      <ul class="class-list">
+		        <li class="class-item">
+		          <div class="avatar avatar-red" id="profile-item">김</div>
+		          <span class="member-name">김시연2</span>
+		        </li>
+		      </ul>
+		    </div>
+		  </c:if>
+		</c:forEach>
+    
       </div>
       
       <div class="weather-section">
@@ -804,12 +673,59 @@
       }
     }
     
-    // 클래스 섹션 토글 기능
-    function toggleClass(header) {
-      const list = header.nextElementSibling;
-      header.classList.toggle('active');
-      list.classList.toggle('active');
-    }
+	// 토글 열고 닫는 함수 (여러 개 열릴 수 있음)
+	function toggleClass(header) {
+	  const list = header.nextElementSibling;
+	  header.classList.toggle('active');
+	  list.classList.toggle('active');
+	  
+	  const isOpen = header.classList.contains('active');
+	  const classCode = header.getAttribute('data-classcode'); // ⭐ 여기서 classCode 가져옴!
+
+	  if (isOpen) {
+	    fetchClassMembers(classCode, list); // 열렸을 때만 멤버 조회!
+	  }
+	}
+	
+	// 멤버 조회 Ajax 함수
+	function fetchClassMembers(classCode, listElement) {
+	  $.ajax({
+	    url: 'selectMemberList.me',  
+	    method: 'GET',
+	    data: { classCode: classCode },
+	    success: function(response) {
+	      console.log('받아온 멤버 리스트:', response);
+	      console.log('첫 번째 멤버:', response[0]);
+
+	      // 리스트 초기화
+	      listElement.innerHTML = '';
+
+	      // 받아온 멤버들 화면에 뿌리기
+	      response.forEach(member => {
+	        const memName = member.memName || "이름없음";  // null, undefined 방지
+	        const li = document.createElement('li');
+	        li.className = 'class-item';
+	        li.innerHTML = `
+	          <div class="avatar avatar-red">\${memName.charAt(0)}</div>
+	          <span class="member-name">\${memName}</span>
+	        `;
+	        listElement.appendChild(li);
+	      });
+	    },  // ✅ 콤마 여기!!
+	    error: function() {
+	      alert('멤버 조회 실패!');
+	    }
+	  });
+	}
+
+	
+	
+	// ⭐ 추가: 기본으로 열어주는 함수 (닫는 건 안 건드림)
+	function openClass(header) {
+	  const list = header.nextElementSibling;
+	  header.classList.add('active');
+	  list.classList.add('active');
+	}
     
     // 프로필 요소에 클릭 이벤트 추가 및 H-Class 기본 열림 설정
     document.addEventListener('DOMContentLoaded', function() {
@@ -824,10 +740,17 @@
       });
       
       // H-Class 기본 열림 설정
-      const hClassHeader = document.querySelector('.class-header');
-      if (hClassHeader) {
-        toggleClass(hClassHeader);
-      }
+      const activeHeader = document.querySelector('.class-header.active');
+	  if (activeHeader) {
+		  openClass(activeHeader); // 이걸로 바꾸기!
+	  }
+	  
+	  // ⭐ 2. 그 다음 Ajax도 호출 (멤버 조회)
+	  if (activeHeader) {
+	    const classCode = activeHeader.getAttribute('data-classcode');
+	    const listElement = activeHeader.nextElementSibling;
+	    fetchClassMembers(classCode, listElement);
+	  }
     });
   </script>
 </body>

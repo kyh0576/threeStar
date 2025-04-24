@@ -1,10 +1,13 @@
 package com.kh.tt.member.model.service;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.tt.member.model.dao.MemberDao;
+import com.kh.tt.member.model.vo.Classes;
 import com.kh.tt.member.model.vo.Member;
 
 @Service
@@ -44,6 +47,16 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int idCheck(String userId) {
 		return 0;
+	}
+
+	@Override
+	public ArrayList<Classes> selectClass() {
+		return mDao.selectClass(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Member> selectMemberList(String classCode) {
+		return mDao.selectMemberList(sqlSession, classCode);
 	}
 
 	
