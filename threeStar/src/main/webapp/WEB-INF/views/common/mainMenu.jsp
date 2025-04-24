@@ -119,11 +119,11 @@
                 <div class="menu-icon">💬</div>
                 <div>채팅</div>
             </a>
-            <a href="${pageContext.request.contextPath}/tdrawer/main" class="menu-item ${page eq 'tdrawer' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/drawerAll/main" class="menu-item ${page eq 'tdrawer' ? 'active' : ''}">
                 <div class="menu-icon">📚</div>
                 <div>티서랍</div>
             </a>
-            <a href="${pageContext.request.contextPath}/calendar/main" class="menu-item ${page eq 'calendar' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/calendarDetail/main" class="menu-item ${page eq 'calendar' ? 'active' : ''}">
                 <div class="menu-icon">📅</div>
                 <div>캘린더</div>
             </a>

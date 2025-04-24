@@ -463,11 +463,11 @@
       </div>
     </div>
       
-      <div class="weather-section">
-        <div class="weather-icon">☀️</div>
-        <div class="temperature">21.8°</div>
-        <div class="weather-info">어제보다 2도 높은 맑은 날씨</div>
-      </div>
+    <div class="weather-section">
+	  <div class="weather-icon" id="weatherIcon">🌤️</div>
+	  <div class="temperature" id="weatherTemp">-°</div>
+	  <div class="weather-info" id="weatherInfo">날씨 로딩 중...</div>
+	</div>
       
     </div>
   </div>
@@ -681,7 +681,11 @@
 	        });
 	    });
 	});
-	</script>
 	
+	</script>
+
+
+
+
 </body>
 </html>
