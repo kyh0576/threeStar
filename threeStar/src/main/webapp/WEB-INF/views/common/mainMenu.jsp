@@ -135,7 +135,7 @@
         <div class="alert-icon" onclick="toggleAlert(this)">
             <i class="fas fa-bell fa-lg"></i>
         </div>
-		<a href="${pageContext.request.contextPath}/logout.me" class="logout-icon">
+		        <a href="${pageContext.request.contextPath}/logout.me" class="logout-icon">
 		    <i class="fas fa-right-from-bracket fa-lg"></i>
 		</a>
         <a href="detailProfile.do">
