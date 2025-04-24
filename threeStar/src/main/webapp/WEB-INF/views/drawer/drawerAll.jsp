@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,53 +28,93 @@
         min-height: 100vh;
     }
 
-    /* 왼쪽 사이드바 */
-    .sidebar {
-        width: 95px;
+    /* 메시지 목록 사이드바 */
+    .message-sidebar {
+        width: 300px;
         background-color: white;
         border-right: 1px solid #e1e1e1;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        padding: 20px 0;
     }
 
-    .sidebar-logo {
-        width: 50px;
-        height: 50px;
-        margin-bottom: 20px;
+    .message-header {
+        padding: 20px;
+        border-bottom: 1px solid #e1e1e1;
+        font-size: 18px;
+        font-weight: bold;
     }
 
-    .sidebar-menu {
+    .message-tabs {
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 25px;
-        width: 100%;
+        border-bottom: 1px solid #e1e1e1;
     }
 
-    .menu-item {
+    .tab {
+        flex: 1;
+        padding: 10px;
+        text-align: center;
+        background-color: #f5f5f5;
+        cursor: pointer;
+    }
+
+    .tab.active {
+        background-color: #4a8cff;
+        color: white;
+    }
+
+    .message-list {
+        overflow-y: auto;
+        flex-grow: 1;
+    }
+
+    .message-item {
+        padding: 15px;
+        border-bottom: 1px solid #f1f1f1;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: center;
+        cursor: pointer;
+    }
+
+    .message-item:hover {
+        background-color: #f9f9f9;
+    }
+
+    .message-item.active {
+        background-color: #f0f7ff;
+    }
+
+    .profile-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 15px;
+        overflow: hidden;
+    }
+
+    .profile-img img {
         width: 100%;
-        padding: 10px 0;
-        color: #888;
-        font-size: 12px;
-        text-decoration: none;
+        height: 100%;
+        object-fit: cover;
     }
 
-    .menu-item.active {
-        color: #4a8cff;
+    .message-info {
+        flex-grow: 1;
     }
 
-    .menu-icon {
-        font-size: 24px;
+    .message-name {
+        font-weight: bold;
         margin-bottom: 5px;
     }
 
-    /* 메시지 목록 사이드바 */
+    .message-preview {
+        color: #666;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    } */
+
+    /* 추가가가가가가 */
     .message-sidebar {
         width: 300px;
         background-color: white;
@@ -277,7 +317,7 @@
 	<jsp:include page="../common/mainMenu.jsp"/>
 
     <!-- 메시지 목록 사이드바 -->
-    <div class="message-sidebar">
+    <div class="message-sidebar" >
         <div class="message-header">Messages</div>
         <div class="message-tabs">
             <div class="tab active">All</div>
@@ -358,6 +398,88 @@
             </div>
         </div>
     </div>
+
+    <!-- <div class="message-sidebar">
+        <div class="message-header">Messages</div>
+        <div class="message-tabs">
+            <div class="tab active">All</div>
+            <div class="tab">Group</div>
+        </div>
+        <div class="message-list">
+            <div class="message-item active">
+                <div class="profile-img">
+                    <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=팀" alt="프로필">
+                </div>
+                <div class="message-info">
+                    <div class="message-name">집주인 첫째 딸</div>
+                    <div class="message-preview">아 어디야</div>
+                </div>
+            </div>
+            <div class="message-item">
+                <div class="profile-img">
+                    <img src="https://via.placeholder.com/40/ff4a8c/ffffff?text=여" alt="프로필">
+                </div>
+                <div class="message-info">
+                    <div class="message-name">여자친구❤</div>
+                    <div class="message-preview">어디야</div>
+                </div>
+            </div>
+            <div class="message-item">
+                <div class="profile-img">
+                    <img src="https://via.placeholder.com/40/8cff4a/000000?text=집" alt="프로필">
+                </div>
+                <div class="message-info">
+                    <div class="message-name">집주인</div>
+                    <div class="message-preview">일마 오늘 맛있는거 사와</div>
+                </div>
+            </div>
+            <div class="message-item">
+                <div class="profile-img">
+                    <img src="https://via.placeholder.com/40/ff8c4a/ffffff?text=F" alt="프로필">
+                </div>
+                <div class="message-info">
+                    <div class="message-name">fire egg friend</div>
+                    <div class="message-preview">야 근일님 ㄷㄷ ㄹㅇ</div>
+                </div>
+            </div>
+            <div class="message-item">
+                <div class="profile-img">
+                    <img src="https://via.placeholder.com/40/4aff8c/000000?text=GD" alt="프로필">
+                </div>
+                <div class="message-info">
+                    <div class="message-name">고명훈</div>
+                    <div class="message-preview">일마 포샵 GD네 ㅋㅋ</div>
+                </div>
+            </div>
+            <div class="message-item">
+                <div class="profile-img">
+                    <img src="https://via.placeholder.com/40/8c4aff/ffffff?text=AI" alt="프로필">
+                </div>
+                <div class="message-info">
+                    <div class="message-name">스승님</div>
+                    <div class="message-preview">아? 뭐 아? 하면 되는데 그걸 못해?</div>
+                </div>
+            </div>
+            <div class="message-item">
+                <div class="profile-img">
+                    <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=간" alt="프로필">
+                </div>
+                <div class="message-info">
+                    <div class="message-name">간성훈</div>
+                    <div class="message-preview">내 위에 바보</div>
+                </div>
+            </div>
+            <div class="message-item">
+                <div class="profile-img">
+                    <img src="https://via.placeholder.com/40/ffd700/000000?text=새" alt="프로필">
+                </div>
+                <div class="message-info">
+                    <div class="message-name">세미 프로젝트 조</div>
+                    <div class="message-preview">이효석 : 나는 원래 잘생겼...</div>
+                </div>
+            </div>
+        </div>
+    </div> -->
 
     <!-- 메인 콘텐츠 -->
     <div class="main-content">
