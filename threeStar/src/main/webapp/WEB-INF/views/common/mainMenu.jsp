@@ -135,9 +135,9 @@
         <div class="alert-icon" onclick="toggleAlert(this)">
             <i class="fas fa-bell fa-lg"></i>
         </div>
-        <div class="logout-icon" onclick="location.href='logout.me'">
-            <i class="fas fa-right-from-bracket fa-lg"></i>
-        </div>
+		<a href="${pageContext.request.contextPath}/logout.me" class="logout-icon">
+		    <i class="fas fa-right-from-bracket fa-lg"></i>
+		</a>
         <a href="detailProfile.do">
         	<img src="59dc3eec-fd50-4286-b086-11fc490dec87.png" alt="프로필" class="profile-img-me">
         </a>

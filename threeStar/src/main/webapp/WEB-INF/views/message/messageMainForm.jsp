@@ -705,6 +705,17 @@
             });
         });
     </script>
+    
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const logout = document.querySelector(".logout-icon");
+  if (logout) {
+    logout.addEventListener("click", function () {
+      window.location.href = "/logout.me"; // ✅ 절대경로
+    });
+  }
+});
+</script>
 
 </body>
 </html>
