@@ -81,6 +81,7 @@
             border-radius: 50%;
             margin-right: 15px;
             overflow: hidden;
+        	border: 2px solid #4a8cff;
         }
 
         .profile-img img {
