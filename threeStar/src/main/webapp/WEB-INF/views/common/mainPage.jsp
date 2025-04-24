@@ -21,7 +21,7 @@
     
     /* 왼쪽 사이드바 */
     .left-sidebar {
-      width: 210px;
+      width: 300px;
       background-color: white;
       border-right: 1px solid #e0e0e0;
       display: flex;
@@ -36,14 +36,56 @@
       align-items: center;
     }
     
-    
     .sidebar-title {
       font-size: 16px;
       font-weight: 600;
     }
     
+    /* 클래스 섹션 스타일 - 토글 기능 추가 */
+    .class-section {
+      padding: 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .class-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+    }
+    
+    .class-header:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .class-list {
+      list-style: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    
+    .class-list.active {
+      max-height: 500px;
+    }
+    
+    .class-item {
+      display: flex;
+      align-items: center;
+      padding: 6px 20px;
+      cursor: pointer;
+    }
+    
+    .class-item:hover {
+      background-color: #f5f5f5;
+    }
+    
+    /* 기존 H-Class 스타일과 통합 */
     .hclass-section {
-      padding: 10px 0;
+      padding: 0;
       border-bottom: 1px solid #e0e0e0;
     }
     
@@ -51,13 +93,25 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 5px 20px;
+      padding: 12px 20px;
       font-size: 14px;
       color: #444;
+      cursor: pointer;
+    }
+    
+    .hclass-header:hover {
+      background-color: #f5f5f5;
     }
     
     .hclass-list {
       list-style: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    
+    .hclass-list.active {
+      max-height: 500px;
     }
     
     .hclass-item {
@@ -102,24 +156,14 @@
       color: #333;
     }
     
-    .class-dropdown {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 20px;
-      font-size: 14px;
-      color: #333;
-      cursor: pointer;
-      border-bottom: 1px solid #f0f0f0;
-    }
-    
-    .class-dropdown:hover {
-      background-color: #f5f5f5;
-    }
-    
     .dropdown-arrow {
       font-size: 12px;
       color: #999;
+      transition: transform 0.3s;
+    }
+    
+    .class-header.active .dropdown-arrow {
+      transform: rotate(180deg);
     }
     
     .weather-section {
@@ -145,7 +189,6 @@
       color: #666;
       margin-top: 5px;
     }
-    
     
     .profile-avatar {
       width: 36px;
@@ -322,7 +365,7 @@
     }
 
     .sidebar-inner {
-      margin-left: 40px;
+      margin-left: 20px;
       width: calc(100% - 40px);
     }
     
@@ -367,108 +410,199 @@
   <jsp:include page="../common/mainMenu.jsp"/>
 
   <!-- 왼쪽 사이드바 -->
-  <div style="border: 1px solid f8f9fa; " class=""border">
-  <div class="left-sidebar">
-    <div class="sidebar-inner">
-      <div class="sidebar-top">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <div style="border: 1px solid #f8f9fa; padding-left:0px" class="border">
+    <div class="left-sidebar">
+      <div class="sidebar-inner">
+        <div class="sidebar-top">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
           </svg>
+          <div class="sidebar-title" style="padding-left: 16px;">KH - Class</div>
         </div>
-        <div class="sidebar-title">KH - Class</div>
-      </div>
-      
-      <div class="hclass-section">
-        <div class="hclass-header">
-          <span>H - Class</span>
+        
+        <!-- H-Class 섹션 -->
+        <div class="class-section">
+          <div class="class-header" onclick="toggleClass(this)">
+            <span>H - Class</span>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+          <ul class="class-list">
+            <li class="class-item">
+              <div class="avatar avatar-red" id="profile-item">김</div>
+              <span class="member-name">김시연</span>
+            </li>
+            <li class="class-item">
+              <div class="avatar avatar-purple">동</div>
+              <span class="member-name">동진이 형</span>
+            </li>
+            <li class="class-item">
+              <div class="avatar avatar-purple">고</div>
+              <span class="member-name">고조장</span>
+            </li>
+            <li class="class-item">
+              <div class="avatar avatar-purple">용</div>
+              <span class="member-name">용훈 형님</span>
+            </li>
+            <li class="class-item">
+              <div class="avatar avatar-orange">전</div>
+              <span class="member-name">전창용</span>
+            </li>
+            <li class="class-item">
+              <div class="avatar avatar-orange">김</div>
+              <span class="member-name">김준서</span>
+            </li>
+          </ul>
         </div>
-        <ul class="hclass-list">
-          <li class="hclass-item">
-            <div class="avatar avatar-red" id="profile-item">김</div>
-            <span class="member-name">김시연</span>
-          </li>
-          <li class="hclass-item">
-            <div class="avatar avatar-purple">동</div>
-            <span class="member-name">동진이 형</span>
-          </li>
-          <li class="hclass-item">
-            <div class="avatar avatar-purple">고</div>
-            <span class="member-name">고조장</span>
-          </li>
-          <li class="hclass-item">
-            <div class="avatar avatar-purple">용</div>
-            <span class="member-name">용훈 형님</span>
-          </li>
-          <li class="hclass-item">
-            <div class="avatar avatar-orange">전</div>
-            <span class="member-name">전창용</span>
-          </li>
-          <li class="hclass-item">
-            <div class="avatar avatar-orange">김</div>
-            <span class="member-name">김준서</span>
-          </li>
-        </ul>
+        
+        <!-- A-Class 섹션 -->
+        <div class="class-section">
+          <div class="class-header" onclick="toggleClass(this)">
+            <span>A - Class</span>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+          <ul class="class-list">
+            <li class="class-item">
+              <div class="avatar avatar-green">이</div>
+              <span class="member-name">이승우</span>
+            </li>
+            <li class="class-item">
+              <div class="avatar avatar-red">박</div>
+              <span class="member-name">박지성</span>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- B-Class 섹션 -->
+        <div class="class-section">
+          <div class="class-header" onclick="toggleClass(this)">
+            <span>B - Class</span>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+          <ul class="class-list">
+            <li class="class-item">
+              <div class="avatar avatar-purple">최</div>
+              <span class="member-name">최지원</span>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- C-Class 섹션 -->
+        <div class="class-section">
+          <div class="class-header" onclick="toggleClass(this)">
+            <span>C - Class</span>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+          <ul class="class-list">
+            <li class="class-item">
+              <div class="avatar avatar-orange">정</div>
+              <span class="member-name">정민수</span>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- D-Class 섹션 -->
+        <div class="class-section">
+          <div class="class-header" onclick="toggleClass(this)">
+            <span>D - Class</span>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+          <ul class="class-list">
+            <li class="class-item">
+              <div class="avatar avatar-purple">김</div>
+              <span class="member-name">김민지</span>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- E-Class 섹션 -->
+        <div class="class-section">
+          <div class="class-header" onclick="toggleClass(this)">
+            <span>E - Class</span>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+          <ul class="class-list">
+            <li class="class-item">
+              <div class="avatar avatar-red">이</div>
+              <span class="member-name">이영희</span>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- F-Class 섹션 -->
+        <div class="class-section">
+          <div class="class-header" onclick="toggleClass(this)">
+            <span>F - Class</span>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+          <ul class="class-list">
+            <li class="class-item">
+              <div class="avatar avatar-purple">장</div>
+              <span class="member-name">장현우</span>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- G-Class 섹션 -->
+        <div class="class-section">
+          <div class="class-header" onclick="toggleClass(this)">
+            <span>G - Class</span>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+          <ul class="class-list">
+            <li class="class-item">
+              <div class="avatar avatar-orange">서</div>
+              <span class="member-name">서지수</span>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- I-Class 섹션 -->
+        <div class="class-section">
+          <div class="class-header" onclick="toggleClass(this)">
+            <span>I - Class</span>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+          <ul class="class-list">
+            <li class="class-item">
+              <div class="avatar avatar-green">강</div>
+              <span class="member-name">강동원</span>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- J-Class 섹션 -->
+        <div class="class-section">
+          <div class="class-header" onclick="toggleClass(this)">
+            <span>J - Class</span>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+          <ul class="class-list">
+            <li class="class-item">
+              <div class="avatar avatar-red">한</div>
+              <span class="member-name">한지민</span>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- K-Class 섹션 -->
+        <div class="class-section">
+          <div class="class-header" onclick="toggleClass(this)">
+            <span>K - Class</span>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+          <ul class="class-list">
+            <li class="class-item">
+              <div class="avatar avatar-purple">유</div>
+              <span class="member-name">유재석</span>
+            </li>
+          </ul>
+        </div>
       </div>
       
-      
-      
-      <div class="class-dropdown">
-        <span>A - Class</span>
-        <span class="dropdown-arrow">▼</span>
+      <div class="weather-section">
+        <div class="weather-icon" id="weatherIcon">🌤️</div>
+        <div class="temperature" id="weatherTemp">-°</div>
+        <div class="weather-info" id="weatherInfo">날씨 로딩 중...</div>
       </div>
-      
-      <div class="class-dropdown">
-        <span>B - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>C - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>D - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>E - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>F - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>G - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>I - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>J - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>K - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-    </div>
-      
-    <div class="weather-section">
-	  <div class="weather-icon" id="weatherIcon">🌤️</div>
-	  <div class="temperature" id="weatherTemp">-°</div>
-	  <div class="weather-info" id="weatherInfo">날씨 로딩 중...</div>
-	</div>
-      
     </div>
   </div>
   
@@ -573,7 +707,7 @@
   
   <!-- 오른쪽 사이드바 -->
   <div class="right-sidebar">
-    <div style="border: 1px solid f8f9fa; "  class="border">
+    <div style="border: 1px solid #f8f9fa;" class="border">
       <div class="today-header">온라인 - 3명</div>
       
       <div class="today-members">
@@ -597,95 +731,104 @@
     <br>
     <br>
 
-      <div style="border: 1px solid f8f9fa;" class="border">
-        <div class="hclass-info-title">H class 일정</div>
-        
-        <div class="hclass-info-list">
-          <div class="info-item">D - 5 : 프로젝트 기반 공공 데이터 활용</div>
-          <div class="info-item">D - 16 : 프로젝트 기반 공공데이터 아키텍처 설계</div>
-          <div class="info-item">D - 39 : 애플리케이션 테스트 수행</div>
-          <div class="info-item">D - 52 : 애플리케이션 배포</div>
-          <div class="info-item">D - 61 : 파이널 프로젝트 발표</div>
-          <div class="info-item">D - 70 : 수료</div>
-        </div>
+    <div style="border: 1px solid #f8f9fa;" class="border">
+      <div class="hclass-info-title">H class 일정</div>
+      
+      <div class="hclass-info-list">
+        <div class="info-item">D - 5 : 프로젝트 기반 공공 데이터 활용</div>
+        <div class="info-item">D - 16 : 프로젝트 기반 공공데이터 아키텍처 설계</div>
+        <div class="info-item">D - 39 : 애플리케이션 테스트 수행</div>
+        <div class="info-item">D - 52 : 애플리케이션 배포</div>
+        <div class="info-item">D - 61 : 파이널 프로젝트 발표</div>
+        <div class="info-item">D - 70 : 수료</div>
+      </div>
     </div>
   </div>
   
-  <!-- 모달 실험중 -->
+  <!-- 스크립트 -->
   <script>
-  // 부모 페이지의 JavaScript
-	function openProfileModal(memId) {
-	    // 모달 컨테이너 생성
-	    const modalContainer = document.createElement('div');
-	    modalContainer.id = 'modalContainer';
-	    modalContainer.style.cssText = `
-	        position: fixed;
-	        top: 0;
-	        left: 0;
-	        width: 100%;
-	        height: 100%;
-	        background-color: rgba(0, 0, 0, 0.5);
-	        display: flex;
-	        justify-content: center;
-	        align-items: center;
-	        z-index: 1000;
-	    `;
-	    
-	    // iframe 생성
-	    const modalIframe = document.createElement('iframe');
-	    // modalIframe.src = `profile.do?memNo=${memNo}`;
-	    modalIframe.src = "profile.do";
-	    modalIframe.style.cssText = `
-	        width: 800px;
-	        height: 865px;
-	    	align-items : center;
-	        border: none;
-	        border-radius: 10px;
-	        background: transparent;
-	    `;
-	    
-	    // 모달 컨테이너에 iframe 추가
-	    modalContainer.appendChild(modalIframe);
-	    
-	    // body에 모달 컨테이너 추가
-	    document.body.appendChild(modalContainer);
-	    
-	    // 모달 외부 클릭 시 닫기
-	    modalContainer.addEventListener('click', function(event) {
-	        if (event.target === modalContainer) {
-	            closeModal();
-	        }
-	    });
-	    
-	    // 스크롤 방지
-	    document.body.style.overflow = 'hidden';
-	}
-	
-	// 모달 닫기 함수 (iframe에서도 접근 가능하도록 전역 함수로 선언)
-	function closeModal() {
-	    const modalContainer = document.getElementById('modalContainer');
-	    if (modalContainer) {
-	        document.body.removeChild(modalContainer);
-	        document.body.style.overflow = 'auto';
-	    }
-	}
-  
-	// 프로필 요소에 클릭 이벤트 추가
-	document.addEventListener('DOMContentLoaded', function() {
-	    const profileElements = document.querySelectorAll('#profile-item');
-	    
-	    profileElements.forEach(function(element) {
-	        element.addEventListener('click', function() {
-	            const memId = this.getAttribute('MEM_ID');
-	            openProfileModal(memId);
-	        });
-	    });
-	});
-	
-	</script>
-
-
-
-
+    // 모달 관련 기능
+    function openProfileModal(memId) {
+      // 모달 컨테이너 생성
+      const modalContainer = document.createElement('div');
+      modalContainer.id = 'modalContainer';
+      modalContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      `;
+      
+      // iframe 생성
+      const modalIframe = document.createElement('iframe');
+      // modalIframe.src = `profile.do?memNo=${memNo}`;
+      modalIframe.src = "profile.do";
+      modalIframe.style.cssText = `
+        width: 800px;
+        height: 865px;
+        align-items : center;
+        border: none;
+        border-radius: 10px;
+        background: transparent;
+      `;
+      
+      // 모달 컨테이너에 iframe 추가
+      modalContainer.appendChild(modalIframe);
+      
+      // body에 모달 컨테이너 추가
+      document.body.appendChild(modalContainer);
+      
+      // 모달 외부 클릭 시 닫기
+      modalContainer.addEventListener('click', function(event) {
+        if (event.target === modalContainer) {
+          closeModal();
+        }
+      });
+      
+      // 스크롤 방지
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // 모달 닫기 함수 (iframe에서도 접근 가능하도록 전역 함수로 선언)
+    function closeModal() {
+      const modalContainer = document.getElementById('modalContainer');
+      if (modalContainer) {
+        document.body.removeChild(modalContainer);
+        document.body.style.overflow = 'auto';
+      }
+    }
+    
+    // 클래스 섹션 토글 기능
+    function toggleClass(header) {
+      const list = header.nextElementSibling;
+      header.classList.toggle('active');
+      list.classList.toggle('active');
+    }
+    
+    // 프로필 요소에 클릭 이벤트 추가 및 H-Class 기본 열림 설정
+    document.addEventListener('DOMContentLoaded', function() {
+      // 프로필 모달 이벤트
+      const profileElements = document.querySelectorAll('#profile-item');
+      
+      profileElements.forEach(function(element) {
+        element.addEventListener('click', function() {
+          const memId = this.getAttribute('MEM_ID');
+          openProfileModal(memId);
+        });
+      });
+      
+      // H-Class 기본 열림 설정
+      const hClassHeader = document.querySelector('.class-header');
+      if (hClassHeader) {
+        toggleClass(hClassHeader);
+      }
+    });
+  </script>
 </body>
 </html>
