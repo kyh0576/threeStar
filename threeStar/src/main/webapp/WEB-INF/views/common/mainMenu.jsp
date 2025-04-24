@@ -106,12 +106,12 @@
     <!-- 상단 로고 + 메뉴 -->
     <div>
         <div class="sidebar-logo">
-        	<a href="${pageContext.request.contextPath}/common/mainPage" class="menu-item">
+        	<a href="${pageContext.request.contextPath}/main.me" class="menu-item">
               <img src="${pageContext.request.contextPath}/resources/asset/smalllogo.png" alt="팀로고">
         	</a>
         </div>
         <div class="sidebar-menu">
-            <a href="${pageContext.request.contextPath}/common/mainPage" class="menu-item ${page eq 'home' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/main.me" class="menu-item ${page eq 'home' ? 'active' : ''}">
                 <div class="menu-icon">🏠</div>
                 <div>홈</div>
             </a>
