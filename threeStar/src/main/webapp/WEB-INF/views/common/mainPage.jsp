@@ -169,31 +169,31 @@
     }
     
     .weather-section {
-	margin-top: auto;
-	padding: 15px;
-	text-align: center;
-	border-top: 1px solid #e0e0e0;
-	}
+   margin-top: auto;
+   padding: 15px;
+   text-align: center;
+   border-top: 1px solid #e0e0e0;
+   }
 
-	.weather-icon {
-		font-size: 38px;
-		margin-bottom: 5px;
-	}
-	
-	.temperature {
-	  font-size: 26px;
-	  font-weight: 500;
-	  color: #333;
-	  display: block; /* ✅ 명확히 표시 */
-	  visibility: visible; /* ✅ 혹시라도 감춰졌을 경우 대비 */
-	  min-height: 30px;     /* ✅ 공간 확보 */
-	  line-height: 1.4;     /* ✅ 텍스트 렌더링 보완 */
-	}
-	.weather-temp {
-		font-size: 12px;
-		color: #666;
-		margin-top: 5px;
-	}
+   .weather-icon {
+      font-size: 38px;
+      margin-bottom: 5px;
+   }
+   
+   .temperature {
+     font-size: 26px;
+     font-weight: 500;
+     color: #333;
+     display: block; /* ✅ 명확히 표시 */
+     visibility: visible; /* ✅ 혹시라도 감춰졌을 경우 대비 */
+     min-height: 30px;     /* ✅ 공간 확보 */
+     line-height: 1.4;     /* ✅ 텍스트 렌더링 보완 */
+   }
+   .weather-temp {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+   }
     
     .profile-avatar {
       width: 36px;
@@ -470,11 +470,11 @@
     
       </div>
       
-     	<div class="weather-section">
-		  <div class="weather-icon" id="weatherIcon">🌤</div>
-		  <div class="temperature" id="weatherTemp"></div>
-		  <div class="weather-info">날씨 로딩 중...</div>
-		</div>
+        <div class="weather-section">
+        <div class="weather-icon" id="weatherIcon">🌤</div>
+        <div class="temperature" id="weatherTemp"></div>
+        <div class="weather-info">날씨 로딩 중...</div>
+      </div>
     </div>
   </div>
   
