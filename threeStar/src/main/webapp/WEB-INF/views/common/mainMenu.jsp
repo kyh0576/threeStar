@@ -106,7 +106,7 @@
     <!-- 상단 로고 + 메뉴 -->
     <div>
         <div class="sidebar-logo">
-        	<a href="${pageContext.request.contextPath}/common/mainPage" class="menu-item">
+        	<a href="${pageContext.request.contextPath}/main.me" class="menu-item">
               <img src="${pageContext.request.contextPath}/resources/asset/smalllogo.png" alt="팀로고">
         	</a>
         </div>
