@@ -223,6 +223,12 @@
 		    <version>20231013</version>
 		</dependency>
 		
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.13.4</version> <!-- 또는 2.15.X 최신 버전 -->
+		</dependency>
+		
 	</dependencies>
 	
 	

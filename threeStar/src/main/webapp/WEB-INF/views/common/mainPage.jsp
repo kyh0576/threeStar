@@ -140,7 +140,7 @@
       color: #333;
     }
     
-    .weather-info {
+    .weather-temp {
       font-size: 12px;
       color: #666;
       margin-top: 5px;
@@ -463,12 +463,13 @@
       </div>
     </div>
       
-    <div class="weather-section">
-	  <div class="weather-icon" id="weatherIcon">🌤️</div>
-	  <div class="temperature" id="weatherTemp">-°</div>
-	  <div class="weather-info" id="weatherInfo">날씨 로딩 중...</div>
-	</div>
-      
+	 <div class="weather-section">
+  <div id="weatherIcon" class="weather-icon">🌤️</div>
+  <div id="weatherTemp" class="temperature">-°C</div>
+  <div class="weather-info">날씨 로딩 중...</div>
+</div>
+
+	      
     </div>
   </div>
   
@@ -610,6 +611,8 @@
         </div>
     </div>
   </div>
+
+
   
   <!-- 모달 실험중 -->
   <script>
@@ -684,7 +687,37 @@
 	
 	</script>
 
+	<script>
+  const apiKey = '0ex1ZeD6su2reN7ppo8aFlatOv2pWDaeEZ6pVOzJb%2BBBbjqpJs4kR1OkwAokxC2yitaLs7ziCVZzLV3PdZxZZA%3D%3D'; // 중복 선언 주의!
+  const city = 'Seoul';
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=kr`;
 
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (!data.main || !data.weather) throw new Error("Invalid response");
+
+      const temp = Math.round(data.main.temp);
+      const iconCode = data.weather[0].icon;
+      const description = data.weather[0].description;
+
+      const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+      const weatherIconEl = document.getElementById('weatherIcon');
+      const weatherTempEl = document.getElementById('weatherTemp');
+      const weatherInfoEl = document.querySelector('.weather-info');
+
+      if (weatherIconEl) weatherIconEl.innerHTML = `<img src="${iconUrl}" alt="${description}" style="width:38px;">`;
+      if (weatherTempEl) weatherTempEl.textContent = `${temp}°C`;
+      if (weatherInfoEl) weatherInfoEl.textContent = description;
+    })
+    .catch(error => {
+      console.error('날씨 정보 로딩 실패:', error);
+      const info = document.querySelector('.weather-info');
+      if (info) info.textContent = '날씨 불러오기 실패';
+    });
+</script>
+
+	
 
 
 </body>
