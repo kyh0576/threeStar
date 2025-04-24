@@ -636,11 +636,11 @@
 	    // modalIframe.src = `profile.do?memNo=${memNo}`;
 	    modalIframe.src = "profile.do";
 	    modalIframe.style.cssText = `
-	        width: 800px;
-	        height: 865px;
+	        width: 500px;
+	        height: 392.33px;
 	    	align-items : center;
 	        border: none;
-	        border-radius: 10px;
+	        border-radius: 30px;
 	        background: transparent;
 	    `;
 	    

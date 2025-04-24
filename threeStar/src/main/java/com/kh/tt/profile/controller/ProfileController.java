@@ -15,7 +15,7 @@ public class ProfileController {
 	@Autowired
 	private ProfileServiceImpl pService;
 	
-	@RequestMapping("profile.do")
+	@RequestMapping("profile.do") // 영훈 씨 모달용
 	public String selectProfile() {
 //	public String selectProfile (@RequestParam(value="memNo", required=true) int memNo, Model model) {
 //		if(memNo <= 0) {
@@ -35,7 +35,7 @@ public class ProfileController {
 //		}
 	}
 	
-	@RequestMapping("detail.do")
+	@RequestMapping("detailProfile.do")
 	public String selectProfileDetail() {
 //	public String selectProfileDetail(int memNo, Model model) {
 //		int result = pService.selectProfileDetail(memNo);
