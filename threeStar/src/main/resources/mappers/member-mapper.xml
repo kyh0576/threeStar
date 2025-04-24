@@ -13,6 +13,11 @@
 		<result column="status" property="status"/>
 		<result column="online_st" property="onlineSt"/>
 	</resultMap>
+	
+	<resultMap id="classesResult" type="Classes">
+		<result column="class_code" property="classCode"/>
+		<result column="class_name" property="className"/>
+	</resultMap>
 
 	<select id="loginMember" resultMap="memberResult">
 		<!-- 암호화 작업 전에 했던 방식
@@ -104,5 +109,36 @@
 			   count(*)
 	      from member
 	     where user_id = #{checkId}
+	</select>
+	
+	<!-- 클래스 이름 포함 모든 맴버 조회 -->
+	<select id="selectMemberList" resultMap="memberResult">
+	select
+	       mem_no
+	     , mem_id
+	     , mem_pwd
+	     , mem_name
+	     , email
+	     , phone
+	     , mem_class_code
+	     , sns_key
+	     , status
+	     , online_st
+	     , admin_yn
+	  from member
+	  join class on (mem_class_code = class_code)
+	 where status = 'Y'
+	   and mem_class_code = #{classCode}
+	</select>
+	
+	<!-- 클래스 조회 -->
+	<select id="selectClass" resultMap="classesResult">
+	select
+	       distinct 
+	       class_code
+	     , class_name
+	  from member
+	  join class on (mem_class_code = class_code)
+	 where status = 'Y'
 	</select>
 </mapper>
