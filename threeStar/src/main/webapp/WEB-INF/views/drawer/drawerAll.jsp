@@ -3,300 +3,278 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>메시지 갤러리</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>메시지 갤러리</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    }
 
-        body {
-            display: flex;
-            background-color: #f9f9f9;
-            min-height: 100vh;
-        }
+    body {
+        display: flex;
+        background-color: #f9f9f9;
+        min-height: 100vh;
+    }
 
-        /* 왼쪽 사이드바 */
-        .sidebar {
-            width: 95px;
-            background-color: white;
-            border-right: 1px solid #e1e1e1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 0;
-        }
+    /* 왼쪽 사이드바 */
+    .sidebar {
+        width: 95px;
+        background-color: white;
+        border-right: 1px solid #e1e1e1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+    }
 
-        .sidebar-logo {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 20px;
-        }
+    .sidebar-logo {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 20px;
+    }
 
-        .sidebar-menu {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 25px;
-            width: 100%;
-        }
+    .sidebar-menu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+        width: 100%;
+    }
 
-        .menu-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 10px 0;
-            color: #888;
-            font-size: 12px;
-            text-decoration: none;
-        }
+    .menu-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 10px 0;
+        color: #888;
+        font-size: 12px;
+        text-decoration: none;
+    }
 
-        .menu-item.active {
-            color: #4a8cff;
-        }
+    .menu-item.active {
+        color: #4a8cff;
+    }
 
-        .menu-icon {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
+    .menu-icon {
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
 
-        /* 메시지 목록 사이드바 */
-        .message-sidebar {
-            width: 300px;
-            background-color: white;
-            border-right: 1px solid #e1e1e1;
-            display: flex;
-            flex-direction: column;
-        }
+    /* 메시지 목록 사이드바 */
+    .message-sidebar {
+        width: 300px;
+        background-color: white;
+        border-right: 1px solid #e1e1e1;
+        display: flex;
+        flex-direction: column;
+    }
 
-        .message-header {
-            padding: 20px;
-            border-bottom: 1px solid #e1e1e1;
-            font-size: 18px;
-            font-weight: bold;
-        }
+    .message-header {
+        padding: 20px;
+        border-bottom: 1px solid #e1e1e1;
+        font-size: 18px;
+        font-weight: bold;
+    }
 
-        .message-tabs {
-            display: flex;
-            border-bottom: 1px solid #e1e1e1;
-        }
+    .message-tabs {
+        display: flex;
+        border-bottom: 1px solid #e1e1e1;
+    }
 
-        .tab {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            background-color: #f5f5f5;
-            cursor: pointer;
-        }
+    .tab {
+        flex: 1;
+        padding: 10px;
+        text-align: center;
+        background-color: #f5f5f5;
+        cursor: pointer;
+    }
 
-        .tab.active {
-            background-color: #4a8cff;
-            color: white;
-        }
+    .tab.active {
+        background-color: #4a8cff;
+        color: white;
+    }
 
-        .message-list {
-            overflow-y: auto;
-            flex-grow: 1;
-        }
+    .message-list {
+        overflow-y: auto;
+        flex-grow: 1;
+    }
 
-        .message-item {
-            padding: 15px;
-            border-bottom: 1px solid #f1f1f1;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
+    .message-item {
+        padding: 15px;
+        border-bottom: 1px solid #f1f1f1;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
 
-        .message-item:hover {
-            background-color: #f9f9f9;
-        }
+    .message-item:hover {
+        background-color: #f9f9f9;
+    }
 
-        .message-item.active {
-            background-color: #f0f7ff;
-        }
+    .message-item.active {
+        background-color: #f0f7ff;
+    }
 
-        .profile-img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 15px;
-            overflow: hidden;
-        }
+    .profile-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 15px;
+        overflow: hidden;
+    }
 
-        .profile-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .profile-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-        .message-info {
-            flex-grow: 1;
-        }
+    .message-info {
+        flex-grow: 1;
+    }
 
-        .message-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+    .message-name {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
 
-        .message-preview {
-            color: #666;
-            font-size: 14px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    .message-preview {
+        color: #666;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-        /* 메인 콘텐츠 영역 */
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
+    /* 메인 콘텐츠 영역 */
+    .main-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
 
-        .gallery-header {
-            padding: 20px;
-            border-bottom: 1px solid #e1e1e1;
-            display: flex;
-            align-items: center;
-        }
+    .gallery-header {
+        padding: 20px;
+        border-bottom: 1px solid #e1e1e1;
+        display: flex;
+        align-items: center;
+    }
 
-        .gallery-profile {
-            display: flex;
-            align-items: center;
-        }
+    .gallery-profile {
+        display: flex;
+        align-items: center;
+    }
 
-        .gallery-profile-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 15px;
-            overflow: hidden;
-        }
+    .gallery-profile-img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 15px;
+        overflow: hidden;
+    }
 
-        .gallery-profile-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .gallery-profile-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-        .gallery-tabs {
-            display: flex;
-            margin-left: 20px;
-            border-bottom: 1px solid #e1e1e1;
-        }
+    .gallery-tabs {
+        display: flex;
+        margin-left: 20px;
+        border-bottom: 1px solid #e1e1e1;
+    }
 
-        .gallery-tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            margin-right: 10px;
-            position: relative;
-        }
+    .gallery-tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        margin-right: 10px;
+        position: relative;
+    }
 
-        .gallery-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: #4a8cff;
-        }
+    .gallery-tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #4a8cff;
+    }
 
-        .gallery-count {
-            margin-left: auto;
-            color: #888;
-        }
+    .gallery-count {
+        margin-left: auto;
+        color: #888;
+    }
 
-        .gallery-date {
-            padding: 10px 20px;
-            color: #666;
-            font-size: 14px;
-            border-bottom: 1px solid #e1e1e1;
-        }
+    .gallery-date {
+        padding: 10px 20px;
+        color: #666;
+        font-size: 14px;
+        border-bottom: 1px solid #e1e1e1;
+    }
 
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            padding: 20px;
-            overflow-y: auto;
-        }
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        padding: 20px;
+        overflow-y: auto;
+    }
 
-        .gallery-item {
-            position: relative;
-            aspect-ratio: 1 / 1;
-            overflow: hidden;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
+    .gallery-item {
+        position: relative;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
 
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-        .file-info {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background-color: white;
-            padding: 10px;
-            border-top-left-radius: 4px;
-            font-size: 12px;
-            border: 1px solid #e1e1e1;
-        }
+    .file-info {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: white;
+        padding: 10px;
+        border-top-left-radius: 4px;
+        font-size: 12px;
+        border: 1px solid #e1e1e1;
+    }
 
-        .file-title {
-            font-weight: bold;
-            margin-bottom: 3px;
-        }
+    .file-title {
+        font-weight: bold;
+        margin-bottom: 3px;
+    }
 
-        .file-size {
-            color: #666;
-        }
-    </style>
+    .file-size {
+        color: #666;
+    }
+</style>
 </head>
 <body>
     <!-- 왼쪽 사이드바 -->
-    <div class="sidebar">
-        <div class="sidebar-logo">
-            <svg viewBox="0 0 24 24" fill="#4a8cff">
-                <path d="M12,2C6.486,2,2,6.486,2,12s4.486,10,10,10s10-4.486,10-10S17.514,2,12,2z M12,20c-4.411,0-8-3.589-8-8s3.589-8,8-8 s8,3.589,8,8S16.411,20,12,20z"/>
-                <path d="M13,7h-2v6h2V7z"/>
-                <path d="M12,17L12,17c0.552,0,1-0.448,1-1v0c0-0.552-0.448-1-1-1h0c-0.552,0-1,0.448-1,1v0C11,16.552,11.448,17,12,17z"/>
-            </svg>
-        </div>
-        <div class="sidebar-menu">
-            <a href="#" class="menu-item">
-                <div class="menu-icon">🏠</div>
-                <div>홈</div>
-            </a>
-            <a href="#" class="menu-item active">
-                <div class="menu-icon">💬</div>
-                <div>채팅</div>
-            </a>
-            <a href="#" class="menu-item">
-                <div class="menu-icon">👥</div>
-                <div>팀</div>
-            </a>
-            <a href="#" class="menu-item">
-                <div class="menu-icon">📅</div>
-                <div>캘린더</div>
-            </a>
-            <a href="#" class="menu-item">
-                <div class="menu-icon">🔔</div>
-                <div>알림</div>
-            </a>
-        </div>
-    </div>
+	<jsp:include page="../common/mainMenu.jsp"/>
 
     <!-- 메시지 목록 사이드바 -->
     <div class="message-sidebar">

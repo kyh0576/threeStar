@@ -14,4 +14,15 @@ public class CommonController  {
 	public String mainPage() {
 	    return "common/mainPage";  // => /WEB-INF/views/message/messageMainForm.jsp
 	}
+ 
+ 	@RequestMapping("/drawer/drawerAll")
+ 	public String drawerAll() {
+ 		return "drawer/drawerAll";
+ 	}
+ 	
+ 	@RequestMapping("/calendar/calendarDetail")
+ 	public String calendarDetail() {
+ 		return "calendar/calendarDetail";
+ 	}
+ 	
 }

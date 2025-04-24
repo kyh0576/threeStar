@@ -119,11 +119,11 @@
                 <div class="menu-icon">💬</div>
                 <div>채팅</div>
             </a>
-            <a href="#" class="menu-item">
+            <a href="${pageContext.request.contextPath}/drawer/drawerAll" class="menu-item">
                 <div class="menu-icon">📚</div>
                 <div>티서랍</div>
             </a>
-            <a href="#" class="menu-item">
+            <a href="${pageContext.request.contextPath}/calendar/calendarDetail" class="menu-item">
                 <div class="menu-icon">📅</div>
                 <div>캘린더</div>
             </a>
