@@ -37,16 +37,20 @@ public class MemberController {
 		if(loginMember != null && bcryptPasswordEncoder.matches(m.getMemPwd(), loginMember.getMemPwd())) {
 			// 로그인 성공
 			session.setAttribute("loginMember", loginMember);
-			mv.setViewName("common/mainPage");
+			mv.setViewName("redirect:/main.me");
 		}else {
 			// 로그인 실패
-			mv.addObject("errorMsg", "로그인 실패!");
-			mv.setViewName("common/errorPage");
+			mv.addObject("alertMsg", "로그인 실패!");
+			mv.setViewName("member/loginForm");
 		}
 		
 		return mv;
 	}
 	
+    @RequestMapping("main.me")
+    public String mainPage() {
+        return "common/mainPage";
+    }
     
     // 메인페이지 연동되면 로그아웃 만들거임
 	@RequestMapping("logout.me")
@@ -88,9 +92,10 @@ public class MemberController {
 			int result = mService.insertMember(m);
 			
 			if(result > 0) { // 성공 => 메인페이지 url 재요청
+				model.addAttribute("alertMsg", "회원가입 성공");
 				System.out.println("회원가입 성공");
 				//session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
-				return "redirect:/";
+				return "member/loginForm";
 				
 			}else { // 실패 => 에러문구 담아서 에러페이지
 				System.out.println("회원가입 실패");
@@ -98,9 +103,9 @@ public class MemberController {
 				return "common/errorPage";
 			}
 		}else { // 유효하지 않는 초대코드를 입력했을때
-			System.out.println("초대코드가 다릅니다. 다시 입력해 주세요");
-			
-			return "common/errorPage";
+			model.addAttribute("alertMsg", "초대코드가 다릅니다. 다시 입력해 주세요");
+			System.out.println("초대코드가 다릅니다.");
+			return "member/signinForm";
 		}
 		
 		

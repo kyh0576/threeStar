@@ -31,11 +31,27 @@
     }
     
     .sidebar-top {
+      padding: 20px;
       padding-bottom: 15px;
       display: flex;
       align-items: center;
     }
     
+    .sidebar-logo {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      background-color: #5bc7f8;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .sidebar-logo img {
+      width: 18px;
+      height: 18px;
+    }
     
     .sidebar-title {
       font-size: 16px;
@@ -146,6 +162,12 @@
       margin-top: 5px;
     }
     
+    .user-profile {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-top: 1px solid #e0e0e0;
+    }
     
     .profile-avatar {
       width: 36px;
@@ -258,7 +280,7 @@
     
     /* 오른쪽 사이드바 */
     .right-sidebar {
-      width: 500px;
+      width: 220px;
       background-color: white;
       border-left: 1px solid #e0e0e0;
       padding: 20px;
@@ -354,23 +376,14 @@
         display: none;
       }
     }
-
-    .border{
-      background-color: #f8f9fa;
-      padding: 16px;
-      border-radius: 10px;
-    }
   </style>
 </head>
 <body>
-  <!-- 이쪽에 메뉴바 포함 할꺼임 -->
-  <jsp:include page="../common/mainMenu.jsp"/>
-
   <!-- 왼쪽 사이드바 -->
-  <div style="border: 1px solid f8f9fa; " class=""border">
   <div class="left-sidebar">
     <div class="sidebar-inner">
       <div class="sidebar-top">
+        <div class="sidebar-logo">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
           </svg>
@@ -384,7 +397,7 @@
         </div>
         <ul class="hclass-list">
           <li class="hclass-item">
-            <div class="avatar avatar-red" id="profile-item">김</div>
+            <div class="avatar avatar-red">김</div>
             <span class="member-name">김시연</span>
           </li>
           <li class="hclass-item">
@@ -409,8 +422,6 @@
           </li>
         </ul>
       </div>
-      
-      
       
       <div class="class-dropdown">
         <span>A - Class</span>
@@ -452,23 +463,17 @@
         <span class="dropdown-arrow">▼</span>
       </div>
       
-      <div class="class-dropdown">
-        <span>J - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>K - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-    </div>
-      
       <div class="weather-section">
         <div class="weather-icon">☀️</div>
         <div class="temperature">21.8°</div>
-        <div class="weather-info">어제보다 2도 높은 맑은 날씨</div>
+        <div class="weather-info">어제보다 2도켜 높음</div>
       </div>
       
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <img src="/api/placeholder/36/36" alt="사용자 프로필">
+        </div>
+      </div>
     </div>
   </div>
   
@@ -573,115 +578,35 @@
   
   <!-- 오른쪽 사이드바 -->
   <div class="right-sidebar">
-    <div style="border: 1px solid f8f9fa; "  class="border">
-      <div class="today-header">온라인 - 3명</div>
+    <div class="today-header">온라인 - 3명</div>
+    
+    <div class="today-members">
+      <div class="member-item">
+        <div class="member-avatar avatar-red">김</div>
+        <span class="member-name">김시연</span>
+      </div>
       
-      <div class="today-members">
-        <div class="member-item">
-          <div class="member-avatar avatar-red">김</div>
-          <span class="member-name">김시연</span>
-        </div>
-        
-        <div class="member-item">
-          <div class="member-avatar avatar-purple">동</div>
-          <span class="member-name">동진이 형</span>
-        </div>
-        
-        <div class="member-item">
-          <div class="member-avatar avatar-purple">현</div>
-          <span class="member-name">현정 누나</span>
-        </div>
+      <div class="member-item">
+        <div class="member-avatar avatar-purple">동</div>
+        <span class="member-name">동진이 형</span>
+      </div>
+      
+      <div class="member-item">
+        <div class="member-avatar avatar-purple">현</div>
+        <span class="member-name">현정 누나</span>
       </div>
     </div>
     
-    <br>
-    <br>
-
-      <div style="border: 1px solid f8f9fa;" class="border">
-        <div class="hclass-info-title">H class 일정</div>
-        
-        <div class="hclass-info-list">
-          <div class="info-item">D - 5 : 프로젝트 기반 공공 데이터 활용</div>
-          <div class="info-item">D - 16 : 프로젝트 기반 공공데이터 아키텍처 설계</div>
-          <div class="info-item">D - 39 : 애플리케이션 테스트 수행</div>
-          <div class="info-item">D - 52 : 애플리케이션 배포</div>
-          <div class="info-item">D - 61 : 파이널 프로젝트 발표</div>
-          <div class="info-item">D - 70 : 수료</div>
-        </div>
+    <div class="hclass-info-title">H class 일정</div>
+    
+    <div class="hclass-info-list">
+      <div class="info-item">D - 5 : 프로젝트 기반 공공 데이터 활용</div>
+      <div class="info-item">D - 16 : 프로젝트 기반 공공데이터 아키텍처 설계</div>
+      <div class="info-item">D - 39 : 애플리케이션 테스트 수행</div>
+      <div class="info-item">D - 52 : 애플리케이션 배포</div>
+      <div class="info-item">D - 61 : 파이널 프로젝트 발표</div>
+      <div class="info-item">D - 70 : 수료</div>
     </div>
   </div>
-  
-  <!-- 모달 실험중 -->
-  <script>
-  // 부모 페이지의 JavaScript
-	function openProfileModal(memId) {
-	    // 모달 컨테이너 생성
-	    const modalContainer = document.createElement('div');
-	    modalContainer.id = 'modalContainer';
-	    modalContainer.style.cssText = `
-	        position: fixed;
-	        top: 0;
-	        left: 0;
-	        width: 100%;
-	        height: 100%;
-	        background-color: rgba(0, 0, 0, 0.5);
-	        display: flex;
-	        justify-content: center;
-	        align-items: center;
-	        z-index: 1000;
-	    `;
-	    
-	    // iframe 생성
-	    const modalIframe = document.createElement('iframe');
-	    // modalIframe.src = `profile.do?memNo=${memNo}`;
-	    modalIframe.src = "profile.do";
-	    modalIframe.style.cssText = `
-	        width: 800px;
-	        height: 865px;
-	    	align-items : center;
-	        border: none;
-	        border-radius: 10px;
-	        background: transparent;
-	    `;
-	    
-	    // 모달 컨테이너에 iframe 추가
-	    modalContainer.appendChild(modalIframe);
-	    
-	    // body에 모달 컨테이너 추가
-	    document.body.appendChild(modalContainer);
-	    
-	    // 모달 외부 클릭 시 닫기
-	    modalContainer.addEventListener('click', function(event) {
-	        if (event.target === modalContainer) {
-	            closeModal();
-	        }
-	    });
-	    
-	    // 스크롤 방지
-	    document.body.style.overflow = 'hidden';
-	}
-	
-	// 모달 닫기 함수 (iframe에서도 접근 가능하도록 전역 함수로 선언)
-	function closeModal() {
-	    const modalContainer = document.getElementById('modalContainer');
-	    if (modalContainer) {
-	        document.body.removeChild(modalContainer);
-	        document.body.style.overflow = 'auto';
-	    }
-	}
-  
-	// 프로필 요소에 클릭 이벤트 추가
-	document.addEventListener('DOMContentLoaded', function() {
-	    const profileElements = document.querySelectorAll('#profile-item');
-	    
-	    profileElements.forEach(function(element) {
-	        element.addEventListener('click', function() {
-	            const memId = this.getAttribute('MEM_ID');
-	            openProfileModal(memId);
-	        });
-	    });
-	});
-	</script>
-	
 </body>
 </html>
