@@ -169,28 +169,31 @@
     }
     
     .weather-section {
-      margin-top: auto;
-      padding: 15px;
-      text-align: center;
-      border-top: 1px solid #e0e0e0;
-    }
-    
-    .weather-icon {
-      font-size: 38px;
-      margin-bottom: 5px;
-    }
-    
-    .temperature {
-      font-size: 26px;
-      font-weight: 500;
-      color: #333;
-    }
-    
-    .weather-info {
-      font-size: 12px;
-      color: #666;
-      margin-top: 5px;
-    }
+	margin-top: auto;
+	padding: 15px;
+	text-align: center;
+	border-top: 1px solid #e0e0e0;
+	}
+
+	.weather-icon {
+		font-size: 38px;
+		margin-bottom: 5px;
+	}
+	
+	.temperature {
+	  font-size: 26px;
+	  font-weight: 500;
+	  color: #333;
+	  display: block; /* ✅ 명확히 표시 */
+	  visibility: visible; /* ✅ 혹시라도 감춰졌을 경우 대비 */
+	  min-height: 30px;     /* ✅ 공간 확보 */
+	  line-height: 1.4;     /* ✅ 텍스트 렌더링 보완 */
+	}
+	.weather-temp {
+		font-size: 12px;
+		color: #666;
+		margin-top: 5px;
+	}
     
     .profile-avatar {
       width: 36px;
@@ -467,11 +470,11 @@
     
       </div>
       
-      <div class="weather-section">
-        <div class="weather-icon" id="weatherIcon">🌤️</div>
-        <div class="temperature" id="weatherTemp">-°</div>
-        <div class="weather-info" id="weatherInfo">날씨 로딩 중...</div>
-      </div>
+     	<div class="weather-section">
+		  <div class="weather-icon" id="weatherIcon">🌤</div>
+		  <div class="temperature" id="weatherTemp"></div>
+		  <div class="weather-info">날씨 로딩 중...</div>
+		</div>
     </div>
   </div>
   
@@ -753,5 +756,47 @@
      }
     });
   </script>
+  
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  fetch('/tt/weather/today')
+    .then(res => res.json())
+    .then(data => {
+      const items = data?.response?.body?.items?.item;
+      if (!items) throw new Error("예보 데이터 없음");
+
+      const tempObj = items.find(i => i.category === "TMP");
+      const skyObj = items.find(i => i.category === "SKY");
+      const ptyObj = items.find(i => i.category === "PTY");
+
+      const temp = tempObj?.fcstValue ?? "N/A";
+      const sky = skyObj?.fcstValue;
+      const pty = ptyObj?.fcstValue;
+      const fcstTime = tempObj?.fcstTime ?? "1200";
+      const hour = parseInt(fcstTime.substring(0, 2));
+      const isNight = hour >= 18 || hour < 6;
+
+      // 날씨 아이콘 결정
+      let icon = "🌤️";
+      if (pty === "1") icon = "🌧️";
+      else if (pty === "2" || pty === "6") icon = "🌦️";
+      else if (pty === "3" || pty === "7") icon = "❄️";
+      else {
+        if (sky === "1") icon = isNight ? "🌕" : "☀️";
+        else if (sky === "3") icon = isNight ? "🌙☁️" : "⛅";
+        else if (sky === "4") icon = "☁️";
+      }
+
+      // 삽입
+      document.getElementById("weatherTemp").textContent = `\${temp}°C`;
+      document.getElementById("weatherIcon").textContent = icon;
+      document.querySelector(".weather-info").textContent = "기상청 기준 단기예보";
+    })
+    .catch(err => {
+      console.error("🌩️ 날씨 정보 로딩 실패:", err);
+      document.querySelector(".weather-info").textContent = "날씨 불러오기 실패";
+    });
+});
+</script>
 </body>
 </html>
