@@ -153,24 +153,5 @@
        
     }
 </script>
-
-<script>
-    const apiKey = '여기에_본인_API_KEY_입력';
-    const city = 'Seoul';
-    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=kr`;
-
-    fetch(weatherUrl)
-        .then(response => response.json())
-        .then(data => {
-            const temp = Math.round(data.main.temp);
-            const description = data.weather[0].description;
-            document.getElementById('temp').textContent = `${temp}°C`;
-            document.querySelector('#weather div:last-child').textContent = description;
-        })
-        .catch(error => {
-            console.error('날씨 정보 로딩 실패:', error);
-            document.querySelector('#weather div:last-child').textContent = '불러오기 실패';
-        });
-</script>
 </body>
 </html>
