@@ -384,7 +384,7 @@
         </div>
         <ul class="hclass-list">
           <li class="hclass-item">
-            <div class="avatar avatar-red">김</div>
+            <div class="avatar avatar-red" id="profile-item">김</div>
             <span class="member-name">김시연</span>
           </li>
           <li class="hclass-item">
@@ -409,6 +409,8 @@
           </li>
         </ul>
       </div>
+      
+      
       
       <div class="class-dropdown">
         <span>A - Class</span>
@@ -608,5 +610,78 @@
         </div>
     </div>
   </div>
+  
+  <!-- 모달 실험중 -->
+  <script>
+  // 부모 페이지의 JavaScript
+	function openProfileModal(memId) {
+	    // 모달 컨테이너 생성
+	    const modalContainer = document.createElement('div');
+	    modalContainer.id = 'modalContainer';
+	    modalContainer.style.cssText = `
+	        position: fixed;
+	        top: 0;
+	        left: 0;
+	        width: 100%;
+	        height: 100%;
+	        background-color: rgba(0, 0, 0, 0.5);
+	        display: flex;
+	        justify-content: center;
+	        align-items: center;
+	        z-index: 1000;
+	    `;
+	    
+	    // iframe 생성
+	    const modalIframe = document.createElement('iframe');
+	    // modalIframe.src = `profile.do?memNo=${memNo}`;
+	    modalIframe.src = "profile.do";
+	    modalIframe.style.cssText = `
+	        width: 800px;
+	        height: 865px;
+	    	align-items : center;
+	        border: none;
+	        border-radius: 10px;
+	        background: transparent;
+	    `;
+	    
+	    // 모달 컨테이너에 iframe 추가
+	    modalContainer.appendChild(modalIframe);
+	    
+	    // body에 모달 컨테이너 추가
+	    document.body.appendChild(modalContainer);
+	    
+	    // 모달 외부 클릭 시 닫기
+	    modalContainer.addEventListener('click', function(event) {
+	        if (event.target === modalContainer) {
+	            closeModal();
+	        }
+	    });
+	    
+	    // 스크롤 방지
+	    document.body.style.overflow = 'hidden';
+	}
+	
+	// 모달 닫기 함수 (iframe에서도 접근 가능하도록 전역 함수로 선언)
+	function closeModal() {
+	    const modalContainer = document.getElementById('modalContainer');
+	    if (modalContainer) {
+	        document.body.removeChild(modalContainer);
+	        document.body.style.overflow = 'auto';
+	    }
+	}
+  
+	// 프로필 요소에 클릭 이벤트 추가
+	document.addEventListener('DOMContentLoaded', function() {
+	    const profileElements = document.querySelectorAll('#profile-item');
+	    
+	    profileElements.forEach(function(element) {
+	        element.addEventListener('click', function() {
+	            const memId = this.getAttribute('MEM_ID');
+	            openProfileModal(memId);
+	        });
+	    });
+	});
+	</script>
+	
 </body>
 </html>

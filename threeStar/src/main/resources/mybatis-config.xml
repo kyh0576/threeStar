@@ -8,10 +8,12 @@
 
     <typeAliases>
         <typeAlias type="com.kh.tt.member.model.vo.Member" alias="Member"/>
+        <typeAlias type="com.kh.tt.profile.model.vo.Profile" alias="Profile"/>
     </typeAliases>
 
      <mappers>
          <mapper resource="/mappers/member-mapper.xml"/>
+         <mapper resource="/mappers/profile-mapper.xml"/>
      </mappers>
 
 </configuration>
