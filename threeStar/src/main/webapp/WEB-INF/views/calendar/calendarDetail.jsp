@@ -1,462 +1,430 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>달력 및 일정 관리</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-        
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .container {
-            display: flex;
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        
-        .sidebar {
-            width: 250px;
-            background-color: #f9f9f9;
-            border-right: 1px solid #eaeaea;
-            padding: 20px;
-        }
-        
-        .main-content {
-            flex: 1;
-            padding: 20px;
-        }
-        
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 10px 0;
-            border-bottom: 1px solid #eaeaea;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: #007bff;
-        }
-        
-        .logo-icon {
-            margin-right: 8px;
-            color: #007bff;
-            font-size: 28px;
-        }
-        
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: #f5f5f5;
-            border-radius: 20px;
-            padding: 5px 15px;
-            width: 300px;
-            border: 1px solid #ddd;
-        }
-        
-        .search-bar input {
-            border: none;
-            background: transparent;
-            flex: 1;
-            padding: 8px;
-            outline: none;
-        }
-        
-        .search-icon {
-            margin-right: 8px;
-            color: #777;
-        }
-        
-        .user-profile {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #ddd;
-            overflow: hidden;
-        }
-        
-        .user-profile img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .year-month {
-            font-size: 28px;
-            font-weight: bold;
-        }
-        
-        .calendar-nav {
-            display: flex;
-            align-items: center;
-        }
-        
-        .nav-button {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            margin: 0 5px;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-        }
-        
-        .nav-button:hover {
-            background-color: #f0f0f0;
-        }
-        
-        .today-button {
-            background-color: #f0f0f0;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-        
-        .today-button:hover {
-            background-color: #e0e0e0;
-        }
-        
-        .calendar-view-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .tab-button {
-            background: none;
-            border: 1px solid #ddd;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .tab-button.active {
-            background-color: #007bff;
-            color: white;
-            border-color: #007bff;
-        }
-        
-        .calendar-grid {
-            width: 100%;
-        }
-        
-        .weekdays {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #666;
-        }
-        
-        .weekday {
-            padding: 10px;
-            font-size: 14px;
-        }
-        
-        .calendar-days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-        }
-        
-        .day-cell {
-            border: 1px solid #eaeaea;
-            min-height: 100px;
-            padding: 8px;
-            position: relative;
-        }
-        
-        .day-cell.other-month {
-            background-color: #f9f9f9;
-            color: #aaa;
-        }
-        
-        .day-number {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            width: 25px;
-            height: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            border-radius: 50%;
-        }
-        
-        .current-day .day-number {
-            background-color: #007bff;
-            color: white;
-        }
-        
-        .today {
-            background-color: #e6f7ff;
-        }
-        
-        .events-container {
-            margin-top: 30px;
-        }
-        
-        .event {
-            background-color: #e6f7ff;
-            border-left: 3px solid #007bff;
-            padding: 5px 8px;
-            margin-bottom: 5px;
-            font-size: 12px;
-            border-radius: 3px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            cursor: pointer;
-        }
-        
-        .event.holiday {
-            background-color: #d4edda;
-            border-left-color: #28a745;
-        }
-        
-        .event.important {
-            background-color: #f8d7da;
-            border-left-color: #dc3545;
-        }
-        
-        .sidebar-section {
-            margin-bottom: 20px;
-        }
-        
-        .sidebar-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .sidebar-icon {
-            margin-right: 8px;
-            width: 16px;
-            height: 16px;
-        }
-        
-        .sidebar-list {
-            list-style-type: none;
-        }
-        
-        .sidebar-list li {
-            padding: 8px 0;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-        
-        .sidebar-list li:hover {
-            color: #007bff;
-        }
-        
-        .sidebar-list li:before {
-            content: "●";
-            margin-right: 10px;
-            font-size: 8px;
-            color: #777;
-        }
-        
-        /* 모달 스타일 */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 400px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .modal-title {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        
-        .close-button {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #777;
-        }
-        
-        .modal-form {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        
-        .form-group textarea {
-            height: 100px;
-            resize: vertical;
-        }
-        
-        .color-options {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .color-option {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-        
-        .color-option.selected {
-            border-color: #333;
-        }
-        
-        .button-group {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        
-        .button-primary {
-            background-color: #007bff;
-            color: white;
-        }
-        
-        .button-secondary {
-            background-color: #f0f0f0;
-            color: #333;
-        }
-        
-        .button-danger {
-            background-color: #dc3545;
-            color: white;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>달력 및 일정 관리</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Noto Sans KR', sans-serif;
+    }
+    
+    body {
+        background-color: #f5f5f5;
+        color: #333;
+        line-height: 1.6;
+    }
+    
+    .container {
+        display: flex;
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
+    .sidebar {
+        width: 250px;
+        background-color: #f9f9f9;
+        border-right: 1px solid #eaeaea;
+        padding: 20px;
+    }
+    
+    .main-content {
+        flex: 1;
+        padding: 20px;
+    }
+    
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 10px 0;
+        border-bottom: 1px solid #eaeaea;
+    }
+    
+    .logo {
+        display: flex;
+        align-items: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: #007bff;
+    }
+    
+    .logo-icon {
+        margin-right: 8px;
+        color: #007bff;
+        font-size: 28px;
+    }
+    
+    .search-bar {
+        display: flex;
+        align-items: center;
+        background: #f5f5f5;
+        border-radius: 20px;
+        padding: 5px 15px;
+        width: 300px;
+        border: 1px solid #ddd;
+    }
+    
+    .search-bar input {
+        border: none;
+        background: transparent;
+        flex: 1;
+        padding: 8px;
+        outline: none;
+    }
+    
+    .search-icon {
+        margin-right: 8px;
+        color: #777;
+    }
+    
+    .user-profile {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #ddd;
+        overflow: hidden;
+    }
+    
+    .user-profile img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .year-month {
+        font-size: 28px;
+        font-weight: bold;
+    }
+    
+    .calendar-nav {
+        display: flex;
+        align-items: center;
+    }
+    
+    .nav-button {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        margin: 0 5px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+    }
+    
+    .nav-button:hover {
+        background-color: #f0f0f0;
+    }
+    
+    .today-button {
+        background-color: #f0f0f0;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    
+    .today-button:hover {
+        background-color: #e0e0e0;
+    }
+    
+    .calendar-view-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .tab-button {
+        background: none;
+        border: 1px solid #ddd;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .tab-button.active {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+    }
+    
+    .calendar-grid {
+        width: 100%;
+    }
+    
+    .weekdays {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #666;
+    }
+    
+    .weekday {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .calendar-days {
+    	height: 700px;
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+    }
+    
+    .day-cell {
+        border: 1px solid #eaeaea;
+        min-height: 100px;
+        padding: 8px;
+        position: relative;
+    }
+    
+    .day-cell.other-month {
+        background-color: #f9f9f9;
+        color: #aaa;
+    }
+    
+    .day-number {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        border-radius: 50%;
+    }
+    
+    .current-day .day-number {
+        background-color: #007bff;
+        color: white;
+    }
+    
+    .today {
+        background-color: #e6f7ff;
+    }
+    
+    .events-container {
+        margin-top: 30px;
+    }
+    
+    .event {
+        background-color: #e6f7ff;
+        border-left: 3px solid #007bff;
+        padding: 5px 8px;
+        margin-bottom: 5px;
+        font-size: 12px;
+        border-radius: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+    }
+    
+    .event.holiday {
+        background-color: #d4edda;
+        border-left-color: #28a745;
+    }
+    
+    .event.important {
+        background-color: #f8d7da;
+        border-left-color: #dc3545;
+    }
+    
+    .sidebar-section {
+        margin-bottom: 20px;
+    }
+    
+    .sidebar-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .sidebar-icon {
+        margin-right: 8px;
+        width: 16px;
+        height: 16px;
+    }
+    
+    .sidebar-list {
+        list-style-type: none;
+    }
+    
+    .sidebar-list li {
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+    
+    .sidebar-list li:hover {
+        color: #007bff;
+    }
+    
+    .sidebar-list li:before {
+        content: "●";
+        margin-right: 10px;
+        font-size: 8px;
+        color: #777;
+    }
+    
+    /* 모달 스타일 */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 400px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .modal-title {
+        font-size: 18px;
+        font-weight: bold;
+    }
+    
+    .close-button {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #777;
+    }
+    
+    .modal-form {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    
+    .form-group input, .form-group select, .form-group textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .form-group textarea {
+        height: 100px;
+        resize: vertical;
+    }
+    
+    .color-options {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .color-option {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+    
+    .color-option.selected {
+        border-color: #333;
+    }
+    
+    .button-group {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    
+    .button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    
+    .button-primary {
+        background-color: #007bff;
+        color: white;
+    }
+    
+    .button-secondary {
+        background-color: #f0f0f0;
+        color: #333;
+    }
+    
+    .button-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+</style>
 </head>
 <body>
     <div class="container">
         <!-- 사이드바 -->
-        <div class="sidebar">
-            <div class="sidebar-section">
-                <div class="sidebar-title">
-                    <span class="sidebar-icon">📅</span> 캘린더
-                </div>
-                <ul class="sidebar-list">
-                    <li>월별 일정표</li>
-                    <li>할 일 일정표</li>
-                </ul>
-            </div>
-            
-            <div class="sidebar-section">
-                <div class="sidebar-title">
-                    <span class="sidebar-icon">🔖</span> 일정 선택 목록
-                </div>
-                <ul class="sidebar-list">
-                    <li>내 일정</li>
-                    <li>가족일정</li>
-                    <li>직장일정1 일정</li>
-                    <li>직장일정2 일정</li>
-                    <li>직장일정3 일정</li>
-                </ul>
-            </div>
-            
-            <div class="sidebar-section">
-                <div class="sidebar-title">
-                    <span class="sidebar-icon">👥</span> 기념일
-                </div>
-                <ul class="sidebar-list">
-                    <li>대한민국 기념일</li>
-                    <li>내 기념일</li>
-                    <li>친구 기념일</li>
-                    <li>직장일정1 기념일</li>
-                </ul>
-            </div>
-            
-            <div class="sidebar-section">
-                <div class="sidebar-title">
-                    <span class="sidebar-icon">⚙️</span> 설정
-                </div>
-            </div>
-        </div>
+		<jsp:include page="../common/mainMenu.jsp"/>
         
         <!-- 메인 콘텐츠 -->
         <div class="main-content">
@@ -476,7 +444,6 @@
             
             <!-- 캘린더 탭 -->
             <div class="calendar-view-tabs">
-                <button class="tab-button">일별 일정표</button>
                 <button class="tab-button active">월별 일정표</button>
             </div>
             
@@ -597,7 +564,6 @@
         function renderCalendar() {
             // 현재 연도와 월 표시
             currentYearMonthElement.textContent = `${currentYear}년 ${monthNames[currentMonth]}`;
-            
             // 캘린더 초기화
             calendarDays.innerHTML = '';
             
@@ -614,27 +580,33 @@
                     const dayNumber = prevMonthLastDate - firstDayOfWeek + i + 1;
                     const prevMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
                     const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-                    const dateString = `${prevMonthYear}-${String(prevMonth + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
-                    const dayCell = createDayCell(dayNumber, true, `${prevMonthYear}-${String(prevMonth + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`);
-                    calendarDays.appendChild(dayCell);
+					const dateString = prevMonthYear + '-' + 
+					                  (prevMonth + 1 < 10 ? '0' + (prevMonth + 1) : prevMonth + 1) + '-' + 
+					                  (dayNumber < 10 ? '0' + dayNumber : dayNumber);
+			        const dayCell = createDayCell(dayNumber, true, dateString);
+			        calendarDays.append(dayCell);
                 }
             }
             
-            // 현재 달의 날짜 표시
+         	// 현재 달의 날짜 표시
             for (let i = 1; i <= getDaysInMonth(currentYear, currentMonth); i++) {
-                const dateString = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                const dateString = currentYear + '-' + 
+                                  (currentMonth + 1 < 10 ? '0' + (currentMonth + 1) : currentMonth + 1) + '-' + 
+                                  (i < 10 ? '0' + i : i);
                 const isToday = i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
                 const dayCell = createDayCell(i, false, dateString, isToday);
-                calendarDays.appendChild(dayCell);
+                calendarDays.append(dayCell);
             }
-            
+
             // 다음 달의 날짜 표시
             const lastDayOfWeek = lastDay.getDay();
             if (lastDayOfWeek < 6) {
                 for (let i = 1; i <= 6 - lastDayOfWeek; i++) {
                     const nextMonthYear = currentMonth === 11 ? currentYear + 1 : currentYear;
                     const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
-                    const dateString = `${nextMonthYear}-${String(nextMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                    const dateString = nextMonthYear + '-' + 
+                                     (nextMonth + 1 < 10 ? '0' + (nextMonth + 1) : nextMonth + 1) + '-' + 
+                                     (i < 10 ? '0' + i : i);
                     const dayCell = createDayCell(i, true, dateString);
                     calendarDays.appendChild(dayCell);
                 }
@@ -873,6 +845,13 @@
         
         // 초기화 함수
         function init() {
+            renderCalendar();
+            setupEventListeners();
+            addDefaultEvents();
+        }
+        
+        function init() {
+            console.log("🌟 init 실행됨!");
             renderCalendar();
             setupEventListeners();
             addDefaultEvents();

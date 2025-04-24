@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!-- jQuery 라이브러리 -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -150,7 +149,9 @@
             <div class="profile-image">
                 <img src="/api/placeholder/100/100" alt="프로필 이미지">
             </div>
-            <h1 class="profile-name">아이디</h1>
+            <h1 class="profile-name">
+                <input type="text" class="form-control" id="memId" name="" value="${ loginMember.memId }">
+            </h1>
             
             <div class="edit-form">
                 <div class="form-title">
@@ -162,34 +163,34 @@
                 
                 <div class="form-group">
                     <label>이름</label>
-                    <input type="text" class="form-control" placeholder="닉네임" id="name">
+                    <input type="text" class="form-control" placeholder="닉네임" id="memName" name="" value="${ loginMember.memName }">
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label>연락처</label>
-                        <input type="text" class="form-control" placeholder="010-1234-5678" id="contact">
+                        <input type="text" class="form-control" placeholder="010-1234-5678" id="phone" name="" value=" ${ loginMember.phone }">
                     </div>
                     <div class="form-group">
                         <label>이메일</label>
-                        <input type="email" class="form-control" placeholder="example@email.com" id="email">
+                        <input type="email" class="form-control" placeholder="example@email.com" id="email" name="" value="${ loginMember.email }">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>초대코드</label>
-                    <input type="password" class="form-control" placeholder="클래스 초대코드" id="inviteCode">
+                    <input type="password" class="form-control" placeholder="클래스 초대코드" id="memClassCode" name="" value="${ loginMember.memClassCode }">
                 </div>
                 
                 <div class="form-group">
                     <label>비밀번호</label>
-                    <input type="password" class="form-control" placeholder="" id="password">
+                    <input type="password" class="form-control" placeholder="" id="memPwd" name="" value="${ loginMember.memPwd}">
                 </div>
                 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label>비밀번호 확인</label>
                     <input type="password" class="form-control" placeholder="" id="passwordConfirm">
-                </div>
+                </div> -->
                 
                 <div class="button-group">
                     <button type="button" class="btn btn-primary" id="saveBtn">수정</button>
@@ -204,11 +205,11 @@
             // DOM 요소 가져오기
             const saveBtn = document.getElementById('saveBtn');
             const cancelBtn = document.getElementById('cancelBtn');
-            const nameInput = document.getElementById('name');
-            const contactInput = document.getElementById('contact');
+            const nameInput = document.getElementById('memName');
+            const contactInput = document.getElementById('phone');
             const emailInput = document.getElementById('email');
-            const inviteCodeInput = document.getElementById('inviteCode');
-            const passwordInput = document.getElementById('password');
+            const inviteCodeInput = document.getElementById('memClassCode');
+            const passwordInput = document.getElementById('memPwd');
             const passwordConfirmInput = document.getElementById('passwordConfirm');
             const statusInput = document.getElementById('status');
             
