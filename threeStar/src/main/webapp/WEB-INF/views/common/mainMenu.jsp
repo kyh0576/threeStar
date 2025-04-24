@@ -111,7 +111,7 @@
         	</a>
         </div>
         <div class="sidebar-menu">
-            <a href="${pageContext.request.contextPath}/common/mainPage" class="menu-item ${page eq 'home' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/main.me" class="menu-item ${page eq 'home' ? 'active' : ''}">
                 <div class="menu-icon">🏠</div>
                 <div>홈</div>
             </a>
