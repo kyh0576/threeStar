@@ -384,7 +384,7 @@
         </div>
         <ul class="hclass-list">
           <li class="hclass-item">
-            <div class="avatar avatar-red" id="profile-item">김</div>
+            <div class="avatar avatar-red" id="profile-item">1</div>
             <span class="member-name">김시연</span>
           </li>
           <li class="hclass-item">
@@ -633,8 +633,8 @@
 	    
 	    // iframe 생성
 	    const modalIframe = document.createElement('iframe');
-	    // modalIframe.src = `profile.do?memNo=${memNo}`;
-	    modalIframe.src = "profile.do";
+	    modalIframe.src = `profile.do?memNo=${memNo}`;
+	    // modalIframe.src = "profile.do";
 	    modalIframe.style.cssText = `
 	        width: 500px;
 	        height: 392.33px;

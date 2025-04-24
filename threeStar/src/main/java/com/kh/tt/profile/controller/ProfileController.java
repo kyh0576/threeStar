@@ -37,13 +37,12 @@ public class ProfileController {
 	
 	@RequestMapping("detailProfile.do")
 	public String selectProfileDetail() {
-//	public String selectProfileDetail(int memNo, Model model) {
+//	public String selectProfileDetail(int memNo, HttpSession session, Model model) {
+//
 //		int result = pService.selectProfileDetail(memNo);
-//		
-//		// System.out.println(result);
+//			System.out.println(result);
 //		
 //		if(result > 0) {
-			
 			return "profile/profileDetail";
 //		}else {
 //			model.addAttribute("errorMsg", "조회 실패");
