@@ -65,6 +65,9 @@ public class MemberServiceImpl implements MemberService{
 		return mDao.online(sqlSession, m);
 	}
 
-	
+	@Override
+	public int offline(Member m) {
+		return mDao.offline(sqlSession, m);
+	}
 
 }

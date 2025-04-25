@@ -50,6 +50,10 @@ public class MemberDao {
 		System.out.println("DAO");
 		return sqlSession.update("memberMapper.online", m);
 	}
+	
+	public int offline(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.update("memberMapper.offline", m);
+	}
 
 	
 }
