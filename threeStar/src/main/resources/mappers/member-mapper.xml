@@ -144,9 +144,16 @@
 	    by class_name asc
 	</select>
 	
+<<<<<<< HEAD
 	<update>
 	UPDATE MEMBER 
 	   SET ONLINE_ST = 'N'
 	 WHERE MEM_ID = #{MEM_ID}
+=======
+	<update id="online">
+	update member
+	   set online_st = 'Y'
+	 where mem_id = #{memId}
+>>>>>>> bb71c853d2d58600321357998dd6bb6008999d36
 	</update>
 </mapper>

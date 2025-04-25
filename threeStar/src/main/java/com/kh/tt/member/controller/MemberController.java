@@ -41,6 +41,7 @@ public class MemberController {
 		
 		if(loginMember != null && bcryptPasswordEncoder.matches(m.getMemPwd(), loginMember.getMemPwd())) {
 			// 로그인 성공
+			mService.online(m);
 			session.setAttribute("loginMember", loginMember);
 			session.setAttribute("cList", cList);
 			mv.setViewName("redirect:/main.me");
