@@ -256,17 +256,18 @@ body {
 				    </label>
 				    <select id="admin_class" name="memClassCode" class="form-select">
 				        <option value="" disabled selected>클래스를 선택해주세요</option>
-				        <option value="A-Class">A-Class</option>
-				        <option value="B-Class">B-Class</option>
-				        <option value="C-Class">C-Class</option>
-				        <option value="D-Class">D-Class</option>
-				        <option value="E-Class">E-Class</option>
-				        <option value="F-Class">F-Class</option>
-				        <option value="G-Class">G-Class</option>
+				        <option value="asd123">A-Class</option>
+				        <option value="qzd915">B-Class</option>
+				        <option value="zxc178">C-Class</option>
+				        <option value="juh518">D-Class</option>
+				        <option value="evb517">E-Class</option>
+				        <option value="aju811">F-Class</option>
+				        <option value="vgh881">G-Class</option>
 				        <option value="qwe246">H-Class</option>
 				        <option value="dfe145">I-Class</option>
 				        <option value="pdf567">J-Class</option>
 				        <option value="odn356">K-Class</option>
+				        <option value="lon466">L-Class</option>
 				    </select>
 				    
 				    <div id="admin-class-container">
