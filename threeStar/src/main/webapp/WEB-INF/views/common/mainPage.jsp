@@ -414,13 +414,6 @@
 <body>
   <!-- 이쪽에 메뉴바 포함 할꺼임 -->
   <jsp:include page="../common/mainMenu.jsp"/>
-  
-  <c:if test="${ not empty alertMsg }">
-		<script>
-			alert("${ alertMsg }");
-		</script>
-		<c:remove var="alertMsg" scope="session"/> <!-- scope 생략시 모든 scope의 있는 alertMsg를 지움 -->
-	</c:if>
 
   <!-- 왼쪽 사이드바 -->
   <div style="border: 1px solid #f8f9fa; padding-left:0px" class="border">
@@ -448,7 +441,7 @@
             </div>
             <ul class="class-list active">
               <li class="class-item">
-                <div class="avatar avatar-red">김</div>
+                <div class="avatar avatar-red" id="profile-item">김</div>
                 <span class="member-name">김시연1</span>
               </li>
             </ul>
@@ -468,7 +461,7 @@
             </div>
             <ul class="class-list">
               <li class="class-item">
-                <div class="avatar avatar-red">김</div>
+                <div class="avatar avatar-red" id="profile-item">김</div>
                 <span class="member-name">김시연2</span>
               </li>
             </ul>
@@ -554,7 +547,64 @@
   </div>
   
   <!-- 스크립트 -->
-  <script>  
+  <script>
+    // 모달 관련 기능
+    function openProfileModal(memId) {
+      // 모달 컨테이너 생성
+      const modalContainer = document.createElement('div');
+      modalContainer.id = 'modalContainer';
+      modalContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      `;
+      
+      // iframe 생성
+      const modalIframe = document.createElement('iframe');
+      // modalIframe.src = `profile.do?memNo=${memNo}`;
+      modalIframe.src = "profile.do";
+      modalIframe.style.cssText = `
+        width: 800px;
+        height: 865px;
+        align-items : center;
+        border: none;
+        border-radius: 10px;
+        background: transparent;
+      `;
+      
+      // 모달 컨테이너에 iframe 추가
+      modalContainer.appendChild(modalIframe);
+      
+      // body에 모달 컨테이너 추가
+      document.body.appendChild(modalContainer);
+      
+      // 모달 외부 클릭 시 닫기
+      modalContainer.addEventListener('click', function(event) {
+        if (event.target === modalContainer) {
+          closeModal();
+        }
+      });
+      
+      // 스크롤 방지
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // 모달 닫기 함수 (iframe에서도 접근 가능하도록 전역 함수로 선언)
+    function closeModal() {
+      const modalContainer = document.getElementById('modalContainer');
+      if (modalContainer) {
+        document.body.removeChild(modalContainer);
+        document.body.style.overflow = 'auto';
+      }
+    }
+    
    // 토글 열고 닫는 함수 (여러 개 열릴 수 있음)
    function toggleClass(header) {
      const list = header.nextElementSibling;
@@ -598,27 +648,29 @@
      });
    }
 
+   
+   
    // ⭐ 추가: 기본으로 열어주는 함수 (닫는 건 안 건드림)
    function openClass(header) {
      const list = header.nextElementSibling;
      header.classList.add('active');
      list.classList.add('active');
    }
-	/*
-	// 이용훈=> modal이 2중으로 열려서 잠궈둡니다.
+    
     // 프로필 요소에 클릭 이벤트 추가 및 H-Class 기본 열림 설정
     document.addEventListener('DOMContentLoaded', function() {
       // 프로필 모달 이벤트
       const profileElements = document.querySelectorAll('#profile-item');
+      
       profileElements.forEach(function(element) {
         element.addEventListener('click', function() {
           const memId = this.getAttribute('MEM_ID');
           openProfileModal(memId);
         });
       });
-     */
+      
       // H-Class 기본 열림 설정
-     const activeHeader = document.querySelector('.class-header.active');
+      const activeHeader = document.querySelector('.class-header.active');
      if (activeHeader) {
         openClass(activeHeader); // 이걸로 바꾸기!
      }
@@ -671,7 +723,61 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("🌩️ 날씨 정보 로딩 실패:", err);
       document.querySelector(".weather-info").textContent = "날씨 불러오기 실패";
     });
+  
+   // 친구목록 리스트 조회
+   const myMemNo = ${loginMember.memNo};  // JSP에서 세션 정보 넘겨줘야 함!
+   loadFriendList(myMemNo);
+   
+   function loadFriendList(memNo) {
+        $.ajax({
+          url: 'selectFriendList.me',
+          method: 'GET',
+          data: { memNo: memNo },  // 본인 번호 넘김
+          success: function(response) {
+            renderFriendList(response);
+          },
+          error: function() {
+            alert('친구 리스트 불러오기 실패');
+          }
+        });
+      }
+   
+     
+   function renderFriendList(friendList) {
+        const container = document.querySelector('.chat-list-container'); // 친구목록을 넣을 곳
+        container.innerHTML = '';  // 기존 비우기
+
+        if (friendList.length === 0) {
+             container.innerHTML = '<div class="chat-item">친구가 없습니다.</div>';
+             return;
+           }
+        
+        friendList.forEach(friend => {
+          const friendItem = document.createElement('div');
+          friendItem.className = 'chat-item';
+          friendItem.innerHTML = `
+            <div class="chat-avatar avatar-red">\${friend.memName.charAt(0)}</div>
+            <div class="chat-info">
+              <div class="chat-name">\${friend.memName}</div>
+            </div>
+            <div class="chat-actions">
+              <div class="chat-message-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </div>
+              <div class="chat-menu-icon">⋯</div>
+            </div>
+          `;
+          container.appendChild(friendItem);
+        });
+      }
+   
+   
+   
 });
+
+
 </script>
 </body>
 </html>
