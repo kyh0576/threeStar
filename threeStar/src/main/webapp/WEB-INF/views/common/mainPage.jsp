@@ -213,6 +213,7 @@
     .main-content {
       flex: 1;
       padding: 20px;
+      padding-left: 10px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
