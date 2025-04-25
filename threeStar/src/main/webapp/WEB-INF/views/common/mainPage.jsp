@@ -492,9 +492,67 @@
     <div class="search-container">
       <input type="text" class="search-box" placeholder="Search...">
     </div>
+
+    <div><b>&nbsp;친구 목록</b></div><br>
     
     <div class="chat-list-container">
     
+      <div class="chat-item">
+        <div class="chat-avatar avatar-red">김</div>
+        <div class="chat-info">
+          <div class="chat-name">김시연</div>
+        </div>
+        <div class="chat-actions">
+          <div class="chat-message-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <div class="chat-menu-icon">⋯</div>
+        </div>
+      </div>
+      
+    </div>
+
+
+    <br><br><br><br><br>
+
+    <!-- ==========친추 대기중 목록============== -->
+
+    <div><b>&nbsp;대기중</b></div><br>
+
+    <div class="chat-list-container">
+    
+      <div class="chat-item">
+        <div class="chat-avatar avatar-red">김</div>
+        <div class="chat-info">
+          <div class="chat-name">김시연</div>
+        </div>
+        <div class="chat-actions">
+          <div class="chat-message-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <div class="chat-menu-icon">⋯</div>
+        </div>
+      </div>
+
+      <div class="chat-item">
+        <div class="chat-avatar avatar-red">김</div>
+        <div class="chat-info">
+          <div class="chat-name">김시연</div>
+        </div>
+        <div class="chat-actions">
+          <div class="chat-message-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <div class="chat-menu-icon">⋯</div>
+        </div>
+      </div>
+
       <div class="chat-item">
         <div class="chat-avatar avatar-red">김</div>
         <div class="chat-info">
