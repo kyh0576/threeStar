@@ -27,6 +27,12 @@ public interface MemberService {
     // 클래스 조회
     ArrayList<Classes> selectClass();
     
-    // 
+    // 클래스별 맴버리스트 조회
     ArrayList<Member> selectMemberList(String classCode);
+    
+    // 맴버 로그인시 온라인 표시
+    int online(Member m);
+    
+ // 맴버 로그아웃시 오프라인 표시
+    int offline(Member m);
 }

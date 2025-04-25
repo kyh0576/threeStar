@@ -256,17 +256,18 @@ body {
 				    </label>
 				    <select id="admin_class" name="memClassCode" class="form-select">
 				        <option value="" disabled selected>클래스를 선택해주세요</option>
-				        <option value="A-Class">A-Class</option>
-				        <option value="B-Class">B-Class</option>
-				        <option value="C-Class">C-Class</option>
-				        <option value="D-Class">D-Class</option>
-				        <option value="E-Class">E-Class</option>
-				        <option value="F-Class">F-Class</option>
-				        <option value="G-Class">G-Class</option>
+				        <option value="asd123">A-Class</option>
+				        <option value="qzd915">B-Class</option>
+				        <option value="zxc178">C-Class</option>
+				        <option value="juh518">D-Class</option>
+				        <option value="evb517">E-Class</option>
+				        <option value="aju811">F-Class</option>
+				        <option value="vgh881">G-Class</option>
 				        <option value="qwe246">H-Class</option>
 				        <option value="dfe145">I-Class</option>
 				        <option value="pdf567">J-Class</option>
 				        <option value="odn356">K-Class</option>
+				        <option value="lon466">L-Class</option>
 				    </select>
 				    
 				    <div id="admin-class-container">
@@ -389,11 +390,32 @@ body {
                 } else {
                     // 여기에 실제 서버로 중복 확인 요청을 보내는 코드가 들어갈 수 있습니다.
                     // 예시로 항상 사용 가능하다고 가정합니다.
-                    alert('사용 가능한 아이디입니다.');
-                    idMessage.style.display = 'block';
-                    idMessage.style.color = '#4CAF50';
-                    idMessage.textContent = '사용 가능한 아이디입니다';
-                    isIdValid.value = 'true';
+                      $.ajax({
+                    	url:"idCheck.me",
+                    	data:{"userId":userid},
+                    	success:function(data){
+                    		if(data > 0){
+                    			alert('사용 불가능한 아이디입니다.');
+                                idMessage.style.display = 'block';
+                                idMessage.style.color = '#ff6b6b';
+                                idMessage.textContent = '사용 불가능한 아이디입니다.';
+                                isIdValid.value = 'false';
+                    		}else{
+                                alert('사용 가능한 아이디입니다.');
+                                idMessage.style.display = 'block';
+                                idMessage.style.color = '#4CAF50';
+                                idMessage.textContent = '사용 가능한 아이디입니다';
+                                isIdValid.value = 'true';
+                    		}
+                    	},error:function(){
+                    		console.log("아이디 중복확인용 ajax 통신 실패")
+                    	}
+                    })
+                    
+                    
+                    
+                    
+                  
                 }
             });
         });

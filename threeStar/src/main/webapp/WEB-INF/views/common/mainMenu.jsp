@@ -145,7 +145,11 @@
         <div class="alert-icon" onclick="toggleAlert(this)">
             <i class="fas fa-bell fa-lg"></i>
         </div>
+<<<<<<< HEAD
 		<a href="${pageContext.request.contextPath}/logout.me" class="logout-icon">
+=======
+		<a href="${pageContext.request.contextPath}/logout.me?memId=${loginMember.memId}" class="logout-icon">
+>>>>>>> b04c73309a8cf78eeb1392297a9619d12de498f8
 		    <i class="fas fa-right-from-bracket fa-lg"></i>
 		</a>
 		<div class="modalId" MEM_ID="${ loginUser.memId }">

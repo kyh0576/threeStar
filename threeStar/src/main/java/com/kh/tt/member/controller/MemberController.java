@@ -41,6 +41,7 @@ public class MemberController {
 		
 		if(loginMember != null && bcryptPasswordEncoder.matches(m.getMemPwd(), loginMember.getMemPwd())) {
 			// 로그인 성공
+			mService.online(m);
 			session.setAttribute("loginMember", loginMember);
 			session.setAttribute("cList", cList);
 			mv.setViewName("redirect:/main.me");
@@ -60,7 +61,13 @@ public class MemberController {
     
     // 메인페이지 연동되면 로그아웃 만들거임
 	@RequestMapping("logout.me")
-	public String logoutMember(HttpSession session) {
+	public String logoutMember(HttpSession session, Member m) {
+		System.out.println("🔍 memId 넘어옴? => " + m.getMemId()); // ⭐ 로그 찍기
+		
+		int result = mService.offline(m); // 상태 업데이트
+		
+		System.out.println("오프라인 처리 결과: " + result);
+		
 		session.invalidate(); // 프로그램에 설정돼있는 모든 세션 무력화
 		return "redirect:/";
 	}
@@ -125,5 +132,14 @@ public class MemberController {
 	    System.out.println("받아온 mList: " + mList);  // ⭐ null 인지 확인!
 
 	    return mList;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "idCheck.me", produces = "application/json; charset=UTF-8")
+	public int idCheck(String userId) {
+		
+		int result =  mService.idCheck(userId);
+
+		return result;
 	}
 }

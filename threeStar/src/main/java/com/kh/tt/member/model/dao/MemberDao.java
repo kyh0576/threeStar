@@ -46,5 +46,13 @@ public class MemberDao {
 		return (ArrayList)sqlSession.selectList("memberMapper.selectMemberList", classCode);
 	}
 
+	public int online(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.update("memberMapper.online", m);
+	}
+	
+	public int offline(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.update("memberMapper.offline", m);
+	}
+
 	
 }

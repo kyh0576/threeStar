@@ -22,12 +22,12 @@
        
         /* 메시지 목록 사이드바 */
         .message-sidebar {
-            width: 300px;
+            width: 320px; /* 기존 300px보다 살짝 넓게 */
             background-color: white;
             border-right: 1px solid #e1e1e1;
             display: flex;
             flex-direction: column;
-        }
+            }
 
         .message-header {
             padding: 20px;
@@ -74,6 +74,44 @@
         .message-item.active {
             background-color: #f0f7ff;
         }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 20px;  /* 🔼 높이 늘림 (기존 16px → 20px) */
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #e1e1e1;
+            width: 100%;
+            box-sizing: border-box;
+            }
+            
+            .new-chat-btn {
+            width: 36px;
+            height: 36px;
+            background-color: #4a8cff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            }
+
+            .new-chat-btn:hover {
+            background-color: #367ee6;
+            transform: scale(1.1);
+            }
+
+            .new-chat-btn svg {
+            stroke: white;
+            }
+
+
+
 
         .profile-img {
             width: 40px;
@@ -422,85 +460,22 @@
     <jsp:include page="../common/mainMenu.jsp"/>
 
     <!-- 메시지 목록 사이드바 -->
-    <div class="message-sidebar" >
-        <div class="message-header">Messages</div>
-        <div class="message-tabs">
-            <div class="tab active">All</div>
-            <div class="tab">Group</div>
-        </div>
+    <div class="message-sidebar">
+        <div class="message-header">
+            <span class="message-title">Messages</span>
+            <button id="newChat" class="new-chat-btn" title="새 채팅 시작">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 4v8M4 8h8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>           
+          </div>
+  
+  <div class="message-tabs">
+    <div class="tab active">All</div>
+    <div class="tab">Group</div>
+  </div>
         <div class="message-list">
-            <div class="message-item active">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=팀" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">집주인 첫째 딸</div>
-                    <div class="message-preview">아 어디야</div>
-                </div>
-            </div>
-            <div class="message-item">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/ff4a8c/ffffff?text=여" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">여자친구❤</div>
-                    <div class="message-preview">어디야</div>
-                </div>
-            </div>
-            <div class="message-item">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/8cff4a/000000?text=집" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">집주인</div>
-                    <div class="message-preview">일마 오늘 맛있는거 사와</div>
-                </div>
-            </div>
-            <div class="message-item">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/ff8c4a/ffffff?text=F" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">fire egg friend</div>
-                    <div class="message-preview">야 근일님 ㄷㄷ ㄹㅇ</div>
-                </div>
-            </div>
-            <div class="message-item">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/4aff8c/000000?text=GD" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">고명훈</div>
-                    <div class="message-preview">일마 포샵 GD네 ㅋㅋ</div>
-                </div>
-            </div>
-            <div class="message-item">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/8c4aff/ffffff?text=AI" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">스승님</div>
-                    <div class="message-preview">아? 뭐 아? 하면 되는데 그걸 못해?</div>
-                </div>
-            </div>
-            <div class="message-item">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=간" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">간성훈</div>
-                    <div class="message-preview">내 위에 바보</div>
-                </div>
-            </div>
-            <div class="message-item">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/ffd700/000000?text=새" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">세미 프로젝트 조</div>
-                    <div class="message-preview">이효석 : 나는 원래 잘생겼...</div>
-                </div>
-            </div>
+            
         </div>
     </div>
 
@@ -511,7 +486,7 @@
                 <div class="chat-profile-img">
                     <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=팀" alt="프로필">
                 </div>
-                <h3>집주인 첫째 딸</h3>
+                <h3 id="chatRoomTitle">채팅 상대</h3>
                 <span style="margin-left: 10px; color: #888; font-size: 14px;">2 participants</span>
             </div>
             <div class="chat-actions">
@@ -522,33 +497,7 @@
         </div>
 
         <div class="chat-messages">
-            <div class="message-bubble received">
-                <div>아 어디야</div>
-                <div class="message-time">08:00</div>
-            </div>
             
-            <div class="message-bubble sent">
-                <div>이거 어때? 밑에 브라켓과 담장 툴리 왜 망가남</div>
-                <div class="chat-attachment">
-                    <img src="https://via.placeholder.com/400x300/eee/888?text=가구+이미지" alt="가구 이미지">
-                </div>
-                <div class="message-time">1:12 PM</div>
-            </div>
-            
-            <div class="message-bubble received">
-                <div>너 연습돼 더 해야겠다. 저소스 혹시 못써니?</div>
-                <div class="message-time">2:12 PM</div>
-            </div>
-            
-            <div class="message-bubble sent">
-                <div>그냥 갤러리 나눠지 괜찮, 이거나 고쳐봐봐</div>
-                <div class="message-time">1:17 PM</div>
-            </div>
-            
-            <div class="message-bubble received">
-                <div>맞음레도 쉬버서 해야지 작식이 힘거니니아</div>
-                <div class="message-time">2:12 PM</div>
-            </div>
         </div>
         
         <div class="chat-input-container">
@@ -716,6 +665,85 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 </script>
+
+<!-- ✅ 닉네임 설정: WebSocket 연결 전에! -->
+
+<script>
+    const nickname = "<%= ((com.kh.tt.member.model.vo.Member)session.getAttribute("loginMember")).getMemName() %>";
+</script>
+
+<!-- ================웹소켓====================== -->
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+	const urlParams = new URLSearchParams(window.location.search);
+	const roomId = urlParams.get("roomId") || "defaultRoom";  // roomId가 없으면 fallback
+	
+	console.log("📌 roomId:", roomId);
+	
+	const socket = new WebSocket(`wss://54ed-121-66-252-155.ngrok-free.app/tt/chat/\${roomId}`);
+
+    const chatInput = document.querySelector(".chat-input");
+    const chatSendBtn = document.querySelector(".chat-send-btn");
+    const chatMessages = document.querySelector(".chat-messages");
+
+    // 메시지 전송
+    chatSendBtn.addEventListener("click", function () {
+    const msg = chatInput.value.trim();
+    if (msg !== "") {
+        const payload = {
+            sender: nickname,
+            text: msg,
+            time: new Date().toISOString(),
+            type: "chat"
+        };
+        socket.send(JSON.stringify(payload));
+        // ❌ 이 줄은 주석 처리 또는 제거
+        // appendMessage(payload, "sent");
+        chatInput.value = "";
+    }
+});
+
+
+    // 메시지 수신
+    socket.onmessage = function (event) {
+	    const data = JSON.parse(event.data);
+	    const type = data.sender === nickname ? "sent" : "received";
+	    appendMessage(data, type);
+	};
+
+    // 메시지 출력 함수
+    function appendMessage(data, type) {
+	  const bubble = document.createElement("div");
+	  bubble.classList.add("message-bubble", type);
+	  bubble.innerHTML =
+	    (type === 'received' ? '<div><strong>' + data.sender + '</strong></div>' : '') +
+	    '<div>' + data.text + '</div>' +
+	    '<div class="message-time">' + formatTime(data.time) + '</div>';
+	
+	  chatMessages.appendChild(bubble);
+	  chatMessages.scrollTop = chatMessages.scrollHeight;
+	}
+	
+	function formatTime(isoString) {
+	    const date = new Date(isoString);
+	    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+
+    // Enter 키 입력 처리
+    chatInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            chatSendBtn.click();
+        }
+    });
+
+});
+
+</script>
+
 
 </body>
 </html>

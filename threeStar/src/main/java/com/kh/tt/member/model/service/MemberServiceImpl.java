@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public int idCheck(String userId) {
-		return 0;
+		return mDao.idCheck(sqlSession, userId);
 	}
 
 	@Override
@@ -59,6 +59,14 @@ public class MemberServiceImpl implements MemberService{
 		return mDao.selectMemberList(sqlSession, classCode);
 	}
 
-	
+	@Override
+	public int online(Member m) {
+		return mDao.online(sqlSession, m);
+	}
+
+	@Override
+	public int offline(Member m) {
+		return mDao.offline(sqlSession, m);
+	}
 
 }
