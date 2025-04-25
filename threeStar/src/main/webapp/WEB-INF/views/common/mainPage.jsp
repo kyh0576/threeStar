@@ -414,6 +414,14 @@
 <body>
   <!-- 이쪽에 메뉴바 포함 할꺼임 -->
   <jsp:include page="../common/mainMenu.jsp"/>
+  
+    <c:if test="${ not empty alertMsg }">
+      <script>
+         alert("${ alertMsg }");
+      </script>
+      <c:remove var="alertMsg" scope="session"/> <!-- scope 생략시 모든 scope의 있는 alertMsg를 지움 -->
+   </c:if>
+  
 
   <!-- 왼쪽 사이드바 -->
   <div style="border: 1px solid #f8f9fa; padding-left:0px" class="border">
