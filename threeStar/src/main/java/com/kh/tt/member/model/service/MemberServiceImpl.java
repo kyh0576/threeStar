@@ -59,6 +59,11 @@ public class MemberServiceImpl implements MemberService{
 		return mDao.selectMemberList(sqlSession, classCode);
 	}
 
+	@Override
+	public int online(Member m) {
+		return mDao.online(sqlSession, m);
+	}
+
 	
 
 }

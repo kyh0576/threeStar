@@ -143,4 +143,10 @@
 	 order
 	    by class_name asc
 	</select>
+	
+	<update id="online">
+	update member
+	   set online_st = 'Y'
+	 where mem_id = #{memId}
+	</update>
 </mapper>
