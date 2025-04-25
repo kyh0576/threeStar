@@ -150,4 +150,13 @@ public class MemberController {
       System.out.println(fList);
        return fList;
    }
+   
+   // 2. 대기중 목록 (friend = 'N')
+	@RequestMapping(value = "selectWaitingList.me", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public ArrayList<Member> selectWaitingList(@RequestParam("memNo") int memNo) {
+	    ArrayList<Member> wList = mService.selectWaitingList(memNo); // friend = 'N'만 조회
+	    System.out.println("대기중 목록: " + wList);
+	    return wList;
+	}
 }

@@ -58,5 +58,9 @@ public class MemberDao {
       return (ArrayList)sqlSession.selectList("memberMapper.selectFriendList", memNo);
    }
 
+   public ArrayList<Member> selectWaitingList(SqlSessionTemplate sqlSession, int memNo) {
+	  return (ArrayList)sqlSession.selectList("memberMapper.selectWaitingList", memNo);
+   }
+
    
 }

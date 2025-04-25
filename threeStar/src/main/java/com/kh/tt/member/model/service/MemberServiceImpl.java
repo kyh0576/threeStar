@@ -74,4 +74,9 @@ public class MemberServiceImpl implements MemberService{
       return mDao.selectFriendList(sqlSession, memNo);
    }
 
+	@Override
+	public ArrayList<Member> selectWaitingList(int memNo) {
+		return mDao.selectWaitingList(sqlSession, memNo);
+	}
+
 }

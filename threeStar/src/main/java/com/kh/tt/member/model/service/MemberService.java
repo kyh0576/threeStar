@@ -38,4 +38,7 @@ public interface MemberService {
     
     // 친구목록 조회
     ArrayList<Member> selectFriendList(int memNo);
+    
+    // 친구대기중 목록 조회
+    ArrayList<Member> selectWaitingList(int memNo);
 }

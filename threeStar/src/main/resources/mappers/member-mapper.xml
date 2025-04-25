@@ -166,4 +166,13 @@
     where are_we_friend = 'Y'
       and from_mem = #{memId}
    </select>
+   
+      <select id="selectWaitingList" resultMap="memberResult">
+   select 
+          mem_name
+     from member
+     join friends on (to_mem = mem_no)
+    where are_we_friend = 'N'
+      and from_mem = #{memId}
+   </select>
 </mapper>

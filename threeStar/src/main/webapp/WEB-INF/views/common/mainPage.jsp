@@ -237,7 +237,7 @@
       padding-left: 30px;
     }
     
-    .chat-list-container {
+    .chat-list-container, .chat-list-container-wait {
       width: 100%;
       max-width: 800px;
       background-color: white;
@@ -497,21 +497,6 @@
     
     <div class="chat-list-container">
     
-      <div class="chat-item">
-        <div class="chat-avatar avatar-red">김</div>
-        <div class="chat-info">
-          <div class="chat-name">김시연</div>
-        </div>
-        <div class="chat-actions">
-          <div class="chat-message-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </div>
-          <div class="chat-menu-icon">⋯</div>
-        </div>
-      </div>
-      
     </div>
 
 
@@ -521,53 +506,8 @@
 
     <div><b>&nbsp;대기중</b></div><br>
 
-    <div class="chat-list-container">
+    <div class="chat-list-container-wait">
     
-      <div class="chat-item">
-        <div class="chat-avatar avatar-red">김</div>
-        <div class="chat-info">
-          <div class="chat-name">김시연</div>
-        </div>
-        <div class="chat-actions">
-          <div class="chat-message-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </div>
-          <div class="chat-menu-icon">⋯</div>
-        </div>
-      </div>
-
-      <div class="chat-item">
-        <div class="chat-avatar avatar-red">김</div>
-        <div class="chat-info">
-          <div class="chat-name">김시연</div>
-        </div>
-        <div class="chat-actions">
-          <div class="chat-message-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </div>
-          <div class="chat-menu-icon">⋯</div>
-        </div>
-      </div>
-
-      <div class="chat-item">
-        <div class="chat-avatar avatar-red">김</div>
-        <div class="chat-info">
-          <div class="chat-name">김시연</div>
-        </div>
-        <div class="chat-actions">
-          <div class="chat-message-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </div>
-          <div class="chat-menu-icon">⋯</div>
-        </div>
-      </div>
-      
     </div>
     
   </div>
@@ -793,6 +733,7 @@ document.addEventListener("DOMContentLoaded", function () {
    // 친구목록 리스트 조회
    const myMemNo = ${loginMember.memNo};  // JSP에서 세션 정보 넘겨줘야 함!
    loadFriendList(myMemNo);
+   loadWaitingList(myMemNo);
    
    function loadFriendList(memNo) {
         $.ajax({
@@ -807,6 +748,21 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         });
       }
+   
+	// 대기중 목록
+   function loadWaitingList(memNo) {
+     $.ajax({
+       url: 'selectWaitingList.me',
+       method: 'GET',
+       data: { memNo: memNo },
+       success: function(response) {
+         renderWaitingList(response); // 대기중만
+       },
+       error: function() {
+         alert('대기중 리스트 불러오기 실패');
+       }
+     });
+   }
    
      
    function renderFriendList(friendList) {
@@ -838,6 +794,36 @@ document.addEventListener("DOMContentLoaded", function () {
           container.appendChild(friendItem);
         });
       }
+   
+   function renderWaitingList(friendList) {
+       const container = document.querySelector('.chat-list-container-wait'); // 친구목록을 넣을 곳
+       container.innerHTML = '';  // 기존 비우기
+
+       if (friendList.length === 0) {
+            container.innerHTML = '<div class="chat-item">대기중인 친구 요청이 없습니다.</div>';
+            return;
+          }
+       
+       friendList.forEach(friend => {
+         const friendItem = document.createElement('div');
+         friendItem.className = 'chat-item';
+         friendItem.innerHTML = `
+           <div class="chat-avatar avatar-red">\${friend.memName.charAt(0)}</div>
+           <div class="chat-info">
+             <div class="chat-name">\${friend.memName}</div>
+           </div>
+           <div class="chat-actions">
+             <div class="chat-message-icon">
+               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+               </svg>
+             </div>
+             <div class="chat-menu-icon">⋯</div>
+           </div>
+         `;
+         container.appendChild(friendItem);
+       });
+     }
    
    
    
