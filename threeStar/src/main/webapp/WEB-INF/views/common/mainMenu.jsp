@@ -178,6 +178,7 @@
 	        position: fixed;
 	        top: 0;
 	        left: 0;
+	    	transform: tranlate(-50%, -50%);
 	        width: 100%;
 	        height: 100%;
 	        background-color: rgba(0, 0, 0, 0.5);
@@ -192,10 +193,10 @@
 	    modalIframe.src = "detailProfile.do";
 	    modalIframe.style.cssText = `
 	        width: 600px;
-	        height: 710.73px;
+	        height: 800px;
 	        border: none;
 	        border-radius: 10px;
-	        background: transparent;
+	        // background: transparent;
 	    `;
 	    
 	    // 모달 컨테이너에 iframe 추가

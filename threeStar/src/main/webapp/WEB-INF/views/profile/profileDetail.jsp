@@ -179,10 +179,10 @@
 	                    </div>
 	                </div>
 	
-	                <c:if test="${ loginMember.adminYN eq 'Y' }">
+	                <c:if test="${ loginMember.adminYN == 'Y' }">
 	                    <div class="form-group">
-	                            <label>초대코드</label>
-	                            <input type="password" class="form-control" placeholder="클래스 초대코드" id="memClassCode" name="" value="${ loginMember.memClassCode }">
+                            <label>초대코드</label>
+                            <input type="password" class="form-control" placeholder="클래스 초대코드" id="memClassCode" name="" value="${ loginMember.memClassCode }">
 	                    </div>
 	                </c:if>
 	                
