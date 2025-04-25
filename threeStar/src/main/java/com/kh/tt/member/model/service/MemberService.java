@@ -36,6 +36,6 @@ public interface MemberService {
     // 맴버 로그아웃시 오프라인 표시
     int offline(Member m);
     
-    //
+    // 친구목록 조회
     ArrayList<Member> selectFriendList(int memNo);
 }
