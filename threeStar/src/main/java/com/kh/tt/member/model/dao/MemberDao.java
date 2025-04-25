@@ -47,6 +47,7 @@ public class MemberDao {
 	}
 
 	public int online(SqlSessionTemplate sqlSession, Member m) {
+		System.out.println("DAO");
 		return sqlSession.update("memberMapper.online", m);
 	}
 

@@ -61,6 +61,7 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public int online(Member m) {
+		System.out.println("서비스");
 		return mDao.online(sqlSession, m);
 	}
 
