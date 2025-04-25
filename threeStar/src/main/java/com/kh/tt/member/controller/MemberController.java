@@ -60,7 +60,8 @@ public class MemberController {
     
     // 메인페이지 연동되면 로그아웃 만들거임
 	@RequestMapping("logout.me")
-	public String logoutMember(HttpSession session) {
+	public String logoutMember(HttpSession session, String mem_id) {
+		mService.updateOnlineStatus(mem_id, "N"); // 상태 업데이트
 		session.invalidate(); // 프로그램에 설정돼있는 모든 세션 무력화
 		return "redirect:/";
 	}
