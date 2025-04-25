@@ -54,5 +54,9 @@ public class MemberDao {
 		return sqlSession.update("memberMapper.offline", m);
 	}
 
+	public ArrayList<Member> selectFriendList(SqlSessionTemplate sqlSession, int memNo) {
+		return (ArrayList)sqlSession.selectList("memberMapper.selectFriendList", memNo);
+	}
+
 	
 }

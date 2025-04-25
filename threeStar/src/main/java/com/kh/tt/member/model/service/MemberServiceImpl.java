@@ -69,4 +69,9 @@ public class MemberServiceImpl implements MemberService{
 		return mDao.offline(sqlSession, m);
 	}
 
+	@Override
+	public ArrayList<Member> selectFriendList(int memNo) {
+		return mDao.selectFriendList(sqlSession, memNo);
+	}
+
 }

@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -135,5 +136,14 @@ public class MemberController {
 		int result =  mService.idCheck(userId);
 
 		return result;
+	}
+	
+	@RequestMapping(value = "selectFriendList.me", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public ArrayList<Member> selectFriendList(@RequestParam("memNo") int memNo) {
+	    // FriendService를 통해 로그인한 사람의 친구 목록 조회
+		ArrayList<Member> fList = mService.selectFriendList(memNo);
+		System.out.println(fList);
+	    return fList;
 	}
 }

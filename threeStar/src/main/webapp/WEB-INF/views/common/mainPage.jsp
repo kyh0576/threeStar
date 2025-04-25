@@ -486,6 +486,7 @@
     </div>
     
     <div class="chat-list-container">
+    
       <div class="chat-item">
         <div class="chat-avatar avatar-red">김</div>
         <div class="chat-info">
@@ -501,81 +502,8 @@
         </div>
       </div>
       
-      <div class="chat-item">
-        <div class="chat-avatar avatar-purple">동</div>
-        <div class="chat-info">
-          <div class="chat-name">동진이 형</div>
-        </div>
-        <div class="chat-actions">
-          <div class="chat-message-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </div>
-          <div class="chat-menu-icon">⋯</div>
-        </div>
-      </div>
-      
-      <div class="chat-item">
-        <div class="chat-avatar avatar-purple">고</div>
-        <div class="chat-info">
-          <div class="chat-name">고조장</div>
-        </div>
-        <div class="chat-actions">
-          <div class="chat-message-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </div>
-          <div class="chat-menu-icon">⋯</div>
-        </div>
-      </div>
-      
-      <div class="chat-item">
-        <div class="chat-avatar avatar-purple">용</div>
-        <div class="chat-info">
-          <div class="chat-name">용훈 형님</div>
-        </div>
-        <div class="chat-actions">
-          <div class="chat-message-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </div>
-          <div class="chat-menu-icon">⋯</div>
-        </div>
-      </div>
-      
-      <div class="chat-item">
-        <div class="chat-avatar avatar-orange">전</div>
-        <div class="chat-info">
-          <div class="chat-name">전창용</div>
-        </div>
-        <div class="chat-actions">
-          <div class="chat-message-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </div>
-          <div class="chat-menu-icon">⋯</div>
-        </div>
-      </div>
-      
-      <div class="chat-item">
-        <div class="chat-avatar avatar-purple">현</div>
-        <div class="chat-info">
-          <div class="chat-name">현정 누나</div>
-        </div>
-        <div class="chat-actions">
-          <div class="chat-message-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </div>
-          <div class="chat-menu-icon">⋯</div>
-        </div>
-      </div>
     </div>
+    
   </div>
   
   <!-- 오른쪽 사이드바 -->
@@ -698,8 +626,6 @@
        method: 'GET',
        data: { classCode: classCode },
        success: function(response) {
-         console.log('받아온 멤버 리스트:', response);
-         console.log('첫 번째 멤버:', response[0]);
 
          // 리스트 초기화
          listElement.innerHTML = '';
@@ -715,7 +641,7 @@
            `;
            listElement.appendChild(li);
          });
-       },  // ✅ 콤마 여기!!
+       },
        error: function() {
          alert('멤버 조회 실패!');
        }
@@ -797,7 +723,61 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("🌩️ 날씨 정보 로딩 실패:", err);
       document.querySelector(".weather-info").textContent = "날씨 불러오기 실패";
     });
+  
+	// 친구목록 리스트 조회
+	const myMemNo = ${loginMember.memNo};  // JSP에서 세션 정보 넘겨줘야 함!
+	loadFriendList(myMemNo);
+	
+	function loadFriendList(memNo) {
+		  $.ajax({
+		    url: 'selectFriendList.me',
+		    method: 'GET',
+		    data: { memNo: memNo },  // 본인 번호 넘김
+		    success: function(response) {
+		      renderFriendList(response);
+		    },
+		    error: function() {
+		      alert('친구 리스트 불러오기 실패');
+		    }
+		  });
+		}
+	
+	  
+	function renderFriendList(friendList) {
+		  const container = document.querySelector('.chat-list-container'); // 친구목록을 넣을 곳
+		  container.innerHTML = '';  // 기존 비우기
+
+		  if (friendList.length === 0) {
+			    container.innerHTML = '<div class="chat-item">친구가 없습니다.</div>';
+			    return;
+			  }
+		  
+		  friendList.forEach(friend => {
+		    const friendItem = document.createElement('div');
+		    friendItem.className = 'chat-item';
+		    friendItem.innerHTML = `
+		      <div class="chat-avatar avatar-red">\${friend.memName.charAt(0)}</div>
+		      <div class="chat-info">
+		        <div class="chat-name">\${friend.memName}</div>
+		      </div>
+		      <div class="chat-actions">
+		        <div class="chat-message-icon">
+		          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+		            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+		          </svg>
+		        </div>
+		        <div class="chat-menu-icon">⋯</div>
+		      </div>
+		    `;
+		    container.appendChild(friendItem);
+		  });
+		}
+	
+	
+	
 });
+
+
 </script>
 </body>
 </html>

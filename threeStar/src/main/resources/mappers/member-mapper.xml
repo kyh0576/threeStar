@@ -3,6 +3,7 @@
 <mapper namespace="memberMapper">
 
 	<resultMap id="memberResult" type="Member">
+		<result column="mem_no" property="memNo"/>
 		<result column="mem_id" property="memId"/>
 		<result column="mem_pwd" property="memPwd"/>
 		<result column="mem_name" property="memName"/>
@@ -39,7 +40,8 @@
 		   and user_pwd = #{userPwd}
 	    -->
 		select
-		       mem_id
+		       mem_no
+		     , mem_id
 		     , mem_pwd
 		     , mem_name
 		     , email
@@ -155,4 +157,13 @@
 		 set online_st = 'N'
 	 where mem_id = #{memId}
 	</update>
+	
+	<select id="selectFriendList" resultMap="memberResult">
+	select 
+	       mem_name
+	  from member
+	  join friends on (to_mem = mem_no)
+	 where are_we_friend = 'Y'
+	   and from_mem = #{memId}
+	</select>
 </mapper>
