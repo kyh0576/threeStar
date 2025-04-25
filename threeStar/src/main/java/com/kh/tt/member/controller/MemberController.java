@@ -37,7 +37,6 @@ public class MemberController {
 	public ModelAndView loginMember(Member m, HttpSession session, ModelAndView mv) {
 		
 		Member loginMember = mService.loginMember(m);
-		
 		ArrayList<Classes> cList = mService.selectClass();
 		
 		if(loginMember != null && bcryptPasswordEncoder.matches(m.getMemPwd(), loginMember.getMemPwd())) {
@@ -51,6 +50,7 @@ public class MemberController {
 			mv.addObject("alertMsg", "로그인 실패!");
 			mv.setViewName("member/loginForm");
 		}
+		
 		return mv;
 	}
 	
@@ -79,6 +79,7 @@ public class MemberController {
 	
 	@RequestMapping("insert.me")
 	public String insertMember(Member m, Model model, HttpSession session) {
+		System.out.println(m);
 		// 1. 한글 깨짐 (post 방식) => 스프링에서 제공하는 인코딩 필터 등록 => web.xml에 filter 등록
 		// 2. 나이를 입력하지 않았을경우 "" 빈문자열이 넘어오는데 int형 필드에 담을 수 없어서 400 에러 발생 
 		//    7이라도 들어있으면 웹사이트에서 들어오는 정보는 다 String로 오니까 "7"로 와도 자동형변환으로 7로 int에 들어갈텐데 ""로와서 문제
@@ -99,11 +100,13 @@ public class MemberController {
 		int classCode = mService.selectClassCode(m.getMemClassCode());
 		System.out.println(classCode);
 		if(classCode > 0) { // 유효한 초대코드를 입력됐을때
+			System.out.println("클래스 코드가 유효합니다.");
 			
 			int result = mService.insertMember(m);
 			
 			if(result > 0) { // 성공 => 메인페이지 url 재요청
 				model.addAttribute("alertMsg", "회원가입 성공");
+				System.out.println("회원가입 성공");
 				//session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
 				return "member/loginForm";
 				
@@ -114,6 +117,7 @@ public class MemberController {
 			}
 		}else { // 유효하지 않는 초대코드를 입력했을때
 			model.addAttribute("alertMsg", "초대코드가 다릅니다. 다시 입력해 주세요");
+			System.out.println("초대코드가 다릅니다.");
 			return "member/signinForm";
 		}
 		
@@ -122,8 +126,10 @@ public class MemberController {
 	@ResponseBody
 	@RequestMapping(value = "selectMemberList.me", produces = "application/json; charset=UTF-8")
 	public ArrayList<Member> selectMemberList(String classCode, HttpSession session) {
+	    System.out.println("받아온 classCode: " + classCode);
 	    
 	    ArrayList<Member> mList = mService.selectMemberList(classCode);
+	    System.out.println("받아온 mList: " + mList);  // ⭐ null 인지 확인!
 
 	    return mList;
 	}
