@@ -6,7 +6,7 @@ import com.kh.tt.member.model.vo.Classes;
 import com.kh.tt.member.model.vo.Member;
 
 public interface MemberService {
-	// 로그인 서비스(select)
+   // 로그인 서비스(select)
     Member loginMember(Member m); // 커맨드 객체 방식
 
     // 회원가입 서비스(insert)
@@ -33,6 +33,9 @@ public interface MemberService {
     // 맴버 로그인시 온라인 표시
     int online(Member m);
     
- // 맴버 로그아웃시 오프라인 표시
+    // 맴버 로그아웃시 오프라인 표시
     int offline(Member m);
+    
+    // 친구목록 조회
+    ArrayList<Member> selectFriendList(int memNo);
 }
