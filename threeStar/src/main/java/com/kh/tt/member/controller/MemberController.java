@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.tt.member.model.service.MemberServiceImpl;
 import com.kh.tt.member.model.vo.Classes;
@@ -35,7 +36,7 @@ public class MemberController {
     
     @RequestMapping("login.me")
 	public ModelAndView loginMember(Member m, HttpSession session, ModelAndView mv) {
-		
+    	
 		Member loginMember = mService.loginMember(m);
 		ArrayList<Classes> cList = mService.selectClass();
 		
@@ -44,7 +45,10 @@ public class MemberController {
 			mService.online(m);
 			session.setAttribute("loginMember", loginMember);
 			session.setAttribute("cList", cList);
+			
+			session.setAttribute("alertMsg", "성공적으로 로그인 되었습니다.");
 			mv.setViewName("redirect:/main.me");
+			
 		}else {
 			// 로그인 실패
 			mv.addObject("alertMsg", "로그인 실패!");
@@ -62,13 +66,10 @@ public class MemberController {
     // 메인페이지 연동되면 로그아웃 만들거임
 	@RequestMapping("logout.me")
 	public String logoutMember(HttpSession session, Member m) {
-		System.out.println("🔍 memId 넘어옴? => " + m.getMemId()); // ⭐ 로그 찍기
-		
 		int result = mService.offline(m); // 상태 업데이트
 		
-		System.out.println("오프라인 처리 결과: " + result);
-		
-		session.invalidate(); // 프로그램에 설정돼있는 모든 세션 무력화
+		session.setAttribute("alertMsg", "성공적으로 로그아웃 되었습니다.");
+		session.removeAttribute("loginMember"); // 로그인 정보만 제거하거나
 		return "redirect:/";
 	}
 	
