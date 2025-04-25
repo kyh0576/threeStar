@@ -19,17 +19,6 @@
 		and MEM_NO = #{memNo}
 	</select>
 	
-	<select id="selectProfileDetail" resultMap="profileResult">
-		select
-			  MEM_ID
-			, MEM_NAME
-			, PHONE
-			, EMAIL
-			, MEM_PWD
-		from MEMBER
-		where MEM_NO = #{memNo}
-	</select>
-	
 	<update id="updateProfile">
 		update
 			  MEMBER

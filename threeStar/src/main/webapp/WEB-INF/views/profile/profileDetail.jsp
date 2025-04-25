@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -153,53 +154,65 @@
                 <input type="text" class="form-control" id="memId" name="" value="${ loginMember.memId }">
             </h1>
             
-            <div class="edit-form">
-                <div class="form-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="#333"/>
-                    </svg>
-                    <h2>프로필 편집</h2>
-                </div>
-                
-                <div class="form-group">
-                    <label>이름</label>
-                    <input type="text" class="form-control" placeholder="닉네임" id="memName" name="" value="${ loginMember.memName }">
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>연락처</label>
-                        <input type="text" class="form-control" placeholder="010-1234-5678" id="phone" name="" value=" ${ loginMember.phone }">
-                    </div>
-                    <div class="form-group">
-                        <label>이메일</label>
-                        <input type="email" class="form-control" placeholder="example@email.com" id="email" name="" value="${ loginMember.email }">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>초대코드</label>
-                    <input type="password" class="form-control" placeholder="클래스 초대코드" id="memClassCode" name="" value="${ loginMember.memClassCode }">
-                </div>
-                
-                <div class="form-group">
-                    <label>비밀번호</label>
-                    <input type="password" class="form-control" placeholder="" id="memPwd" name="" value="${ loginMember.memPwd}">
-                </div>
-                
-                <!-- <div class="form-group">
-                    <label>비밀번호 확인</label>
-                    <input type="password" class="form-control" placeholder="" id="passwordConfirm">
-                </div> -->
-                
-                <div class="button-group">
-                    <button type="button" class="btn btn-primary" id="saveBtn">수정</button>
-                    <button type="reset" class="btn btn-cancel" id="cancelBtn">초기화</button>
-                </div>
-            </div>
+            <form id="" action="profileUpdate" method="GET">
+	            <div class="edit-form">
+	                <div class="form-title">
+	                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+	                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="#333"/>
+	                    </svg>
+	                    <h2>프로필 편집</h2>
+	                </div>
+	                
+	                <div class="form-group">
+	                    <label>이름</label>
+	                    <input type="text" class="form-control" placeholder="닉네임" id="memName" name="" value="${ loginMember.memName }">
+	                </div>
+	                
+	                <div class="form-row">
+	                    <div class="form-group">
+	                        <label>연락처</label>
+	                        <input type="text" class="form-control" placeholder="010-1234-5678" id="phone" name="" value=" ${ loginMember.phone }">
+	                    </div>
+	                    <div class="form-group">
+	                        <label>이메일</label>
+	                        <input type="email" class="form-control" placeholder="example@email.com" id="email" name="" value="${ loginMember.email }">
+	                    </div>
+	                </div>
+	
+	                <c:if test="${ loginMember.adminYN eq 'Y' }">
+	                    <div class="form-group">
+	                            <label>초대코드</label>
+	                            <input type="password" class="form-control" placeholder="클래스 초대코드" id="memClassCode" name="" value="${ loginMember.memClassCode }">
+	                    </div>
+	                </c:if>
+	                
+	                <div class="form-group">
+	                    <label>비밀번호</label>
+	                    <input type="password" class="form-control" placeholder="비밀번호를 입력하세요" id="memPwd" name="" value="">
+	                </div>
+	                
+	                <div class="button-group">
+	                    <button type="submit" class="btn btn-primary" id="saveBtn">수정</button>
+	                    <button type="button" class="btn btn-cancel" id="cancelBtn">닫기</button>
+	                </div>
+	            </div>
+	    	</form>  
         </div>
     </div>
-
+    
+    <script>
+    // 모달 외부 클릭 시 닫기
+	    document.addEventListener('DOMContentLoaded', function () {
+	        const cancelBtn = document.getElementById('cancelBtn');
+	        cancelBtn.addEventListener('click', function () {
+	            if (parent && typeof parent.closeModal === 'function') {
+	                parent.closeModal();
+	            }
+	        });
+	    });
+    </script>
+    
+	<!--
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // DOM 요소 가져오기
@@ -211,8 +224,9 @@
             const inviteCodeInput = document.getElementById('memClassCode');
             const passwordInput = document.getElementById('memPwd');
             const passwordConfirmInput = document.getElementById('passwordConfirm');
-            const statusInput = document.getElementById('status');
+            // const statusInput = document.getElementById('status');
             
+            /*
             // 프로필 데이터 로드 (예시)
             function loadProfileData() {
                 // 실제 구현에서는 AJAX 요청을 통해 서버에서 데이터를 가져옵니다.
@@ -245,7 +259,8 @@
             
             // 초기 데이터 로드
             loadProfileData();
-            
+            */
+
             // 저장 버튼 클릭 이벤트
             saveBtn.addEventListener('click', function() {
                 if (validateForm()) {
@@ -278,14 +293,16 @@
                     emailInput.focus();
                     return false;
                 }
-                
+
+                /*
                 // 비밀번호 일치 검사
                 if (passwordInput.value !== '' && passwordInput.value !== passwordConfirmInput.value) {
                     alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
                     passwordConfirmInput.focus();
                     return false;
                 }
-                
+                */
+
                 return true;
             }
             
@@ -297,7 +314,7 @@
                     contact: contactInput.value.trim(),
                     email: emailInput.value.trim(),
                     password: passwordInput.value,
-                    status: statusInput.value.trim()
+                    // status: statusInput.value.trim()
                 };
                 
                 // 실제 구현에서는 AJAX를 사용하여 서버에 데이터를 전송합니다.
@@ -307,9 +324,10 @@
                 alert('프로필이 성공적으로 수정되었습니다.');
                 
                 // 프로필 페이지로 이동 (JSP 환경에 따라 경로 조정 필요)
-                location.href = "WEB-INF/views/index.jsp";
+                location.href = "profileUpdate.do";
             }
         });
     </script>
+     -->
 </body>
 </html>

@@ -24,5 +24,6 @@ public class Profile {
 	private String snsKey;
 	private String status;
 	private String onlineSt;
+	private String adminYN;
 
 }
