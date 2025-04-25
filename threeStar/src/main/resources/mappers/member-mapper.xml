@@ -140,5 +140,7 @@
 	  from member
 	  join class on (mem_class_code = class_code)
 	 where status = 'Y'
+	 order
+	    by class_name asc
 	</select>
 </mapper>
