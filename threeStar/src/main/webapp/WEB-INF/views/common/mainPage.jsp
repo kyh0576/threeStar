@@ -440,7 +440,7 @@
             </div>
             <ul class="class-list active">
               <li class="class-item">
-                <div class="avatar avatar-red" id="profile-item">김</div>
+                <div class="avatar avatar-red">김</div>
                 <span class="member-name">김시연1</span>
               </li>
             </ul>
@@ -460,7 +460,7 @@
             </div>
             <ul class="class-list">
               <li class="class-item">
-                <div class="avatar avatar-red" id="profile-item">김</div>
+                <div class="avatar avatar-red">김</div>
                 <span class="member-name">김시연2</span>
               </li>
             </ul>
@@ -531,9 +531,9 @@
       </div>
       
       <div class="chat-item">
-        <div class="chat-avatar avatar-purple">용</div>
+        <div class="chat-avatar avatar-purple" id="profile-item">용</div>
         <div class="chat-info">
-          <div class="chat-name">용훈 형님</div>
+          <div class="chat-name" id="profile-item">용훈 형님</div>
         </div>
         <div class="chat-actions">
           <div class="chat-message-icon">
@@ -618,64 +618,7 @@
   </div>
   
   <!-- 스크립트 -->
-  <script>
-    // 모달 관련 기능
-    function openProfileModal(memId) {
-      // 모달 컨테이너 생성
-      const modalContainer = document.createElement('div');
-      modalContainer.id = 'modalContainer';
-      modalContainer.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-      `;
-      
-      // iframe 생성
-      const modalIframe = document.createElement('iframe');
-      // modalIframe.src = `profile.do?memNo=${memNo}`;
-      modalIframe.src = "profile.do";
-      modalIframe.style.cssText = `
-        width: 800px;
-        height: 865px;
-        align-items : center;
-        border: none;
-        border-radius: 10px;
-        background: transparent;
-      `;
-      
-      // 모달 컨테이너에 iframe 추가
-      modalContainer.appendChild(modalIframe);
-      
-      // body에 모달 컨테이너 추가
-      document.body.appendChild(modalContainer);
-      
-      // 모달 외부 클릭 시 닫기
-      modalContainer.addEventListener('click', function(event) {
-        if (event.target === modalContainer) {
-          closeModal();
-        }
-      });
-      
-      // 스크롤 방지
-      document.body.style.overflow = 'hidden';
-    }
-    
-    // 모달 닫기 함수 (iframe에서도 접근 가능하도록 전역 함수로 선언)
-    function closeModal() {
-      const modalContainer = document.getElementById('modalContainer');
-      if (modalContainer) {
-        document.body.removeChild(modalContainer);
-        document.body.style.overflow = 'auto';
-      }
-    }
-    
+  <script>  
    // 토글 열고 닫는 함수 (여러 개 열릴 수 있음)
    function toggleClass(header) {
      const list = header.nextElementSibling;
@@ -721,29 +664,27 @@
      });
    }
 
-   
-   
    // ⭐ 추가: 기본으로 열어주는 함수 (닫는 건 안 건드림)
    function openClass(header) {
      const list = header.nextElementSibling;
      header.classList.add('active');
      list.classList.add('active');
    }
-    
+	/*
+	// 이용훈=> modal이 2중으로 열려서 잠궈둡니다.
     // 프로필 요소에 클릭 이벤트 추가 및 H-Class 기본 열림 설정
     document.addEventListener('DOMContentLoaded', function() {
       // 프로필 모달 이벤트
       const profileElements = document.querySelectorAll('#profile-item');
-      
       profileElements.forEach(function(element) {
         element.addEventListener('click', function() {
           const memId = this.getAttribute('MEM_ID');
           openProfileModal(memId);
         });
       });
-      
+     */
       // H-Class 기본 열림 설정
-      const activeHeader = document.querySelector('.class-header.active');
+     const activeHeader = document.querySelector('.class-header.active');
      if (activeHeader) {
         openClass(activeHeader); // 이걸로 바꾸기!
      }
@@ -798,5 +739,59 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
+
+<!-- modal 2 -->
+<script>
+    function openProfileModal2(memId) {
+        const modalContainer = document.createElement('div');
+        modalContainer.id = 'modalContainer';
+        modalContainer.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        `;
+
+        // iframe 생성
+        const modalIframe = document.createElement('iframe');
+        modalIframe.src = "profile.do" + (memId ? `?memId=${memId}` : '');
+        modalIframe.style.cssText = `
+            width: 500px;
+            height: 411px;
+            border: none;
+            border-radius: 20px;
+            background: transparent;
+        `;
+
+        modalContainer.append(modalIframe);
+        document.body.append(modalContainer);
+
+        // 외부 클릭 시 닫기
+        modalContainer.addEventListener('click', function(event) {
+            if (event.target === modalContainer) {
+                closeModal();
+            }
+        });
+
+        document.body.style.overflow = 'hidden';
+    }
+    
+	document.addEventListener('DOMContentLoaded', function() {
+	   const profileElements = document.querySelectorAll('#profile-item');
+	   profileElements.forEach(function(element) {
+	     element.addEventListener('click', function() {
+	       const memId = this.getAttribute('MEM_ID');
+	       openProfileModal2(memId);  // detailProfile.do가 아님!
+	     });
+	   });
+	 });
+</script>
+
 </body>
 </html>

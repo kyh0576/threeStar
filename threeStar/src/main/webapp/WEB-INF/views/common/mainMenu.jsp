@@ -78,7 +78,7 @@
         padding-bottom: 20px;
     }
 
-    .sidebar-footer a{
+    .sidebar-footer .modalId{
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -145,12 +145,12 @@
         <div class="alert-icon" onclick="toggleAlert(this)">
             <i class="fas fa-bell fa-lg"></i>
         </div>
-		        <a href="${pageContext.request.contextPath}/logout.me" class="logout-icon">
+		<a href="${pageContext.request.contextPath}/logout.me" class="logout-icon">
 		    <i class="fas fa-right-from-bracket fa-lg"></i>
 		</a>
-        <a href="detailProfile.do" class="logout-icon">
+		<div class="modalId" MEM_ID="${ loginUser.memId }">
         	<img src="59dc3eec-fd50-4286-b086-11fc490dec87.png" alt="프로필" class="profile-img-me">
-        </a>
+    	</div>
     </div>
 </div>
 
@@ -165,5 +165,78 @@
        
     }
 </script>
+
+<!-- modal 1 -->
+<script>
+	// 부모 페이지의 JavaScript
+	function openProfileModal(memId) {
+	    // 모달 컨테이너 생성
+	    const modalContainer = document.createElement('div');
+	    
+	    modalContainer.id = 'modalContainer';
+	    modalContainer.style.cssText = `
+	        position: fixed;
+	        top: 0;
+	        left: 0;
+	        width: 100%;
+	        height: 100%;
+	        background-color: rgba(0, 0, 0, 0.5);
+	        display: flex;
+	        justify-content: center;
+	        align-items: center;
+	        z-index: 1000;
+	    `;
+	    
+	    // iframe 생성
+	    const modalIframe = document.createElement('iframe');
+	    modalIframe.src = "detailProfile.do";
+	    modalIframe.style.cssText = `
+	        width: 600px;
+	        height: 710.73px;
+	        border: none;
+	        border-radius: 10px;
+	        background: transparent;
+	    `;
+	    
+	    // 모달 컨테이너에 iframe 추가
+	    modalContainer.append(modalIframe);
+	    
+	    // body에 모달 컨테이너 추가
+	    document.body.append(modalContainer);
+	    
+	    // 모달 외부 클릭 시 닫기
+	    modalContainer.addEventListener('click', function(event) {
+	    	const closeButton = document.getElementById('#cancelBtn');
+	        if (event.target === modalContainer || event.target === closeButton) {
+	            closeModal();
+	        }
+	    });
+	    
+	    // 스크롤 방지
+	    document.body.style.overflow = 'hidden';
+	}
+	
+	// 모달 닫기 함수 (iframe에서도 접근 가능하도록 전역 함수로 선언)
+	function closeModal() {
+	    const modalContainer = document.getElementById('modalContainer');
+	    if (modalContainer) {
+	        document.body.removeChild(modalContainer);
+	        document.body.style.overflow = 'auto';
+	    }
+	}
+	
+	// 프로필 요소에 클릭 이벤트 추가
+	document.addEventListener('DOMContentLoaded', function() {
+	    const profileElements = document.querySelectorAll('.modalId');
+	    
+	    profileElements.forEach(function(element) {
+	        element.addEventListener('click', function() {
+	            const memId = this.getAttribute('MEM_ID');
+	            openProfileModal(memId);
+	        });
+	    });
+	});
+</script>
+
 </body>
 </html>

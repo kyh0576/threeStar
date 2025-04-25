@@ -19,13 +19,7 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public int selectProfile(int memNo) {
 		int result = pDao.selectProfile(sqlSession, memNo);
-		System.out.println("service : " + result);
 		return result;
-	}
-	
-	@Override
-	public int selectProfileDetail(int memNo) {
-		return pDao.selectProfileDetail(sqlSession, memNo);
 	}
 	
 	@Override
