@@ -166,7 +166,6 @@
     }
 </script>
 
-<<<<<<< HEAD
 <!-- modal 1 -->
 <script>
 	// 부모 페이지의 JavaScript
@@ -238,8 +237,6 @@
 	    });
 	});
 </script>
-=======
->>>>>>> d78d5f8a48c179fecef70384979abc138b324067
 
 </body>
 </html>
