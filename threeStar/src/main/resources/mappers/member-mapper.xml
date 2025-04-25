@@ -108,7 +108,7 @@
 		select
 			   count(*)
 	      from member
-	     where user_id = #{checkId}
+	     where mem_id = #{checkId}
 	</select>
 	
 	<!-- 클래스 이름 포함 모든 맴버 조회 -->

@@ -390,11 +390,32 @@ body {
                 } else {
                     // 여기에 실제 서버로 중복 확인 요청을 보내는 코드가 들어갈 수 있습니다.
                     // 예시로 항상 사용 가능하다고 가정합니다.
-                    alert('사용 가능한 아이디입니다.');
-                    idMessage.style.display = 'block';
-                    idMessage.style.color = '#4CAF50';
-                    idMessage.textContent = '사용 가능한 아이디입니다';
-                    isIdValid.value = 'true';
+                      $.ajax({
+                    	url:"idCheck.me",
+                    	data:{"userId":userid},
+                    	success:function(data){
+                    		if(data > 0){
+                    			alert('사용 불가능한 아이디입니다.');
+                                idMessage.style.display = 'block';
+                                idMessage.style.color = '#ff6b6b';
+                                idMessage.textContent = '사용 불가능한 아이디입니다.';
+                                isIdValid.value = 'false';
+                    		}else{
+                                alert('사용 가능한 아이디입니다.');
+                                idMessage.style.display = 'block';
+                                idMessage.style.color = '#4CAF50';
+                                idMessage.textContent = '사용 가능한 아이디입니다';
+                                isIdValid.value = 'true';
+                    		}
+                    	},error:function(){
+                    		console.log("아이디 중복확인용 ajax 통신 실패")
+                    	}
+                    })
+                    
+                    
+                    
+                    
+                  
                 }
             });
         });

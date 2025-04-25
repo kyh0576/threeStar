@@ -126,4 +126,13 @@ public class MemberController {
 
 	    return mList;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "idCheck.me", produces = "application/json; charset=UTF-8")
+	public int idCheck(String userId) {
+		
+		int result =  mService.idCheck(userId);
+
+		return result;
+	}
 }
