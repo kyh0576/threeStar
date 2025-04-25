@@ -230,6 +230,18 @@
 		    <version>2.13.4</version> <!-- 버전은 너 프로젝트에 맞춰 -->
 		</dependency>
 		
+		<!-- 웹 소켓 -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-websocket</artifactId>
+		    <version>5.3.30</version> <!-- Spring 버전에 맞게 설정 -->
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-messaging</artifactId>
+		    <version>5.3.30</version>
+		</dependency>
+		
 	</dependencies>
 	
 	
