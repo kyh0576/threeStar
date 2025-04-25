@@ -36,7 +36,7 @@ public class MemberController {
     
     @RequestMapping("login.me")
 	public ModelAndView loginMember(Member m, HttpSession session, ModelAndView mv) {
-		
+    	
 		Member loginMember = mService.loginMember(m);
 		
 		ArrayList<Classes> cList = mService.selectClass();
@@ -46,7 +46,10 @@ public class MemberController {
 			mService.online(m);
 			session.setAttribute("loginMember", loginMember);
 			session.setAttribute("cList", cList);
+			
+			session.setAttribute("alertMsg", "성공적으로 로그인 되었습니다.");
 			mv.setViewName("redirect:/main.me");
+			
 		}else {
 			// 로그인 실패
 			mv.addObject("alertMsg", "로그인 실패!");
