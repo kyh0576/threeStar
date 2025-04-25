@@ -96,8 +96,7 @@ public class MemberController {
 		
 		m.setMemPwd(encPwd); // Member 객체의 userPwd에 평문이 아닌 암호문으로 변경
 		
-		
-		
+				
 		int classCode = mService.selectClassCode(m.getMemClassCode());
 		System.out.println(classCode);
 		if(classCode > 0) { // 유효한 초대코드를 입력됐을때
