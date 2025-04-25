@@ -1,10 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %> 
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>채팅 메신저</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -22,7 +24,7 @@
     
     /* 왼쪽 사이드바 */
     .left-sidebar {
-      width: 210px;
+      width: 300px;
       background-color: white;
       border-right: 1px solid #e0e0e0;
       display: flex;
@@ -37,14 +39,56 @@
       align-items: center;
     }
     
-    
     .sidebar-title {
       font-size: 16px;
       font-weight: 600;
     }
     
+    /* 클래스 섹션 스타일 - 토글 기능 추가 */
+    .class-section {
+      padding: 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .class-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+    }
+    
+    .class-header:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .class-list {
+      list-style: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    
+    .class-list.active {
+      max-height: 500px;
+    }
+    
+    .class-item {
+      display: flex;
+      align-items: center;
+      padding: 6px 20px;
+      cursor: pointer;
+    }
+    
+    .class-item:hover {
+      background-color: #f5f5f5;
+    }
+    
+    /* 기존 H-Class 스타일과 통합 */
     .hclass-section {
-      padding: 10px 0;
+      padding: 0;
       border-bottom: 1px solid #e0e0e0;
     }
     
@@ -52,13 +96,25 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 5px 20px;
+      padding: 12px 20px;
       font-size: 14px;
       color: #444;
+      cursor: pointer;
+    }
+    
+    .hclass-header:hover {
+      background-color: #f5f5f5;
     }
     
     .hclass-list {
       list-style: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    
+    .hclass-list.active {
+      max-height: 500px;
     }
     
     .hclass-item {
@@ -103,50 +159,42 @@
       color: #333;
     }
     
-    .class-dropdown {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 20px;
-      font-size: 14px;
-      color: #333;
-      cursor: pointer;
-      border-bottom: 1px solid #f0f0f0;
-    }
-    
-    .class-dropdown:hover {
-      background-color: #f5f5f5;
-    }
-    
     .dropdown-arrow {
       font-size: 12px;
       color: #999;
+      transition: transform 0.3s;
+    }
+    
+    .class-header.active .dropdown-arrow {
+      transform: rotate(180deg);
     }
     
     .weather-section {
-      margin-top: auto;
-      padding: 15px;
-      text-align: center;
-      border-top: 1px solid #e0e0e0;
-    }
-    
-    .weather-icon {
+   margin-top: auto;
+   padding: 15px;
+   text-align: center;
+   border-top: 1px solid #e0e0e0;
+   }
+
+   .weather-icon {
       font-size: 38px;
       margin-bottom: 5px;
-    }
-    
-    .temperature {
-      font-size: 26px;
-      font-weight: 500;
-      color: #333;
-    }
-    
-    .weather-info {
+   }
+   
+   .temperature {
+     font-size: 26px;
+     font-weight: 500;
+     color: #333;
+     display: block; /* ✅ 명확히 표시 */
+     visibility: visible; /* ✅ 혹시라도 감춰졌을 경우 대비 */
+     min-height: 30px;     /* ✅ 공간 확보 */
+     line-height: 1.4;     /* ✅ 텍스트 렌더링 보완 */
+   }
+   .weather-temp {
       font-size: 12px;
       color: #666;
       margin-top: 5px;
-    }
-    
+   }
     
     .profile-avatar {
       width: 36px;
@@ -323,7 +371,7 @@
     }
 
     .sidebar-inner {
-      margin-left: 40px;
+      margin-left: 20px;
       width: calc(100% - 40px);
     }
     
@@ -368,106 +416,66 @@
   <jsp:include page="../common/mainMenu.jsp"/>
 
   <!-- 왼쪽 사이드바 -->
-  <div style="border: 1px solid f8f9fa; " class=""border">
-  <div class="left-sidebar">
-    <div class="sidebar-inner">
-      <div class="sidebar-top">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <div style="border: 1px solid #f8f9fa; padding-left:0px" class="border">
+    <div class="left-sidebar">
+      <div class="sidebar-inner">
+      
+        <div class="sidebar-top">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
           </svg>
+          <div class="sidebar-title" style="padding-left: 16px;">KH - Class</div>
         </div>
-        <div class="sidebar-title">KH - Class</div>
+        
+        <c:set var="myClassCode" value="${loginMember.memClassCode}" />
+      
+      <!-- 본인 클래스 먼저 출력 -->
+      <c:forEach var="c" items="${cList}">
+        <c:if test="${c.classCode == myClassCode}">
+          <div class="class-section">
+            <div class="class-header active" 
+                 onclick="toggleClass(this)" 
+                 data-classcode="${c.classCode}">
+              <span>${c.className} - Class</span>
+              <span class="dropdown-arrow">▼</span>
+              <input type="hidden" id="classCode" name="classCode" value="${c.classCode}">
+            </div>
+            <ul class="class-list active">
+              <li class="class-item">
+                <div class="avatar avatar-red" id="profile-item">김</div>
+                <span class="member-name">김시연1</span>
+              </li>
+            </ul>
+          </div>
+        </c:if>
+      </c:forEach>
+      
+      <!-- 나머지 클래스 출력 -->
+      <c:forEach var="c" items="${cList}">
+        <c:if test="${c.classCode != myClassCode}">
+          <div class="class-section">
+            <div class="class-header" 
+                 onclick="toggleClass(this)" 
+                 data-classcode="${c.classCode}">
+              <span>${c.className} - Class</span>
+              <span class="dropdown-arrow">▼</span>
+            </div>
+            <ul class="class-list">
+              <li class="class-item">
+                <div class="avatar avatar-red" id="profile-item">김</div>
+                <span class="member-name">김시연2</span>
+              </li>
+            </ul>
+          </div>
+        </c:if>
+      </c:forEach>
+    
       </div>
       
-      <div class="hclass-section">
-        <div class="hclass-header">
-          <span>H - Class</span>
-        </div>
-        <ul class="hclass-list">
-          <li class="hclass-item">
-            <div class="avatar avatar-red">김</div>
-            <span class="member-name">김시연</span>
-          </li>
-          <li class="hclass-item">
-            <div class="avatar avatar-purple">동</div>
-            <span class="member-name">동진이 형</span>
-          </li>
-          <li class="hclass-item">
-            <div class="avatar avatar-purple">고</div>
-            <span class="member-name">고조장</span>
-          </li>
-          <li class="hclass-item">
-            <div class="avatar avatar-purple">용</div>
-            <span class="member-name">용훈 형님</span>
-          </li>
-          <li class="hclass-item">
-            <div class="avatar avatar-orange">전</div>
-            <span class="member-name">전창용</span>
-          </li>
-          <li class="hclass-item">
-            <div class="avatar avatar-orange">김</div>
-            <span class="member-name">김준서</span>
-          </li>
-        </ul>
+        <div class="weather-section">
+        <div class="weather-icon" id="weatherIcon">🌤</div>
+        <div class="temperature" id="weatherTemp"></div>
+        <div class="weather-info">날씨 로딩 중...</div>
       </div>
-      
-      <div class="class-dropdown">
-        <span>A - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>B - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>C - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>D - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>E - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>F - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>G - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>I - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>J - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      
-      <div class="class-dropdown">
-        <span>K - Class</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-    </div>
-      
-      <div class="weather-section">
-        <div class="weather-icon">☀️</div>
-        <div class="temperature">21.8°</div>
-        <div class="weather-info">어제보다 2도 높은 맑은 날씨</div>
-      </div>
-      
     </div>
   </div>
   
@@ -572,7 +580,7 @@
   
   <!-- 오른쪽 사이드바 -->
   <div class="right-sidebar">
-    <div style="border: 1px solid f8f9fa; "  class="border">
+    <div style="border: 1px solid #f8f9fa;" class="border">
       <div class="today-header">온라인 - 3명</div>
       
       <div class="today-members">
@@ -596,18 +604,200 @@
     <br>
     <br>
 
-      <div style="border: 1px solid f8f9fa;" class="border">
-        <div class="hclass-info-title">H class 일정</div>
-        
-        <div class="hclass-info-list">
-          <div class="info-item">D - 5 : 프로젝트 기반 공공 데이터 활용</div>
-          <div class="info-item">D - 16 : 프로젝트 기반 공공데이터 아키텍처 설계</div>
-          <div class="info-item">D - 39 : 애플리케이션 테스트 수행</div>
-          <div class="info-item">D - 52 : 애플리케이션 배포</div>
-          <div class="info-item">D - 61 : 파이널 프로젝트 발표</div>
-          <div class="info-item">D - 70 : 수료</div>
-        </div>
+    <div style="border: 1px solid #f8f9fa;" class="border">
+      <div class="hclass-info-title">H class 일정</div>
+      
+      <div class="hclass-info-list">
+        <div class="info-item">D - 5 : 프로젝트 기반 공공 데이터 활용</div>
+        <div class="info-item">D - 16 : 프로젝트 기반 공공데이터 아키텍처 설계</div>
+        <div class="info-item">D - 39 : 애플리케이션 테스트 수행</div>
+        <div class="info-item">D - 52 : 애플리케이션 배포</div>
+        <div class="info-item">D - 61 : 파이널 프로젝트 발표</div>
+        <div class="info-item">D - 70 : 수료</div>
+      </div>
     </div>
   </div>
+  
+  <!-- 스크립트 -->
+  <script>
+    // 모달 관련 기능
+    function openProfileModal(memId) {
+      // 모달 컨테이너 생성
+      const modalContainer = document.createElement('div');
+      modalContainer.id = 'modalContainer';
+      modalContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      `;
+      
+      // iframe 생성
+      const modalIframe = document.createElement('iframe');
+      // modalIframe.src = `profile.do?memNo=${memNo}`;
+      modalIframe.src = "profile.do";
+      modalIframe.style.cssText = `
+        width: 800px;
+        height: 865px;
+        align-items : center;
+        border: none;
+        border-radius: 10px;
+        background: transparent;
+      `;
+      
+      // 모달 컨테이너에 iframe 추가
+      modalContainer.appendChild(modalIframe);
+      
+      // body에 모달 컨테이너 추가
+      document.body.appendChild(modalContainer);
+      
+      // 모달 외부 클릭 시 닫기
+      modalContainer.addEventListener('click', function(event) {
+        if (event.target === modalContainer) {
+          closeModal();
+        }
+      });
+      
+      // 스크롤 방지
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // 모달 닫기 함수 (iframe에서도 접근 가능하도록 전역 함수로 선언)
+    function closeModal() {
+      const modalContainer = document.getElementById('modalContainer');
+      if (modalContainer) {
+        document.body.removeChild(modalContainer);
+        document.body.style.overflow = 'auto';
+      }
+    }
+    
+   // 토글 열고 닫는 함수 (여러 개 열릴 수 있음)
+   function toggleClass(header) {
+     const list = header.nextElementSibling;
+     header.classList.toggle('active');
+     list.classList.toggle('active');
+     
+     const isOpen = header.classList.contains('active');
+     const classCode = header.getAttribute('data-classcode'); // ⭐ 여기서 classCode 가져옴!
+
+     if (isOpen) {
+       fetchClassMembers(classCode, list); // 열렸을 때만 멤버 조회!
+     }
+   }
+   
+   // 멤버 조회 Ajax 함수
+   function fetchClassMembers(classCode, listElement) {
+     $.ajax({
+       url: 'selectMemberList.me',  
+       method: 'GET',
+       data: { classCode: classCode },
+       success: function(response) {
+         console.log('받아온 멤버 리스트:', response);
+         console.log('첫 번째 멤버:', response[0]);
+
+         // 리스트 초기화
+         listElement.innerHTML = '';
+
+         // 받아온 멤버들 화면에 뿌리기
+         response.forEach(member => {
+           const memName = member.memName || "이름없음";  // null, undefined 방지
+           const li = document.createElement('li');
+           li.className = 'class-item';
+           li.innerHTML = `
+             <div class="avatar avatar-red">\${memName.charAt(0)}</div>
+             <span class="member-name">\${memName}</span>
+           `;
+           listElement.appendChild(li);
+         });
+       },  // ✅ 콤마 여기!!
+       error: function() {
+         alert('멤버 조회 실패!');
+       }
+     });
+   }
+
+   
+   
+   // ⭐ 추가: 기본으로 열어주는 함수 (닫는 건 안 건드림)
+   function openClass(header) {
+     const list = header.nextElementSibling;
+     header.classList.add('active');
+     list.classList.add('active');
+   }
+    
+    // 프로필 요소에 클릭 이벤트 추가 및 H-Class 기본 열림 설정
+    document.addEventListener('DOMContentLoaded', function() {
+      // 프로필 모달 이벤트
+      const profileElements = document.querySelectorAll('#profile-item');
+      
+      profileElements.forEach(function(element) {
+        element.addEventListener('click', function() {
+          const memId = this.getAttribute('MEM_ID');
+          openProfileModal(memId);
+        });
+      });
+      
+      // H-Class 기본 열림 설정
+      const activeHeader = document.querySelector('.class-header.active');
+     if (activeHeader) {
+        openClass(activeHeader); // 이걸로 바꾸기!
+     }
+     
+     // ⭐ 2. 그 다음 Ajax도 호출 (멤버 조회)
+     if (activeHeader) {
+       const classCode = activeHeader.getAttribute('data-classcode');
+       const listElement = activeHeader.nextElementSibling;
+       fetchClassMembers(classCode, listElement);
+     }
+    });
+  </script>
+  
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  fetch('/tt/weather/today')
+    .then(res => res.json())
+    .then(data => {
+      const items = data?.response?.body?.items?.item;
+      if (!items) throw new Error("예보 데이터 없음");
+
+      const tempObj = items.find(i => i.category === "TMP");
+      const skyObj = items.find(i => i.category === "SKY");
+      const ptyObj = items.find(i => i.category === "PTY");
+
+      const temp = tempObj?.fcstValue ?? "N/A";
+      const sky = skyObj?.fcstValue;
+      const pty = ptyObj?.fcstValue;
+      const fcstTime = tempObj?.fcstTime ?? "1200";
+      const hour = parseInt(fcstTime.substring(0, 2));
+      const isNight = hour >= 18 || hour < 6;
+
+      // 날씨 아이콘 결정
+      let icon = "🌤️";
+      if (pty === "1") icon = "🌧️";
+      else if (pty === "2" || pty === "6") icon = "🌦️";
+      else if (pty === "3" || pty === "7") icon = "❄️";
+      else {
+        if (sky === "1") icon = isNight ? "🌕" : "☀️";
+        else if (sky === "3") icon = isNight ? "🌙☁️" : "⛅";
+        else if (sky === "4") icon = "☁️";
+      }
+
+      // 삽입
+      document.getElementById("weatherTemp").textContent = `\${temp}°C`;
+      document.getElementById("weatherIcon").textContent = icon;
+      document.querySelector(".weather-info").textContent = "기상청 기준 단기예보";
+    })
+    .catch(err => {
+      console.error("🌩️ 날씨 정보 로딩 실패:", err);
+      document.querySelector(".weather-info").textContent = "날씨 불러오기 실패";
+    });
+});
+</script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 package com.kh.tt.member.controller;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +9,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.tt.member.model.service.MemberServiceImpl;
+import com.kh.tt.member.model.vo.Classes;
 import com.kh.tt.member.model.vo.Member;
 
 @Controller
@@ -33,15 +37,17 @@ public class MemberController {
 	public ModelAndView loginMember(Member m, HttpSession session, ModelAndView mv) {
 		
 		Member loginMember = mService.loginMember(m);
+		ArrayList<Classes> cList = mService.selectClass();
 		
 		if(loginMember != null && bcryptPasswordEncoder.matches(m.getMemPwd(), loginMember.getMemPwd())) {
 			// 로그인 성공
 			session.setAttribute("loginMember", loginMember);
+			session.setAttribute("cList", cList);
 			mv.setViewName("redirect:/main.me");
 		}else {
 			// 로그인 실패
-			mv.addObject("errorMsg", "로그인 실패!");
-			mv.setViewName("common/errorPage");
+			mv.addObject("alertMsg", "로그인 실패!");
+			mv.setViewName("member/loginForm");
 		}
 		
 		return mv;
@@ -108,7 +114,16 @@ public class MemberController {
 			return "member/signinForm";
 		}
 		
-		
-		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "selectMemberList.me", produces = "application/json; charset=UTF-8")
+	public ArrayList<Member> selectMemberList(String classCode, HttpSession session) {
+	    System.out.println("받아온 classCode: " + classCode);
+	    
+	    ArrayList<Member> mList = mService.selectMemberList(classCode);
+	    System.out.println("받아온 mList: " + mList);  // ⭐ null 인지 확인!
+
+	    return mList;
 	}
 }

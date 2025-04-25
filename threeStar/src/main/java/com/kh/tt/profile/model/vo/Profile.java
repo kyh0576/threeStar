@@ -1,4 +1,4 @@
-package com.kh.tt.member.model.vo;
+package com.kh.tt.profile.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,9 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class Member {
+
+public class Profile {
+	
 	private int memNo;
 	private String memId;
 	private String memPwd;
@@ -22,8 +24,5 @@ public class Member {
 	private String snsKey;
 	private String status;
 	private String onlineSt;
-	private String adminYN;
+
 }
-
-
-

@@ -81,6 +81,7 @@
             border-radius: 50%;
             margin-right: 15px;
             overflow: hidden;
+        	border: 2px solid #4a8cff;
         }
 
         .profile-img img {
@@ -704,6 +705,17 @@
             });
         });
     </script>
+    
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const logout = document.querySelector(".logout-icon");
+  if (logout) {
+    logout.addEventListener("click", function () {
+      window.location.href = "/logout.me"; // ✅ 절대경로
+    });
+  }
+});
+</script>
 
 </body>
 </html>

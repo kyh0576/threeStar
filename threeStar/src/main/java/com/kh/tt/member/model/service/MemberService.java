@@ -1,5 +1,8 @@
 package com.kh.tt.member.model.service;
 
+import java.util.ArrayList;
+
+import com.kh.tt.member.model.vo.Classes;
 import com.kh.tt.member.model.vo.Member;
 
 public interface MemberService {
@@ -20,4 +23,10 @@ public interface MemberService {
     
     // 초대코드 유호한지 확인(select)
     int selectClassCode(String classCode);
+    
+    // 클래스 조회
+    ArrayList<Classes> selectClass();
+    
+    // 
+    ArrayList<Member> selectMemberList(String classCode);
 }
