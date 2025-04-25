@@ -78,6 +78,16 @@
         padding-bottom: 20px;
     }
 
+    .sidebar-footer a{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        padding-bottom: 20px;
+        text-decoration: none;
+        color: 
+    }
+
     .profile-img-me {
         width: 40px;
         height: 40px;
@@ -138,7 +148,7 @@
 		        <a href="${pageContext.request.contextPath}/logout.me" class="logout-icon">
 		    <i class="fas fa-right-from-bracket fa-lg"></i>
 		</a>
-        <a href="detailProfile.do">
+        <a href="detailProfile.do" class="logout-icon">
         	<img src="59dc3eec-fd50-4286-b086-11fc490dec87.png" alt="프로필" class="profile-img-me">
         </a>
     </div>
