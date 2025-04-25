@@ -555,7 +555,7 @@
   <!-- 스크립트 -->
   <script>
     // 모달 관련 기능
-    function openProfileModal(memId) {
+    function openProfileModal2(memId) {
       // 모달 컨테이너 생성
       const modalContainer = document.createElement('div');
       modalContainer.id = 'modalContainer';
@@ -574,22 +574,21 @@
       
       // iframe 생성
       const modalIframe = document.createElement('iframe');
-      // modalIframe.src = `profile.do?memNo=${memNo}`;
-      modalIframe.src = "profile.do";
+      modalIframe.src = "profile.do" + (memId ? `?memId=${memId}` : '');
       modalIframe.style.cssText = `
-        width: 800px;
-        height: 865px;
+        width: 500px;
+        height: 412px;
         align-items : center;
         border: none;
-        border-radius: 10px;
+        border-radius: 20px;
         background: transparent;
       `;
       
       // 모달 컨테이너에 iframe 추가
-      modalContainer.appendChild(modalIframe);
+      modalContainer.append(modalIframe);
       
       // body에 모달 컨테이너 추가
-      document.body.appendChild(modalContainer);
+      document.body.append(modalContainer);
       
       // 모달 외부 클릭 시 닫기
       modalContainer.addEventListener('click', function(event) {
@@ -671,7 +670,7 @@
       profileElements.forEach(function(element) {
         element.addEventListener('click', function() {
           const memId = this.getAttribute('MEM_ID');
-          openProfileModal(memId);
+          openProfileModal2(memId);
         });
       });
       
