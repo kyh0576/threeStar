@@ -49,6 +49,10 @@ public class MemberDao {
 	public int online(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.update("memberMapper.online", m);
 	}
+	
+	public int offline(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.update("memberMapper.offline", m);
+	}
 
 	
 }

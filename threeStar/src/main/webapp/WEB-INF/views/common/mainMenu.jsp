@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-   String memId = ((com.kh.tt.member.model.vo.Member)session.getAttribute("loginMember")).getMemId();
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -148,7 +145,7 @@
         <div class="alert-icon" onclick="toggleAlert(this)">
             <i class="fas fa-bell fa-lg"></i>
         </div>
-		        <a href="${pageContext.request.contextPath}/logout.me?mem_id=<%= memId %>" class="logout-icon">
+		<a href="${pageContext.request.contextPath}/logout.me?memId=${loginMember.memId}" class="logout-icon">
 		    <i class="fas fa-right-from-bracket fa-lg"></i>
 		</a>
         <a href="detailProfile.do" class="logout-icon">

@@ -32,4 +32,7 @@ public interface MemberService {
     
     // 맴버 로그인시 온라인 표시
     int online(Member m);
+    
+ // 맴버 로그아웃시 오프라인 표시
+    int offline(Member m);
 }
