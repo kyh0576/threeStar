@@ -101,6 +101,8 @@
     const warningText = document.getElementById('pwd-warning');
     const isPasswordValid = document.getElementById('is-password-valid');
     
+    warningText.style.display = 'none';
+    
     passwordConfirm.addEventListener('input', function() {
         if (password.value !== passwordConfirm.value) {
             warningText.style.display = 'block';
