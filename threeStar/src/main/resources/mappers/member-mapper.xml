@@ -51,6 +51,7 @@
            , sns_key
            , status
            , online_st
+           , admin_yn
         from member
        where status = 'Y'
          and mem_id = #{memId}
