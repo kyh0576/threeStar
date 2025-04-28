@@ -1,4 +1,4 @@
-package com.kh.tt.message;
+package com.kh.tt.message.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

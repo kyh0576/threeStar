@@ -5,7 +5,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.kh.tt.message.ChatRoomManager;
+import com.kh.tt.message.controller.ChatRoomManager;
 
 public class ChatWebSocketHandler extends TextWebSocketHandler {
 

@@ -1,4 +1,4 @@
-package com.kh.tt.message;
+package com.kh.tt.message.controller;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
