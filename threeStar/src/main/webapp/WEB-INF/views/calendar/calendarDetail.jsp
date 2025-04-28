@@ -424,7 +424,7 @@
 <body>
     <div class="container">
         <!-- 사이드바 -->
-		<jsp:include page="../common/mainMenu.jsp"/>
+		<jsp:include page="/WEB-INF/views/common/mainMenu.jsp"/>
         
         <!-- 메인 콘텐츠 -->
         <div class="main-content">
@@ -860,5 +860,6 @@
         // 페이지 로드시 초기화
         window.addEventListener('DOMContentLoaded', init);
     </script>
+    
 </body>
 </html>

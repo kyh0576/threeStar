@@ -2,13 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
 <mapper namespace="profileMapper">
 
-	<resultMap id="profileResult" type="Profile">
+	<resultMap id="profileResult" type="Member">
 		<result column="MEM_ID" property="memId" />
 		<result column="MEM_NAME" property="memName" />
 		<result column="PHONE" property="phone" />
 		<result column="EMAIL" property="email" />
 		<result column="MEM_PWD" property="memPwd" />
 	</resultMap>
+	
+   <resultMap id="memberResult" type="Member">
+      <result column="mem_no" property="memNo"/>
+      <result column="mem_id" property="memId"/>
+      <result column="mem_pwd" property="memPwd"/>
+      <result column="mem_name" property="memName"/>
+      <result column="email" property="email"/>
+      <result column="phone" property="phone"/>
+      <result column="mem_class_code" property="memClassCode"/>
+      <result column="sns_key" property="snsKey"/>
+      <result column="status" property="status"/>
+      <result column="online_st" property="onlineSt"/>
+      <result column="admin_yn" property="adminYN"/>
+   </resultMap>
 	
 	<select id="selectProfile" resultType="string">
 		select
@@ -19,15 +33,34 @@
 		and MEM_NO = #{memNo}
 	</select>
 	
+	
+   <select id="loginMember" resultMap="memberResult">
+      select
+             mem_no
+           , mem_id
+           , mem_pwd
+           , mem_name
+           , email
+           , phone
+           , mem_class_code
+           , sns_key
+           , status
+           , online_st
+           , admin_yn
+        from member
+       where status = 'Y'
+         and mem_id = #{memId}
+   </select>
+	
 	<update id="updateProfile">
 		update
-			  MEMBER
+			  member
 		  set
-		  	  MEM_NAME = #{memName}
-			  PHONE = #{phone}
-			  EMAIL = #{email}
-			  MEM_PWD = #{memPwd}
-		where MEM_NO = #{memNo}
+		  	    mem_name = #{memName}
+			  , phone = #{phone}
+			  , email = #{email}
+			  , mem_pwd = #{memPwd}
+		where mem_id = #{memId}
 	</update>
 
 </mapper>

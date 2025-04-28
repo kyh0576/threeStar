@@ -147,14 +147,15 @@
     <div class="container">
         <div class="profile-header"></div>
         <div class="profile-content">
+        <form id="" action="profileUpdate.do" method="POST">
             <div class="profile-image">
                 <img src="/api/placeholder/100/100" alt="프로필 이미지">
             </div>
             <h1 class="profile-name">
-                <input type="text" class="form-control" id="memId" name="" value="${ loginMember.memId }">
+                <input type="hidden" class="form-control" id="memId" name="memId" value="${ loginMember.memId }">
             </h1>
             
-            <form id="" action="profileUpdate" method="GET">
+            
 	            <div class="edit-form">
 	                <div class="form-title">
 	                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -165,30 +166,30 @@
 	                
 	                <div class="form-group">
 	                    <label>이름</label>
-	                    <input type="text" class="form-control" placeholder="닉네임" id="memName" name="" value="${ loginMember.memName }">
+	                    <input type="text" class="form-control" placeholder="닉네임" id="memName" name="memName" value="${ loginMember.memName }">
 	                </div>
 	                
 	                <div class="form-row">
 	                    <div class="form-group">
 	                        <label>연락처</label>
-	                        <input type="text" class="form-control" placeholder="010-1234-5678" id="phone" name="" value=" ${ loginMember.phone }">
+	                        <input type="text" class="form-control" placeholder="010-1234-5678" id="phone" name="phone" value=" ${ loginMember.phone }">
 	                    </div>
 	                    <div class="form-group">
 	                        <label>이메일</label>
-	                        <input type="email" class="form-control" placeholder="example@email.com" id="email" name="" value="${ loginMember.email }">
+	                        <input type="email" class="form-control" placeholder="example@email.com" id="email" name="email" value="${ loginMember.email }">
 	                    </div>
 	                </div>
 	
 	                <c:if test="${ loginMember.adminYN == 'Y' }">
 	                    <div class="form-group">
                             <label>초대코드</label>
-                            <input type="password" class="form-control" placeholder="클래스 초대코드" id="memClassCode" name="" value="${ loginMember.memClassCode }">
+                            <input type="text" class="form-control" placeholder="클래스 초대코드" id="memClassCode" name="memClassCode" value="${ loginMember.memClassCode }" readonly>
 	                    </div>
 	                </c:if>
 	                
 	                <div class="form-group">
 	                    <label>비밀번호</label>
-	                    <input type="password" class="form-control" placeholder="비밀번호를 입력하세요" id="memPwd" name="" value="">
+	                    <input type="text" class="form-control" placeholder="비밀번호를 입력하세요" id="memPwd" name="memPwd" value="" required>
 	                </div>
 	                
 	                <div class="button-group">
