@@ -293,6 +293,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
     }
     
     .chat-menu-icon {
@@ -316,10 +317,8 @@
     
     .today-header {
       padding-bottom: 10px;
-      border-bottom: 1px solid #e0e0e0;
       font-size: 13px;
       color: #666;
-      margin-bottom: 15px;
     }
     
     .today-members {
@@ -516,7 +515,7 @@
   <div class="right-sidebar">
     <div style="border: 1px solid #f8f9fa;" class="border">
       <div class="today-header">온라인 - 3명</div>
-      
+      <hr>
       <div class="today-members">
         <div class="member-item">
           <div class="member-avatar avatar-red">김</div>
@@ -535,12 +534,13 @@
       </div>
     </div>
     
+    
     <br>
     <br>
 
     <div style="border: 1px solid #f8f9fa;" class="border">
       <div class="hclass-info-title">H class 일정</div>
-      
+      <hr>
       <div class="hclass-info-list">
         <div class="info-item">D - 5 : 프로젝트 기반 공공 데이터 활용</div>
         <div class="info-item">D - 16 : 프로젝트 기반 공공데이터 아키텍처 설계</div>
@@ -787,8 +787,10 @@ document.addEventListener("DOMContentLoaded", function () {
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg>
               </div>
+              <div class="chat-message-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 6L6 18M6 6l12 12"></path>
+              </div>
             </svg>
             </div>
           `;
