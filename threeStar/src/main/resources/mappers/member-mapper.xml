@@ -14,6 +14,7 @@
       <result column="status" property="status"/>
       <result column="online_st" property="onlineSt"/>
       <result column="admin_yn" property="adminYN"/>
+      <result column="profile_url" property="profileURL"/>
    </resultMap>
    
    <resultMap id="classesResult" type="Classes">
@@ -52,6 +53,7 @@
            , status
            , online_st
            , admin_yn
+           , profile_url
         from member
        where status = 'Y'
          and mem_id = #{memId}

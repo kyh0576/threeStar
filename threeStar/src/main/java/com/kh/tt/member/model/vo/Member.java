@@ -23,6 +23,7 @@ public class Member {
 	private String status;
 	private String onlineSt;
 	private String adminYN;
+	private String profileURL;
 }
 
 
