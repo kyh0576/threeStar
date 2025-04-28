@@ -85,7 +85,7 @@
         gap: 15px;
         padding-bottom: 20px;
         text-decoration: none;
-        color: 
+        cursor: pointer;
     }
 
     .profile-img-me {

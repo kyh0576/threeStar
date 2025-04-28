@@ -10,8 +10,8 @@ import com.kh.tt.member.model.vo.Member;
 
 @Repository
 public class MemberDao {
-	
-	public Member loginMember(SqlSessionTemplate sqlSession, Member m) {
+   
+   public Member loginMember(SqlSessionTemplate sqlSession, Member m) {
 
         return sqlSession.selectOne("memberMapper.loginMember", m);
     }
@@ -22,8 +22,8 @@ public class MemberDao {
     }
 
     public int selectClassCode(SqlSessionTemplate sqlSession, String classCode) {
-		return sqlSession.selectOne("memberMapper.selectClassCode", classCode);
-	}
+      return sqlSession.selectOne("memberMapper.selectClassCode", classCode);
+   }
     
     public int updateMember(SqlSessionTemplate sqlSession, Member m) {
 
@@ -38,21 +38,29 @@ public class MemberDao {
         return sqlSession.selectOne("memberMapper.idCheck", checkId);
     }
 
-	public ArrayList<Classes> selectClass(SqlSessionTemplate sqlSession) {
-		return (ArrayList)sqlSession.selectList("memberMapper.selectClass");
-	}
+   public ArrayList<Classes> selectClass(SqlSessionTemplate sqlSession) {
+      return (ArrayList)sqlSession.selectList("memberMapper.selectClass");
+   }
 
-	public ArrayList<Member> selectMemberList(SqlSessionTemplate sqlSession, String classCode) {
-		return (ArrayList)sqlSession.selectList("memberMapper.selectMemberList", classCode);
-	}
+   public ArrayList<Member> selectMemberList(SqlSessionTemplate sqlSession, String classCode) {
+      return (ArrayList)sqlSession.selectList("memberMapper.selectMemberList", classCode);
+   }
 
-	public int online(SqlSessionTemplate sqlSession, Member m) {
-		return sqlSession.update("memberMapper.online", m);
-	}
-	
-	public int offline(SqlSessionTemplate sqlSession, Member m) {
-		return sqlSession.update("memberMapper.offline", m);
-	}
+   public int online(SqlSessionTemplate sqlSession, Member m) {
+      return sqlSession.update("memberMapper.online", m);
+   }
+   
+   public int offline(SqlSessionTemplate sqlSession, Member m) {
+      return sqlSession.update("memberMapper.offline", m);
+   }
 
-	
+   public ArrayList<Member> selectFriendList(SqlSessionTemplate sqlSession, int memNo) {
+      return (ArrayList)sqlSession.selectList("memberMapper.selectFriendList", memNo);
+   }
+
+   public ArrayList<Member> selectWaitingList(SqlSessionTemplate sqlSession, int memNo) {
+	  return (ArrayList)sqlSession.selectList("memberMapper.selectWaitingList", memNo);
+   }
+
+   
 }
