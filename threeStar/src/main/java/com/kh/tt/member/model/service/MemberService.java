@@ -41,4 +41,13 @@ public interface MemberService {
     
     // 친구대기중 목록 조회
     ArrayList<Member> selectWaitingList(int memNo);
+    
+    // 아이디 찾기
+    Member findId(Member m);
+    
+    // 비밀번호 찾기
+    Member findPwd(Member m);
+    
+    // 비밀번호 재설정
+    int findUpdatePwd(Member m);
 }
