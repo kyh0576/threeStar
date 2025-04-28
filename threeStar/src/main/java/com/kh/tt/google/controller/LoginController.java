@@ -24,11 +24,10 @@ public class LoginController {
     @Value("${google.client.pw}")
     private String googleClientPw;
 	
-	@RequestMapping(value="api/v1/oauth2/google", method=RequestMethod.POST)
+	@RequestMapping(value="/api/v1/oauth2/google", method = RequestMethod.POST)
 	public String loginUrlGoogle() {
 		String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
-				+ "&redirect_url=http://localhost:8333/api/v1/oauth2/google&response_type=code&scope="
-				+ "email%20profile%20openid&access_type=offline";
+				+ "&redirect_uri=http://local:8080/api/v1/oauth2/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
 		return reqUrl;
 	}
 	
