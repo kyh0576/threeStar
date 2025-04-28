@@ -8,13 +8,14 @@
 
     <typeAliases>
         <typeAlias type="com.kh.tt.member.model.vo.Member" alias="Member"/>
-        <typeAlias type="com.kh.tt.member.model.vo.Member" alias="Member"/>
         <typeAlias type="com.kh.tt.member.model.vo.Classes" alias="Classes"/>
+        <typeAlias type="com.kh.tt.message.model.vo.Message" alias="Message"/>
     </typeAliases>
 
      <mappers>
          <mapper resource="/mappers/member-mapper.xml"/>
          <mapper resource="/mappers/profile-mapper.xml"/>
+         <mapper resource="/mappers/message-mapper.xml"/>
      </mappers>
 
 </configuration>
