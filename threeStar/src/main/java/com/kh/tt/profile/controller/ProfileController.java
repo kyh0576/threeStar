@@ -54,7 +54,7 @@ public class ProfileController {
 	
 	@RequestMapping("detailProfile.do")
 	public String selectProfileDetail() {
-		return "profile/profileDetail";
+		return "member/myPage";
 	}
 	
 	
