@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="messageMapper">
+
+   <resultMap id="messageResult" type="Message">
+      <result column="message_no" property="messageNo"/>
+      <result column="message_content" property="messageContent"/>
+      <result column="create_date" property="createDate"/>
+      <result column="send_time" property="sendTime"/>
+      <result column="origin_name" property="originName"/>
+      <result column="change_name" property="changeName"/>
+      <result column="ms_chat_id" property="msChatId"/>
+      <result column="ms_mem_no" property="msMemNo"/>
+   </resultMap>
+   
+    <insert id="insertMessage" parameterType="Message">
+        INSERT INTO MESSAGE (
+            MESSAGE_NO, 
+            MESSAGE_CONTENT, 
+            CREATE_DATE, 
+            SEND_TIME, 
+            ORIGIN_NAME, 
+            CHANGE_NAME, 
+            MS_CHAT_ID, 
+            MS_MEM_NO
+        ) VALUES (
+            SEQ_MESSAGE_NO.NEXTVAL,
+            #{messageContent},
+            DEFAULT,
+            DEFAULT,
+            #{originName},
+            #{changeName},
+            #{msChatId},
+            #{msMemNo}
+        )
+    </insert>
+
+</mapper>

@@ -678,11 +678,12 @@ document.addEventListener("DOMContentLoaded", function () {
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 	const urlParams = new URLSearchParams(window.location.search);
-	const roomId = urlParams.get("roomId") || "defaultRoom";  // roomId가 없으면 fallback
+	const roomId = urlParams.get("roomId") || "1";  // 기본값 "1"번 채팅방
 	
 	console.log("📌 roomId:", roomId);
 	
-	const socket = new WebSocket(`wss://54ed-121-66-252-155.ngrok-free.app/tt/chat/\${roomId}`);
+	//const socket = new WebSocket(`wss://54ed-121-66-252-155.ngrok-free.app/tt/chat/\${roomId}`);
+	const socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);
 
     const chatInput = document.querySelector(".chat-input");
     const chatSendBtn = document.querySelector(".chat-send-btn");
