@@ -199,8 +199,8 @@
         </div>
         
         <div class="help-links">
-            <a href="#" id="find-id">아이디 찾기</a>
-            <a href="#" id="find-password">비밀번호 찾기</a>
+            <a href="findIdPage.me" id="find-id">아이디 찾기</a>
+            <a href="findPwdPage.me" id="find-password">비밀번호 찾기</a>
         </div>
         
         <button type="submit" class="login-btn">LOGIN</button>
@@ -227,6 +227,7 @@
             const findPasswordLink = document.getElementById('find-password');
             const googleLogin = document.getElementById('google-login');
             
+            /*
             findIdLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 alert('아이디 찾기 페이지로 이동합니다.');
@@ -238,6 +239,7 @@
                 alert('비밀번호 찾기 페이지로 이동합니다.');
                 // 비밀번호 찾기 페이지로 이동하는 로직
             });
+            */
             
             signupBtn.addEventListener('click', function(e) {
                 e.preventDefault();

@@ -79,4 +79,19 @@ public class MemberServiceImpl implements MemberService{
 		return mDao.selectWaitingList(sqlSession, memNo);
 	}
 
+	@Override
+	public Member findId(Member m) {
+		return mDao.findId(sqlSession, m);
+	}
+
+	@Override
+	public Member findPwd(Member m) {
+		return mDao.findPwd(sqlSession, m);
+	}
+
+	@Override
+	public int findUpdatePwd(Member m) {
+		return mDao.findUpdatePwd(sqlSession, m);
+	}
+
 }

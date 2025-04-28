@@ -62,6 +62,56 @@ public class MemberController {
         return "common/mainPage";
     }
     
+    @RequestMapping("findIdPage.me")
+    public String findIdPage() {
+    	return "member/findIdPage";
+    }
+    
+    @RequestMapping("findPwdPage.me")
+    public String findPwdPage() {
+    	return "member/findPwdPage";
+    }
+    
+    @RequestMapping("findId.me")
+    public String findId(Member m, Model model) {
+    	Member member = mService.findId(m);
+    	
+    	if(member != null) {
+    		model.addAttribute("alertMsg", "회원님의 아이디는 " + member.getMemId() + "입니다.");
+    		return "member/findIdPage";
+    	}else {
+    		model.addAttribute("alertMsg", "존재하지 않는 회원입니다.");
+    		return "member/findIdPage";
+    	}
+    }
+    
+    @RequestMapping("findPwdResultPage.me")
+    public String findPwdResultPage(Member m, Model model) {
+    	Member member = mService.findPwd(m);
+    	if(member != null) {
+    		model.addAttribute("m", m);
+    		return "member/findPwdResult";
+    	}else {
+    		model.addAttribute("alertMsg", "존재하지 않는 회원입니다.");
+    		return "member/findPwdPage";
+    	}
+    }
+    
+    @RequestMapping("findUpdatePwd.me")
+    public String findUpdatePwd(Member m, Model model) {
+		String encPwd = bcryptPasswordEncoder.encode(m.getMemPwd());
+		m.setMemPwd(encPwd);
+		
+		int result = mService.findUpdatePwd(m);
+		if(result > 0) {
+			model.addAttribute("alertMsg", "비밀번호 재설정이 완료되었습니다.");
+			return "member/loginForm";
+		}else {
+			model.addAttribute("alertMsg", "비밀번호 재설정 실패");
+			return "member/findPwdResult";
+		}
+    }
+    
     // 메인페이지 연동되면 로그아웃 만들거임
 	@RequestMapping("logout.me")
 	public String logoutMember(HttpSession session, Member m) {

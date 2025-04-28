@@ -156,7 +156,7 @@
     where mem_id = #{memId}
    </update>
 
-   <update id="offline" parameterType="com.kh.tt.member.model.vo.Member">
+   <update id="offline" parameterType="Member">
    update member
        set online_st = 'N'
     where mem_id = #{memId}
@@ -171,7 +171,7 @@
       and from_mem = #{memId}
    </select>
    
-      <select id="selectWaitingList" resultMap="memberResult">
+   <select id="selectWaitingList" resultMap="memberResult">
    select 
           mem_name
      from member
@@ -179,4 +179,27 @@
     where are_we_friend = 'N'
       and from_mem = #{memId}
    </select>
+   
+   <select id="findId" resultMap="memberResult">
+	select
+	       mem_id
+	  from member
+	 where mem_name = #{memName}
+	   and email = #{email}
+   </select>
+   
+    <select id="findPwd" resultMap="memberResult">
+	select
+	       mem_pwd
+	  from member
+	 where mem_name = #{memName}
+	   and mem_id = #{memId}
+	   and email = #{email}
+   </select>
+   
+   <update id="findUpdatePwd" parameterType="Member">
+   update member
+      set mem_pwd = #{memPwd}
+    where mem_id = #{memId}
+   </update>
 </mapper>
