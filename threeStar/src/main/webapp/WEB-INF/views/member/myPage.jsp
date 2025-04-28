@@ -147,14 +147,15 @@
     <div class="container">
         <div class="profile-header"></div>
         <div class="profile-content">
+        <form id="" action="profileUpdate.do" method="POST">
             <div class="profile-image">
                 <img src="/api/placeholder/100/100" alt="프로필 이미지">
             </div>
             <h1 class="profile-name">
-                <input type="text" class="form-control" id="memId" name="" value="${ loginMember.memId }">
+                <input type="hidden" class="form-control" id="memId" name="memId" value="${ loginMember.memId }">
             </h1>
             
-            <form id="" action="profileUpdate" method="GET">
+            
 	            <div class="edit-form">
 	                <div class="form-title">
 	                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -165,30 +166,30 @@
 	                
 	                <div class="form-group">
 	                    <label>이름</label>
-	                    <input type="text" class="form-control" placeholder="닉네임" id="memName" name="" value="${ loginMember.memName }">
+	                    <input type="text" class="form-control" placeholder="닉네임" id="memName" name="memName" value="${ loginMember.memName }">
 	                </div>
 	                
 	                <div class="form-row">
 	                    <div class="form-group">
 	                        <label>연락처</label>
-	                        <input type="text" class="form-control" placeholder="010-1234-5678" id="phone" name="" value=" ${ loginMember.phone }">
+	                        <input type="tel" class="form-control" placeholder="010-1234-5678" pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" maxlength="13" id="phone" name="phone" value="${ loginMember.phone }">
 	                    </div>
 	                    <div class="form-group">
 	                        <label>이메일</label>
-	                        <input type="email" class="form-control" placeholder="example@email.com" id="email" name="" value="${ loginMember.email }">
+	                        <input type="email" class="form-control" placeholder="example@email.com" id="email" name="email" value="${ loginMember.email }">
 	                    </div>
 	                </div>
 	
 	                <c:if test="${ loginMember.adminYN == 'Y' }">
 	                    <div class="form-group">
                             <label>초대코드</label>
-                            <input type="password" class="form-control" placeholder="클래스 초대코드" id="memClassCode" name="" value="${ loginMember.memClassCode }">
+                            <input type="text" class="form-control" placeholder="클래스 초대코드" id="memClassCode" name="memClassCode" value="${ loginMember.memClassCode }" readonly>
 	                    </div>
 	                </c:if>
 	                
 	                <div class="form-group">
 	                    <label>비밀번호</label>
-	                    <input type="password" class="form-control" placeholder="비밀번호를 입력하세요" id="memPwd" name="" value="">
+	                    <input type="text" class="form-control" placeholder="비밀번호를 입력하세요" id="memPwd" name="memPwd" value="" required>
 	                </div>
 	                
 	                <div class="button-group">
@@ -212,122 +213,40 @@
 	    });
     </script>
     
-	<!--
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM 요소 가져오기
-            const saveBtn = document.getElementById('saveBtn');
-            const cancelBtn = document.getElementById('cancelBtn');
-            const nameInput = document.getElementById('memName');
-            const contactInput = document.getElementById('phone');
-            const emailInput = document.getElementById('email');
-            const inviteCodeInput = document.getElementById('memClassCode');
-            const passwordInput = document.getElementById('memPwd');
-            const passwordConfirmInput = document.getElementById('passwordConfirm');
-            // const statusInput = document.getElementById('status');
+    document.addEventListener('DOMContentLoaded', function() {
+        const phoneInput = document.getElementById('phone');
+        
+        // 전화번호 입력 시 하이픈 자동 추가
+        phoneInput.addEventListener('input', function(e) {
+            let number = e.target.value.replace(/[^0-9]/g, '');
             
-            /*
-            // 프로필 데이터 로드 (예시)
-            function loadProfileData() {
-                // 실제 구현에서는 AJAX 요청을 통해 서버에서 데이터를 가져옵니다.
-                $.ajax({
-                    url:"detail.do",
-                    data:{
-                        name:$("name").val(),
-                        contact:$("contact").val(),
-                        email:$("email").val(),
-                        inviteCode:$("intiveCode").val(),
-                        password:$("password").val(),
-                        passwordConfirm:$("passwordConfirm").val(),
-                        status:$("status").val()
-                    },
-                    success:function(result){
-						console.log(result)
-                    },
-                    error:function(){
-                        console.log("Ajax 실패")
-                    }
-                })
-                };
-                
-                // 폼에 데이터 설정
-                nameInput.value = userData.name;
-                contactInput.value = userData.contact;
-                emailInput.value = userData.email;
-                statusInput.value = userData.status;
-            }
-            
-            // 초기 데이터 로드
-            loadProfileData();
-            */
-
-            // 저장 버튼 클릭 이벤트
-            saveBtn.addEventListener('click', function() {
-                if (validateForm()) {
-                    saveProfileData();
-                }
-            });
-            
-            /*
-            // 취소 버튼 클릭 이벤트
-            cancelBtn.addEventListener('click', function() {
-                if (confirm('변경사항을 취소하시겠습니까?')) {
-                    window.history.back();
-                }
-            });
-            */
-            
-            // 폼 유효성 검사
-            function validateForm() {
-                // 이름 검사
-                if (nameInput.value.trim() === '') {
-                    alert('이름을 입력해주세요.');
-                    nameInput.focus();
-                    return false;
-                }
-                
-                // 이메일 형식 검사
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (emailInput.value.trim() !== '' && !emailRegex.test(emailInput.value)) {
-                    alert('유효한 이메일 주소를 입력해주세요.');
-                    emailInput.focus();
-                    return false;
-                }
-
-                /*
-                // 비밀번호 일치 검사
-                if (passwordInput.value !== '' && passwordInput.value !== passwordConfirmInput.value) {
-                    alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
-                    passwordConfirmInput.focus();
-                    return false;
-                }
-                */
-
-                return true;
-            }
-            
-            // 프로필 데이터 저장
-            function saveProfileData() {
-                // 저장할 데이터 객체 생성
-                const profileData = {
-                    name: nameInput.value.trim(),
-                    contact: contactInput.value.trim(),
-                    email: emailInput.value.trim(),
-                    password: passwordInput.value,
-                    // status: statusInput.value.trim()
-                };
-                
-                // 실제 구현에서는 AJAX를 사용하여 서버에 데이터를 전송합니다.
-                console.log('저장할 프로필 데이터:', profileData);
-                
-                // 성공적으로 저장되었다고 가정
-                alert('프로필이 성공적으로 수정되었습니다.');
-                
-                // 프로필 페이지로 이동 (JSP 환경에 따라 경로 조정 필요)
-                location.href = "profileUpdate.do";
+            if (number.length <= 3) {
+                // 입력된 값이 3자리 이하일 경우
+                phoneInput.value = number;
+            } else if (number.length <= 7) {
+                // 입력된 값이 4자리~7자리일 경우
+                phoneInput.value = number.substring(0, 3) + '-' + number.substring(3);
+            } else {
+                // 입력된 값이 8자리 이상일 경우
+                phoneInput.value = number.substring(0, 3) + '-' + 
+                                  number.substring(3, 7) + '-' + 
+                                  number.substring(7, 11);
             }
         });
+	        
+        window.validateForm = function() {
+            const phonePattern = /^01[0-9]-[0-9]{3,4}-[0-9]{4}$/;
+            if (!phonePattern.test(phoneInput.value)) {
+                alert('전화번호 형식이 올바르지 않습니다. 010-XXXX-XXXX 형식으로 입력해주세요.');
+                phoneInput.focus();
+                return false;
+            }
+            return true;
+	    };
+	    
+    });
     </script>
-     -->
+    
 </body>
 </html>

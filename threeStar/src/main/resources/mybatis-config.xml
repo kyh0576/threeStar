@@ -8,7 +8,7 @@
 
     <typeAliases>
         <typeAlias type="com.kh.tt.member.model.vo.Member" alias="Member"/>
-        <typeAlias type="com.kh.tt.profile.model.vo.Profile" alias="Profile"/>
+        <typeAlias type="com.kh.tt.member.model.vo.Member" alias="Member"/>
         <typeAlias type="com.kh.tt.member.model.vo.Classes" alias="Classes"/>
     </typeAliases>
 

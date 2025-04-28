@@ -314,7 +314,7 @@
 </head>
 <body>
     <!-- 왼쪽 사이드바 -->
-	<jsp:include page="../common/mainMenu.jsp"/>
+	<jsp:include page="/WEB-INF/views/common/mainMenu.jsp"/>
 
     <!-- 메시지 목록 사이드바 -->
     <div class="message-sidebar" >
