@@ -178,7 +178,6 @@
 	        position: fixed;
 	        top: 0;
 	        left: 0;
-	    	transform: tranlate(-50%, -50%);
 	        width: 100%;
 	        height: 100%;
 	        background-color: rgba(0, 0, 0, 0.5);
@@ -190,7 +189,7 @@
 	    
 	    // iframe 생성
 	    const modalIframe = document.createElement('iframe');
-	    modalIframe.src = "detailProfile.do";
+	    modalIframe.src = "/tt/detailProfile.do";
 	    modalIframe.style.cssText = `
 	        width: 600px;
 	        height: 800px;
