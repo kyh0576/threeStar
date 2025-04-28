@@ -787,7 +787,9 @@ document.addEventListener("DOMContentLoaded", function () {
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg>
               </div>
-              <div class="chat-menu-icon">⋯</div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6L6 18M6 6l12 12"></path>
+            </svg>
             </div>
           `;
           container.appendChild(friendItem);
@@ -812,13 +814,21 @@ document.addEventListener("DOMContentLoaded", function () {
              <div class="chat-name">\${friend.memName}</div>
            </div>
            <div class="chat-actions">
-             <div class="chat-message-icon">
-               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-               </svg>
-             </div>
-             <div class="chat-menu-icon">⋯</div>
+           <div class="chat-message-icon">
+             <!-- 초록색 체크표시 아이콘 -->
+             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+               <path d="M20 6L9 17l-5-5"></path>
+             </svg>
            </div>
+           <div class="chat-menu-icon">
+             <!-- 빨간색 X 표시 아이콘 -->
+             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+               <path d="M18 6L6 18M6 6l12 12"></path>
+             </svg>
+           </div>
+         </div>
+
+
          `;
          container.appendChild(friendItem);
        });
