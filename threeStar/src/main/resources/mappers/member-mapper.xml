@@ -12,7 +12,6 @@
 		<result column="sns_key" property="snsKey"/>
 		<result column="status" property="status"/>
 		<result column="online_st" property="onlineSt"/>
-		<result column="admin_yn" property="adminYN"/>
 	</resultMap>
 	
 	<resultMap id="classesResult" type="Classes">
@@ -49,7 +48,6 @@
 		     , sns_key
 		     , status
 		     , online_st
-		     , admin_yn
 		  from member
 		 where status = 'Y'
 		   and mem_id = #{memId}
