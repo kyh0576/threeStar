@@ -33,6 +33,15 @@
 		and MEM_NO = #{memNo}
 	</select>
 	
+	<select id="detailProfile" resultMap="memberResult">
+		select
+			  MEM_ID
+			, MEM_PWD
+		from MEMBER
+		where MEM_ID = #{memId}
+		  and status = 'Y'
+	</select>
+	
 	
    <select id="loginMember" resultMap="memberResult">
       select

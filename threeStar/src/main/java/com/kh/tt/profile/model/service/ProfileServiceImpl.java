@@ -29,6 +29,11 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 	
 	@Override
+	public Member detailProfile(Member p) {
+		return pDao.detailProfile(sqlSession, p);
+	}
+	
+	@Override
 	public Member loginMember(Member p) {
 	   return mDao.loginMember(sqlSession, p);
 	}

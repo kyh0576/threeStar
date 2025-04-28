@@ -14,6 +14,10 @@ public class ProfileDao {
 		return result;
 	}
 	
+	public Member detailProfile(SqlSessionTemplate sqlSession, Member p) {
+		return sqlSession.selectOne("profileMapper.detailProfile", p);
+	}
+	
    public Member loginMember(SqlSessionTemplate sqlSession, Member p) {
 
         return sqlSession.selectOne("profileMapper.loginMember", p);

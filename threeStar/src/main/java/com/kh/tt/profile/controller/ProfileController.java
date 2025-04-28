@@ -53,8 +53,21 @@ public class ProfileController {
 	}
 	
 	@RequestMapping("detailProfile.do")
-	public String selectProfileDetail() {
-		return "member/myPage";
+	public String selectProfileDetail(Member p, HttpSession session, Model model) {
+		
+		Member loginMember = mService.loginMember(p);
+		
+		Member profile = pService.detailProfile(p);
+		
+		if(loginMember != null && bcryptPasswordEncoder.matches(p.getMemPwd(), loginMember.getMemPwd())) {
+			session.setAttribute("loginMember", loginMember);
+			session.setAttribute("profile", profile);
+			return "member/myPage";
+		}else {
+			model.addAttribute("errorMsg", "비밀번호가 틀렸습니다.");
+			return "common/mainPage";
+		}
+
 	}
 	
 	
@@ -110,6 +123,10 @@ public class ProfileController {
 		return null;
 	}
 	
+	@RequestMapping("profileCheck.do")
+	public String profileCheck() {
+		return "member/myPageCheck";
+	}
 	
 
 }
