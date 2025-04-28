@@ -740,6 +740,7 @@ document.addEventListener("DOMContentLoaded", function () {
           method: 'GET',
           data: { memNo: memNo },  // 본인 번호 넘김
           success: function(response) {
+        	  
             renderFriendList(response);
           },
           error: function() {
@@ -782,7 +783,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <div class="chat-name">\${friend.memName}</div>
             </div>
             <div class="chat-actions">
-              <div class="chat-message-icon">
+              <div class="chat-message-icon" data-target-user-id="\${friend.memNo}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg>
@@ -835,11 +836,47 @@ document.addEventListener("DOMContentLoaded", function () {
          container.appendChild(friendItem);
        });
      }
-   
-   
-   
 });
 
+//================= 채팅 이모지 클릭 시 =================
+
+document.addEventListener('click', function(e) {
+  
+  // chat-message-icon을 눌렀는지 확인
+  if (e.target.closest('.chat-message-icon')) {  // 오타 수정: .chat-mewssage-icon ❌ -> .chat-message-icon ✅
+    const chatIcon = e.target.closest('.chat-message-icon');
+    const targetUserId = chatIcon.dataset.targetUserId; // 데이터 속성 가져오기
+
+    if (targetUserId) {
+      startChat(targetUserId);
+    } else {
+      console.error('❌ targetUserId를 찾을 수 없습니다.');
+    }
+  }
+});
+
+//================= 채팅 이모지 클릭 시 startChat 함수 실행 =================
+function startChat(targetUserId) {
+  fetch('/tt/chattingRoom/startChat', {  // ✅ URL도 실제 컨트롤러 매핑에 맞게 /tt/message/startChat 등으로 수정
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json' 
+    },
+    body: JSON.stringify({ targetUserId })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      const roomId = data.roomId;
+      location.href = `/tt/message/messageForm?roomId=\${roomId}`;  // ✅ 백틱(`) 사용
+    } else {
+      alert('❌ 채팅방 생성에 실패했습니다.');
+    }
+  })
+  .catch(error => {
+    console.error('❌ 채팅방 생성 오류', error);
+  });
+}
 
 </script>
 </body>
