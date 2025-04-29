@@ -212,15 +212,15 @@
         
 		<div id="g_id_onload"
 		     data-client_id="939670547310-mjuf549e4q081qu90jtle7uk7fvhcplr.apps.googleusercontent.com"
-		     data-context="signup"
+		     data-context="signin"
 		     data-ux_mode="popup"
-		     data-callback="handleCredentialResponse"
+		     data-login_uri="http://localhost:8333/tt/main.me"
 		     data-auto_prompt="false">
 		</div>
 		
 		<div class="g_id_signin"
 		     data-type="standard"
-		     data-shape="pill"
+		     data-shape="rectangular"
 		     data-theme="outline"
 		     data-text="signin_with"
 		     data-size="large"
