@@ -27,8 +27,8 @@ import com.kh.tt.profile.model.service.ProfileServiceImpl;
 @Controller
 public class ProfileController {
 	
-   @Autowired // DI(Dependency Injection) 특징
-    private MemberServiceImpl mService; // spring이 대신 생성해주므로 new 필요없 (하지만 아래에 사항이 충족돼야함)
+   @Autowired
+    private MemberServiceImpl mService;
 
 
 	@Autowired
@@ -53,21 +53,27 @@ public class ProfileController {
 	}
 	
 	@RequestMapping("detailProfile.do")
-	public String selectProfileDetail(Member p, HttpSession session, Model model) {
+	public String selectProfileDetail(Member p, Model model, HttpSession session, HttpServletResponse response) throws IOException {
 		
 		Member loginMember = mService.loginMember(p);
 		
 		Member profile = pService.detailProfile(p);
+		
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
 		
 		if(loginMember != null && bcryptPasswordEncoder.matches(p.getMemPwd(), loginMember.getMemPwd())) {
 			session.setAttribute("loginMember", loginMember);
 			session.setAttribute("profile", profile);
 			return "member/myPage";
 		}else {
-			model.addAttribute("errorMsg", "비밀번호가 틀렸습니다.");
-			return "common/mainPage";
+			out.println("<script>");
+			out.println("alert('비밀번호가 틀렸습니다.');");
+			out.println("history.back();");
+			out.println("</script>");
 		}
-
+		out.flush();
+		return null;
 	}
 	
 	
@@ -85,7 +91,7 @@ public class ProfileController {
          session.setAttribute("cList", cList);
          
          session.setAttribute("alertMsg", "성공적으로 로그인 되었습니다.");
-         mv.setViewName("redirect:/main.me");
+         mv.setViewName("redirect:/tt/main.me");
       }else {
          // 로그인 실패
          mv.addObject("alertMsg", "로그인 실패!");

@@ -26,7 +26,6 @@ public class ProfileDao {
 	public int updateProfile(SqlSessionTemplate sqlSession, Member p) {
 		int result = sqlSession.update("profileMapper.updateProfile", p);
 		return result;
-		
 	}
 
 }

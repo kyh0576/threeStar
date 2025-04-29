@@ -193,7 +193,7 @@
 	    modalIframe.src = "/tt/profileCheck.do";
 	    modalIframe.style.cssText = `
 	        width: 600px;
-	        height: 800px;
+	        height: 700px;
 	        border: none;
 	        border-radius: 10px;
 	        // background: transparent;
@@ -237,123 +237,6 @@
 	        });
 	    });
 	});
-</script>
-
-
-<script>
-	function openProfileModal3(password) {
-		return new Promise((resolve, reject) => {
-	    // 모달 컨테이너 생성
-	    const modalContainer = document.createElement('div');
-	    
-		    modalContainer.id = 'modalContainer';
-		    modalContainer.style.cssText = `
-		        position: fixed;
-		        top: 0;
-		        left: 0;
-		        width: 100%;
-		        height: 100%;
-		        background-color: rgba(0, 0, 0, 0.5);
-		        display: flex;
-		        justify-content: center;
-		        align-items: center;
-		        z-index: 1000;
-		    `;
-		    
-		    // iframe 생성
-		    const modalIframe = document.createElement('iframe');
-		    modalIframe.src = "/tt/profileCheck.do";
-		    modalIframe.style.cssText = `
-		        width: 600px;
-		        height: 800px;
-		        border: none;
-		        border-radius: 10px;
-		        // background: transparent;
-		    `;
-		    
-		    // 모달 컨테이너에 iframe 추가
-		    modalContainer.append(modalIframe);
-		    
-		    // body에 모달 컨테이너 추가
-		    document.body.append(modalContainer);
-		    
-		    // 모달 외부 클릭 시 닫기
-		    modalContainer.addEventListener('click', function(event) {
-		    	const closeButton = document.getElementById('#cancelBtn');
-		        if (event.target === modalContainer || event.target === closeButton) {
-		            closeModal();
-		        }
-		    });
-		    
-		    // 스크롤 방지
-		    document.body.style.overflow = 'hidden';
-		    
-	        // 확인 버튼 클릭 시
-	        document.getElementById('submitPassword').addEventListener('click', function() {
-	            const password = document.getElementById('password').value;
-	            if (password === 'yourCorrectPassword') {  // 여기에 비밀번호 검증 로직 추가
-	                resolve(true);
-	            } else {
-	                alert('비밀번호가 틀렸습니다!');
-	                reject(false);
-	            }
-			});
-		});
-	};
-	
-    // 확인 버튼 클릭 시
-    document.getElementById('submitPassword').addEventListener('click', function() {
-        const password = document.getElementById('password').value;
-
-        // 비밀번호를 서버로 전송하여 검증
-	        verifyPasswordWithServer(password)
-	            .then(success => {
-	                if (success) {
-	                    resolve(true);
-	                } else {
-	                    alert('비밀번호가 틀렸습니다!');
-	                    reject(false);
-	                }
-	            })
-	            .catch(error => {
-	                console.error('서버 오류:', error);
-	                alert('서버 오류가 발생했습니다.');
-	                reject(false);
-	            });
-		    });
-		});
-	}
-	
-	//서버로 비밀번호 검증 요청
-	function verifyPasswordWithServer(password) {
-		return new Promise((resolve, reject) => {
-		    fetch('/verify-password', {
-		        method: 'POST',
-		        headers: {
-		            'Content-Type': 'application/json',
-		        },
-		        body: JSON.stringify({ password })
-		    })
-		    .then(response => response.json())
-		    .then(data => {
-		        if (data.success) {
-		            resolve(true);  // 서버에서 성공하면 true 반환
-		        } else {
-		            resolve(false);  // 서버에서 실패하면 false 반환
-		        }
-		    })
-		    .catch(error => {
-		        reject(error);  // 오류 발생 시 reject
-		    });
-		});
-	}
-	
-	// 모달 열기 함수 예시
-	function openProfileModal3(password) {
-	    // 모달 열기 코드 작성
-	    console.log('모달을 엽니다:', password);
-	    // 예시로 콘솔 출력 대신 실제 모달 열기 코드 추가 가능
-	}
 </script>
 
 </body>

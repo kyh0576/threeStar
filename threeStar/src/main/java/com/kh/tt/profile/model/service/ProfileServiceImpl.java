@@ -13,8 +13,8 @@ import com.kh.tt.profile.model.vo.Profile;
 @Service
 public class ProfileServiceImpl implements ProfileService {
 	
-   @Autowired // spring! 나를 injection(주입) 해줘
-   private MemberDao mDao; // spring이 직접 생성해줘서 new 필요없음 @Repository로 해줬었음
+   @Autowired
+   private MemberDao mDao;
 	
 	@Autowired
 	private ProfileDao pDao;
