@@ -26,7 +26,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        height: 100%;
         background-color: #f5f5f5;
     }
     
@@ -151,8 +151,7 @@
         <div class="profile-picture-container">
             <div class="profile-picture" id="profilePicture">
                 <img id="profileImage" src="/api/placeholder/120/120" alt="프로필 이미지">
-                <!-- <input type="file" id="fileInput" accept="image/*"> -->
-                <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24"  fill="#FFFFFF"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+                <input type="file" id="fileInput" accept="image/*">
             </div>
 
         </div>
@@ -171,6 +170,7 @@
         </div>
 
         <div class="button-group">
+            <button type="button" class="btn btn-cancel" id="">채팅하기</button>
             <button type="button" class="btn btn-cancel" id="cancelBtn">닫기</button>
         </div>
     </div>
@@ -185,7 +185,7 @@
 	    });
     </script>
 
-   	<!--
+   	
     <script>
         // 프로필 사진 변경 기능
         const profilePicture = document.getElementById('profilePicture');
@@ -213,7 +213,7 @@
             }
         });
     </script>
-     -->
+     
 
 </body>
 </html>

@@ -579,7 +579,7 @@
       modalIframe.src = "profile.do" + (memId ? `?memId=${memId}` : '');
       modalIframe.style.cssText = `
         width: 500px;
-        height: 412px;
+        height: 430px;
         align-items : center;
         border: none;
         border-radius: 20px;
@@ -640,12 +640,19 @@
          // 받아온 멤버들 화면에 뿌리기
          response.forEach(member => {
            const memName = member.memName || "이름없음";  // null, undefined 방지
+           const memId = member.memId;
            const li = document.createElement('li');
            li.className = 'class-item';
            li.innerHTML = `
              <div class="avatar avatar-red">\${memName.charAt(0)}</div>
              <span class="member-name">\${memName}</span>
            `;
+           
+            // 👉 클릭 이벤트 추가
+	        li.addEventListener('click', function() {
+	          openProfileModal2(memId);
+	        });
+            
            listElement.appendChild(li);
          });
        },
