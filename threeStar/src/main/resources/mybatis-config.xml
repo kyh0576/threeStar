@@ -18,5 +18,6 @@
         <mapper resource="mappers/profile-mapper.xml"/>
         <mapper resource="mappers/message-mapper.xml"/>
         <mapper resource="mappers/chat-mapper.xml"/>
+        <mapper resource="mappers/google-mapper.xml"/>
     </mappers>
 </configuration>

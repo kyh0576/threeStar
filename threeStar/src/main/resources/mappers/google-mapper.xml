@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="googleMapper">
+
+	<resultMap id="profileResult" type="Member">
+		<result column="MEM_ID" property="memId" />
+		<result column="MEM_NAME" property="memName" />
+		<result column="PHONE" property="phone" />
+		<result column="EMAIL" property="email" />
+		<result column="MEM_PWD" property="memPwd" />
+	</resultMap>
+	
+   <resultMap id="memberResult" type="Member">
+      <result column="mem_no" property="memNo"/>
+      <result column="mem_id" property="memId"/>
+      <result column="mem_pwd" property="memPwd"/>
+      <result column="mem_name" property="memName"/>
+      <result column="email" property="email"/>
+      <result column="phone" property="phone"/>
+      <result column="mem_class_code" property="memClassCode"/>
+      <result column="sns_key" property="snsKey"/>
+      <result column="status" property="status"/>
+      <result column="online_st" property="onlineSt"/>
+      <result column="admin_yn" property="adminYN"/>
+   </resultMap>
+
+   <resultMap id="friendResult" type="Friend">
+   		<result column="from_mem" property="fromMem"/>
+  		<result column="to_mem" property="toMem"/>
+  		<result column="arw_we_friend" property="areWeFriend"/>
+  		<result column="to_nickname" property="toNickname"/>
+   </resultMap>
+   
+   <select id="SelectGoogleLogin" resultMap="profileResult">
+   		select
+   			  mem_name
+   		  from
+   		  	  member
+   		where mem_id = #{memId}
+   </select>
+	
+	
+
+</mapper>
