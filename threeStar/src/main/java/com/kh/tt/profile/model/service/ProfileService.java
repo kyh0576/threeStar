@@ -9,8 +9,12 @@ public interface ProfileService{
 	int selectProfile(int memNo);
 	
     Member loginMember(Member p); // 커맨드 객체 방식
+    
+    Member detailProfile(Member p);
 	
 	//  및 수정(update)
 	int updateProfile(Member p);
+	
+	
 
 }

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -148,7 +149,7 @@
 		<a href="${pageContext.request.contextPath}/logout.me?memId=${loginMember.memId}" class="logout-icon">
 		    <i class="fas fa-right-from-bracket fa-lg"></i>
 		</a>
-		<div class="modalId" MEM_ID="${ loginUser.memId }">
+		<div class="modalId" MEM_ID="${ loginMember.memId }">
         	<img src="59dc3eec-fd50-4286-b086-11fc490dec87.png" alt="프로필" class="profile-img-me">
     	</div>
     </div>
@@ -189,10 +190,10 @@
 	    
 	    // iframe 생성
 	    const modalIframe = document.createElement('iframe');
-	    modalIframe.src = "/tt/detailProfile.do";
+	    modalIframe.src = "/tt/profileCheck.do";
 	    modalIframe.style.cssText = `
 	        width: 600px;
-	        height: 800px;
+	        height: 700px;
 	        border: none;
 	        border-radius: 10px;
 	        // background: transparent;
