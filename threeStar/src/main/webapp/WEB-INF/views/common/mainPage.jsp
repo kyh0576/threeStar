@@ -33,6 +33,7 @@
     }
     
     .sidebar-top {
+      padding-top: 16px;
       padding-bottom: 15px;
       display: flex;
       align-items: center;
@@ -213,7 +214,6 @@
     .main-content {
       flex: 1;
       padding: 20px;
-      padding-left: 10px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -221,7 +221,7 @@
     
     .search-container {
       width: 100%;
-      max-width: 800px;
+      max-width: 1000px;
       margin-bottom: 20px;
     }
     
@@ -239,7 +239,7 @@
     
     .chat-list-container, .chat-list-container-wait {
       width: 100%;
-      max-width: 800px;
+      max-width: 1000px;
       background-color: white;
       border: 1px solid #e6e6e6;
       border-radius: 8px;
@@ -405,7 +405,6 @@
 
     .border{
       background-color: #f8f9fa;
-      padding: 16px;
       border-radius: 10px;
     }
   </style>
@@ -580,7 +579,7 @@
       modalIframe.src = "profile.do" + (memId ? `?memId=${memId}` : '');
       modalIframe.style.cssText = `
         width: 500px;
-        height: 412px;
+        height: 430px;
         align-items : center;
         border: none;
         border-radius: 20px;
@@ -641,12 +640,19 @@
          // 받아온 멤버들 화면에 뿌리기
          response.forEach(member => {
            const memName = member.memName || "이름없음";  // null, undefined 방지
+           const memId = member.memId;
            const li = document.createElement('li');
            li.className = 'class-item';
            li.innerHTML = `
              <div class="avatar avatar-red">\${memName.charAt(0)}</div>
              <span class="member-name">\${memName}</span>
            `;
+           
+            // 👉 클릭 이벤트 추가
+	        li.addEventListener('click', function() {
+	          openProfileModal2(memId);
+	        });
+            
            listElement.appendChild(li);
          });
        },

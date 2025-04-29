@@ -54,6 +54,8 @@ public class MemberController {
          mv.addObject("alertMsg", "로그인 실패!");
          mv.setViewName("member/loginForm");
       }
+      
+      System.out.println(loginMember);
       return mv;
    }
    
