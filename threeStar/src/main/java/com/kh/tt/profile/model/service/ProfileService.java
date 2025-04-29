@@ -18,8 +18,14 @@ public interface ProfileService{
 	//  및 수정(update)
 	int updateProfile(Member p);
 	
+<<<<<<< HEAD
 	// 친구 신청
 	int insertFriend(Friend friend);
+=======
+	int deleteProfile(Member p);
+	
+	
+>>>>>>> 918227559e2cac9f485d2ac2cb4d63c39c103c64
 
 	// 친구 삭제
 	int deleteFriend(Friend friend);

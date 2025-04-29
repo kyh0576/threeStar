@@ -65,10 +65,11 @@ public class ProfileController {
 		if(loginMember != null && bcryptPasswordEncoder.matches(p.getMemPwd(), loginMember.getMemPwd())) {
 			session.setAttribute("loginMember", loginMember);
 			session.setAttribute("profile", profile);
-			out.println("<script>");
-			out.println("alert('수정 성공');");
-			out.println("parent.location.reload();");
-			out.println("</script>");
+			return "member/myPageUpdate";
+			// out.println("<script>");
+			// out.println("alert('수정 성공');");
+			// out.println("parent.location.reload();");
+			// out.println("</script>");
 		}else {
 			out.println("<script>");
 			out.println("alert('비밀번호가 틀렸습니다.');");
@@ -118,8 +119,8 @@ public class ProfileController {
 		if(result > 0) {
 			session.setAttribute("loginMember", mService.loginMember(p));
 			out.println("<script>");
-			// out.println("alert('수정 성공');");
-			// out.println("parent.location.reload();");
+			out.println("alert('수정 성공');");
+			out.println("parent.location.reload();");
 			out.println("</script>");
 		}else {
 			out.println("<script>");
@@ -128,14 +129,15 @@ public class ProfileController {
 			out.println("</script>");
 		}
 		out.flush();
-		return "member/myPageCheck";
+		return null;
 	}
 	
 	@RequestMapping("profileCheck.do")
-	public String profileCheck() {
+	public String myPage() {
 		return "member/myPage";
 	}
 	
+<<<<<<< HEAD
 	@RequestMapping("insertFriend.do")
 	public void insertFriend(Friend friend, Model model, HttpServletResponse response) throws IOException {
 	    response.setContentType("text/html; charset=UTF-8");
@@ -203,5 +205,48 @@ public class ProfileController {
 	    }
 	}
 	
+=======
+	@RequestMapping("deleteProfile.do")
+	public String deleteProfile(Member p, Model model, HttpSession session, HttpServletResponse response) throws IOException  {
+		
+		Member loginMember = mService.loginMember(p);
+
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		
+		if(bcryptPasswordEncoder.matches(p.getMemPwd(), loginMember.getMemPwd())) {
+			int result = pService.deleteProfile(p);
+			if(result > 0) {
+				session.setAttribute("alertMsg", "회원 탈퇴에 성공했습니다.");
+				session.removeAttribute("loginMember");
+				// return "member/loginForm";
+			}else {
+				out.println("<script>");
+				out.println("alert('회원 탈퇴에 실패했습니다. 다시 시도해 주세요.');");
+				out.println("history.back();");
+				// out.println("parent.location.reload();");
+				out.println("</script>");
+			}
+			out.println("<script>");
+			out.println("parent.location.href='/tt/';");
+			out.println("</script>");
+			out.flush();
+			return null;
+		}else {
+			out.println("<script>");
+			out.println("alert('비밀번호가 틀렸습니다. 다시 시도해 주세요.')");
+			out.println("history.back();");
+			// out.println("parent.location.reload();");
+			out.println("</script>");
+		}
+		out.flush();
+		return null;
+	}
+	
+	@RequestMapping("checkProfile.do")
+	public String checkProfile() {
+		return "member/myPageCheck";
+	}
+>>>>>>> 918227559e2cac9f485d2ac2cb4d63c39c103c64
 
 }

@@ -2,11 +2,11 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>프로필 편집</title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 <!-- jQuery library -->
@@ -17,83 +17,110 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <style>
     * {
-        box-sizing: border-box;
         margin: 0;
         padding: 0;
-        font-family: 'Arial', sans-serif;
+        box-sizing: border-box;
+        font-family: 'Noto Sans KR', sans-serif;
     }
     
     body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
         background-color: #f5f5f5;
+        align-items: center;
     }
     
-    .profile-container {
-        width: 100%;
-        max-width: 500px;
-        padding: 30px;
-        background-color: #7dd3ed;
-        border-radius: 20px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    .container {
+    	align: center;
+        max-width: 600px;
+        margin: 0 auto;
+        overflow: hidden;
     }
     
-    .profile-picture-container {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 30px;
+    .profile-header {
+        background-color: #86e0f9;
+        height: 150px;
+        position: relative;
     }
     
-    .profile-picture img {
+    .profile-content {
+        background-color: #9f9fd6;
+        padding: 70px 20px 20px;
+    }
+    
+    .profile-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        position: absolute;
+        left: 50%;
+        top: 120px;
+        transform: translateX(-50%);
+        /* border: 3px solid white; */
+        overflow: hidden;
+    }
+    
+    .profile-image img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
     
-    .progress-container {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
+    .profile-name {
+        text-align: center;
+        color: white;
+        font-size: 24px;
+        margin-top: 10px;
         margin-bottom: 20px;
     }
     
-    .progress-text {
-        font-size: 16px;
+    .edit-form {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .form-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
         color: #333;
+    }
+    
+    .form-title svg {
         margin-right: 10px;
     }
     
-    .edit-icon {
-        margin-left: 15px;
-        cursor: pointer;
+    .form-group {
+        margin-bottom: 15px;
     }
     
-    .input-container {
-        margin-bottom: 20px;
-        display: flex;
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #666;
     }
     
-    .input-field {
+    .form-control {
         width: 100%;
-        padding: 12px 0;
-        border: none;
-        border-bottom: 1px solid #ccc;
-        background-color: transparent;
-        font-size: 16px;
-        outline: none;
-        transition: border-color 0.3s;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
     }
     
-    .input-field:focus {
-        border-bottom: 2px solid #007bff;
-    }
-    
-    .button-container {
+    .form-row {
         display: flex;
-        justify-content: space-between;
-        margin-top: 40px;
+        gap: 10px;
+    }
+    
+    .form-row .form-group {
+        flex: 1;
+    }
+    
+    .button-group {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
     }
     
     .btn {
@@ -104,64 +131,84 @@
         font-size: 14px;
     }
     
-    .btn-confirm {
-        background-color: #3498db;
+    .btn-primary {
+        background-color: #02c8fa;
         color: white;
     }
     
-    .btn:hover {
-        opacity: 0.9;
-    }
-    
-    #fileInput {
-        display: none;
-    }
-
-    .button-group {
-        display: flex;
-        gap: 10px;
-        justify-content: flex-end;
-    }
-
     .btn-cancel {
         background-color: white;
         color: #333;
         border: 1px solid #ddd;
     }
-
-    #detailInput{
-        display: flex;
-    }
 </style>
 </head>
 <body>
-	<form id="" action="detailProfile.do" method="POST">
-	    <div class="profile-container">
-	        <div class="profile-picture-container">
-	            <div class="profile-picture" id="profilePicture">
+    <div class="container">
+        <div class="profile-header"></div>
+        <div class="profile-content">
+        <form id="profileUpdate" action="" method="POST">
+            <div class="profile-image">
+
+            </div>
+            <h1 class="profile-name">
+                <input type="hidden" class="form-control" id="memId" name="memId" value="${ loginMember.memId }">
+            </h1>
+            
+            
+	            <div class="edit-form">
+	                <div class="form-title">
+	                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+	                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="#333"/>
+	                    </svg>
+	                    <h2>비밀번호 확인</h2>
+	                </div>
+	                
+	                <div class="form-group">
+	                    <label></label>
+	                    <input type="hidden" class="form-control" placeholder="닉네임" id="memName" name="memName" value="${ loginMember.memName }" readonly>
+	                </div>
+	                
+	                <div class="form-row">
+	                    <div class="form-group">
+	                        <label></label>
+	                        <input type="hidden" class="form-control" placeholder="010-1234-5678" pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" maxlength="13" id="phone" name="phone" value="${ loginMember.phone }" readonly>
+	                    </div>
+	                    <div class="form-group">
+	                        <label></label>
+	                        <input type="hidden" class="form-control" placeholder="example@email.com" id="email" name="email" value="${ loginMember.email }" readonly>
+	                    </div>
+	                </div>
 	
+	                <c:if test="${ loginMember.adminYN == 'Y' }">
+	                    <div class="form-group">
+                            <label></label>
+                            <input type="hidden" class="form-control" placeholder="클래스 초대코드" id="memClassCode" name="memClassCode" value="${ loginMember.memClassCode }" readonly>
+	                    </div>
+	                </c:if>
+	                
+	                <div class="form-group">
+	                    <label></label>
+	                    <input type="password" class="form-control" placeholder="비밀번호를 입력하세요" id="memPwd" name="memPwd" value="" required>
+	                </div>
+	                
+	                <div class="button-group">
+	                	<a class="btn btn-primary" id="deleteBtn" onclick="profileUpdate(1)">회원탈퇴</a>
+	                	<a class="btn btn-secondary" id="deleteBtn" onclick="profileUpdate(2)">수정</a>
+	                    <a class="btn btn-cancel" id="cancelBtn">닫기</a>
+	                </div>
 	            </div>
+	    	</form>  
+        </div>
+    </div>
+    <script>
 	
-	        </div>
-	        
-	        <div class="progress-container">
-				<input type="hidden" class="" id="memId" name="memId" value="${ loginMember.memId }">
-	        </div>
-	        
-	        <div class="input-container">
-	            <input type="password" class="input-field" id="memPwd" name="memPwd" placeholder="비밀번호 확인" value="">
-	            <svg class="edit-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 3.5C16.8978 3.10217 17.4374 2.87868 18 2.87868C18.2786 2.87868 18.5544 2.93355 18.8118 3.04015C19.0692 3.14676 19.303 3.30301 19.5 3.5C19.697 3.69698 19.8532 3.93083 19.9598 4.18822C20.0665 4.4456 20.1213 4.72142 20.1213 5C20.1213 5.27858 20.0665 5.5544 19.9598 5.81178C19.8532 6.06917 19.697 6.30302 19.5 6.5L7 19L3 20L4 16L16.5 3.5Z" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-	        </div>
-	
-	        <div class="button-group">
-	            <button type="submit" class="btn btn-primary" id="confirmBtn">확인</button>
-	            <button type="button" class="btn btn-cancel" id="cancelBtn">닫기</button>
-	        </div>
-	    </div>
-    </form>
+    
+    </script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+    // 모달 외부 클릭 시 닫기
+	    document.addEventListener('DOMContentLoaded', function () {
 	        const cancelBtn = document.getElementById('cancelBtn');
 	        cancelBtn.addEventListener('click', function () {
 	            if (parent && typeof parent.closeModal === 'function') {
@@ -170,6 +217,16 @@
 	        });
 	    });
     </script>
-
+    
+    <script>
+    	function profileUpdate(num){
+    		if(num === 1){
+    			$("#profileUpdate").attr("action","deleteProfile.do").submit();
+    		}else{
+    			$("#profileUpdate").attr("action","detailProfile.do").submit();
+    		}
+    	}
+    </script>
+    
 </body>
 </html>

@@ -80,12 +80,23 @@
 		where mem_id = #{memId}
 	</update>
 	
+<<<<<<< HEAD
 	<insert id="insertFriend">
 	    INSERT ALL
 	        INTO FRIENDS (FROM_MEM, TO_MEM, ARE_WE_FRIEND) VALUES (#{fromMem}, #{toMem}, 'N')
 	        INTO FRIENDS (FROM_MEM, TO_MEM, ARE_WE_FRIEND) VALUES (#{toMem}, #{fromMem}, 'N')
 	    SELECT * FROM DUAL
 	</insert>
+=======
+	<update id="deleteProfile">
+		update
+			  member
+			set
+			    status = 'N'
+			  , online_st = 'N'
+		where mem_id = #{memId}
+	</update>
+>>>>>>> 918227559e2cac9f485d2ac2cb4d63c39c103c64
 
 	<delete id="deleteFriend" parameterType="map">
 	    DELETE FROM FRIENDS

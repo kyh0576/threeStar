@@ -40,5 +40,9 @@ public class ProfileDao {
 	public ArrayList<Member> selectWaitingList(SqlSessionTemplate sqlSession, Friend friend) {
 		return (ArrayList)sqlSession.selectList("profileMapper.selectWaitingList", friend);
 	}
+	
+	public int deleteProfile(SqlSessionTemplate sqlSession, Member p) {
+		return sqlSession.update("profileMapper.deleteProfile", p);
+	}
 
 }

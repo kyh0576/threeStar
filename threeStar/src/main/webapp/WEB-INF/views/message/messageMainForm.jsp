@@ -677,63 +677,55 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-	const urlParams = new URLSearchParams(window.location.search);
-	const roomId = urlParams.get("roomId") || "1";  // 기본값 "1"번 채팅방
-	
-	console.log("📌 roomId:", roomId);
-	
-	//const socket = new WebSocket(`wss://54ed-121-66-252-155.ngrok-free.app/tt/chat/\${roomId}`);
-	const socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    const roomId = urlParams.get("roomId");
+    if (!roomId) {
+      alert('❌ roomId가 없습니다. 채팅방을 먼저 생성하세요.');
+      window.history.back(); // 또는 메인으로 보내기
+    }
+    
+    console.log("📌 roomId:", roomId);
+
+
+    const socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);
+    //const socket = new WebSocket('wss://192.168.20.49:8333/tt/chat/' + roomId);
+    //const socket = new WebSocket('wss://54ed-121-66-252-155.ngrok-free.app/tt/chat' + roomId);
+    
+    socket.onopen = function () {
+    	  console.log("✅ WebSocket 연결 성공");
+    	};
+
+    	socket.onerror = function (error) {
+    	  console.error("❌ WebSocket 연결 실패", error);
+    	};
 
     const chatInput = document.querySelector(".chat-input");
     const chatSendBtn = document.querySelector(".chat-send-btn");
     const chatMessages = document.querySelector(".chat-messages");
 
-    // 메시지 전송
+    // 소켓 열렸을 때
+    socket.onopen = function () {
+        console.log('✅ WebSocket 연결 성공 roomId:', roomId);
+    };
+
+    // 메시지 보내기
     chatSendBtn.addEventListener("click", function () {
-    const msg = chatInput.value.trim();
-    if (msg !== "") {
-        const payload = {
-            sender: nickname,
-            text: msg,
-            time: new Date().toISOString(),
-            type: "chat"
-        };
-        socket.send(JSON.stringify(payload));
-        // ❌ 이 줄은 주석 처리 또는 제거
-        // appendMessage(payload, "sent");
-        chatInput.value = "";
-    }
-});
+        const msg = chatInput.value.trim();
+        if (msg !== "") {
+            const payload = {
+                sender: nickname,
+                text: msg,
+                time: new Date().toISOString(),
+                type: "chat"
+            };
+            socket.send(JSON.stringify(payload));
+            chatInput.value = "";
+        }
+    });
 
-
-    // 메시지 수신
-    socket.onmessage = function (event) {
-	    const data = JSON.parse(event.data);
-	    const type = data.sender === nickname ? "sent" : "received";
-	    appendMessage(data, type);
-	};
-
-    // 메시지 출력 함수
-    function appendMessage(data, type) {
-	  const bubble = document.createElement("div");
-	  bubble.classList.add("message-bubble", type);
-	  bubble.innerHTML =
-	    (type === 'received' ? '<div><strong>' + data.sender + '</strong></div>' : '') +
-	    '<div>' + data.text + '</div>' +
-	    '<div class="message-time">' + formatTime(data.time) + '</div>';
-	
-	  chatMessages.appendChild(bubble);
-	  chatMessages.scrollTop = chatMessages.scrollHeight;
-	}
-	
-	function formatTime(isoString) {
-	    const date = new Date(isoString);
-	    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
-
-
-    // Enter 키 입력 처리
+    // 엔터키로 전송
     chatInput.addEventListener("keydown", function (e) {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
@@ -741,9 +733,44 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-});
+    // 소켓으로 메시지 수신
+    socket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        const type = data.sender === nickname ? "sent" : "received";
+        appendMessage(data, type);
+    };
 
+    // 메시지 출력
+    function appendMessage(data, type) {
+        const bubble = document.createElement("div");
+        bubble.classList.add("message-bubble", type);
+        bubble.innerHTML =
+            (type === 'received' ? '<div><strong>' + data.sender + '</strong></div>' : '') +
+            '<div>' + data.text + '</div>' +
+            '<div class="message-time">' + formatTime(data.time) + '</div>';
+        
+        chatMessages.appendChild(bubble);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // 시간 포맷
+    function formatTime(isoString) {
+        const date = new Date(isoString);
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // 소켓 오류/닫힘 처리 (선택)
+    socket.onerror = function (error) {
+        console.error('❌ WebSocket 에러:', error);
+    };
+
+    socket.onclose = function () {
+        console.log('🔌 WebSocket 연결 종료됨');
+    };
+
+});
 </script>
+
 
 
 </body>
