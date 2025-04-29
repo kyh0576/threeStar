@@ -161,22 +161,22 @@
 	                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 	                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="#333"/>
 	                    </svg>
-	                    <h2>프로필</h2>
+	                    <h2>프로필 편집</h2>
 	                </div>
 	                
 	                <div class="form-group">
 	                    <label>이름</label>
-	                    <input type="text" class="form-control" placeholder="닉네임" id="memName" name="memName" value="${ loginMember.memName }" readonly>
+	                    <input type="text" class="form-control" placeholder="닉네임" id="memName" name="memName" value="${ loginMember.memName }">
 	                </div>
 	                
 	                <div class="form-row">
 	                    <div class="form-group">
 	                        <label>연락처</label>
-	                        <input type="tel" class="form-control" placeholder="010-1234-5678" pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" maxlength="13" id="phone" name="phone" value="${ loginMember.phone }" readonly>
+	                        <input type="tel" class="form-control" placeholder="010-1234-5678" pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" maxlength="13" id="phone" name="phone" value="${ loginMember.phone }">
 	                    </div>
 	                    <div class="form-group">
 	                        <label>이메일</label>
-	                        <input type="email" class="form-control" placeholder="example@email.com" id="email" name="email" value="${ loginMember.email }" readonly>
+	                        <input type="email" class="form-control" placeholder="example@email.com" id="email" name="email" value="${ loginMember.email }">
 	                    </div>
 	                </div>
 	
@@ -188,7 +188,7 @@
 	                </c:if>
 	                
 	                <div class="form-group">
-	                    <label>비밀번호 확인</label>
+	                    <label>비밀번호</label>
 	                    <input type="password" class="form-control" placeholder="비밀번호를 입력하세요" id="memPwd" name="memPwd" value="" required>
 	                </div>
 	                
@@ -254,7 +254,7 @@
     
     <script>
     	function profileUpdate(){
-    		$("#profileUpdate").attr("action","detailProfile.do").submit();
+    		$("#profileUpdate").attr("action","profileUpdate.do").submit();
     	}
     </script>
     

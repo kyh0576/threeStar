@@ -65,10 +65,10 @@ public class ProfileController {
 		if(loginMember != null && bcryptPasswordEncoder.matches(p.getMemPwd(), loginMember.getMemPwd())) {
 			session.setAttribute("loginMember", loginMember);
 			session.setAttribute("profile", profile);
-			out.println("<script>");
-			out.println("alert('수정 성공');");
-			out.println("parent.location.reload();");
-			out.println("</script>");
+			// out.println("<script>");
+			// out.println("alert('수정 성공');");
+			// out.println("parent.location.reload();");
+			// out.println("</script>");
 		}else {
 			out.println("<script>");
 			out.println("alert('비밀번호가 틀렸습니다.');");
@@ -76,7 +76,7 @@ public class ProfileController {
 			out.println("</script>");
 		}
 		out.flush();
-		return null;
+		return "member/myPageUpdate";
 	}
 	
 	
@@ -118,8 +118,8 @@ public class ProfileController {
 		if(result > 0) {
 			session.setAttribute("loginMember", mService.loginMember(p));
 			out.println("<script>");
-			// out.println("alert('수정 성공');");
-			// out.println("parent.location.reload();");
+			out.println("alert('수정 성공');");
+			out.println("parent.location.reload();");
 			out.println("</script>");
 		}else {
 			out.println("<script>");
@@ -128,13 +128,12 @@ public class ProfileController {
 			out.println("</script>");
 		}
 		out.flush();
-		return "member/myPageCheck";
+		return null;
 	}
 	
 	@RequestMapping("profileCheck.do")
-	public String profileCheck() {
+	public String myPage() {
 		return "member/myPage";
 	}
-	
 
 }
