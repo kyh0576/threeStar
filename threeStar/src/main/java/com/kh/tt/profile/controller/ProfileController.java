@@ -137,7 +137,6 @@ public class ProfileController {
 		return "member/myPage";
 	}
 	
-<<<<<<< HEAD
 	@RequestMapping("insertFriend.do")
 	public void insertFriend(Friend friend, Model model, HttpServletResponse response) throws IOException {
 	    response.setContentType("text/html; charset=UTF-8");
@@ -205,7 +204,6 @@ public class ProfileController {
 	    }
 	}
 	
-=======
 	@RequestMapping("deleteProfile.do")
 	public String deleteProfile(Member p, Model model, HttpSession session, HttpServletResponse response) throws IOException  {
 		
@@ -247,6 +245,5 @@ public class ProfileController {
 	public String checkProfile() {
 		return "member/myPageCheck";
 	}
->>>>>>> 918227559e2cac9f485d2ac2cb4d63c39c103c64
 
 }

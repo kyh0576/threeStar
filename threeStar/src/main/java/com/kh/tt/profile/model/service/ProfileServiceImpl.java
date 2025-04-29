@@ -44,14 +44,11 @@ public class ProfileServiceImpl implements ProfileService {
 	public int updateProfile(Member p) {
 		return pDao.updateProfile(sqlSession, p);
 	}
-<<<<<<< HEAD
-=======
 	
 	@Override
 	public int deleteProfile(Member p) {
 		return pDao.deleteProfile(sqlSession, p);
 	}
->>>>>>> 918227559e2cac9f485d2ac2cb4d63c39c103c64
 
 	@Override
 	public int insertFriend(Friend friend) {
