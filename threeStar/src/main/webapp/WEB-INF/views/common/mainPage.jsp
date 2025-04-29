@@ -783,7 +783,7 @@ document.addEventListener("DOMContentLoaded", function () {
              return;
            }
         
-        friendList.forEach(friend => {
+        friendList.forEach(friend => {   	
           const friendItem = document.createElement('div');
           friendItem.className = 'chat-item';
           friendItem.innerHTML = `
@@ -805,6 +805,8 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
           `;
           container.appendChild(friendItem);
+          console.log('friend.memNo:', friend.memNo, 'friend.memName:', friend.memName);
+          console.log('friend:', friend);
         });
       }
    
@@ -850,19 +852,37 @@ document.addEventListener("DOMContentLoaded", function () {
 //================= 채팅 이모지 클릭 시 =================
 
 document.addEventListener('click', function(e) {
-  
-  // chat-message-icon을 눌렀는지 확인
-  if (e.target.closest('.chat-message-icon')) {  // 오타 수정: .chat-mewssage-icon ❌ -> .chat-message-icon ✅
     const chatIcon = e.target.closest('.chat-message-icon');
-    const targetUserId = chatIcon.dataset.targetUserId; // 데이터 속성 가져오기
+    if (chatIcon && chatIcon.dataset.targetUserId) {
+        const targetUserId = chatIcon.dataset.targetUserId;
+        console.log('✅ 클릭한 targetUserId:', targetUserId);
 
-    if (targetUserId) {
-      startChat(targetUserId);
-    } else {
-      console.error('❌ targetUserId를 찾을 수 없습니다.');
+        // 서버로 채팅방 생성 요청
+        fetch('/tt/chattingRoom/startChat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ targetUserId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('✅ 서버 응답 데이터:', data); // <- 추가
+            if (data.success) {
+                const roomId = data.roomId;
+                console.log('✅ 이동할 roomId:', roomId); // <- 추가
+                location.href = `/tt/message/messageForm?roomId=\${roomId}`;
+            } else {
+                alert('❌ 채팅방 생성 실패');
+            }
+        })
+        .catch(error => {
+            console.error('❌ 채팅방 생성 오류', error);
+        });
     }
-  }
 });
+
+
 
 //================= 채팅 이모지 클릭 시 startChat 함수 실행 =================
 function startChat(targetUserId) {
