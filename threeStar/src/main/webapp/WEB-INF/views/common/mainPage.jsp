@@ -33,6 +33,7 @@
     }
     
     .sidebar-top {
+      padding-top: 16px;
       padding-bottom: 15px;
       display: flex;
       align-items: center;
@@ -213,7 +214,6 @@
     .main-content {
       flex: 1;
       padding: 20px;
-      padding-left: 10px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -405,7 +405,6 @@
 
     .border{
       background-color: #f8f9fa;
-      padding: 16px;
       border-radius: 10px;
     }
   </style>
