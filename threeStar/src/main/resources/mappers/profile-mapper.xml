@@ -76,9 +76,9 @@
 		update
 			  member
 			set
-			  status = 'N'
+			    status = 'N'
+			  , online_st = 'N'
 		where mem_id = #{memId}
-			  mem_pwd = #{memPwd}
 	</update>
 
 </mapper>

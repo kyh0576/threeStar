@@ -139,22 +139,17 @@ public class ProfileController {
 	@RequestMapping("deleteProfile.do")
 	public String deleteProfile(Member p, Model model, HttpSession session, HttpServletResponse response) throws IOException  {
 		
-		String encPwd = ((Member)session.getAttribute("loginMember")).getMemPwd();
-		
 		Member loginMember = mService.loginMember(p);
-		
-		int result = pService.deleteProfile(p);
+
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		
 		if(bcryptPasswordEncoder.matches(p.getMemPwd(), loginMember.getMemPwd())) {
+			int result = pService.deleteProfile(p);
 			if(result > 0) {
+				session.setAttribute("alertMsg", "회원 탈퇴에 성공했습니다.");
 				session.removeAttribute("loginMember");
-				out.println("<script>");
-				out.println("alert('회원 탈퇴하였습니다.');");
-				out.println("parent.location.reload();");
-				out.println("</script>");
-				return "member/loginForm";
+				// return "member/loginForm";
 			}else {
 				out.println("<script>");
 				out.println("alert('회원 탈퇴에 실패했습니다. 다시 시도해 주세요.');");
@@ -162,9 +157,11 @@ public class ProfileController {
 				// out.println("parent.location.reload();");
 				out.println("</script>");
 			}
+			out.println("<script>");
+			out.println("parent.location.href='/tt/';");
+			out.println("</script>");
 			out.flush();
 			return null;
-			
 		}else {
 			out.println("<script>");
 			out.println("alert('비밀번호가 틀렸습니다. 다시 시도해 주세요.')");

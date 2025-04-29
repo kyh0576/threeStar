@@ -260,6 +260,16 @@
     		}else
     			$("#profileUpdate").attr("action","detailProfile.do").submit();
     	}
+    	
+        window.validateForm = function() {
+            const passwordInput = document.getElementById('memPwd');
+            if (passwordInput.test(passwordInput.value == null)) {
+                alert('비밀번호를 입력해 주세요');
+                passwordInput.focus();
+                return true;
+            }
+            return false;
+	    };
     </script>
     
 </body>

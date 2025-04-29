@@ -147,7 +147,7 @@
     <div class="container">
         <div class="profile-header"></div>
         <div class="profile-content">
-        <form id="profileUpdate" action="" method="POST">
+        <form id="profileUpdate" action="profileUpdate.do" method="POST">
             <div class="profile-image">
                 <img src="/api/placeholder/100/100" alt="프로필 이미지">
             </div>
@@ -193,8 +193,8 @@
 	                </div>
 	                
 	                <div class="button-group">
-	                    <a class="btn btn-primary" id="saveBtn" onclick="profileUpdate()">수정</a>
-	                    <a class="btn btn-cancel" id="cancelBtn">닫기</a>
+	                    <button type="submit" class="btn btn-primary" id="saveBtn">수정</button>
+	                    <button type="button" class="btn btn-cancel" id="cancelBtn">닫기</button>
 	                </div>
 	            </div>
 	    	</form>  
@@ -250,12 +250,6 @@
 	    };
 	    
     });
-    </script>
-    
-    <script>
-    	function profileUpdate(){
-    		$("#profileUpdate").attr("action","profileUpdate.do").submit();
-    	}
     </script>
     
 </body>
