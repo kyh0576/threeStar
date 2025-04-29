@@ -1,6 +1,8 @@
 package com.kh.tt.websocket;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -22,7 +24,11 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Autowired
     private MessageService messageService; // ✅ 서비스 주입
     
+    private ChatRoomManager chatRoomManager;
+    
     private ObjectMapper objectMapper = new ObjectMapper();
+    
+    
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -31,13 +37,13 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         if (loginMember != null) {
             System.out.println("✅ WebSocket 세션에서 loginMember 가져오기 성공: " + loginMember.getMemId());
         } else {
-            System.out.println("⚠️ WebSocket 세션에 loginMember 없음 (아직 복사 안 됨)");
+            System.out.println("⚠️ WebSocket 세션에 loginMember 없음 (아직 복사 안 됨)"); 
         }
 
         String uri = session.getUri().toString();
         String roomId = uri.substring(uri.lastIndexOf("/") + 1);
 
-        ChatRoomManager.addSession(roomId, session);
+        chatRoomManager.addSession(roomId, session);
     }
 //===========================================================================
     @Override
