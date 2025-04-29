@@ -23,7 +23,16 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
 
 		@Override
 		public int createChatRoom(int myMemNo, int targetMemNo) {
-			return mDao.createChatRoom(sqlSession, myMemNo, targetMemNo);
+		    // 1. 먼저 나(myMemNo) 채팅방 등록
+		    int result = mDao.createChatRoom(sqlSession, myMemNo);
+
+		    // 2. 채팅방 id (chatId) 가져오기
+		    int chatId = mDao.selectLastChatId(sqlSession);
+
+		    // 3. 상대방(targetMemNo)도 같은 방에 등록
+		    int result2 = mDao.createTargetChatRoom(sqlSession, chatId, targetMemNo, "채팅방");
+
+		    return chatId;  // ✅ 생성된 채팅방 ID를 반환
 		}
 
 		@Override

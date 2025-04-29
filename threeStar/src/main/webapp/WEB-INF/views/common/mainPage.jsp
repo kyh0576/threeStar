@@ -864,7 +864,7 @@ document.addEventListener('click', function(e) {
             if (data.success) {
                 const roomId = data.roomId;
                 console.log('✅ 이동할 roomId:', roomId); // <- 추가
-                location.href = `/tt/message/messageForm?roomId=${roomId}`;
+                location.href = `/tt/message/messageForm?roomId=\${roomId}`;
             } else {
                 alert('❌ 채팅방 생성 실패');
             }

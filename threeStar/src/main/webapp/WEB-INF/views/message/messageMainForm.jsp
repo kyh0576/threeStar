@@ -690,6 +690,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     const socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);
+    
+    socket.onopen = function () {
+    	  console.log("✅ WebSocket 연결 성공");
+    	};
+
+    	socket.onerror = function (error) {
+    	  console.error("❌ WebSocket 연결 실패", error);
+    	};
 
     const chatInput = document.querySelector(".chat-input");
     const chatSendBtn = document.querySelector(".chat-send-btn");
