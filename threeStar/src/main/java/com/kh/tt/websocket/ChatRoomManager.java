@@ -6,8 +6,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
+@Component
 public class ChatRoomManager {
 
     // 각 채팅방(roomId)에 연결된 세션들을 저장하는 Map

@@ -24,12 +24,9 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Autowired
     private MessageService messageService; // ✅ 서비스 주입
     
-    private ChatRoomManager chatRoomManager;
-    
-    private ObjectMapper objectMapper = new ObjectMapper();
-    
-    
 
+    private ObjectMapper objectMapper = new ObjectMapper(); // 직접 생성
+    
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         Member loginMember = (Member) session.getAttributes().get("loginMember");
@@ -43,8 +40,10 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         String uri = session.getUri().toString();
         String roomId = uri.substring(uri.lastIndexOf("/") + 1);
 
-        chatRoomManager.addSession(roomId, session);
+        ChatRoomManager.addSession(roomId, session);
     }
+    
+    
 //===========================================================================
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {

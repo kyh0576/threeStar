@@ -20,9 +20,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(chatWebSocketHandler, "/chat/{roomId}")  // ✅ 소켓 경로
-                .setAllowedOrigins("*")
-                .addInterceptors(new HttpSessionHandshakeInterceptor());  // ✅ 기본 인터셉터만 등록
+    	registry.addHandler(chatWebSocketHandler, "/chat/{roomId}")
+        .setAllowedOrigins("*")
+        .addInterceptors(new HttpSessionHandshakeInterceptor());  // ✅ 여기 오타 없애기 // ✅ 기본 인터셉터만 등록
     }
 }
 
