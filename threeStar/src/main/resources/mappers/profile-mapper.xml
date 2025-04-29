@@ -71,5 +71,14 @@
 			  , mem_pwd = #{memPwd}
 		where mem_id = #{memId}
 	</update>
+	
+	<update id="deleteProfile">
+		update
+			  member
+			set
+			  status = 'N'
+		where mem_id = #{memId}
+			  mem_pwd = #{memPwd}
+	</update>
 
 </mapper>
