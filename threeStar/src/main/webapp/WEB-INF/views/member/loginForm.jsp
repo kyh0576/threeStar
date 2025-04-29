@@ -210,11 +210,22 @@
             <span>OR</span>
         </div>
         
-        <div class="social-login">
-            <div class="social-icon google" id="google-login">
-               Google 계정으로 로그인
-            </div>
-        </div>
+		<div id="g_id_onload"
+		     data-client_id="939670547310-mjuf549e4q081qu90jtle7uk7fvhcplr.apps.googleusercontent.com"
+		     data-context="signin"
+		     data-ux_mode="popup"
+		     data-login_uri="http://localhost:8333/tt/main.me"
+		     data-auto_prompt="false">
+		</div>
+		
+		<div class="g_id_signin"
+		     data-type="standard"
+		     data-shape="rectangular"
+		     data-theme="outline"
+		     data-text="signin_with"
+		     data-size="large"
+		     data-logo_alignment="left">
+		</div>
     </form>
 
     <script>
@@ -255,5 +266,26 @@
             });
         });
     </script>
+    
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script type="text/javascript" src="js/loginGoogleAPI.js" defer></script>
+    
+    <script>
+    //전역 함수로 설정
+	window.handleCredentialResponse = function (response) {
+		console.log('handleCredentialResponse 호출');
+		//토큰 값을 디코딩해서 JSON으로 반환
+		//decodeJwtResponse <- 디코딩하는 함수
+		const responsePayload = decodeJwtResponse(response.credential);
+		
+		//디코딩한 정보를 콘솔창에 출력
+		console.log('Full Name: ' + responsePayload.name);
+		console.log('Email: ' + responsePayload.email);
+		
+		//값 전송
+		sendforwardGooglelogin(responsePayload.name, responsePayload.email)
+	}
+	</script>
+    
 </body>
 </html>
