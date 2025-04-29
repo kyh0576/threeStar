@@ -221,8 +221,8 @@
     }
 
     .gallery-profile-img {
-        width: 50px;
-        height: 50px;
+        width: 20px;
+        height: 20px;
         border-radius: 50%;
         margin-right: 15px;
         overflow: hidden;
@@ -272,12 +272,14 @@
     .gallery-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
+        gap: 50px;
         padding: 20px;
         overflow-y: auto;
     }
 
     .gallery-item {
+        width: 400px;
+        height: 200px;
         position: relative;
         aspect-ratio: 1 / 1;
         overflow: hidden;
@@ -506,22 +508,20 @@
             <!-- 갤러리 아이템 2 -->
             <div class="gallery-item">
                 <img src="https://via.placeholder.com/300/ffefef/888888?text=Image+2" alt="이미지">
-                <div class="file-info">
-                    <div class="file-title">파일명 프로젝트 기획 및 요구사항 보고서</div>
-                    <div class="file-size">2.8MB</div>
-                </div>
+                
             </div>
             <!-- 갤러리 아이템 3 -->
             <div class="gallery-item">
                 <img src="https://via.placeholder.com/300/eeeeee/888888?text=Image" alt="이미지">
-            </div>
-            <!-- 갤러리 아이템 4 -->
-            <div class="gallery-item">
-                <img src="https://via.placeholder.com/300/ffefef/888888?text=Image+2" alt="이미지">
                 <div class="file-info">
                     <div class="file-title">파일명 프로젝트 기획 및 요구사항 보고서</div>
                     <div class="file-size">2.8MB</div>
                 </div>
+            </div>
+            <!-- 갤러리 아이템 4 -->
+            <div class="gallery-item">
+                <img src="https://via.placeholder.com/300/ffefef/888888?text=Image+2" alt="이미지">
+                
             </div>
             <!-- 갤러리 아이템 5 -->
             <div class="gallery-item">
@@ -530,6 +530,22 @@
             <!-- 갤러리 아이템 6 -->
             <div class="gallery-item">
                 <img src="https://via.placeholder.com/300/ffefef/888888?text=Image+2" alt="이미지">
+                <div class="file-info">
+                    <div class="file-title">파일명 프로젝트 기획 및 요구사항 보고서</div>
+                    <div class="file-size">2.8MB</div>            
+                </div>
+            </div>
+            <!-- 갤러리 아이템 7 -->
+            <div class="gallery-item">
+                <img src="https://via.placeholder.com/300/ddffee/888888?text=Image+3" alt="이미지">
+            </div>
+            <!-- 갤러리 아이템 8 -->
+            <div class="gallery-item">
+                <img src="https://via.placeholder.com/300/f0e0ff/888888?text=Image+4" alt="이미지">
+            </div>
+            <!-- 갤러리 아이템 9 -->
+            <div class="gallery-item">
+                <img src="https://via.placeholder.com/300/ffeedd/888888?text=Image+5" alt="이미지">
                 <div class="file-info">
                     <div class="file-title">파일명 프로젝트 기획 및 요구사항 보고서</div>
                     <div class="file-size">2.8MB</div>
