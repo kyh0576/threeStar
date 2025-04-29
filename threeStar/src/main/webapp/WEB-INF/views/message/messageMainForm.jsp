@@ -689,9 +689,9 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("📌 roomId:", roomId);
 
 
-    //const socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);
+    const socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);
     //const socket = new WebSocket('wss://192.168.20.49:8333/tt/chat/' + roomId);
-    const socket = new WebSocket('wss://54ed-121-66-252-155.ngrok-free.app/tt/chat' + roomId);
+    //const socket = new WebSocket('wss://54ed-121-66-252-155.ngrok-free.app/tt/chat' + roomId);
     
     socket.onopen = function () {
     	  console.log("✅ WebSocket 연결 성공");
