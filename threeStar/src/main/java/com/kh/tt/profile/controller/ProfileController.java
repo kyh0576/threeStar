@@ -65,6 +65,7 @@ public class ProfileController {
 		if(loginMember != null && bcryptPasswordEncoder.matches(p.getMemPwd(), loginMember.getMemPwd())) {
 			session.setAttribute("loginMember", loginMember);
 			session.setAttribute("profile", profile);
+			return "member/myPageUpdate";
 			// out.println("<script>");
 			// out.println("alert('수정 성공');");
 			// out.println("parent.location.reload();");
@@ -76,7 +77,7 @@ public class ProfileController {
 			out.println("</script>");
 		}
 		out.flush();
-		return "member/myPageUpdate";
+		return null;
 	}
 	
 	
@@ -171,6 +172,11 @@ public class ProfileController {
 		}
 		out.flush();
 		return null;
+	}
+	
+	@RequestMapping("checkProfile.do")
+	public String checkProfile() {
+		return "member/myPageCheck";
 	}
 
 }
