@@ -829,16 +829,22 @@ document.addEventListener("DOMContentLoaded", function () {
            </div>
            <div class="chat-actions">
            <div class="chat-message-icon">
-             <!-- 초록색 체크표시 아이콘 -->
-             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-               <path d="M20 6L9 17l-5-5"></path>
-             </svg>
+	           <!-- 친구수락 아이콘 -->
+	           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+	                fill="none" stroke="#28a745" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+	                style="cursor: pointer;"
+	                	onclick="acceptFriend(${loginMember.memNo}, \${friend.memNo})">
+	             <path d="M20 6L9 17l-5-5"></path>
+	           </svg>
            </div>
            <div class="chat-menu-icon">
-             <!-- 빨간색 X 표시 아이콘 -->
-             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-               <path d="M18 6L6 18M6 6l12 12"></path>
-             </svg>
+	           <!-- 친구요청 거절 (X 아이콘) -->
+	           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+	                fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+	                style="cursor: pointer;"
+	                onclick="rejectFriend(${loginMember.memNo}, \${friend.memNo})">
+	             <path d="M18 6L6 18M6 6l12 12"></path>
+	           </svg>
            </div>
          </div>
 
@@ -847,7 +853,23 @@ document.addEventListener("DOMContentLoaded", function () {
          container.appendChild(friendItem);
        });
      }
+   
+  
+
 });
+
+function acceptFriend(fromMem, toMem) {
+	   if (confirm("친구신청을 수락하시겠습니까?")) {
+	     location.href = "acceptFriend.do?fromMem=" + encodeURIComponent(fromMem) + "&toMem=" + encodeURIComponent(toMem);
+	   }
+	 }
+	 
+function rejectFriend(fromMem, toMem) {
+	  if (confirm("친구 요청을 거절하시겠습니까?")) {
+	    location.href = "rejectFriend.do?fromMem=" + encodeURIComponent(fromMem) + "&toMem=" + encodeURIComponent(toMem);
+	  }
+	}
+
 
 //================= 채팅 이모지 클릭 시 =================
 
