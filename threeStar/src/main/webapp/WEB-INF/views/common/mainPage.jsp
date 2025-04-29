@@ -447,10 +447,12 @@
               <input type="hidden" id="classCode" name="classCode" value="${c.classCode}">
             </div>
             <ul class="class-list active">
+            <!-- 예시 
               <li class="class-item">
                 <div class="avatar avatar-red" id="profile-item">김</div>
                 <span class="member-name">김시연1</span>
               </li>
+              -->
             </ul>
           </div>
         </c:if>
