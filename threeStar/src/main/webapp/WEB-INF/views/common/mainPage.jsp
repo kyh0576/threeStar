@@ -409,6 +409,7 @@
       border-radius: 10px;
     }
   </style>
+
 </head>
 <body>
   <!-- 이쪽에 메뉴바 포함 할꺼임 -->
