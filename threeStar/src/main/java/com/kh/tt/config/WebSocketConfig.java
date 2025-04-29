@@ -24,5 +24,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
         .setAllowedOrigins("*")
         .addInterceptors(new HttpSessionHandshakeInterceptor());  // ✅ 여기 오타 없애기 // ✅ 기본 인터셉터만 등록
     }
+    
+    
 }
 
