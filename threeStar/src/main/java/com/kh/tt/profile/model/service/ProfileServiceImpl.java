@@ -43,7 +43,10 @@ public class ProfileServiceImpl implements ProfileService {
 		return pDao.updateProfile(sqlSession, p);
 	}
 	
-	
+	@Override
+	public int deleteProfile(Member p) {
+		return pDao.deleteProfile(sqlSession, p);
+	}
 
 	
 	

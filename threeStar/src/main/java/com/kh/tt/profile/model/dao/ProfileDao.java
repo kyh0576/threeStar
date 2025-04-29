@@ -27,5 +27,9 @@ public class ProfileDao {
 		int result = sqlSession.update("profileMapper.updateProfile", p);
 		return result;
 	}
+	
+	public int deleteProfile(SqlSessionTemplate sqlSession, Member p) {
+		return sqlSession.update("profileMapper.deleteProfile", p);
+	}
 
 }

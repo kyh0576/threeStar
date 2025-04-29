@@ -15,6 +15,8 @@ public interface ProfileService{
 	//  및 수정(update)
 	int updateProfile(Member p);
 	
+	int deleteProfile(Member p);
+	
 	
 
 }
