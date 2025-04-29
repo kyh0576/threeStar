@@ -193,7 +193,7 @@
 	                </div>
 	                
 	                <div class="button-group">
-	                    <button type="submit" class="btn btn-primary" id="saveBtn">수정</button>
+	                    <button type="submit" class="btn btn-primary" id="saveBtn" onclick="profileUp()">수정</button>
 	                    <button type="button" class="btn btn-cancel" id="cancelBtn">닫기</button>
 	                </div>
 	            </div>
@@ -261,6 +261,12 @@
 	    };
 	    
     });
+    </script>
+    
+    <script>
+    	function profileUp(${logimMember.Pwd}){
+    		$("#saveBtn").attr("action", "profileCheck.do").submit();
+    	}
     </script>
     
 </body>
