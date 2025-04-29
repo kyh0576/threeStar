@@ -164,7 +164,18 @@
    
    <select id="selectFriendList" resultMap="memberResult">
    select 
-          mem_name
+          mem_no
+        , mem_id
+        , mem_pwd
+        , mem_name
+        , email
+        , phone
+        , mem_class_code
+        , sns_key
+        , status
+        , online_st
+        , admin_yn
+        , profile_url
      from member
      join friends on (to_mem = mem_no)
     where are_we_friend = 'Y'
@@ -173,7 +184,18 @@
    
    <select id="selectWaitingList" resultMap="memberResult">
    select 
-          mem_name
+          mem_no
+        , mem_id
+        , mem_pwd
+        , mem_name
+        , email
+        , phone
+        , mem_class_code
+        , sns_key
+        , status
+        , online_st
+        , admin_yn
+        , profile_url
      from member
      join friends on (to_mem = mem_no)
     where are_we_friend = 'N'
