@@ -193,7 +193,7 @@
 	    modalIframe.src = "/tt/profileCheck.do";
 	    modalIframe.style.cssText = `
 	        width: 600px;
-	        height: 700px;
+	        height: 666px;
 	        border: none;
 	        border-radius: 10px;
 	        // background: transparent;

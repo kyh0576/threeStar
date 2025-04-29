@@ -114,9 +114,8 @@ public class ProfileController {
 		
 		if(result > 0) {
 			session.setAttribute("loginMember", mService.loginMember(p));
-			session.setAttribute("alertMsg", "수정 성공");
 			out.println("<script>");
-			// out.println("parent.closeModal();");
+			out.println("alert('수정 성공');");
 			out.println("parent.location.reload();");
 			out.println("</script>");
 		}else {
