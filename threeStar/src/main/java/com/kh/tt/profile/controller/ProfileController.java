@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.tt.member.model.dao.MemberDao;
@@ -23,6 +24,7 @@ import com.kh.tt.member.controller.MemberController;
 import com.kh.tt.member.model.vo.Classes;
 import com.kh.tt.member.model.vo.Member;
 import com.kh.tt.profile.model.service.ProfileServiceImpl;
+import com.kh.tt.profile.model.vo.Friend;
 
 @Controller
 public class ProfileController {
@@ -38,18 +40,16 @@ public class ProfileController {
     private BCryptPasswordEncoder bcryptPasswordEncoder;
 	
     @RequestMapping("profile.do")
-//	public String selectProfile (@RequestParam(value="memNo") int memNo, Model model) {	
-    public String selectProfile () {	
-//    	int result = pService.selectProfile(memNo);
-//		
-//		System.out.println("controller : " + result);
-//		
-//		if(result > 0) {
+    public String selectProfile (@RequestParam("memId") String memId, Model model) {	
+    	Member m = pService.selectProfile(memId);
+		
+		if(m != null) {
+	    	model.addAttribute("m", m);
 			return "profile/profile";
-//		}else {
-//			model.addAttribute("errorMsg", "조회 실패");
-//			return "common/mainPage";
-//		}
+		}else {
+			model.addAttribute("alertMsg", "조회 실패");
+			return "common/mainPage";
+		}
 	}
 	
 	@RequestMapping("detailProfile.do")
@@ -135,6 +135,73 @@ public class ProfileController {
 	@RequestMapping("profileCheck.do")
 	public String myPage() {
 		return "member/myPage";
+	}
+	
+	@RequestMapping("insertFriend.do")
+	public void insertFriend(Friend friend, Model model, HttpServletResponse response) throws IOException {
+	    response.setContentType("text/html; charset=UTF-8");
+	    PrintWriter out = response.getWriter();
+
+	    try {
+	        int result = pService.insertFriend(friend);
+
+	        if(result > 0) {
+	            out.println("<script>");
+	            out.println("alert('친구신청 완료');");
+	            out.println("parent.location.reload();");
+	            out.println("</script>");
+	        } else {
+	            out.println("<script>");
+	            out.println("alert('친구신청 실패');");
+	            out.println("parent.location.reload();");
+	            out.println("</script>");
+	        }
+
+	    } catch(Exception e) {
+	        // 예외 발생 시: 친구 신청이 이미 되어 있는 경우
+	    	ArrayList<Member> wList = pService.selectWaitingList(friend);
+	        System.out.println(wList);
+	    	if(wList != null && !wList.isEmpty()) {
+	        	out.println("<script>");
+	        	out.println("if(confirm('이미 친구신청이 되어있습니다. 친구신청을 취소하시겠습니까?')) {");
+	        	out.println("    location.href='deleteFriend.do?fromMem=" + friend.getFromMem() + "&toMem=" + friend.getToMem() + "';");
+	        	out.println("} else {");
+	        	out.println("    alert('취소되었습니다.');");
+	        	out.println("parent.location.reload();");
+	        	out.println("}");
+	        	out.println("</script>");
+	        }else {
+	        	out.println("<script>");
+	        	out.println("if(confirm('이미 친구입니다. 친구를 삭제하시겠습니까?')) {");
+	        	out.println("    location.href='deleteFriend.do?fromMem=" + friend.getFromMem() + "&toMem=" + friend.getToMem() + "';");
+	        	out.println("} else {");
+	        	out.println("    alert('취소되었습니다.');");
+	        	out.println("parent.location.reload();");
+	        	out.println("}");
+	        	out.println("</script>");
+	        }
+	    	
+	    }
+	}
+	
+	@RequestMapping("deleteFriend.do")
+	public void deleteFriend(Friend friend, HttpServletResponse response) throws IOException {
+	    response.setContentType("text/html; charset=UTF-8");
+	    PrintWriter out = response.getWriter();
+	    
+	    int result = pService.deleteFriend(friend);
+	    
+	    if(result > 0) {
+	        out.println("<script>");
+	        out.println("alert('친구신청이 취소되었습니다.');");
+	        out.println("parent.location.reload();");
+	        out.println("</script>");
+	    } else {
+	        out.println("<script>");
+	        out.println("alert('친구 삭제 실패');");
+	        out.println("parent.location.reload();");
+	        out.println("</script>");
+	    }
 	}
 	
 	@RequestMapping("deleteProfile.do")

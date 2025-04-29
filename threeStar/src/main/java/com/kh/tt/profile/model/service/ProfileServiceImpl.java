@@ -1,5 +1,7 @@
 package com.kh.tt.profile.model.service;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.kh.tt.member.model.dao.MemberDao;
 import com.kh.tt.member.model.vo.Member;
 import com.kh.tt.profile.model.dao.ProfileDao;
+import com.kh.tt.profile.model.vo.Friend;
 import com.kh.tt.profile.model.vo.Profile;
 
 @Service
@@ -23,9 +26,8 @@ public class ProfileServiceImpl implements ProfileService {
 	private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public int selectProfile(int memNo) {
-		int result = pDao.selectProfile(sqlSession, memNo);
-		return result;
+	public Member selectProfile(String memId) {
+		return pDao.selectProfile(sqlSession, memId);
 	}
 	
 	@Override
@@ -48,6 +50,18 @@ public class ProfileServiceImpl implements ProfileService {
 		return pDao.deleteProfile(sqlSession, p);
 	}
 
+	@Override
+	public int insertFriend(Friend friend) {
+		return pDao.insertFriend(sqlSession, friend);
+	}
+
+	public int deleteFriend(Friend friend) {
+		return pDao.deleteFriend(sqlSession, friend);
+	}
+
+	public ArrayList<Member> selectWaitingList(Friend friend) {
+		return pDao.selectWaitingList(sqlSession, friend);
+	}
 	
 	
 }

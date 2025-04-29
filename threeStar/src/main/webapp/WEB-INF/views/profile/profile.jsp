@@ -161,11 +161,13 @@
         </div>
         
         <div class="input-container">
-            <input type="text" class="input-field" id="nameInput" placeholder="아이디" value=""><svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24"  fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <input type="text" class="input-field" id="nameInput" placeholder="아이디" value="${ m.memId }" readonly>
+            <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24"  fill="#000000"><path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" onclick="location.href='insertFriend.do?toMem=' + encodeURIComponent('${m.memNo}') + '&fromMem=' + encodeURIComponent('${loginMember.memNo}')"/></svg>
         </div>
         
         <div class="input-container">
-            <input type="text" class="input-field" id="detailInput" placeholder="닉네임" value="">
+            <input type="text" class="input-field" id="detailInput" placeholder="닉네임" value="${ m.memName }">
             <svg class="edit-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 3.5C16.8978 3.10217 17.4374 2.87868 18 2.87868C18.2786 2.87868 18.5544 2.93355 18.8118 3.04015C19.0692 3.14676 19.303 3.30301 19.5 3.5C19.697 3.69698 19.8532 3.93083 19.9598 4.18822C20.0665 4.4456 20.1213 4.72142 20.1213 5C20.1213 5.27858 20.0665 5.5544 19.9598 5.81178C19.8532 6.06917 19.697 6.30302 19.5 6.5L7 19L3 20L4 16L16.5 3.5Z" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
 

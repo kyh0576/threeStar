@@ -23,14 +23,22 @@
       <result column="online_st" property="onlineSt"/>
       <result column="admin_yn" property="adminYN"/>
    </resultMap>
+
+   <resultMap id="friendResult" type="Friend">
+   		<result column="from_mem" property="fromMem"/>
+  		<result column="to_mem" property="toMem"/>
+  		<result column="arw_we_friend" property="areWeFriend"/>
+  		<result column="to_nickname" property="toNickname"/>
+   </resultMap>
 	
-	<select id="selectProfile" resultType="string">
+	<select id="selectProfile" resultMap="memberResult">
 		select
-			  MEM_ID
+		      MEM_NO
+			, MEM_ID
 			, MEM_NAME
 		from MEMBER
 		where status='Y'
-		and MEM_NO = #{memNo}
+		and MEM_ID = #{memId}
 	</select>
 	
 	<select id="detailProfile" resultMap="memberResult">
@@ -72,6 +80,12 @@
 		where mem_id = #{memId}
 	</update>
 	
+	<insert id="insertFriend">
+	    INSERT ALL
+	        INTO FRIENDS (FROM_MEM, TO_MEM, ARE_WE_FRIEND) VALUES (#{fromMem}, #{toMem}, 'N')
+	        INTO FRIENDS (FROM_MEM, TO_MEM, ARE_WE_FRIEND) VALUES (#{toMem}, #{fromMem}, 'N')
+	    SELECT * FROM DUAL
+	</insert>
 	<update id="deleteProfile">
 		update
 			  member
@@ -81,4 +95,21 @@
 		where mem_id = #{memId}
 	</update>
 
+	<delete id="deleteFriend" parameterType="map">
+	    DELETE FROM FRIENDS
+	    WHERE (FROM_MEM = #{fromMem} AND TO_MEM = #{toMem})
+	       OR (FROM_MEM = #{toMem} AND TO_MEM = #{fromMem})
+	</delete>
+	
+	<select id="selectWaitingList" resultMap="friendResult">
+		select
+	       from_mem
+	     , to_mem
+	     , are_we_friend
+	     , to_nickname
+	  from friends
+	 where from_mem = #{fromMem}
+	   and to_mem = #{toMem}
+       and are_we_friend = 'N'
+	</select>
 </mapper>

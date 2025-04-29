@@ -202,4 +202,5 @@ public class MemberController {
 	    ArrayList<Member> wList = mService.selectWaitingList(memNo); // friend = 'N'만 조회
 	    return wList;
 	}
+	
 }
