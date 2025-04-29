@@ -214,7 +214,7 @@
 		     data-client_id="939670547310-mjuf549e4q081qu90jtle7uk7fvhcplr.apps.googleusercontent.com"
 		     data-context="signin"
 		     data-ux_mode="popup"
-		     data-login_uri="http://localhost:8333/tt/main.me"
+		     data-login_uri="http://localhost:8333/tt/signinForm.me"
 		     data-auto_prompt="false">
 		</div>
 		
