@@ -102,5 +102,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         // WebSocket 핸드쉐이크 때 세션에 로그인한 사용자 정보 넣어둔 경우 꺼내기
         Object userNo = session.getAttributes().get("loginMemberNo");
         return userNo != null ? (Integer) userNo : 0;
+        
     }
 }
