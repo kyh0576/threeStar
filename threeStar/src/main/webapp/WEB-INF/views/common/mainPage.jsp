@@ -33,6 +33,7 @@
     }
     
     .sidebar-top {
+      padding-top: 16px;
       padding-bottom: 15px;
       display: flex;
       align-items: center;
@@ -213,7 +214,6 @@
     .main-content {
       flex: 1;
       padding: 20px;
-      padding-left: 10px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -221,7 +221,7 @@
     
     .search-container {
       width: 100%;
-      max-width: 800px;
+      max-width: 1000px;
       margin-bottom: 20px;
     }
     
@@ -239,7 +239,7 @@
     
     .chat-list-container, .chat-list-container-wait {
       width: 100%;
-      max-width: 800px;
+      max-width: 1000px;
       background-color: white;
       border: 1px solid #e6e6e6;
       border-radius: 8px;
@@ -405,10 +405,10 @@
 
     .border{
       background-color: #f8f9fa;
-      padding: 16px;
       border-radius: 10px;
     }
   </style>
+
 </head>
 <body>
   <!-- 이쪽에 메뉴바 포함 할꺼임 -->
@@ -447,10 +447,12 @@
               <input type="hidden" id="classCode" name="classCode" value="${c.classCode}">
             </div>
             <ul class="class-list active">
+            <!-- 예시 
               <li class="class-item">
                 <div class="avatar avatar-red" id="profile-item">김</div>
                 <span class="member-name">김시연1</span>
               </li>
+              -->
             </ul>
           </div>
         </c:if>

@@ -189,7 +189,7 @@
 	                
 	                <div class="form-group">
 	                    <label>비밀번호</label>
-	                    <input type="text" class="form-control" placeholder="비밀번호를 입력하세요" id="memPwd" name="memPwd" value="" required>
+	                    <input type="password" class="form-control" placeholder="비밀번호를 입력하세요" id="memPwd" name="memPwd" value="" required>
 	                </div>
 	                
 	                <div class="button-group">
@@ -200,6 +200,10 @@
 	    	</form>  
         </div>
     </div>
+    <script>
+	
+    
+    </script>
     
     <script>
     // 모달 외부 클릭 시 닫기
@@ -211,6 +215,17 @@
 	            }
 	        });
 	    });
+    </script>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const cancelBtn = document.getElementById('cancelBtn');
+        cancelBtn.addEventListener('click', function () {
+            if (parent && typeof parent.closeModal === 'function') {
+                parent.closeModal();
+            }
+        });
+    });
     </script>
     
     <script>
