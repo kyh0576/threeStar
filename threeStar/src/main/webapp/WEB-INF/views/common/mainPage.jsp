@@ -221,7 +221,7 @@
     
     .search-container {
       width: 100%;
-      max-width: 800px;
+      max-width: 1000px;
       margin-bottom: 20px;
     }
     
@@ -239,7 +239,7 @@
     
     .chat-list-container, .chat-list-container-wait {
       width: 100%;
-      max-width: 800px;
+      max-width: 1000px;
       background-color: white;
       border: 1px solid #e6e6e6;
       border-radius: 8px;
