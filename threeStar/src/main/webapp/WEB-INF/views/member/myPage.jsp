@@ -193,8 +193,7 @@
 	                </div>
 	                
 	                <div class="button-group">
-	                	<a class="btn btn-primary" id="deleteBtn" onclick="profileUpdate(1)">회원탈퇴</a>
-	                    <a class="btn btn-secondary" id="saveBtn" onclick="profileUpdate(2)">수정</a>
+	                    <a class="btn btn-primary" id="saveBtn" onclick="profileUpdate()">수정</a>
 	                    <a class="btn btn-cancel" id="cancelBtn">닫기</a>
 	                </div>
 	            </div>
@@ -255,10 +254,7 @@
     
     <script>
     	function profileUpdate(num){
-    		if(num === 1){
-    			$("#profileUpdate").attr("action","deleteProfile.do").submit();
-    		}else
-    			$("#profileUpdate").attr("action","detailProfile.do").submit();
+    		$("#profileUpdate").attr("action","checkProfile.do").submit();
     	}
     </script>
     

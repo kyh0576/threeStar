@@ -194,7 +194,7 @@
 	                
 	                <div class="button-group">
 	                	<a class="btn btn-primary" id="deleteBtn" onclick="profileUpdate(1)">회원탈퇴</a>
-	                    <a class="btn btn-secondary" id="saveBtn" onclick="profileUpdate(2)">수정</a>
+	                	<a class="btn btn-secondary" id="deleteBtn" onclick="profileUpdate(2)">수정</a>
 	                    <a class="btn btn-cancel" id="cancelBtn">닫기</a>
 	                </div>
 	            </div>
@@ -219,57 +219,13 @@
     </script>
     
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const phoneInput = document.getElementById('phone');
-        
-        // 전화번호 입력 시 하이픈 자동 추가
-        phoneInput.addEventListener('input', function(e) {
-            let number = e.target.value.replace(/[^0-9]/g, '');
-            
-            if (number.length <= 3) {
-                // 입력된 값이 3자리 이하일 경우
-                phoneInput.value = number;
-            } else if (number.length <= 7) {
-                // 입력된 값이 4자리~7자리일 경우
-                phoneInput.value = number.substring(0, 3) + '-' + number.substring(3);
-            } else {
-                // 입력된 값이 8자리 이상일 경우
-                phoneInput.value = number.substring(0, 3) + '-' + 
-                                  number.substring(3, 7) + '-' + 
-                                  number.substring(7, 11);
-            }
-        });
-	        
-        window.validateForm = function() {
-            const phonePattern = /^01[0-9]-[0-9]{3,4}-[0-9]{4}$/;
-            if (!phonePattern.test(phoneInput.value)) {
-                alert('전화번호 형식이 올바르지 않습니다. 010-XXXX-XXXX 형식으로 입력해주세요.');
-                phoneInput.focus();
-                return false;
-            }
-            return true;
-	    };
-	    
-    });
-    </script>
-    
-    <script>
     	function profileUpdate(num){
     		if(num === 1){
     			$("#profileUpdate").attr("action","deleteProfile.do").submit();
-    		}else
+    		}else{
     			$("#profileUpdate").attr("action","detailProfile.do").submit();
+    		}
     	}
-    	
-        window.validateForm = function() {
-            const passwordInput = document.getElementById('memPwd');
-            if (passwordInput.test(passwordInput.value == null)) {
-                alert('비밀번호를 입력해 주세요');
-                passwordInput.focus();
-                return true;
-            }
-            return false;
-	    };
     </script>
     
 </body>
