@@ -44,6 +44,8 @@
 	    LEFT JOIN FRIENDS ON MEM_NO = TO_MEM
 	    WHERE STATUS = 'Y'
 	      AND MEM_NO = #{memNo}
+        order
+           by to_nickname
 	)
 	WHERE ROWNUM = 1
 	</select>

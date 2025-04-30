@@ -43,6 +43,7 @@ public class ProfileController {
     public String selectProfile (@RequestParam("memNo") int memNo, Model model) {	
     	Member m = pService.selectProfile(memNo);
 		System.out.println("memNo : " + memNo);
+		System.out.println(m);
 		if(m != null) {
 	    	model.addAttribute("m", m);
 			return "profile/profile";
