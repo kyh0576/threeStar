@@ -576,7 +576,7 @@
       
       // iframe 생성
       const modalIframe = document.createElement('iframe');
-      modalIframe.src = 'profile.do' + (memId ? '?memId=' + memId : '');
+      modalIframe.src = "profile.do" + (memId ? `?memId=${memId}` : '');
       modalIframe.style.cssText = `
         width: 500px;
         height: 430px;

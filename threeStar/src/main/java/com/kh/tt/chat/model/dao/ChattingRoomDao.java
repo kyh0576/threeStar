@@ -1,10 +1,13 @@
 package com.kh.tt.chat.model.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
+
+import com.kh.tt.chat.model.vo.ChattingRoom;
 
 @Repository
 public class ChattingRoomDao {
@@ -33,4 +36,8 @@ public class ChattingRoomDao {
         return sqlSession.insert("chatMapper.createTargetChatRoom", 
             Map.of("chatId", chatId, "targetMemNo", targetMemNo, "chatName", chatName));
     }
+    
+//    public  List<ChattingRoom> getChatRoomsByMemberId(SqlSessionTemplate sqlSession ,String memId){
+////    	return sqlSession.selectList(statement)
+//    }
 }
