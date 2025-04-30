@@ -560,10 +560,10 @@
   <!-- 스크립트 -->
   <script>
   let globalFriendList = [];  // 모든 친구 리스트 저장
-  	
+  console.log("📦 globalFriendList 선언바로 후 내용:", globalFriendList);
   
     // 모달 관련 기능
-    function openProfileModal2(memId) {
+    function openProfileModal2(memNo) {
       // 모달 컨테이너 생성
       const modalContainer = document.createElement('div');
       modalContainer.id = 'modalContainer';
@@ -582,7 +582,7 @@
       
       // iframe 생성
       const modalIframe = document.createElement('iframe');
-      modalIframe.src = 'profile.do' + (memId ? '?memId=' + memId : '');
+      modalIframe.src = 'profile.do' + (memNo ? '?memNo=' + memNo : '');
       modalIframe.style.cssText = `
         width: 500px;
         height: 430px;
@@ -639,7 +639,7 @@
        method: 'GET',
        data: { classCode: classCode },
        success: function(response) {
-
+   	   		console.log("📦 globalFriendList 내용zz:", globalFriendList);
          // 리스트 초기화
          listElement.innerHTML = '';
 
@@ -649,7 +649,7 @@
            const memId = member.memId;
            const memNo = member.memNo;
            
-           console.log("📦 globalFriendList 내용:", globalFriendList);
+           
            
            // ✅ 친구 리스트에서 해당 멤버를 찾음
            const friendData = globalFriendList.find(f => f.memNo === memNo);
@@ -668,7 +668,7 @@
            
             // 👉 클릭 이벤트 추가
 	        li.addEventListener('click', function() {
-	          openProfileModal2(memId);
+	          openProfileModal2(memNo);
 	        });
             
            listElement.appendChild(li);
@@ -697,7 +697,7 @@
       profileElements.forEach(function(element) {
         element.addEventListener('click', function() {
           const memId = this.getAttribute('MEM_ID');
-          openProfileModal2(memId);
+          openProfileModal2(memNo);
         });
       });
       
@@ -757,134 +757,144 @@
   	      console.error("🌩️ 날씨 정보 로딩 실패:", err);
   	      document.querySelector(".weather-info").textContent = "날씨 불러오기 실패";
   	    });
-  	  
-  	   // 친구목록 리스트 조회
-  	   const myMemNo = ${loginMember.memNo};  // JSP에서 세션 정보 넘겨줘야 함!
-  	   loadFriendList(myMemNo);
-  	   loadWaitingList(myMemNo);
-  	   
-  	   function loadFriendList(memNo) {
-  	        $.ajax({
-  	          url: 'selectFriendList.me',
-  	          method: 'GET',
-  	          data: { memNo: memNo },  // 본인 번호 넘김
-  	          success: function(response) {
-         	 	 	globalFriendList = response;  // ✅ 전역에 저장
-         	 	 	
-         	 		console.log("📦 loadFriendList에 있는 globalFriendList 내용:", globalFriendList);
-
-         	 	 	
-  	            renderFriendList(response);
-  	          },
-  	          error: function() {
-  	            alert('친구 리스트 불러오기 실패');
-  	          }
-  	        });
-  	      }
-  	   
-  	   console.log("📦 loadFriendList 바깥에 있는 globalFriendList 내용:", globalFriendList);
-  	   
-  	   
-  		// 대기중 목록
-  	   function loadWaitingList(memNo) {
-  	     $.ajax({
-  	       url: 'selectWaitingList.me',
-  	       method: 'GET',
-  	       data: { memNo: memNo },
-  	       success: function(response) {
-  	         renderWaitingList(response); // 대기중만
-  	       },
-  	       error: function() {
-  	         alert('대기중 리스트 불러오기 실패');
-  	       }
-  	     });
-  	   }
-  	   
-  	     
-  	   function renderFriendList(friendList) {
-  	        const container = document.querySelector('.chat-list-container'); // 친구목록을 넣을 곳
-  	        container.innerHTML = '';  // 기존 비우기
-  	
-  	        if (friendList.length === 0) {
-  	             container.innerHTML = '<div class="chat-item">친구가 없습니다.</div>';
-  	             return;
-  	           }
-  	        
-  	        friendList.forEach(friend => {   	
-  	          const friendItem = document.createElement('div');
-  	          friendItem.className = 'chat-item';
-  	          friendItem.innerHTML = `
-  	            <div class="chat-avatar avatar-red">\${friend.memName.charAt(0)}</div>
-  	            <div class="chat-info">
-  	              <div class="chat-name">\${friend.memName}</div>
-  	            </div>
-  	            <div class="chat-actions">
-  	              <div class="chat-message-icon" data-target-user-id="\${friend.memNo}">
-  	                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  	                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-  	                </svg>
-  	              </div>
-  	              <div class="chat-message-icon">
-  	              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-  	            	  onclick="rejectFriend(${loginMember.memNo}, \${friend.memNo}, '친구를 삭제하시겠습니까?')">
-  	              <path d="M18 6L6 18M6 6l12 12"></path>
-  	              </div>
-  	            </svg>
-  	            </div>
-  	          `;
-  	          container.appendChild(friendItem);
-  	          console.log('friend.memNo:', friend.memNo, 'friend.memName:', friend.memName);
-  	          console.log('friend:', friend);
-  	        });
-  	      }
-  	   
-  	   function renderWaitingList(friendList) {
-  	       const container = document.querySelector('.chat-list-container-wait'); // 친구목록을 넣을 곳
-  	       container.innerHTML = '';  // 기존 비우기
-  	
-  	       if (friendList.length === 0) {
-  	            container.innerHTML = '<div class="chat-item">대기중인 친구 요청이 없습니다.</div>';
-  	            return;
-  	          }
-  	       
-  	       friendList.forEach(friend => {
-  	         const friendItem = document.createElement('div');
-  	         friendItem.className = 'chat-item';
-  	         friendItem.innerHTML = `
-  	           <div class="chat-avatar avatar-red">\${friend.memName.charAt(0)}</div>
-  	           <div class="chat-info">
-  	             <div class="chat-name">\${friend.memName}</div>
-  	           </div>
-  	           <div class="chat-actions">
-  	           <div class="chat-message-icon">
-  		           <!-- 친구수락 아이콘 -->
-  		           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-  		                fill="none" stroke="#28a745" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-  		                style="cursor: pointer;"
-  		                	onclick="acceptFriend(${loginMember.memNo}, \${friend.memNo})">
-  		             <path d="M20 6L9 17l-5-5"></path>
-  		           </svg>
-  	           </div>
-  	           <div class="chat-menu-icon">
-  		           <!-- 친구요청 거절 (X 아이콘) -->
-  		           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-  		                fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-  		                style="cursor: pointer;"
-  		                onclick="rejectFriend(${loginMember.memNo}, \${friend.memNo}, '친구 요청을 거절하시겠습니까?')">
-  		             <path d="M18 6L6 18M6 6l12 12"></path>
-  		           </svg>
-  	           </div>
-  	         </div>
-  	
-  	         `;
-  	         container.appendChild(friendItem);
-  	       });
-  	     }
   	   
   	  
   	
   	});
 
+	   // 친구목록 리스트 조회
+	   const myMemNo = ${loginMember.memNo};  // JSP에서 세션 정보 넘겨줘야 함!
+	   loadFriendList(myMemNo);
+	   loadWaitingList(myMemNo);
+	   
+	   console.log("📦 loadFriendList 바깥 위에 있는 globalFriendList 내용:", globalFriendList);
+	   
+	   function loadFriendList(memNo) {
+	        $.ajax({
+	          url: 'selectFriendList.me',
+	          method: 'GET',
+	          data: { memNo: memNo },  // 본인 번호 넘김
+	          success: function(response) {
+      	 	 	globalFriendList = response;  // ✅ 전역에 저장
+      	 	 	
+      	 		console.log("📦 loadFriendList에 있는 globalFriendList 내용:", globalFriendList);
+
+      	 	 	
+	            renderFriendList(response);
+	          },
+	          error: function() {
+	            alert('친구 리스트 불러오기 실패');
+	          }
+	        });
+	      }
+	   
+	 console.log("📦 loadFriendList 바깥 아래에 있는 globalFriendList 내용:", globalFriendList);
+	   
+	   
+		// 대기중 목록
+	   function loadWaitingList(memNo) {
+	     $.ajax({
+	       url: 'selectWaitingList.me',
+	       method: 'GET',
+	       data: { memNo: memNo },
+	       success: function(response) {
+	         renderWaitingList(response); // 대기중만
+	       },
+	       error: function() {
+	         alert('대기중 리스트 불러오기 실패');
+	       }
+	     });
+	   }
+		
+	 console.log("📦 globalFriendList 대기중 다음 내용zz:", globalFriendList);
+	   
+	     
+	   function renderFriendList(friendList) {
+	        const container = document.querySelector('.chat-list-container'); // 친구목록을 넣을 곳
+	        container.innerHTML = '';  // 기존 비우기
+	
+	        if (friendList.length === 0) {
+	             container.innerHTML = '<div class="chat-item">친구가 없습니다.</div>';
+	             return;
+	           }
+	        
+	        friendList.forEach(friend => {   
+	        	
+	        	const displayName = friend.toNickname ? friend.toNickname : friend.memName;
+	        	const firstChar = displayName.charAt(0);
+	        	
+	          const friendItem = document.createElement('div');
+	          friendItem.className = 'chat-item';
+	          friendItem.innerHTML = `
+	        	  <div class="chat-avatar avatar-red">\${firstChar}</div>
+	        	  <div class="chat-info">
+	        	    <div class="chat-name">\${displayName}</div>
+	        	  </div>
+	            <div class="chat-actions">
+	              <div class="chat-message-icon" data-target-user-id="\${friend.memNo}">
+	                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5aaafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+	                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+	                </svg>
+	              </div>
+	              <div class="chat-message-icon">
+	              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+	            	  onclick="rejectFriend(${loginMember.memNo}, \${friend.memNo}, '친구를 삭제하시겠습니까?')">
+	              <path d="M18 6L6 18M6 6l12 12"></path>
+	              </div>
+	            </svg>
+	            </div>
+	          `;
+	          container.appendChild(friendItem);
+	        });
+	      }
+	   
+	   function renderWaitingList(friendList) {
+	       const container = document.querySelector('.chat-list-container-wait'); // 친구목록을 넣을 곳
+	       container.innerHTML = '';  // 기존 비우기
+	
+	       if (friendList.length === 0) {
+	            container.innerHTML = '<div class="chat-item">대기중인 친구 요청이 없습니다.</div>';
+	            return;
+	          }
+	       
+	       friendList.forEach(friend => {
+	         const friendItem = document.createElement('div');
+	         friendItem.className = 'chat-item';
+	         friendItem.innerHTML = `
+	           <div class="chat-avatar avatar-red">\${friend.memName.charAt(0)}</div>
+	           <div class="chat-info">
+	             <div class="chat-name">\${friend.memName}</div>
+	           </div>
+	           <div class="chat-actions">
+	           <div class="chat-message-icon">
+		           <!-- 친구수락 아이콘 -->
+		           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+		                fill="none" stroke="#28a745" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+		                style="cursor: pointer;"
+		                	onclick="acceptFriend(${loginMember.memNo}, \${friend.memNo})">
+		             <path d="M20 6L9 17l-5-5"></path>
+		           </svg>
+	           </div>
+	           <div class="chat-menu-icon">
+		           <!-- 친구요청 거절 (X 아이콘) -->
+		           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+		                fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+		                style="cursor: pointer;"
+		                onclick="rejectFriend(${loginMember.memNo}, \${friend.memNo}, '친구 요청을 거절하시겠습니까?')">
+		             <path d="M18 6L6 18M6 6l12 12"></path>
+		           </svg>
+	           </div>
+	         </div>
+	
+	         `;
+	         container.appendChild(friendItem);
+	       });
+	     }
+	   
+	   
+	   
+	   
+    
   	function acceptFriend(fromMem, toMem) {
   		   if (confirm("친구신청을 수락하시겠습니까?")) {
   		     location.href = "acceptFriend.do?fromMem=" + encodeURIComponent(fromMem) + "&toMem=" + encodeURIComponent(toMem);
@@ -955,6 +965,8 @@
   	    console.error('❌ 채팅방 생성 오류', error);
   	  });
   	}
+  	
+  	console.log("📦 globalFriendList 맨 마지막줄 내용zz:", globalFriendList);
   </script>
   
 </body>
