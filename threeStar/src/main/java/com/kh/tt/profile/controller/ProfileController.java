@@ -41,8 +41,9 @@ public class ProfileController {
 	
     @RequestMapping("profile.do")
     public String selectProfile (@RequestParam("memId") String memId, Model model) {	
+    	System.out.println("memId : " +memId);
     	Member m = pService.selectProfile(memId);
-		
+		System.out.println("zzzzzzzz :" + m);
 		if(m != null) {
 	    	model.addAttribute("m", m);
 			return "profile/profile";

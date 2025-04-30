@@ -50,7 +50,7 @@ public class MessageController {
     }
     
 //==================이전에 한 메시지 화면에 띄우기================  
-    @GetMapping("/history")
+    @GetMapping(value = "/history", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public List<Message> getChatHistory(@RequestParam("roomId") int roomId) {
         return messageService.sendMessage(roomId);

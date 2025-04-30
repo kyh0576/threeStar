@@ -23,6 +23,7 @@ public class MessageServiceImpl implements MessageService {
         return mDao.insertMessage(sqlSession, msg);
     }
 
+//이전메시지 불러오기============================
 	@Override
 	public List<Message> sendMessage(int roomId) {
 		return mDao.sendMessage(sqlSession, roomId);
