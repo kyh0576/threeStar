@@ -677,40 +677,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-
     const urlParams = new URLSearchParams(window.location.search);
-    
     const roomId = urlParams.get("roomId");
+
     if (!roomId) {
-      alert('❌ roomId가 없습니다. 채팅방을 먼저 생성하세요.');
-      window.history.back(); // 또는 메인으로 보내기
+        console.warn("ℹ️ roomId가 없으므로 WebSocket 연결 없이 목록만 표시합니다.");
+        return; // 여기서 WebSocket 로직 실행 막음
     }
-    
+
     console.log("📌 roomId:", roomId);
-
-
     const socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);
-    //const socket = new WebSocket('ws://192.168.20.49:8333/tt/chat/' + roomId);
-    //const socket = new WebSocket('wss://54ed-121-66-252-155.ngrok-free.app/tt/chat' + roomId);
-    
-    socket.onopen = function () {
-    	  console.log("✅ WebSocket 연결 성공");
-    	};
 
-    	socket.onerror = function (error) {
-    	  console.error("❌ WebSocket 연결 실패", error);
-    	};
+    socket.onopen = function () {
+        console.log('✅ WebSocket 연결 성공 roomId:', roomId);
+    };
+
+    socket.onerror = function (error) {
+        console.error("❌ WebSocket 연결 실패", error);
+    };
 
     const chatInput = document.querySelector(".chat-input");
     const chatSendBtn = document.querySelector(".chat-send-btn");
     const chatMessages = document.querySelector(".chat-messages");
 
-    // 소켓 열렸을 때
-    socket.onopen = function () {
-        console.log('✅ WebSocket 연결 성공 roomId:', roomId);
-    };
-
-    // 메시지 보내기
     chatSendBtn.addEventListener("click", function () {
         const msg = chatInput.value.trim();
         if (msg !== "") {
@@ -725,7 +714,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // 엔터키로 전송
     chatInput.addEventListener("keydown", function (e) {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
@@ -733,14 +721,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // 소켓으로 메시지 수신
     socket.onmessage = function (event) {
         const data = JSON.parse(event.data);
         const type = data.sender === nickname ? "sent" : "received";
         appendMessage(data, type);
     };
 
-    // 메시지 출력
     function appendMessage(data, type) {
         const bubble = document.createElement("div");
         bubble.classList.add("message-bubble", type);
@@ -753,24 +739,44 @@ document.addEventListener("DOMContentLoaded", function () {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // 시간 포맷
     function formatTime(isoString) {
         const date = new Date(isoString);
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
-    // 소켓 오류/닫힘 처리 (선택)
-    socket.onerror = function (error) {
-        console.error('❌ WebSocket 에러:', error);
-    };
-
     socket.onclose = function () {
         console.log('🔌 WebSocket 연결 종료됨');
     };
-
 });
+
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("/tt/chattingRoom/rooms")  // 🔁 백엔드에서 참여중인 채팅방 목록 호출
+        .then(response => response.json())
+        .then(rooms => {
+            const list = document.querySelector(".message-list");
+            if (!rooms || rooms.length === 0) {
+                list.innerHTML = "<p style='padding: 20px; color: gray;'>채팅방이 없습니다</p>";
+                return;
+            }
+
+            list.innerHTML = rooms.map(room => `
+            <div class="message-item" onclick="location.href='${pageContext.request.contextPath}/message/mainForm?roomId=\${room.chatId}'">
+                <div class="profile-img"><img src="/resources/images/default-profile.png" alt="프로필"></div>
+                <div class="message-info">
+                    <div class="message-name">\${room.chatName}</div> <!-- ✅ 여기 수정 -->
+                    <div class="message-preview">\${room.lastMessage || '대화를 시작하세요'}</div>
+                </div>
+            </div>
+        `).join('');
+        })
+        .catch(err => {
+            console.error("❌ 채팅방 목록 불러오기 실패:", err);
+        });
+});
+</script>
 
 
 </body>

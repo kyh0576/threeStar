@@ -17,5 +17,5 @@ public class ChattingRoom {
 	private String chatName;
 	private String status;
 	
-//	private String lastMessage;
+	private String lastMessage;
 }

@@ -14,7 +14,7 @@ public interface ChattingRoomService {
 	int createTargetChatRoom(int chatId, int targetMemNo, String chatName);
 	
 //	============채팅방===========
-//	List<ChattingRoom> getChatRoomsByMemberId(String memId);
+	List<ChattingRoom> getChatRoomsByMemberId(String memId);
 	
 
 }

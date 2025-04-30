@@ -47,10 +47,10 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
 		public int createTargetChatRoom(int chatId, int targetMemNo, String chatName) {
 			return mDao.createTargetChatRoom(sqlSession,chatId,targetMemNo,chatName);
 		}
-
-//		@Override
-//		public List<ChattingRoom> getChatRoomsByMemberId(String memId) {
-//			return mDao.getChatRoomsByMemberId(sqlSession, memId);
-//		}
+//채팅방 생성 ====================================================================
+		@Override
+		public List<ChattingRoom> getChatRoomsByMemberId(String memId) {
+			return mDao.getChatRoomsByMemberId(sqlSession, memId);
+		}
 
 }

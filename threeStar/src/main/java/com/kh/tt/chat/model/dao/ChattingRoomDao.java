@@ -37,7 +37,7 @@ public class ChattingRoomDao {
             Map.of("chatId", chatId, "targetMemNo", targetMemNo, "chatName", chatName));
     }
     
-//    public  List<ChattingRoom> getChatRoomsByMemberId(SqlSessionTemplate sqlSession ,String memId){
-////    	return sqlSession.selectList(statement)
-//    }
+    public  List<ChattingRoom> getChatRoomsByMemberId(SqlSessionTemplate sqlSession ,String memId){
+    	return sqlSession.selectList("chatMapper.selectRoomsByMemberId" ,memId);
+    }
 }

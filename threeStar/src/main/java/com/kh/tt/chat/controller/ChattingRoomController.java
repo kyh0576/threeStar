@@ -20,7 +20,7 @@ import com.kh.tt.chat.model.vo.ChattingRoom;
 import com.kh.tt.member.model.vo.Member;
 
 @Controller
-@RequestMapping("/chat")
+@RequestMapping("/chattingRoom")
 public class ChattingRoomController {
 	
 	@Autowired
@@ -65,16 +65,16 @@ public class ChattingRoomController {
         return response;
     }
     
-//    // ==================== 채팅방 ====================
-//    
-//    @GetMapping("/rooms")
-//    @ResponseBody
-//    public List<ChattingRoom> getMyChatRooms(HttpSession session) {
-//        Member loginUser = (Member) session.getAttribute("loginMember");
-//        if (loginUser == null) return Collections.emptyList();  // 로그인 안 한 경우
-//
-//        return chattingRoomService.getChatRoomsByMemberId(loginUser.getMemId());
-//    }
+    // ==================== 채팅방 ====================
+    
+    @GetMapping("/rooms")
+    @ResponseBody
+    public List<ChattingRoom> getMyChatRooms(HttpSession session) {
+        Member loginUser = (Member) session.getAttribute("loginMember");
+        if (loginUser == null) return Collections.emptyList();  // 로그인 안 한 경우
+
+        return chattingRoomService.getChatRoomsByMemberId(loginUser.getMemId());
+    }
 
 
 }
