@@ -113,4 +113,14 @@
 	   and to_mem = #{toMem}
        and are_we_friend = 'N'
 	</select>
+	
+	<update id="updateFriendName">
+	update
+		   friends
+	   set
+		   to_nickname = #{toNickname}
+	 where to_mem = #{toMem}
+	   and from_mem = #{fromMem}
+	   and are_we_friend = 'Y'
+	</update>
 </mapper>

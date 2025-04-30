@@ -205,6 +205,31 @@ public class ProfileController {
 	    }
 	}
 	
+	@RequestMapping("updateFriendName.do")
+	public void updateFriendName(Friend friend, HttpServletResponse response) throws IOException {
+		response.setContentType("text/html; charset=UTF-8");
+	    PrintWriter out = response.getWriter();
+		
+	    // 내 memNo는 Friend의 fromMem에 들어있음
+		// 내가 누른사람의 memNo는 Friend의 toMem에 들어있음
+		int result = pService.updateFriendName(friend);
+		System.out.println(friend);
+		System.out.println("result : " + result);
+		if(result > 0) {
+			// 성공적으로 이름 수정됨 (친구일때)
+	        out.println("<script>");
+	        out.println("alert('닉네임 변경이 완료되었습니다.');");
+	        out.println("parent.location.reload();");
+	        out.println("</script>");
+		}else {
+			// 이름 수정 실패 (친구가 아닐때)
+	        out.println("<script>");
+	        out.println("alert('친구가 아니면 닉네임 변경이 불가합니다.');");
+	        out.println("parent.location.reload();");
+	        out.println("</script>");
+		}
+	}
+	
 	@RequestMapping("deleteProfile.do")
 	public String deleteProfile(Member p, Model model, HttpSession session, HttpServletResponse response) throws IOException  {
 		

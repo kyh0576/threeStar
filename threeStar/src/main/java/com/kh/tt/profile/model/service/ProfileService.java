@@ -27,6 +27,9 @@ public interface ProfileService{
 	// 친구 삭제
 	int deleteFriend(Friend friend);
 	
+	// 친구 닉네임 변경
+	int updateFriendName(Friend friend);
+	
 	// 친구 신청한 목록
 	ArrayList<Member> selectWaitingList(Friend friend);
 }
