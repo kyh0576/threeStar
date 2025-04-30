@@ -231,7 +231,8 @@
         function updateFriendName(memNo) {
             const nickname = document.getElementById('detailInput').value;
             const url = 'updateFriendName.do?toMem=' + encodeURIComponent(memNo) +
-                        '&toNickname=' + encodeURIComponent(nickname);
+                        '&toNickname=' + encodeURIComponent(nickname) +
+            			'&fromMem=' + encodeURIComponent('${loginMember.memNo}');
             location.href = url;
    		}
     </script>

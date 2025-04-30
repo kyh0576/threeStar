@@ -210,9 +210,10 @@ public class ProfileController {
 		response.setContentType("text/html; charset=UTF-8");
 	    PrintWriter out = response.getWriter();
 		
+	    // 내 memNo는 Friend의 fromMem에 들어있음
 		// 내가 누른사람의 memNo는 Friend의 toMem에 들어있음
 		int result = pService.updateFriendName(friend);
-		
+		System.out.println(friend);
 		System.out.println("result : " + result);
 		if(result > 0) {
 			// 성공적으로 이름 수정됨 (친구일때)
