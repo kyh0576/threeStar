@@ -162,7 +162,7 @@
         </div>
         
         <div class="input-container">
-            <input type="text" class="input-field" id="nameInput" placeholder="아이디" value="${ m.memId }" readonly>
+            <input type="text" class="input-field" id="nameInput" placeholder="아이디" value="${ m.memName }" readonly>
             
             <c:if test="${ loginMember.memNo != m.memNo }">
 	            <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24"  fill="#000000">
@@ -173,8 +173,7 @@
         </div>
         
         <div class="input-container">
-            <input type="text" class="input-field" id="detailInput" placeholder="닉네임"
-       value="${not empty m.toNickname ? m.toNickname : m.memName}">
+            <input type="text" class="input-field" id="detailInput" placeholder="변경할 닉네임을 입력해주세요">
         	<c:if test="${ loginMember.memNo != m.memNo }">
 	            <svg class="edit-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
 				     onclick="updateFriendName('${m.memNo}')">
