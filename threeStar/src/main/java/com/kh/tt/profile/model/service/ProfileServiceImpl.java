@@ -26,8 +26,8 @@ public class ProfileServiceImpl implements ProfileService {
 	private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public Member selectProfile(String memId) {
-		return pDao.selectProfile(sqlSession, memId);
+	public Member selectProfile(int memNo) {
+		return pDao.selectProfile(sqlSession, memNo);
 	}
 	
 	@Override
