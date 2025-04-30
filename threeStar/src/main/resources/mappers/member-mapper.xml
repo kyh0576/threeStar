@@ -15,6 +15,7 @@
       <result column="online_st" property="onlineSt"/>
       <result column="admin_yn" property="adminYN"/>
       <result column="profile_url" property="profileURL"/>
+      <result column="to_Nickname" property="toNickname"/>
    </resultMap>
    
    <resultMap id="classesResult" type="Classes">
@@ -176,10 +177,11 @@
         , online_st
         , admin_yn
         , profile_url
+        , to_Nickname
      from member
      join friends on (to_mem = mem_no)
     where are_we_friend = 'Y'
-      and from_mem = #{memId}
+      and from_mem = #{memNo}
    </select>
    
    <select id="selectWaitingList" resultMap="memberResult">

@@ -22,6 +22,7 @@
       <result column="status" property="status"/>
       <result column="online_st" property="onlineSt"/>
       <result column="admin_yn" property="adminYN"/>
+      <result column="to_Nickname" property="toNickname"/>
    </resultMap>
 
    <resultMap id="friendResult" type="Friend">
@@ -32,13 +33,19 @@
    </resultMap>
 	
 	<select id="selectProfile" resultMap="memberResult">
-		select
-		      MEM_NO
-			, MEM_ID
-			, MEM_NAME
-		from MEMBER
-		where status='Y'
-		and MEM_ID = #{memId}
+	SELECT *
+	FROM (
+	    SELECT
+	        MEM_NO,
+	        MEM_ID,
+	        MEM_NAME,
+	        TO_NICKNAME
+	    FROM MEMBER
+	    LEFT JOIN FRIENDS ON MEM_NO = TO_MEM
+	    WHERE STATUS = 'Y'
+	      AND MEM_NO = #{memNo}
+	)
+	WHERE ROWNUM = 1
 	</select>
 	
 	<select id="detailProfile" resultMap="memberResult">
