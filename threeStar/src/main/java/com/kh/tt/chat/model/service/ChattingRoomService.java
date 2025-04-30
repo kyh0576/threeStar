@@ -15,6 +15,4 @@ public interface ChattingRoomService {
 	
 //	============채팅방===========
 	List<ChattingRoom> getChatRoomsByMemberId(String memId);
-	
-
 }

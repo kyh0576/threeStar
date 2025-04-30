@@ -670,7 +670,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <script>
     const nickname = "<%= ((com.kh.tt.member.model.vo.Member)session.getAttribute("loginMember")).getMemName() %>";
+    const myMemNo = <%= ((com.kh.tt.member.model.vo.Member)session.getAttribute("loginMember")).getMemNo() %>;
 </script>
+
+<script>
+// ✅ 전역에서 사용 가능하게
+function appendMessage(data, type) {
+    const bubble = document.createElement("div");
+    bubble.classList.add("message-bubble", type);
+    bubble.innerHTML =
+    	(type === 'received' ? '<div><strong>' + data.sender + '</strong></div>' : '') +
+        '<div>' + data.text + '</div>' +
+        '<div class="message-time">' + formatTime(data.time) + '</div>';
+    
+    document.querySelector(".chat-messages").appendChild(bubble);
+    document.querySelector(".chat-messages").scrollTop =
+        document.querySelector(".chat-messages").scrollHeight;
+}
+
+function formatTime(isoString) {
+    const date = new Date(isoString);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+</script>
+
 
 <!-- ================웹소켓====================== -->
 
@@ -727,23 +750,6 @@ document.addEventListener("DOMContentLoaded", function () {
         appendMessage(data, type);
     };
 
-    function appendMessage(data, type) {
-        const bubble = document.createElement("div");
-        bubble.classList.add("message-bubble", type);
-        bubble.innerHTML =
-            (type === 'received' ? '<div><strong>' + data.sender + '</strong></div>' : '') +
-            '<div>' + data.text + '</div>' +
-            '<div class="message-time">' + formatTime(data.time) + '</div>';
-        
-        chatMessages.appendChild(bubble);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function formatTime(isoString) {
-        const date = new Date(isoString);
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-
     socket.onclose = function () {
         console.log('🔌 WebSocket 연결 종료됨');
     };
@@ -751,6 +757,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </script>
 
+<!-- 채팅방 목록 -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     fetch("/tt/chattingRoom/rooms")  // 🔁 백엔드에서 참여중인 채팅방 목록 호출
@@ -776,7 +783,30 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("❌ 채팅방 목록 불러오기 실패:", err);
         });
 });
+
 </script>
+
+<!-- 이전채팅가져오기 -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+	  const urlParams = new URLSearchParams(window.location.search);
+	  const roomId = urlParams.get("roomId");
+
+	  fetch(`/tt/message/history?roomId=\${roomId}`)  // ✅ 백틱 사용 → 템플릿 리터럴
+	    .then(response => response.json())
+	    .then(messages => {
+	      messages.forEach(msg => {
+	    	 const type = msg.msMemNo == myMemNo ? "received" : "sent";
+	        appendMessage(msg, type);
+	      });
+	    })
+	    .catch(err => {
+	      console.error("❌ 이전 메시지 불러오기 실패:", err);
+	    });
+	});
+
+</script>
+
 
 
 </body>
