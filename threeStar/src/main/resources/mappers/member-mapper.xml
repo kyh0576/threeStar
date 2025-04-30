@@ -72,6 +72,7 @@
            , email
            , mem_class_code
            , admin_yn
+           , sns_key
            )
       values
           (
@@ -83,6 +84,7 @@
           , #{email}
           , #{memClassCode}
           , #{adminYN}
+          , #{snsKey}
           )
    </insert>
    
