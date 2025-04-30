@@ -217,7 +217,7 @@
 		     data-callback="handleCredentialResponse"
 		     data-auto_prompt="false">
 		</div>
-		<!-- data-login_uri="http://localhost:8333/tt/signinForm.me"  -->
+
 		<div class="g_id_signin"
 		     data-type="standard"
 		     data-shape="rectangular"
@@ -226,7 +226,7 @@
 		     data-size="large"
 		     data-logo_alignment="left">
 		</div>
-		
+		<!-- data-login_uri="http://localhost:8333/tt/signinForm.me"  -->
     </form>
 
     <script>
@@ -272,27 +272,11 @@
     <!-- <script type="text/javascript" src="js/loginGoogleAPI.js" defer></script>  -->
     
     <script>
-    /*
-	    // 전역 함수로 설정
-		window.handleCredentialResponse = function (response) {
-			console.log('handleCredentialResponse 호출');
-			// 토큰 값을 디코딩해서 JSON으로 반환
-			// decodeJwtResponse <- 디코딩하는 함수
-			const responsePayload = decodeJwtResponse(response.credential);
-			
-			// 디코딩한 정보를 콘솔창에 출력
-			console.log('Full Name: ' + responsePayload.name);
-			console.log('Email: ' + responsePayload.email);
-			
-			// 값 전송
-			sendforwardGooglelogin(responsePayload.name, responsePayload.email)
-		}
-	*/
 		function handleCredentialResponse(response) {
 			// decodeJwtResponse() is a custom function defined by you
 			// to decode the credential response.
 			const id_token = response.credential;
-			console.log("토근값 : " + id_token);
+			console.log("토큰값 : " + id_token);
 			
 			const responsePayload = decodeJwtResponse(id_token);
 			
@@ -302,6 +286,8 @@
 			console.log('Family Name: ' + responsePayload.family_name);
 			console.log("Image URL: " + responsePayload.picture);
 			console.log("Email: " + responsePayload.email);
+			
+			sendforwardGooglelogin(id_token, responsePayload.name, responsePayload.email)
 		}
 		
 		// 디코딩 함수
@@ -320,19 +306,26 @@
 			// 최종적으로 JSON 타입으로 변환해 반환
 			return JSON.parse(jsonPayload);
 		}
-	/*    
+	    
 		// 받아온 값을 보내는 함수
-		function sendforwardGooglelogin(fullname, email) {
+		function sendforwardGooglelogin(snsKey, fullname, email) {
 		    // 새로운 폼 요소 생성합니다.
 		    let googleloginForm = document.createElement("form");
 			googleloginForm.style.display = "none";
 		    googleloginForm.method = "POST"; // POST 요청 방식
-		    googleloginForm.action = "googleLogin.do"; // 요청을 보낼 URL
-
+		    // googleloginForm.action = "signinForm.me"; // 요청을 보낼 URL
+		    googleloginForm.action = "googleLogin.do";
+		    
+			// 토큰 값을 보낼 input태그 만들기
+		    let snsKeyField = document.createElement("input");
+		    snsKeyField.type = "hidden"; // 폼에 표시되지 않도록 숨김 필드로 설정
+		    snsKeyField.name = "snsKey"; // 서버에서 받을 변수 이름
+		    snsKeyField.value = snsKey; // 보낼 데이터
+		    
 		    // 이름 값을 보낼 input태그 만들기
 		    let nameField = document.createElement("input");
 		    nameField.type = "hidden"; // 폼에 표시되지 않도록 숨김 필드로 설정
-		    nameField.name = "name"; // 서버에서 받을 변수 이름
+		    nameField.name = "memName"; // 서버에서 받을 변수 이름
 		    nameField.value = fullname; // 보낼 데이터
 
 		    // 이메일값을 보낼 input태그 만들기
@@ -348,6 +341,7 @@
 		    typeField.value = "googleLogin";
 
 			// 만든 input태그를 form에 추가합니다.
+			googleloginForm.appendChild(snsKeyField);
 		    googleloginForm.appendChild(nameField);
 		    googleloginForm.appendChild(emailField);
 		    googleloginForm.appendChild(typeField);
@@ -357,7 +351,7 @@
 		    googleloginForm.submit();
 		    
 		}
-	*/	
+		
 	</script>
     
 </body>

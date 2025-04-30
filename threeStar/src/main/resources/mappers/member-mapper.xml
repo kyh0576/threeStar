@@ -71,6 +71,7 @@
            , email
            , mem_class_code
            , admin_yn
+           , sns_key
            )
       values
           (
@@ -82,6 +83,7 @@
           , #{email}
           , #{memClassCode}
           , #{adminYN}
+          , #{snsKey}
           )
    </insert>
    
@@ -199,7 +201,8 @@
      from member
      join friends on (to_mem = mem_no)
     where are_we_friend = 'N'
-      and from_mem = #{memId}
+      and RECEIVER = #{memNo}
+      and from_mem = #{memNo}
    </select>
    
    <select id="findId" resultMap="memberResult">
@@ -224,4 +227,17 @@
       set mem_pwd = #{memPwd}
     where mem_id = #{memId}
    </update>
+   
+	<update id="acceptFriend" parameterType="Friend">
+	    UPDATE FRIENDS
+	    SET ARE_WE_FRIEND = 'Y'
+	    WHERE (FROM_MEM = #{fromMem} AND TO_MEM = #{toMem})
+	       OR (FROM_MEM = #{toMem} AND TO_MEM = #{fromMem})
+	</update>
+	
+	<delete id="rejectFriend" parameterType="map">
+	    DELETE FROM FRIENDS
+	    WHERE (FROM_MEM = #{fromMem} AND TO_MEM = #{toMem})
+	       OR (FROM_MEM = #{toMem} AND TO_MEM = #{fromMem})
+	</delete>
 </mapper>

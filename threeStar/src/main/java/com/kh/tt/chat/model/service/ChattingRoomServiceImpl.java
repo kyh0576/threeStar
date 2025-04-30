@@ -1,10 +1,13 @@
 package com.kh.tt.chat.model.service;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.tt.chat.model.dao.ChattingRoomDao;
+import com.kh.tt.chat.model.vo.ChattingRoom;
 import com.kh.tt.message.model.dao.MessageDao;
 @Service
 public class ChattingRoomServiceImpl implements ChattingRoomService {
@@ -43,6 +46,11 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
 		@Override
 		public int createTargetChatRoom(int chatId, int targetMemNo, String chatName) {
 			return mDao.createTargetChatRoom(sqlSession,chatId,targetMemNo,chatName);
+		}
+//채팅방 생성 ====================================================================
+		@Override
+		public List<ChattingRoom> getChatRoomsByMemberId(String memId) {
+			return mDao.getChatRoomsByMemberId(sqlSession, memId);
 		}
 
 }

@@ -160,8 +160,9 @@ public class ProfileController {
 	    } catch(Exception e) {
 	        // 예외 발생 시: 친구 신청이 이미 되어 있는 경우
 	    	ArrayList<Member> wList = pService.selectWaitingList(friend);
-	        System.out.println(wList);
-	    	if(wList != null && !wList.isEmpty()) {
+	        System.out.println("pro : " + wList);
+	        
+	    	if(!wList.isEmpty()) {
 	        	out.println("<script>");
 	        	out.println("if(confirm('이미 친구신청이 되어있습니다. 친구신청을 취소하시겠습니까?')) {");
 	        	out.println("    location.href='deleteFriend.do?fromMem=" + friend.getFromMem() + "&toMem=" + friend.getToMem() + "';");
@@ -202,6 +203,31 @@ public class ProfileController {
 	        out.println("parent.location.reload();");
 	        out.println("</script>");
 	    }
+	}
+	
+	@RequestMapping("updateFriendName.do")
+	public void updateFriendName(Friend friend, HttpServletResponse response) throws IOException {
+		response.setContentType("text/html; charset=UTF-8");
+	    PrintWriter out = response.getWriter();
+		
+	    // 내 memNo는 Friend의 fromMem에 들어있음
+		// 내가 누른사람의 memNo는 Friend의 toMem에 들어있음
+		int result = pService.updateFriendName(friend);
+		System.out.println(friend);
+		System.out.println("result : " + result);
+		if(result > 0) {
+			// 성공적으로 이름 수정됨 (친구일때)
+	        out.println("<script>");
+	        out.println("alert('닉네임 변경이 완료되었습니다.');");
+	        out.println("parent.location.reload();");
+	        out.println("</script>");
+		}else {
+			// 이름 수정 실패 (친구가 아닐때)
+	        out.println("<script>");
+	        out.println("alert('친구가 아니면 닉네임 변경이 불가합니다.');");
+	        out.println("parent.location.reload();");
+	        out.println("</script>");
+		}
 	}
 	
 	@RequestMapping("deleteProfile.do")

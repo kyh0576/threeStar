@@ -45,4 +45,8 @@ public class ProfileDao {
 		return sqlSession.update("profileMapper.deleteProfile", p);
 	}
 
+	public int updateFriendName(SqlSessionTemplate sqlSession, Friend friend) {
+		return sqlSession.update("profileMapper.updateFriendName", friend);
+	}
+
 }

@@ -16,4 +16,6 @@ public class ChattingRoom {
 	private int chMemNo;
 	private String chatName;
 	private String status;
+	
+	private String lastMessage;
 }
