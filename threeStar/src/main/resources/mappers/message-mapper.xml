@@ -35,4 +35,16 @@
         )
     </insert>
     
+    <select id="sendMessage" parameterType="_int" resultType="Message">
+    	  SELECT 
+		    MESSAGE_NO,
+		    MS_CHAT_ID,
+		    MS_MEM_NO,
+		    MESSAGE_CONTENT,
+		    SEND_TIME
+		  FROM MESSAGE
+		  WHERE MS_CHAT_ID = #{roomId}
+		  ORDER BY SEND_TIME ASC
+    </select>
+    
 </mapper>

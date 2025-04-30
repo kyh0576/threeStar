@@ -1,5 +1,6 @@
 package com.kh.tt.message.model.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -13,6 +14,8 @@ public class MessageDao {
     public int insertMessage(SqlSessionTemplate sqlSession, Message msg) {
         return sqlSession.insert("messageMapper.insertMessage", msg);
     }
-
-    
+//===================저장된 메시지 메시지 방에 출력===============================
+    public List<Message> sendMessage(SqlSessionTemplate sqlSession, int roomId) {
+        return sqlSession.selectList("messageMapper.sendMessage", roomId);
+    }
 }

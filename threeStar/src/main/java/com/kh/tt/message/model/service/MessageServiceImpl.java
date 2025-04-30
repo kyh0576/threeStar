@@ -1,5 +1,7 @@
 package com.kh.tt.message.model.service;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,11 @@ public class MessageServiceImpl implements MessageService {
 	   
     @Override
     public int saveMessage(Message msg) {
-    	System.out.println("✅ saveMessage() 호출! msg = " + msg);
         return mDao.insertMessage(sqlSession, msg);
     }
+
+	@Override
+	public List<Message> sendMessage(int roomId) {
+		return mDao.sendMessage(sqlSession, roomId);
+	}
 }

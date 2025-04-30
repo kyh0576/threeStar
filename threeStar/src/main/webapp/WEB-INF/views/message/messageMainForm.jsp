@@ -776,6 +776,25 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("❌ 채팅방 목록 불러오기 실패:", err);
         });
 });
+
+</script>
+
+<!-- messageMainForm.jsp 내부의 script 블록 맨 아래에 추가 -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get("roomId");
+
+    fetch("/message/history?roomId=" + roomId)
+        .then(res => res.json())
+        .then(messages => {
+            messages.forEach(msg => {
+                const type = msg.sender === nickname ? "sent" : "received";
+                appendMessage(msg, type);
+            });
+        })
+        .catch(err => console.error("❌ 이전 메시지 불러오기 실패:", err));
+});
 </script>
 
 
