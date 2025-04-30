@@ -40,17 +40,10 @@ public class ProfileController {
     private BCryptPasswordEncoder bcryptPasswordEncoder;
 	
     @RequestMapping("profile.do")
-<<<<<<< HEAD
-    public String selectProfile (@RequestParam("memId") String memId, Model model) {	
-    	System.out.println("memId : " +memId);
-    	Member m = pService.selectProfile(memId);
-		System.out.println("zzzzzzzz :" + m);
-=======
     public String selectProfile (@RequestParam("memNo") int memNo, Model model) {	
     	Member m = pService.selectProfile(memNo);
 		System.out.println("memNo : " + memNo);
 		System.out.println(m);
->>>>>>> 6c7b0880ec43d27fbf25aecd7472bc0ee25d3c3e
 		if(m != null) {
 	    	model.addAttribute("m", m);
 			return "profile/profile";
