@@ -62,6 +62,10 @@ public class ProfileServiceImpl implements ProfileService {
 	public ArrayList<Member> selectWaitingList(Friend friend) {
 		return pDao.selectWaitingList(sqlSession, friend);
 	}
+
+	public int updateFriendName(Friend friend) {
+		return pDao.updateFriendName(sqlSession, friend);
+	}
 	
 	
 }
