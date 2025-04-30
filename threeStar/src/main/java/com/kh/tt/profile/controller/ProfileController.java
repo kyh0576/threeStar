@@ -7,19 +7,25 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.tt.member.model.dao.MemberDao;
 import com.kh.tt.member.model.service.MemberService;
 import com.kh.tt.member.model.service.MemberServiceImpl;
+import com.kh.tt.chat.model.service.ChattingRoomService;
 import com.kh.tt.member.controller.MemberController;
 import com.kh.tt.member.model.vo.Classes;
 import com.kh.tt.member.model.vo.Member;
@@ -38,6 +44,9 @@ public class ProfileController {
 	
     @Autowired
     private BCryptPasswordEncoder bcryptPasswordEncoder;
+    
+	@Autowired
+    private ChattingRoomService chattingRoomService;
 	
     @RequestMapping("profile.do")
     public String selectProfile (@RequestParam("memNo") int memNo, Model model) {	
@@ -272,5 +281,4 @@ public class ProfileController {
 	public String checkProfile() {
 		return "member/myPageCheck";
 	}
-
 }

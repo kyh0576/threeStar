@@ -966,7 +966,6 @@
   	  });
   	}
   	
-  	console.log("📦 globalFriendList 맨 마지막줄 내용zz:", globalFriendList);
   </script>
   
 </body>
