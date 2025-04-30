@@ -82,10 +82,11 @@
 	
 	<insert id="insertFriend">
 	    INSERT ALL
-	        INTO FRIENDS (FROM_MEM, TO_MEM, ARE_WE_FRIEND) VALUES (#{fromMem}, #{toMem}, 'N')
-	        INTO FRIENDS (FROM_MEM, TO_MEM, ARE_WE_FRIEND) VALUES (#{toMem}, #{fromMem}, 'N')
+	        INTO FRIENDS (FROM_MEM, TO_MEM, ARE_WE_FRIEND, RECEIVER) VALUES (#{fromMem}, #{toMem}, 'N', #{toMem})
+	        INTO FRIENDS (FROM_MEM, TO_MEM, ARE_WE_FRIEND, RECEIVER) VALUES (#{toMem}, #{fromMem}, 'N', #{toMem})
 	    SELECT * FROM DUAL
 	</insert>
+	
 	<update id="deleteProfile">
 		update
 			  member

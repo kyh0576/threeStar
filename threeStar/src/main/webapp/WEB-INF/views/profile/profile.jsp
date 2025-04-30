@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -162,8 +163,11 @@
         
         <div class="input-container">
             <input type="text" class="input-field" id="nameInput" placeholder="아이디" value="${ m.memId }" readonly>
-            <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24"  fill="#000000"><path d="M0 0h24v24H0z" fill="none"/>
-            <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" onclick="location.href='insertFriend.do?toMem=' + encodeURIComponent('${m.memNo}') + '&fromMem=' + encodeURIComponent('${loginMember.memNo}')"/></svg>
+            
+            <c:if test="${ loginMember.memNo != m.memNo }">
+	            <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24"  fill="#000000"><path d="M0 0h24v24H0z" fill="none"/>
+	            <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" onclick="location.href='insertFriend.do?toMem=' + encodeURIComponent('${m.memNo}') + '&fromMem=' + encodeURIComponent('${loginMember.memNo}')"/></svg>
+            </c:if>
         </div>
         
         <div class="input-container">

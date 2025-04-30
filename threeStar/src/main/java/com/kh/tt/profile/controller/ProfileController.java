@@ -160,8 +160,9 @@ public class ProfileController {
 	    } catch(Exception e) {
 	        // 예외 발생 시: 친구 신청이 이미 되어 있는 경우
 	    	ArrayList<Member> wList = pService.selectWaitingList(friend);
-	        System.out.println(wList);
-	    	if(wList != null && !wList.isEmpty()) {
+	        System.out.println("pro : " + wList);
+	        
+	    	if(!wList.isEmpty()) {
 	        	out.println("<script>");
 	        	out.println("if(confirm('이미 친구신청이 되어있습니다. 친구신청을 취소하시겠습니까?')) {");
 	        	out.println("    location.href='deleteFriend.do?fromMem=" + friend.getFromMem() + "&toMem=" + friend.getToMem() + "';");

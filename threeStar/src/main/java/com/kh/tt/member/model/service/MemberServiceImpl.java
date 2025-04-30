@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.kh.tt.member.model.dao.MemberDao;
 import com.kh.tt.member.model.vo.Classes;
 import com.kh.tt.member.model.vo.Member;
+import com.kh.tt.profile.model.vo.Friend;
 
 @Service
 public class MemberServiceImpl implements MemberService{
@@ -92,6 +93,14 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int findUpdatePwd(Member m) {
 		return mDao.findUpdatePwd(sqlSession, m);
+	}
+
+	public int acceptFriend(Friend friend) {
+		return mDao.acceptFriend(sqlSession, friend);
+	}
+
+	public int rejectFriend(Friend friend) {
+		return mDao.rejectFriend(sqlSession, friend);
 	}
 
 }

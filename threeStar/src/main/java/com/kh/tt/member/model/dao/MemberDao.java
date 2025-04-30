@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.tt.member.model.vo.Classes;
 import com.kh.tt.member.model.vo.Member;
+import com.kh.tt.profile.model.vo.Friend;
 
 @Repository
 public class MemberDao {
@@ -69,6 +70,14 @@ public class MemberDao {
 
 	public int findUpdatePwd(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.update("memberMapper.findUpdatePwd", m);
+	}
+
+	public int acceptFriend(SqlSessionTemplate sqlSession, Friend friend) {
+		return sqlSession.update("memberMapper.acceptFriend", friend);
+	}
+
+	public int rejectFriend(SqlSessionTemplate sqlSession, Friend friend) {
+		return sqlSession.delete("memberMapper.rejectFriend", friend);
 	}
 
    
