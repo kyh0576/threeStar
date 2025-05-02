@@ -238,35 +238,35 @@
         
       //================= 프로필 채팅하기 클릭 시 =================
       	
-      	document.addEventListener('click', function(e) {
-      	    
-      	        const targetUserId = ${m.memNo};
-      	        console.log('✅ 클릭한 targetUserId:', targetUserId);
-      	
-      	        // 서버로 채팅방 생성 요청
-      	        fetch('/tt/chattingRoom/startChat', {
-      	            method: 'POST',
-      	            headers: {
-      	                'Content-Type': 'application/json'
-      	            },
-      	            body: JSON.stringify({ targetUserId })
-      	        })
-      	        .then(response => response.json())
-      	        .then(data => {
-      	            console.log('✅ 서버 응답 데이터:', data); // <- 추가
-      	            if (data.success) {
-      	                const roomId = data.roomId;
-      	                console.log('✅ 이동할 roomId:', roomId); // <- 추가
-      	              window.parent.location.href= `/tt/message/messageForm?roomId=\${roomId}`;
-      	            } else {
-      	                alert('❌ 채팅방 생성 실패');
-      	            }
-      	        })
-      	        .catch(error => {
-      	            console.error('❌ 채팅방 생성 오류', error);
-      	        });
-      	    
-      	});
+     document.addEventListener('click', function(e) {
+	    // #startChat 눌렀을 때만 동작
+	    const chatBtn = e.target.closest('#startChat');
+	    if (!chatBtn) return;
+	
+	    // 이 사람과의 채팅방 ID를 서버에서 가져오거나 고정된 값을 사용
+	    const targetUserId = "${m.memNo}";
+	
+	    fetch('/tt/chattingRoom/startChat', {
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify({ targetUserId })
+	    })
+	    .then(response => response.json())
+	    .then(data => {
+	        if (data.success) {
+	            const roomId = data.roomId;
+	            window.parent.location.href = `/tt/message/messageForm?roomId=${roomId}`;
+	        } else {
+	            alert('채팅방 생성 실패');
+	        }
+	    })
+	    .catch(err => {
+	        console.error('채팅방 생성 오류', err);
+	    });
+	});
+
       
       
       //================= 프로필 채팅하기 클릭 시startChat 함수 실행 =================
