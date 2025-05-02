@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -161,18 +162,29 @@
         </div>
         
         <div class="input-container">
-            <input type="text" class="input-field" id="nameInput" placeholder="아이디" value="${ m.memId }" readonly>
-            <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24"  fill="#000000"><path d="M0 0h24v24H0z" fill="none"/>
-            <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" onclick="location.href='insertFriend.do?toMem=' + encodeURIComponent('${m.memNo}') + '&fromMem=' + encodeURIComponent('${loginMember.memNo}')"/></svg>
+            <input type="text" class="input-field" id="nameInput" placeholder="아이디" value="${ m.memName }" readonly>
+            
+            <c:if test="${ loginMember.memNo != m.memNo }">
+	            <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24"  fill="#000000">
+	            <path d="M0 0h24v24H0z" fill="none"/>
+	            <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" 
+	            	onclick="location.href='insertFriend.do?toMem=' + encodeURIComponent('${m.memNo}') + '&fromMem=' + encodeURIComponent('${loginMember.memNo}')"/></svg>
+            </c:if>
         </div>
         
         <div class="input-container">
-            <input type="text" class="input-field" id="detailInput" placeholder="닉네임" value="${ m.memName }">
-            <svg class="edit-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 3.5C16.8978 3.10217 17.4374 2.87868 18 2.87868C18.2786 2.87868 18.5544 2.93355 18.8118 3.04015C19.0692 3.14676 19.303 3.30301 19.5 3.5C19.697 3.69698 19.8532 3.93083 19.9598 4.18822C20.0665 4.4456 20.1213 4.72142 20.1213 5C20.1213 5.27858 20.0665 5.5544 19.9598 5.81178C19.8532 6.06917 19.697 6.30302 19.5 6.5L7 19L3 20L4 16L16.5 3.5Z" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <input type="text" class="input-field" id="detailInput" placeholder="변경할 닉네임을 입력해주세요">
+        	<c:if test="${ loginMember.memNo != m.memNo }">
+	            <svg class="edit-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+				     onclick="updateFriendName('${m.memNo}')">
+				    <path d="M16.5 3.5C16.8978 3.10217 17.4374 2.87868 18 2.87868C18.2786 2.87868 18.5544 2.93355 18.8118 3.04015C19.0692 3.14676 19.303 3.30301 19.5 3.5C19.697 3.69698 19.8532 3.93083 19.9598 4.18822C20.0665 4.4456 20.1213 4.72142 20.1213 5C20.1213 5.27858 20.0665 5.5544 19.9598 5.81178C19.8532 6.06917 19.697 6.30302 19.5 6.5L7 19L3 20L4 16L16.5 3.5Z" 
+				          stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+				</svg>
+       		</c:if>
         </div>
 
         <div class="button-group">
-            <button type="button" class="btn btn-cancel" id="">채팅하기</button>
+            <button type="button" class="btn btn-cancel" id="startChat">채팅하기</button>
             <button type="button" class="btn btn-cancel" id="cancelBtn">닫기</button>
         </div>
     </div>
@@ -214,6 +226,72 @@
                 reader.readAsDataURL(file);
             }
         });
+        
+        // 친구 닉네임 변경하기
+        function updateFriendName(memNo) {
+            const nickname = document.getElementById('detailInput').value;
+            const url = 'updateFriendName.do?toMem=' + encodeURIComponent(memNo) +
+                        '&toNickname=' + encodeURIComponent(nickname) +
+            			'&fromMem=' + encodeURIComponent('${loginMember.memNo}');
+            location.href = url;
+   		}
+        
+      //================= 프로필 채팅하기 클릭 시 =================
+      	
+      	document.addEventListener('click', function(e) {
+      	    
+      	        const targetUserId = ${m.memNo};
+      	        console.log('✅ 클릭한 targetUserId:', targetUserId);
+      	
+      	        // 서버로 채팅방 생성 요청
+      	        fetch('/tt/chattingRoom/startChat', {
+      	            method: 'POST',
+      	            headers: {
+      	                'Content-Type': 'application/json'
+      	            },
+      	            body: JSON.stringify({ targetUserId })
+      	        })
+      	        .then(response => response.json())
+      	        .then(data => {
+      	            console.log('✅ 서버 응답 데이터:', data); // <- 추가
+      	            if (data.success) {
+      	                const roomId = data.roomId;
+      	                console.log('✅ 이동할 roomId:', roomId); // <- 추가
+      	              window.parent.location.href= `/tt/message/messageForm?roomId=\${roomId}`;
+      	            } else {
+      	                alert('❌ 채팅방 생성 실패');
+      	            }
+      	        })
+      	        .catch(error => {
+      	            console.error('❌ 채팅방 생성 오류', error);
+      	        });
+      	    
+      	});
+      
+      
+      //================= 프로필 채팅하기 클릭 시startChat 함수 실행 =================
+      	function startChat(targetUserId) {
+      	  fetch('/tt/chattingRoom/startChatPro', {  // ✅ URL도 실제 컨트롤러 매핑에 맞게 /tt/message/startChat 등으로 수정
+      	    method: 'POST',
+      	    headers: {
+      	      'Content-Type': 'application/json' 
+      	    },
+      	    body: JSON.stringify({ targetUserId })
+      	  })
+      	  .then(response => response.json())
+      	  .then(data => {
+      	    if (data.success) {
+      	      const roomId = data.roomId;
+      	    window.parent.location.href = `/tt/message/messageForm?roomId=\${roomId}`;  // ✅ 백틱(`) 사용
+      	    } else {
+      	      alert('❌ 채팅방 생성에 실패했습니다.');
+      	    }
+      	  })
+      	  .catch(error => {
+      	    console.error('❌ 채팅방 생성 오류', error);
+      	  });
+      	}
+        
     </script>
      
 

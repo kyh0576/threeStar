@@ -23,5 +23,11 @@ public class Message {
 	private String changeName;
 	private int msChatId;
     private int msMemNo;
+    
+    private String sender;
+    private String text;
+    private String time;
 
 }
+
+

@@ -53,5 +53,29 @@ WHERE (cr.CH_MEM_NO = #{myMemNo} AND cr.CHAT_ID IN (
            'Y'
        )
    </insert>
+   
+<select id="selectRoomsByMemberId" parameterType="String" resultType="Chat">
+  SELECT 
+	  CR.CHAT_ID AS chatId,
+	  CR.CH_MEM_NO AS chMemNo,
+	  CR.CHAT_NAME AS chatName,
+	  CR.STATUS AS status,
+	  M.LAST_MESSAGE AS lastMessage
+	FROM CHATTING_ROOM CR
+	LEFT JOIN (
+	    SELECT MS_CHAT_ID, MESSAGE_CONTENT AS LAST_MESSAGE
+	    FROM (
+	        SELECT MS_CHAT_ID, MESSAGE_CONTENT, 
+	               ROW_NUMBER() OVER (PARTITION BY MS_CHAT_ID ORDER BY SEND_TIME DESC) AS RN
+	        FROM MESSAGE
+	    )
+	    WHERE RN = 1
+	) M ON CR.CHAT_ID = M.MS_CHAT_ID
+	WHERE CR.CH_MEM_NO = (
+	  SELECT MEM_NO FROM MEMBER WHERE MEM_ID = #{memId}
+	)
+
+</select>
+
 
 </mapper>

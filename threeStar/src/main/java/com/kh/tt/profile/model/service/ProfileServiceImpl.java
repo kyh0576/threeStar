@@ -26,8 +26,8 @@ public class ProfileServiceImpl implements ProfileService {
 	private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public Member selectProfile(String memId) {
-		return pDao.selectProfile(sqlSession, memId);
+	public Member selectProfile(int memNo) {
+		return pDao.selectProfile(sqlSession, memNo);
 	}
 	
 	@Override
@@ -61,6 +61,10 @@ public class ProfileServiceImpl implements ProfileService {
 
 	public ArrayList<Member> selectWaitingList(Friend friend) {
 		return pDao.selectWaitingList(sqlSession, friend);
+	}
+
+	public int updateFriendName(Friend friend) {
+		return pDao.updateFriendName(sqlSession, friend);
 	}
 	
 	

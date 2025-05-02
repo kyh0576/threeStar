@@ -22,6 +22,7 @@
       <result column="status" property="status"/>
       <result column="online_st" property="onlineSt"/>
       <result column="admin_yn" property="adminYN"/>
+      <result column="to_Nickname" property="toNickname"/>
    </resultMap>
 
    <resultMap id="friendResult" type="Friend">
@@ -32,13 +33,21 @@
    </resultMap>
 	
 	<select id="selectProfile" resultMap="memberResult">
-		select
-		      MEM_NO
-			, MEM_ID
-			, MEM_NAME
-		from MEMBER
-		where status='Y'
-		and MEM_ID = #{memId}
+	SELECT *
+	FROM (
+	    SELECT
+	        MEM_NO,
+	        MEM_ID,
+	        MEM_NAME,
+	        TO_NICKNAME
+	    FROM MEMBER
+	    LEFT JOIN FRIENDS ON MEM_NO = TO_MEM
+	    WHERE STATUS = 'Y'
+	      AND MEM_NO = #{memNo}
+        order
+           by to_nickname
+	)
+	WHERE ROWNUM = 1
 	</select>
 	
 	<select id="detailProfile" resultMap="memberResult">
@@ -82,10 +91,11 @@
 	
 	<insert id="insertFriend">
 	    INSERT ALL
-	        INTO FRIENDS (FROM_MEM, TO_MEM, ARE_WE_FRIEND) VALUES (#{fromMem}, #{toMem}, 'N')
-	        INTO FRIENDS (FROM_MEM, TO_MEM, ARE_WE_FRIEND) VALUES (#{toMem}, #{fromMem}, 'N')
+	        INTO FRIENDS (FROM_MEM, TO_MEM, ARE_WE_FRIEND, RECEIVER) VALUES (#{fromMem}, #{toMem}, 'N', #{toMem})
+	        INTO FRIENDS (FROM_MEM, TO_MEM, ARE_WE_FRIEND, RECEIVER) VALUES (#{toMem}, #{fromMem}, 'N', #{toMem})
 	    SELECT * FROM DUAL
 	</insert>
+	
 	<update id="deleteProfile">
 		update
 			  member
@@ -112,4 +122,14 @@
 	   and to_mem = #{toMem}
        and are_we_friend = 'N'
 	</select>
+	
+	<update id="updateFriendName">
+	update
+		   friends
+	   set
+		   to_nickname = #{toNickname}
+	 where to_mem = #{toMem}
+	   and from_mem = #{fromMem}
+	   and are_we_friend = 'Y'
+	</update>
 </mapper>

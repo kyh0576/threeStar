@@ -7,19 +7,25 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.tt.member.model.dao.MemberDao;
 import com.kh.tt.member.model.service.MemberService;
 import com.kh.tt.member.model.service.MemberServiceImpl;
+import com.kh.tt.chat.model.service.ChattingRoomService;
 import com.kh.tt.member.controller.MemberController;
 import com.kh.tt.member.model.vo.Classes;
 import com.kh.tt.member.model.vo.Member;
@@ -38,11 +44,15 @@ public class ProfileController {
 	
     @Autowired
     private BCryptPasswordEncoder bcryptPasswordEncoder;
+    
+	@Autowired
+    private ChattingRoomService chattingRoomService;
 	
     @RequestMapping("profile.do")
-    public String selectProfile (@RequestParam("memId") String memId, Model model) {	
-    	Member m = pService.selectProfile(memId);
-		
+    public String selectProfile (@RequestParam("memNo") int memNo, Model model) {	
+    	Member m = pService.selectProfile(memNo);
+		System.out.println("memNo : " + memNo);
+		System.out.println(m);
 		if(m != null) {
 	    	model.addAttribute("m", m);
 			return "profile/profile";
@@ -160,8 +170,9 @@ public class ProfileController {
 	    } catch(Exception e) {
 	        // 예외 발생 시: 친구 신청이 이미 되어 있는 경우
 	    	ArrayList<Member> wList = pService.selectWaitingList(friend);
-	        System.out.println(wList);
-	    	if(wList != null && !wList.isEmpty()) {
+	        System.out.println("pro : " + wList);
+	        
+	    	if(!wList.isEmpty()) {
 	        	out.println("<script>");
 	        	out.println("if(confirm('이미 친구신청이 되어있습니다. 친구신청을 취소하시겠습니까?')) {");
 	        	out.println("    location.href='deleteFriend.do?fromMem=" + friend.getFromMem() + "&toMem=" + friend.getToMem() + "';");
@@ -202,6 +213,31 @@ public class ProfileController {
 	        out.println("parent.location.reload();");
 	        out.println("</script>");
 	    }
+	}
+	
+	@RequestMapping("updateFriendName.do")
+	public void updateFriendName(Friend friend, HttpServletResponse response) throws IOException {
+		response.setContentType("text/html; charset=UTF-8");
+	    PrintWriter out = response.getWriter();
+		
+	    // 내 memNo는 Friend의 fromMem에 들어있음
+		// 내가 누른사람의 memNo는 Friend의 toMem에 들어있음
+		int result = pService.updateFriendName(friend);
+		System.out.println(friend);
+		System.out.println("result : " + result);
+		if(result > 0) {
+			// 성공적으로 이름 수정됨 (친구일때)
+	        out.println("<script>");
+	        out.println("alert('닉네임 변경이 완료되었습니다.');");
+	        out.println("parent.location.reload();");
+	        out.println("</script>");
+		}else {
+			// 이름 수정 실패 (친구가 아닐때)
+	        out.println("<script>");
+	        out.println("alert('친구가 아니면 닉네임 변경이 불가합니다.');");
+	        out.println("parent.location.reload();");
+	        out.println("</script>");
+		}
 	}
 	
 	@RequestMapping("deleteProfile.do")
@@ -245,5 +281,4 @@ public class ProfileController {
 	public String checkProfile() {
 		return "member/myPageCheck";
 	}
-
 }

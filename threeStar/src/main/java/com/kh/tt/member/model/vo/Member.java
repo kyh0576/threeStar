@@ -24,6 +24,7 @@ public class Member {
 	private String onlineSt;
 	private String adminYN;
 	private String profileURL;
+	private String toNickname;
 }
 
 
