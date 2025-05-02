@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
 </head>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
@@ -15,6 +16,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <!-- Latest compiled JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
     * {
         box-sizing: border-box;
@@ -146,9 +148,7 @@
         display: flex;
     }
 </style>
-</head>
-<body>
-    <div class="profile-container">
+ <div class="profile-container">
         <div class="profile-picture-container">
             <div class="profile-picture" id="profilePicture">
                 <img id="profileImage" src="/api/placeholder/120/120" alt="프로필 이미지">
@@ -163,8 +163,7 @@
         
         <div class="input-container">
             <input type="text" class="input-field" id="nameInput" placeholder="아이디" value="${ m.memName }" readonly>
-            
-            <c:if test="${ loginMember.memNo != m.memNo }">
+              <c:if test="${ loginMember.memNo != m.memNo }">
 	            <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24"  fill="#000000">
 	            <path d="M0 0h24v24H0z" fill="none"/>
 	            <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" 
@@ -184,7 +183,9 @@
         </div>
 
         <div class="button-group">
-            <button type="button" class="btn btn-cancel" id="startChat">채팅하기</button>
+        	<c:if test="${ loginMember.memNo != m.memNo }">
+            	<button type="button" class="btn btn-cancel" id="startChat">채팅하기</button>
+           	</c:if>
             <button type="button" class="btn btn-cancel" id="cancelBtn">닫기</button>
         </div>
     </div>
@@ -197,6 +198,8 @@
 	            }
 	        });
 	    });
+        
+
     </script>
 
    	
@@ -236,6 +239,21 @@
             location.href = url;
    		}
         
+        
+        
+        
+    		$.ajax({
+    	   		url:'profileFriend.do',
+    	   		data:{toMem : ${m.memNo}, fromMem : ${loginMember.memNo}},
+    	   		success:function(friend){
+    	   			console.log(friend)
+    	   			$("#detailInput").val(friend.toNickname);
+    	   			$("#detailInput").attr("placeholder", friend.toNickname);
+    	   		},error:function(){
+    	   			console.log("친구 불러오기용 ajax 통신 실패");
+    	   		}
+    	   	})
+
       //================= 프로필 채팅하기 클릭 시 =================
       	
      document.addEventListener('click', function(e) {
@@ -294,6 +312,5 @@
         
     </script>
      
-
-</body>
+    </body>
 </html>

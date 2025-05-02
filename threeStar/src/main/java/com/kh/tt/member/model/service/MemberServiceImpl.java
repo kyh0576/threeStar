@@ -102,5 +102,7 @@ public class MemberServiceImpl implements MemberService{
 	public int rejectFriend(Friend friend) {
 		return mDao.rejectFriend(sqlSession, friend);
 	}
+	
+
 
 }
