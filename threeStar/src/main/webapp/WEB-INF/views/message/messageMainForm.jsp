@@ -784,6 +784,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
+
+
 </script>
 
 <!-- 이전채팅가져오기 -->
@@ -813,7 +815,6 @@ console.log("내 번호:", myMemNo);
 	});
 
 </script>
-
 
 
 </body>
