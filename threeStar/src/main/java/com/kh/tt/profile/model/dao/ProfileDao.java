@@ -49,4 +49,8 @@ public class ProfileDao {
 		return sqlSession.update("profileMapper.updateFriendName", friend);
 	}
 
+	public Member selectFriend(SqlSessionTemplate sqlSession, Friend friend) {
+		return sqlSession.selectOne("profileMapper.selectFriend", friend);
+	}
+
 }

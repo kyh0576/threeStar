@@ -67,5 +67,7 @@ public class ProfileServiceImpl implements ProfileService {
 		return pDao.updateFriendName(sqlSession, friend);
 	}
 	
-	
+	public Member selectFriend(Friend friend) {
+		return pDao.selectFriend(sqlSession, friend);
+	}
 }

@@ -32,4 +32,8 @@ public interface ProfileService{
 	
 	// 친구 신청한 목록
 	ArrayList<Member> selectWaitingList(Friend friend);
+	
+	// 친구 조회
+	Member selectFriend(Friend friend);
+
 }
