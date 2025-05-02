@@ -183,7 +183,9 @@
         </div>
 
         <div class="button-group">
-            <button type="button" class="btn btn-cancel" id="startChat">채팅하기</button>
+        	<c:if test="${ loginMember.memNo != m.memNo }">
+            	<button type="button" class="btn btn-cancel" id="startChat">채팅하기</button>
+           	</c:if>
             <button type="button" class="btn btn-cancel" id="cancelBtn">닫기</button>
         </div>
     </div>
