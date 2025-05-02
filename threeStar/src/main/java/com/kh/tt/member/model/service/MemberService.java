@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.kh.tt.member.model.vo.Classes;
 import com.kh.tt.member.model.vo.Member;
+import com.kh.tt.profile.model.vo.Friend;
 
 public interface MemberService {
    // 로그인 서비스(select)
@@ -51,4 +52,9 @@ public interface MemberService {
     // 비밀번호 재설정
     int findUpdatePwd(Member m);
     
+    // 친구요청 수락
+    int acceptFriend(Friend friend);
+    
+    // 친구요청 거절
+    int rejectFriend(Friend friend);
 }

@@ -12,8 +12,8 @@ import com.kh.tt.profile.model.vo.Profile;
 @Repository 
 public class ProfileDao {
 	
-	public Member selectProfile(SqlSessionTemplate sqlSession, String memId) {
-		return sqlSession.selectOne("profileMapper.selectProfile", memId);
+	public Member selectProfile(SqlSessionTemplate sqlSession, int memNo) {
+		return sqlSession.selectOne("profileMapper.selectProfile", memNo);
 	}
 	
 	public Member detailProfile(SqlSessionTemplate sqlSession, Member p) {
@@ -43,6 +43,10 @@ public class ProfileDao {
 	
 	public int deleteProfile(SqlSessionTemplate sqlSession, Member p) {
 		return sqlSession.update("profileMapper.deleteProfile", p);
+	}
+
+	public int updateFriendName(SqlSessionTemplate sqlSession, Friend friend) {
+		return sqlSession.update("profileMapper.updateFriendName", friend);
 	}
 
 }

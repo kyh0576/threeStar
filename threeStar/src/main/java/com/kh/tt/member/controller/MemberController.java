@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kh.tt.member.model.service.MemberServiceImpl;
 import com.kh.tt.member.model.vo.Classes;
 import com.kh.tt.member.model.vo.Member;
+import com.kh.tt.profile.model.vo.Friend;
 
 @Controller
 public class MemberController {
@@ -200,7 +201,32 @@ public class MemberController {
 	@ResponseBody
 	public ArrayList<Member> selectWaitingList(@RequestParam("memNo") int memNo) {
 	    ArrayList<Member> wList = mService.selectWaitingList(memNo); // friend = 'N'만 조회
+	    System.out.println(wList);
 	    return wList;
+	}
+	
+	@RequestMapping("acceptFriend.do")
+	public String acceptFriend(Friend friend, Model model) {
+		int result = mService.acceptFriend(friend);
+		if(result > 0) {
+			model.addAttribute("alertMsg", "친구요청 수락 완료");
+			return "common/mainPage";
+		}else {
+			model.addAttribute("alertMsg", "친구요청 수락 실패");
+			return "common/mainPage";
+		}
+	}
+	
+	@RequestMapping("rejectFriend.do")
+	public String rejectFriend(Friend friend, Model model) {
+		int result = mService.rejectFriend(friend);
+		if(result > 0) {
+			model.addAttribute("alertMsg", "친구요청 거절 완료");
+			return "common/mainPage";
+		}else {
+			model.addAttribute("alertMsg", "친구요청 거절 실패");
+			return "common/mainPage";
+		}
 	}
 	
 }

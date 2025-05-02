@@ -217,7 +217,7 @@ body {
                 <label for="name">
                     이름 <span class="required">*</span>
                 </label>
-                <input type="text" id="name" name="memName" placeholder="이름을 입력해주세요" required>
+                <input type="text" id="name" name="memName" placeholder="이름을 입력해주세요" value="${ memName }" required>
             </div>
             
             <div class="form-group">
@@ -233,7 +233,7 @@ body {
                     이메일 주소 <span class="required">*</span>
                 </label>
                 <div class="form-group">
-                    <input type="email" id="email-id" name="email" placeholder="이메일 주소" required>
+                    <input type="email" id="email-id" name="email" placeholder="이메일 주소" value="${ email }" required>
                 </div>
             </div>
             
@@ -283,7 +283,7 @@ body {
 			</div>
             
             
-            
+            <input type="hidden" id="snsKey" name="snsKey" value="${ snsKey }">
             <input type="hidden" id="is-password-valid" value="false">
             <input type="hidden" id="is-id-valid" value="false">
             
