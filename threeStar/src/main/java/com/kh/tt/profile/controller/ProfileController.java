@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.tt.member.model.dao.MemberDao;
@@ -42,8 +43,6 @@ public class ProfileController {
     @RequestMapping("profile.do")
     public String selectProfile (@RequestParam("memNo") int memNo, Model model) {	
     	Member m = pService.selectProfile(memNo);
-		System.out.println("memNo : " + memNo);
-		System.out.println(m);
 		if(m != null) {
 	    	model.addAttribute("m", m);
 			return "profile/profile";
@@ -161,7 +160,6 @@ public class ProfileController {
 	    } catch(Exception e) {
 	        // 예외 발생 시: 친구 신청이 이미 되어 있는 경우
 	    	ArrayList<Member> wList = pService.selectWaitingList(friend);
-	        System.out.println("pro : " + wList);
 	        
 	    	if(!wList.isEmpty()) {
 	        	out.println("<script>");
@@ -214,8 +212,6 @@ public class ProfileController {
 	    // 내 memNo는 Friend의 fromMem에 들어있음
 		// 내가 누른사람의 memNo는 Friend의 toMem에 들어있음
 		int result = pService.updateFriendName(friend);
-		System.out.println(friend);
-		System.out.println("result : " + result);
 		if(result > 0) {
 			// 성공적으로 이름 수정됨 (친구일때)
 	        out.println("<script>");
@@ -272,5 +268,14 @@ public class ProfileController {
 	public String checkProfile() {
 		return "member/myPageCheck";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "profileFriend.do", produces = "application/json; charset=UTF-8")
+	public Member selectFriend(Friend friend) {
+	    Member m = pService.selectFriend(friend);
+ 	    System.out.println(m);
+	    return m;
+	   
+   }
 
 }

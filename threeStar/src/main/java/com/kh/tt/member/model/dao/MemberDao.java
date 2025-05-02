@@ -80,5 +80,6 @@ public class MemberDao {
 		return sqlSession.delete("memberMapper.rejectFriend", friend);
 	}
 
+
    
 }

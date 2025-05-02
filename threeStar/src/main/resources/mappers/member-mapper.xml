@@ -242,4 +242,6 @@
 	    WHERE (FROM_MEM = #{fromMem} AND TO_MEM = #{toMem})
 	       OR (FROM_MEM = #{toMem} AND TO_MEM = #{fromMem})
 	</delete>
+	
+
 </mapper>

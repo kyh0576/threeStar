@@ -560,10 +560,10 @@
   <!-- 스크립트 -->
   <script>
   let globalFriendList = [];  // 모든 친구 리스트 저장
-  console.log("📦 globalFriendList 선언바로 후 내용:", globalFriendList);
   
     // 모달 관련 기능
     function openProfileModal2(memNo) {
+	  
       // 모달 컨테이너 생성
       const modalContainer = document.createElement('div');
       modalContainer.id = 'modalContainer';
@@ -639,7 +639,6 @@
        method: 'GET',
        data: { classCode: classCode },
        success: function(response) {
-   	   		console.log("📦 globalFriendList 내용zz:", globalFriendList);
          // 리스트 초기화
          listElement.innerHTML = '';
 
@@ -669,6 +668,7 @@
             // 👉 클릭 이벤트 추가
 	        li.addEventListener('click', function() {
 	          openProfileModal2(memNo);
+	
 	        });
             
            listElement.appendChild(li);
@@ -678,7 +678,12 @@
          alert('멤버 조회 실패!');
        }
      });
+     
+     
    }
+   
+   
+
 
    
    
@@ -716,8 +721,7 @@
     });
     
     
-    
-    
+
     
     document.addEventListener("DOMContentLoaded", function () {
   	  fetch('/tt/weather/today')
@@ -767,8 +771,6 @@
 	   loadFriendList(myMemNo);
 	   loadWaitingList(myMemNo);
 	   
-	   console.log("📦 loadFriendList 바깥 위에 있는 globalFriendList 내용:", globalFriendList);
-	   
 	   function loadFriendList(memNo) {
 	        $.ajax({
 	          url: 'selectFriendList.me',
@@ -777,9 +779,6 @@
 	          success: function(response) {
       	 	 	globalFriendList = response;  // ✅ 전역에 저장
       	 	 	
-      	 		console.log("📦 loadFriendList에 있는 globalFriendList 내용:", globalFriendList);
-
-      	 	 	
 	            renderFriendList(response);
 	          },
 	          error: function() {
@@ -787,9 +786,6 @@
 	          }
 	        });
 	      }
-	   
-	 console.log("📦 loadFriendList 바깥 아래에 있는 globalFriendList 내용:", globalFriendList);
-	   
 	   
 		// 대기중 목록
 	   function loadWaitingList(memNo) {
@@ -805,9 +801,6 @@
 	       }
 	     });
 	   }
-		
-	 console.log("📦 globalFriendList 대기중 다음 내용zz:", globalFriendList);
-	   
 	     
 	   function renderFriendList(friendList) {
 	        const container = document.querySelector('.chat-list-container'); // 친구목록을 넣을 곳
@@ -914,7 +907,6 @@
   	    const chatIcon = e.target.closest('.chat-message-icon');
   	    if (chatIcon && chatIcon.dataset.targetUserId) {
   	        const targetUserId = chatIcon.dataset.targetUserId;
-  	        console.log('✅ 클릭한 targetUserId:', targetUserId);
   	
   	        // 서버로 채팅방 생성 요청
   	        fetch('/tt/chattingRoom/startChat', {
@@ -926,10 +918,8 @@
   	        })
   	        .then(response => response.json())
   	        .then(data => {
-  	            console.log('✅ 서버 응답 데이터:', data); // <- 추가
   	            if (data.success) {
   	                const roomId = data.roomId;
-  	                console.log('✅ 이동할 roomId:', roomId); // <- 추가
   	                location.href = `/tt/message/messageForm?roomId=\${roomId}`;
   	            } else {
   	                alert('❌ 채팅방 생성 실패');
@@ -965,8 +955,11 @@
   	    console.error('❌ 채팅방 생성 오류', error);
   	  });
   	}
+
   	
-  	console.log("📦 globalFriendList 맨 마지막줄 내용zz:", globalFriendList);
+
+    
+  	
   </script>
   
 </body>

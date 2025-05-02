@@ -57,4 +57,6 @@ public interface MemberService {
     
     // 친구요청 거절
     int rejectFriend(Friend friend);
+    
+
 }
