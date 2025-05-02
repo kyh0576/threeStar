@@ -784,6 +784,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
+
+
 </script>
 
 <!-- 이전채팅가져오기 -->
@@ -814,7 +816,32 @@ console.log("내 번호:", myMemNo);
 
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get("roomId");
+    const myName = nickname.trim();   // 세션 닉네임
 
+    if (!roomId) return;
+
+    fetch("/tt/chattingRoom/participants?roomId=" + roomId)
+        .then(response => response.json())
+        .then(participants => {
+            const otherUsers = participants
+                .map(p => p.nickname)
+                .filter(name => name !== myName);
+
+            if (otherUsers.length === 1) {
+                document.getElementById("chatRoomTitle").textContent = otherUsers[0];
+            } else {
+                document.getElementById("chatRoomTitle").textContent = otherUsers.join(", ");
+            }
+        })
+        .catch(err => {
+            console.error("❌ 참여자 불러오기 실패", err);
+        });
+});
+</script>
 
 </body>
 </html>
