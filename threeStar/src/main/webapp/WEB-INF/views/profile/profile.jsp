@@ -275,7 +275,7 @@
 	    .then(data => {
 	        if (data.success) {
 	            const roomId = data.roomId;
-	            window.parent.location.href = `/tt/message/messageForm?roomId=${roomId}`;
+	            window.parent.location.href = `/tt/message/messageForm?roomId=\${roomId}`;
 	        } else {
 	            alert('채팅방 생성 실패');
 	        }
