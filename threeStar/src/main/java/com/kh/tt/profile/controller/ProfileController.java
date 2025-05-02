@@ -276,7 +276,6 @@ public class ProfileController {
 	public String checkProfile() {
 		return "member/myPageCheck";
 	}
-<<<<<<< HEAD
 	
 	@ResponseBody
 	@RequestMapping(value = "profileFriend.do", produces = "application/json; charset=UTF-8")
@@ -287,6 +286,4 @@ public class ProfileController {
 	   
    }
 
-=======
->>>>>>> 1fbee3dde6a274d520d1ba4bc91006bdd83b449e
 }

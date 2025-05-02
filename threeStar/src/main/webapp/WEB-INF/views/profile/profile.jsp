@@ -237,7 +237,6 @@
             location.href = url;
    		}
         
-<<<<<<< HEAD
         
         
         
@@ -253,7 +252,6 @@
     	   		}
     	   	})
 
-=======
       //================= 프로필 채팅하기 클릭 시 =================
       	
       	document.addEventListener('click', function(e) {
@@ -310,8 +308,7 @@
       	  });
       	}
         
->>>>>>> 1fbee3dde6a274d520d1ba4bc91006bdd83b449e
     </script>
      
-            </body>
+    </body>
 </html>
