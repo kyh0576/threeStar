@@ -613,13 +613,14 @@
     <br>
 
 	<div style="border: 1px solid #f8f9fa;" class="border">
-	  <div class="hclass-info-title">H class 일정
+	  <div class="hclass-info-title">${ loginMember.memClassName } class 일정
 	    <c:if test="${loginMember.adminYN eq 'Y'}">
 	      <button id="addScheduleBtn" style="float:right;">추가</button>
 	    </c:if>
 	  </div>
 	  <hr>
 	  <div class="hclass-info-list" id="scheduleList">
+	    
 	    <div class="info-item">
 	      D - 5 : 프로젝트 기반 공공 데이터 활용
 	      <c:if test="${loginMember.adminYN eq 'Y'}">
@@ -627,7 +628,9 @@
 	        <button class="delete-btn" data-day="5">삭제</button>
 	      </c:if>
 	    </div>
+	    
 	    <!-- 이하 반복 -->
+	    
 	  </div>
 	</div>
 	
@@ -646,6 +649,62 @@
   <script>
   
   $(document).ready(function(){
+	  let loginMemberAdminYN = "${loginMember.adminYN}";
+	  $.ajax({
+	        url: 'selectScheduleList.do',
+	        data: { scClassCode: "${loginMember.memClassCode}" },
+	        method: 'GET',
+	        success: function(list) {
+	            console.log(list);
+
+	            let html = "";
+
+	            const today = new Date();
+	            today.setHours(0, 0, 0, 0); // 오늘 날짜의 시간을 00:00:00으로 맞춰 정확히 비교
+
+	            list.forEach(function(schedule) {
+	                const targetDate = new Date(schedule.scDate);
+	                targetDate.setHours(0, 0, 0, 0); // 마찬가지로 시간 초기화
+
+	                const timeDiff = targetDate.getTime() - today.getTime(); // 밀리초 차이
+	                const dayDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24)); // 일수 차이
+
+	                if (dayDiff < 0) {
+	                    // 지난 일정은 무시 (아예 화면에 추가 안함)
+	                    return;
+	                }
+
+	                let dDayText = "";
+
+	                if (dayDiff === 0) {
+	                    dDayText = "D-day";
+	                } else {
+	                    dDayText = `D - \${dayDiff}`;
+	                }
+
+	                html += `<div class="info-item">
+	                            \${dDayText} : \${schedule.scTitle}`;
+	                
+	                if (loginMemberAdminYN === 'Y') {
+	                    html += `
+	                        <button class="edit-btn" data-id="${schedule.scId}" data-title="${schedule.scTitle}" data-date="${schedule.scDate}">수정</button>
+	                        <button class="delete-btn" data-id="${schedule.scId}">삭제</button>
+	                    `;
+	                }
+
+	                html += `</div>`;
+	            });
+
+	            $("#scheduleList").html(html);
+	        },
+	        error: function() {
+	            console.log("일정 목록 불러오기 실패!");
+	        }
+	    });
+
+	  
+	  
+	  
 
 	  // 수정 버튼
 	  $(document).on('click', '.edit-btn', function() {
