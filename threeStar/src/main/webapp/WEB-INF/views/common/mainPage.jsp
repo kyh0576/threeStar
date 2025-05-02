@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>채팅 메신저</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- 예시: Font Awesome 불러오기 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
       margin: 0;
@@ -407,7 +409,74 @@
       background-color: #f8f9fa;
       border-radius: 10px;
     }
-  </style>
+    
+    
+   /*---------------- 스케줄 관련 css-------------------------*/
+    
+    
+ 
+  /* 수정/삭제 버튼 기본 스타일 */
+  .info-item .edit-btn, .info-item .delete-btn {
+    background-color: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 14px;
+    transition: color 0.3s;
+  }
+
+  /* 마우스 올렸을 때 */
+  .info-item .edit-btn:hover, .info-item .delete-btn:hover {
+    color: #000;
+  }
+
+  /* 추가 버튼 */
+  #addScheduleBtn {
+    background-color: #53a2dd;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    margin-right: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    float: right;
+    transition: background-color 0.3s;
+  }
+
+  #addScheduleBtn:hover {
+    background-color: #0056b3;
+  }
+
+  /* 모달 내부 버튼 (저장, 취소) */
+  #scheduleEditModal button {
+    background-color: #53a2dd;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    margin-right: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+
+  #scheduleEditModal button:hover {
+    background-color: #0056b3;
+  }
+
+  /* 취소 버튼은 다른 색 */
+  #cancelScheduleBtn {
+    background-color: #6c757d;
+  }
+
+  #cancelScheduleBtn:hover {
+    background-color: #5a6268;
+  }
+
+</style>
+    
 
 </head>
 <body>
@@ -543,22 +612,113 @@
     <br>
     <br>
 
-    <div style="border: 1px solid #f8f9fa;" class="border">
-      <div class="hclass-info-title">H class 일정</div>
-      <hr>
-      <div class="hclass-info-list">
-        <div class="info-item">D - 5 : 프로젝트 기반 공공 데이터 활용</div>
-        <div class="info-item">D - 16 : 프로젝트 기반 공공데이터 아키텍처 설계</div>
-        <div class="info-item">D - 39 : 애플리케이션 테스트 수행</div>
-        <div class="info-item">D - 52 : 애플리케이션 배포</div>
-        <div class="info-item">D - 61 : 파이널 프로젝트 발표</div>
-        <div class="info-item">D - 70 : 수료</div>
-      </div>
-    </div>
+	<div style="border: 1px solid #f8f9fa;" class="border">
+	  <div class="hclass-info-title">H class 일정
+	    <c:if test="${loginMember.adminYN eq 'Y'}">
+	      <button id="addScheduleBtn" style="float:right;">추가</button>
+	    </c:if>
+	  </div>
+	  <hr>
+	  <div class="hclass-info-list" id="scheduleList">
+	    <div class="info-item">
+	      D - 5 : 프로젝트 기반 공공 데이터 활용
+	      <c:if test="${loginMember.adminYN eq 'Y'}">
+	        <button class="edit-btn" data-day="5" data-title="프로젝트 기반 공공 데이터 활용">수정</button>
+	        <button class="delete-btn" data-day="5">삭제</button>
+	      </c:if>
+	    </div>
+	    <!-- 이하 반복 -->
+	  </div>
+	</div>
+	
+	<!-- 모달 -->
+	<div id="scheduleEditModal" style="display:none; position:fixed; top:30%; left:40%; background:white; border:1px solid #ccc; padding:20px; z-index:999;">
+	  <h3>일정 수정</h3>
+	  <input type="number" id="editDay" placeholder="D-Day" style="display:block; margin-bottom:10px;">
+	  <input type="text" id="editTitle" placeholder="일정 제목" style="display:block; margin-bottom:10px;">
+	  <button id="saveScheduleBtn">저장</button>
+	  <button id="cancelScheduleBtn">취소</button>
+	</div>
+    
   </div>
   
   <!-- 스크립트 -->
   <script>
+  
+  $(document).ready(function(){
+
+	  // 수정 버튼
+	  $(document).on('click', '.edit-btn', function() {
+	    const day = $(this).data('day');
+	    const title = $(this).data('title');
+
+	    $("#editDay").val(day);
+	    $("#editTitle").val(title);
+	    $("#scheduleEditModal").data('originalDay', day); // 수정대상 기억
+
+	    $("#scheduleEditModal").show();
+	  });
+
+	  // 저장 버튼 (수정)
+	  $("#saveScheduleBtn").click(function(){
+	    const newDay = $("#editDay").val();
+	    const newTitle = $("#editTitle").val();
+	    const originalDay = $("#scheduleEditModal").data('originalDay');
+
+	    $.ajax({
+	      url: 'updateSchedule.do',
+	      method: 'POST',
+	      data: {
+	        originalDay: originalDay,
+	        newDay: newDay,
+	        newTitle: newTitle
+	      },
+	      success: function(response){
+	        alert("수정 완료!");
+	        location.reload();
+	      },
+	      error: function(){
+	        alert("수정 실패");
+	      }
+	    });
+	  });
+
+	  // 취소 버튼
+	  $("#cancelScheduleBtn").click(function(){
+	    $("#scheduleEditModal").hide();
+	  });
+
+	  // 삭제 버튼
+	  $(document).on('click', '.delete-btn', function() {
+	    const day = $(this).data('day');
+
+	    if(confirm('정말 삭제할까요?')){
+	      $.ajax({
+	        url: 'deleteSchedule.do',
+	        method: 'POST',
+	        data: { day: day },
+	        success: function(response){
+	          alert("삭제 완료!");
+	          location.reload();
+	        },
+	        error: function(){
+	          alert("삭제 실패");
+	        }
+	      });
+	    }
+	  });
+
+	  // 추가 버튼
+	  $("#addScheduleBtn").click(function(){
+	    $("#editDay").val('');
+	    $("#editTitle").val('');
+	    $("#scheduleEditModal").removeData('originalDay'); // 새 추가이므로 원본 없음
+	    $("#scheduleEditModal").show();
+	  });
+
+	});
+
+  
   let globalFriendList = [];  // 모든 친구 리스트 저장
   
     // 모달 관련 기능
