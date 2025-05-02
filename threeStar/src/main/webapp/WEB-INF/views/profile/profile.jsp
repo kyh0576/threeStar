@@ -183,7 +183,7 @@
         </div>
 
         <div class="button-group">
-            <button type="button" class="btn btn-cancel" id="">채팅하기</button>
+            <button type="button" class="btn btn-cancel" id="startChat">채팅하기</button>
             <button type="button" class="btn btn-cancel" id="cancelBtn">닫기</button>
         </div>
     </div>
@@ -237,6 +237,7 @@
             location.href = url;
    		}
         
+<<<<<<< HEAD
         
         
         
@@ -252,6 +253,64 @@
     	   		}
     	   	})
 
+=======
+      //================= 프로필 채팅하기 클릭 시 =================
+      	
+      	document.addEventListener('click', function(e) {
+      	    
+      	        const targetUserId = ${m.memNo};
+      	        console.log('✅ 클릭한 targetUserId:', targetUserId);
+      	
+      	        // 서버로 채팅방 생성 요청
+      	        fetch('/tt/chattingRoom/startChat', {
+      	            method: 'POST',
+      	            headers: {
+      	                'Content-Type': 'application/json'
+      	            },
+      	            body: JSON.stringify({ targetUserId })
+      	        })
+      	        .then(response => response.json())
+      	        .then(data => {
+      	            console.log('✅ 서버 응답 데이터:', data); // <- 추가
+      	            if (data.success) {
+      	                const roomId = data.roomId;
+      	                console.log('✅ 이동할 roomId:', roomId); // <- 추가
+      	              window.parent.location.href= `/tt/message/messageForm?roomId=\${roomId}`;
+      	            } else {
+      	                alert('❌ 채팅방 생성 실패');
+      	            }
+      	        })
+      	        .catch(error => {
+      	            console.error('❌ 채팅방 생성 오류', error);
+      	        });
+      	    
+      	});
+      
+      
+      //================= 프로필 채팅하기 클릭 시startChat 함수 실행 =================
+      	function startChat(targetUserId) {
+      	  fetch('/tt/chattingRoom/startChatPro', {  // ✅ URL도 실제 컨트롤러 매핑에 맞게 /tt/message/startChat 등으로 수정
+      	    method: 'POST',
+      	    headers: {
+      	      'Content-Type': 'application/json' 
+      	    },
+      	    body: JSON.stringify({ targetUserId })
+      	  })
+      	  .then(response => response.json())
+      	  .then(data => {
+      	    if (data.success) {
+      	      const roomId = data.roomId;
+      	    window.parent.location.href = `/tt/message/messageForm?roomId=\${roomId}`;  // ✅ 백틱(`) 사용
+      	    } else {
+      	      alert('❌ 채팅방 생성에 실패했습니다.');
+      	    }
+      	  })
+      	  .catch(error => {
+      	    console.error('❌ 채팅방 생성 오류', error);
+      	  });
+      	}
+        
+>>>>>>> 1fbee3dde6a274d520d1ba4bc91006bdd83b449e
     </script>
      
             </body>
