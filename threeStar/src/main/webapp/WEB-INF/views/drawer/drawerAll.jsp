@@ -114,7 +114,6 @@
         text-overflow: ellipsis;
     } */
 
-    /* 추가가가가가가 */
     .message-sidebar {
         width: 300px;
         background-color: white;

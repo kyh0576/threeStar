@@ -16,8 +16,8 @@ import com.kh.tt.profile.model.vo.Profile;
 @Service
 public class ProfileServiceImpl implements ProfileService {
 	
-   @Autowired
-   private MemberDao mDao;
+    @Autowired
+    private MemberDao mDao;
 	
 	@Autowired
 	private ProfileDao pDao;
