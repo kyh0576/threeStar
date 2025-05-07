@@ -727,6 +727,12 @@
 		    const scDate = $("#editDay").val();
 		    const scTitle = $("#editTitle").val();
 
+		    // ⭐ 입력값 비어있는지 검사
+		    if (!scDate || !scTitle) {
+		        alert("날짜와 제목을 모두 입력해주세요!");
+		        return; // ❌ 저장 중단 (ajax 안보냄)
+		    }
+		    
 		    if (mode === 'add') {
 		        // 추가
 		        $.ajax({
