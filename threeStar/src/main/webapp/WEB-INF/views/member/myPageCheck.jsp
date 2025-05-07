@@ -36,7 +36,7 @@
     }
     
     .profile-header {
-        background-color: #86e0f9;
+        background-color: #86e0f9; 
         height: 150px;
         position: relative;
     }
