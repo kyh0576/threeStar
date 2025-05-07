@@ -12,41 +12,28 @@
 		<result column="sns_key" property="snsKey"/>
 		<result column="status" property="status"/>
 		<result column="online_st" property="onlineSt"/>
+		<result column="CLASS_NAME" property="memClassName"/>
 	</resultMap>
 
 	<select id="loginMember" resultMap="memberResult">
-		<!-- 암호화 작업 전에 했던 방식
-		select
-		       user_id
-		     , user_pwd
-		     , user_name
-		     , email
-		     , gender
-		     , age
-		     , phone
-		     , address
-		     , enroll_date
-		     , modify_date
-		     , status
-		  from member
-		 where status = 'Y'
-		   and user_id = #{userId}
-		   and user_pwd = #{userPwd}
-	    -->
-		select
-		       mem_id
-		     , mem_pwd
-		     , mem_name
-		     , email
-		     , phone
-		     , mem_class_code
-		     , sns_key
-		     , status
-		     , online_st
-		  from member
-		 where status = 'Y'
-		   and mem_id = #{memId}
+		SELECT
+		       m.mem_id,
+		       m.mem_pwd,
+		       m.mem_name,
+		       m.email,
+		       m.phone,
+		       m.mem_class_code,
+		       m.sns_key,
+		       m.status,
+		       m.online_st,
+		       c.class_name
+		FROM member m
+		JOIN class c ON c.class_code = m.mem_class_code
+		WHERE m.status = 'Y'
+		  AND m.mem_id = #{memId}
 	</select>
+
+
 
 	<insert id="insertMember">
 		insert

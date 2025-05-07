@@ -1,5 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%> 
+    
+
+
+<%
+    com.kh.tt.member.model.vo.Member loginMember = (com.kh.tt.member.model.vo.Member) session.getAttribute("loginMember");
+    String myNickname = loginMember.getMemName();   // 내 닉네임
+    String targetNickname = (String) request.getAttribute("targetNickname"); // 상대방 닉네임
+    int roomId = (Integer) request.getAttribute("roomId");
+%>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -486,7 +497,7 @@
                 <div class="chat-profile-img">
                     <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=팀" alt="프로필">
                 </div>
-                <h3 id="chatRoomTitle">채팅 상대</h3>
+                <h3 id="chatRoomTitle"><%= targetNickname == null ? "이름없음" : targetNickname %></h3>
                 <span style="margin-left: 10px; color: #888; font-size: 14px;">2 participants</span>
             </div>
             <div class="chat-actions">
@@ -529,7 +540,7 @@
                         <img src="https://via.placeholder.com/40/8c4aff/ffffff?text=서" alt="프로필">
                     </div>
                     <div class="member-info">
-                        <div class="member-name">서동진</div>
+                        <div class="member-name"><%= myNickname %></div>
                         <div class="member-status">온라인</div>
                     </div>
                 </div>
@@ -539,7 +550,7 @@
                         <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=팀" alt="프로필">
                     </div>
                     <div class="member-info">
-                        <div class="member-name">집주인 첫째 딸</div>
+                        <div class="member-name" id="targetNicknameArea">상대방 닉네임 로딩중...</div>
                         <div class="member-status">온라인</div>
                     </div>
                 </div>
@@ -815,6 +826,45 @@ console.log("내 번호:", myMemNo);
 	});
 
 </script>
+
+<!-- ✅ 여기 바로 밑이나 위에 넣으면 됨 -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get("roomId");
+
+    if (!roomId) return;
+
+    fetch("/tt/chattingRoom/roomName?roomId=" + roomId)
+        .then(response => response.text())
+        .then(name => {
+            document.querySelector("#chatRoomTitle").textContent = name;
+        })
+        .catch(err => {
+            console.error("❌ 채팅방 이름 가져오기 실패:", err);
+        });
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get("roomId");
+
+    fetch("/tt/chattingRoom/roomName?roomId=" + roomId)
+        .then(response => response.text())
+        .then(name => {
+            const targetNameDom = document.querySelector("#targetNicknameArea");
+            if (targetNameDom) {
+                targetNameDom.textContent = name;
+            }
+        })
+        .catch(err => {
+            console.error("❌ People 상대방 닉네임 가져오기 실패", err);
+        });
+});
+
+</script>
+
 
 </body>
 </html>

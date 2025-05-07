@@ -56,7 +56,7 @@ public class MemberController {
          mv.setViewName("member/loginForm");
       }
       
-      System.out.println(loginMember);
+      System.out.println("로그인 맴버 : " + loginMember);
       return mv;
    }
    
@@ -228,7 +228,6 @@ public class MemberController {
 			return "common/mainPage";
 		}
 	}
-	
 
 	
 }
