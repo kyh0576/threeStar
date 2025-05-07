@@ -622,7 +622,7 @@
 	  <div class="hclass-info-list" id="scheduleList">
 	    
 	    <div class="info-item">
-	      D - 5 : 프로젝트 기반 공공 데이터 활용
+	      D - 5 : 프로젝트 기반 공공 데이터 활용 <!-- 여기가 스케줄 올 자리 -->
 	      <c:if test="${loginMember.adminYN eq 'Y'}">
 	        <button class="edit-btn" data-day="5" data-title="프로젝트 기반 공공 데이터 활용">수정</button>
 	        <button class="delete-btn" data-day="5">삭제</button>
@@ -637,7 +637,7 @@
 	<!-- 모달 -->
 	<div id="scheduleEditModal" style="display:none; position:fixed; top:30%; left:40%; background:white; border:1px solid #ccc; padding:20px; z-index:999;">
 	  <h3>일정 수정</h3>
-	  <input type="number" id="editDay" placeholder="D-Day" style="display:block; margin-bottom:10px;">
+	  <input type="date" id="editDay" placeholder="D-Day" style="display:block; margin-bottom:10px;">
 	  <input type="text" id="editTitle" placeholder="일정 제목" style="display:block; margin-bottom:10px;">
 	  <button id="saveScheduleBtn">저장</button>
 	  <button id="cancelScheduleBtn">취소</button>
@@ -655,7 +655,6 @@
 	        data: { scClassCode: "${loginMember.memClassCode}" },
 	        method: 'GET',
 	        success: function(list) {
-	            console.log(list);
 
 	            let html = "";
 
@@ -687,8 +686,8 @@
 	                
 	                if (loginMemberAdminYN === 'Y') {
 	                    html += `
-	                        <button class="edit-btn" data-id="${schedule.scId}" data-title="${schedule.scTitle}" data-date="${schedule.scDate}">수정</button>
-	                        <button class="delete-btn" data-id="${schedule.scId}">삭제</button>
+	                        <button class="edit-btn" data-id="\${schedule.scId}" data-title="\${schedule.scTitle}" data-date="\${schedule.scDate}">수정</button>
+	                        <button class="delete-btn" data-id="\${schedule.scId}">삭제</button>
 	                    `;
 	                }
 
@@ -708,38 +707,67 @@
 
 	  // 수정 버튼
 	  $(document).on('click', '.edit-btn', function() {
-	    const day = $(this).data('day');
+	    const scId = $(this).data('id');
 	    const title = $(this).data('title');
+	    const date = $(this).data('date').split(' ')[0];
 
-	    $("#editDay").val(day);
+	    
+	    $("#scheduleEditModal").data('mode', 'edit'); // 수정 모드
+	    $("#scheduleEditModal").data('scId', scId);   // 수정할 아이디 저장
+
+	    $("#editDay").val(date);
 	    $("#editTitle").val(title);
-	    $("#scheduleEditModal").data('originalDay', day); // 수정대상 기억
-
 	    $("#scheduleEditModal").show();
 	  });
 
-	  // 저장 버튼 (수정)
+	  // 저장 버튼 (수정 & 추가)
 	  $("#saveScheduleBtn").click(function(){
-	    const newDay = $("#editDay").val();
-	    const newTitle = $("#editTitle").val();
-	    const originalDay = $("#scheduleEditModal").data('originalDay');
+		  const mode = $("#scheduleEditModal").data('mode'); // 현재 모드를 읽어옴
+		    const scClassCode = "${loginMember.memClassCode}";
+		    const scDate = $("#editDay").val();
+		    const scTitle = $("#editTitle").val();
 
-	    $.ajax({
-	      url: 'updateSchedule.do',
-	      method: 'POST',
-	      data: {
-	        originalDay: originalDay,
-	        newDay: newDay,
-	        newTitle: newTitle
-	      },
-	      success: function(response){
-	        alert("수정 완료!");
-	        location.reload();
-	      },
-	      error: function(){
-	        alert("수정 실패");
-	      }
-	    });
+		    if (mode === 'add') {
+		        // 추가
+		        $.ajax({
+		            url: 'insertSchedule.do',
+		            method: 'POST',
+		            data: {
+		                scClassCode: scClassCode,
+		                scDate: scDate,
+		                scTitle: scTitle
+		            },
+		            success: function(response){
+		                alert("추가 완료!");
+		                location.reload();
+		            },
+		            error: function(){
+		                alert("추가 실패");
+		            }
+		        });
+
+		    } else if (mode === 'edit') {
+		        // 수정
+		        const scId = $("#scheduleEditModal").data('scId'); // 수정할 아이디도 읽어옴
+
+		        $.ajax({
+		            url: 'updateSchedule.do',
+		            method: 'POST',
+		            data: {
+		                scId: scId,
+		                scClassCode: scClassCode,
+		                scDate: scDate,
+		                scTitle: scTitle
+		            },
+		            success: function(response){
+		                alert("수정 완료!");
+		                location.reload();
+		            },
+		            error: function(){
+		                alert("수정 실패");
+		            }
+		        });
+		    }
 	  });
 
 	  // 취소 버튼
@@ -749,13 +777,12 @@
 
 	  // 삭제 버튼
 	  $(document).on('click', '.delete-btn', function() {
-	    const day = $(this).data('day');
-
+	    const scId = $(this).data('id');
 	    if(confirm('정말 삭제할까요?')){
 	      $.ajax({
 	        url: 'deleteSchedule.do',
 	        method: 'POST',
-	        data: { day: day },
+	        data: { scId: scId },
 	        success: function(response){
 	          alert("삭제 완료!");
 	          location.reload();
@@ -769,9 +796,9 @@
 
 	  // 추가 버튼
 	  $("#addScheduleBtn").click(function(){
-	    $("#editDay").val('');
-	    $("#editTitle").val('');
-	    $("#scheduleEditModal").removeData('originalDay'); // 새 추가이므로 원본 없음
+	    $("#scheduleEditModal").data('mode', 'add'); // 추가 모드
+	    $("#editDay").val(""); // 입력창 초기화
+	    $("#editTitle").val("");
 	    $("#scheduleEditModal").show();
 	  });
 

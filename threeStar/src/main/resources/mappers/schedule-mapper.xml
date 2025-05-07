@@ -18,4 +18,33 @@
 	  from schedule
 	 where sc_class_code = #{scClassCode}
    </select>
+   
+   <insert id="insertSchedule">
+   INSERT INTO SCHEDULE
+	(
+	     SC_ID
+	   , SC_TITLE
+	   , SC_DATE
+	   , SC_CLASS_CODE
+	)
+	VALUES
+	(
+	     SEQ_SC_ID.NEXTVAL
+	   , #{scTitle}
+	   , #{scDate}
+	   , #{scClassCode}
+	)
+   </insert>
+   
+   <delete id="deleteSchedule">
+	DELETE FROM SCHEDULE
+	WHERE SC_ID = #{scId}
+   </delete>
+   
+   <update id="updateSchedule">
+      update schedule
+         set sc_title = #{scTitle}
+           , sc_date = #{scDate}
+        where sc_id = #{scId}   
+   </update>
 </mapper>

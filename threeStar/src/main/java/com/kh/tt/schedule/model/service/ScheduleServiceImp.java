@@ -23,4 +23,19 @@ public class ScheduleServiceImp implements ScheduleService{
 		return scDao.selectScheduleList(sqlSession, schedule);
 	}
 
+	@Override
+	public int insertSchedule(Schedule schedule) {
+		return scDao.insertSchedule(sqlSession, schedule);
+	}
+
+	@Override
+	public int deleteSchedule(Schedule schedule) {
+		return scDao.deleteSchedule(sqlSession, schedule);
+	}
+
+	@Override
+	public int updateSchedule(Schedule schedule) {
+		return scDao.updateSchedule(sqlSession, schedule);
+	}
+
 }

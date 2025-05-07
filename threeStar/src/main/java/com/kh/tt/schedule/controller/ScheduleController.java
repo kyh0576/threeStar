@@ -19,9 +19,25 @@ public class ScheduleController {
 	@RequestMapping(value = "selectScheduleList.do", produces = "application/json; charset=UTF-8")
 	@ResponseBody
 	public ArrayList<Schedule> selectScheduleList(Schedule schedule) {
-		System.out.println("스케줄 : " + schedule);
 	    ArrayList<Schedule> scList = scService.selectScheduleList(schedule); // friend = 'N'만 조회
-	    System.out.println(scList);
 	    return scList;
+	}
+	
+	@RequestMapping(value = "insertSchedule.do", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public void insertSchedule(Schedule schedule) {
+	    scService.insertSchedule(schedule); 
+	}
+	
+	@RequestMapping(value = "deleteSchedule.do", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public void deleteSchedule(Schedule schedule) {
+	    scService.deleteSchedule(schedule); 
+	}
+	
+	@RequestMapping(value = "updateSchedule.do", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public void updateSchedule(Schedule schedule) {
+		scService.updateSchedule(schedule); 
 	}
 }
