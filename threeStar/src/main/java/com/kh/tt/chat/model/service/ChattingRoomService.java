@@ -13,12 +13,16 @@ public interface ChattingRoomService {
     int createChatRoom(int myMemNo, int targetMemNo);
     int selectLastChatId();
     int createTargetChatRoom(int chatId, int targetMemNo, String chatName);
-    
-    Member findTargetMember(int roomId, int myMemNo);
-    ChattingRoom selectChatRoomById(int roomId);
+   
     
 //    ============채팅방===========
     List<ChattingRoom> getChatRoomsByMemberId(String memId);
+    
+    
+//  ============채팅방 이름===========    
+    Member findTargetMember(int roomId, int myMemNo);
+    
+    ChattingRoom selectChatRoomById(int roomId);
     
     
 }

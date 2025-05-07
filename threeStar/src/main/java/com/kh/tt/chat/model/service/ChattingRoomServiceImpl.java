@@ -53,7 +53,7 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
         public List<ChattingRoom> getChatRoomsByMemberId(String memId) {
             return mDao.getChatRoomsByMemberId(sqlSession, memId);
         }
-//===============================================================================
+//채팅방 이름 변경=========================================================================
         
 		@Override
 		public Member findTargetMember(int roomId, int myMemNo) {

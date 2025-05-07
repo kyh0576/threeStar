@@ -42,6 +42,7 @@ public class ChattingRoomDao {
         return sqlSession.selectList("chatMapper.selectRoomsByMemberId" ,memId);
     }
     
+    // ===== 채팅방 이름 ================================================
     public Member findTargetMember(SqlSessionTemplate sqlSession, int roomId, int myMemNo) {
         return sqlSession.selectOne("chatMapper.findTargetMember", Map.of("roomId", roomId, "myMemNo", myMemNo));
     }

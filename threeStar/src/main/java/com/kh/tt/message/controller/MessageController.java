@@ -59,23 +59,21 @@ public class MessageController {
         return messageService.sendMessage(roomId);
     }
     
-//===================================================================
-//    
-//    @RequestMapping("/roomForm")
-//    public String showMainForm(@RequestParam("roomId") int roomId,
-//                                   HttpSession session,
-//                                   Model model) {
-//
-//            Member loginMember = (Member) session.getAttribute("loginMember");
-//            int myMemNo = loginMember.getMemNo();
-//
-//            Member targetMember = chattingRoomService.findTargetMember(roomId, myMemNo);
-//
-//            model.addAttribute("targetNickname", targetMember.getMemName());  // ✅ 이거 정상
-//            model.addAttribute("roomId", roomId);
-//
-//            return "message/mainMessageForm";  // ✅ 이게 jsp 이름임
-//    }
+    @RequestMapping("/roomForm")
+    public String showMainForm(@RequestParam("roomId") int roomId,
+                                   HttpSession session,
+                                   Model model) {
 
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        int myMemNo = loginMember.getMemNo();
+
+        // 여기가 findTargetMember 호출!
+        Member targetMember = chattingRoomService.findTargetMember(roomId, myMemNo);
+
+        model.addAttribute("targetNickname", targetMember.getMemName());
+        model.addAttribute("roomId", roomId);
+
+        return "message/mainMessageForm";
+    }
     
 }
