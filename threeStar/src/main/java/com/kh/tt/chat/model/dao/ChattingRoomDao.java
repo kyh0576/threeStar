@@ -8,6 +8,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kh.tt.chat.model.vo.ChattingRoom;
+import com.kh.tt.member.model.vo.Member;
 
 @Repository
 public class ChattingRoomDao {
@@ -39,5 +40,13 @@ public class ChattingRoomDao {
 
     public  List<ChattingRoom> getChatRoomsByMemberId(SqlSessionTemplate sqlSession ,String memId){
         return sqlSession.selectList("chatMapper.selectRoomsByMemberId" ,memId);
+    }
+    
+    public Member findTargetMember(SqlSessionTemplate sqlSession, int roomId, int myMemNo) {
+        return sqlSession.selectOne("chatMapper.findTargetMember", Map.of("roomId", roomId, "myMemNo", myMemNo));
+    }
+    
+    public ChattingRoom selectChatRoomById(SqlSessionTemplate sqlSession, int roomId) {
+        return sqlSession.selectOne("chatMapper.selectChatRoomById", roomId);
     }
 }

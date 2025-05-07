@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.kh.tt.chat.model.dao.ChattingRoomDao;
 import com.kh.tt.chat.model.vo.ChattingRoom;
+import com.kh.tt.member.model.vo.Member;
 import com.kh.tt.message.model.dao.MessageDao;
 @Service
 public class ChattingRoomServiceImpl implements ChattingRoomService {
@@ -52,5 +53,16 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
         public List<ChattingRoom> getChatRoomsByMemberId(String memId) {
             return mDao.getChatRoomsByMemberId(sqlSession, memId);
         }
+//===============================================================================
+        
+		@Override
+		public Member findTargetMember(int roomId, int myMemNo) {
+			return mDao.findTargetMember(sqlSession, roomId, myMemNo);
+		}
+		
+		@Override
+		public ChattingRoom selectChatRoomById(int roomId) {
+		    return mDao.selectChatRoomById(sqlSession, roomId);
+		}
 
 }

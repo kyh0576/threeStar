@@ -27,6 +27,9 @@ public class MessageController {
 
     @Autowired
     private MessageService messageService;
+    
+    @Autowired
+    private ChattingRoomService chattingRoomService;
 
 
     // 메시지 메인 화면 이동
@@ -55,5 +58,24 @@ public class MessageController {
     public List<Message> getChatHistory(@RequestParam("roomId") int roomId) {
         return messageService.sendMessage(roomId);
     }
+    
+//===================================================================
+//    
+//    @RequestMapping("/roomForm")
+//    public String showMainForm(@RequestParam("roomId") int roomId,
+//                                   HttpSession session,
+//                                   Model model) {
+//
+//            Member loginMember = (Member) session.getAttribute("loginMember");
+//            int myMemNo = loginMember.getMemNo();
+//
+//            Member targetMember = chattingRoomService.findTargetMember(roomId, myMemNo);
+//
+//            model.addAttribute("targetNickname", targetMember.getMemName());  // ✅ 이거 정상
+//            model.addAttribute("roomId", roomId);
+//
+//            return "message/mainMessageForm";  // ✅ 이게 jsp 이름임
+//    }
+
     
 }
