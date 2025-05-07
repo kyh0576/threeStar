@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>채팅 메신저</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- 예시: Font Awesome 불러오기 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
       margin: 0;
@@ -407,7 +409,74 @@
       background-color: #f8f9fa;
       border-radius: 10px;
     }
-  </style>
+    
+    
+   /*---------------- 스케줄 관련 css-------------------------*/
+    
+    
+ 
+  /* 수정/삭제 버튼 기본 스타일 */
+  .info-item .edit-btn, .info-item .delete-btn {
+    background-color: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 14px;
+    transition: color 0.3s;
+  }
+
+  /* 마우스 올렸을 때 */
+  .info-item .edit-btn:hover, .info-item .delete-btn:hover {
+    color: #000;
+  }
+
+  /* 추가 버튼 */
+  #addScheduleBtn {
+    background-color: #53a2dd;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    margin-right: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    float: right;
+    transition: background-color 0.3s;
+  }
+
+  #addScheduleBtn:hover {
+    background-color: #0056b3;
+  }
+
+  /* 모달 내부 버튼 (저장, 취소) */
+  #scheduleEditModal button {
+    background-color: #53a2dd;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    margin-right: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+
+  #scheduleEditModal button:hover {
+    background-color: #0056b3;
+  }
+
+  /* 취소 버튼은 다른 색 */
+  #cancelScheduleBtn {
+    background-color: #6c757d;
+  }
+
+  #cancelScheduleBtn:hover {
+    background-color: #5a6268;
+  }
+
+</style>
+    
 
 </head>
 <body>
@@ -543,27 +612,210 @@
     <br>
     <br>
 
-    <div style="border: 1px solid #f8f9fa;" class="border">
-      <div class="hclass-info-title">H class 일정</div>
-      <hr>
-      <div class="hclass-info-list">
-        <div class="info-item">D - 5 : 프로젝트 기반 공공 데이터 활용</div>
-        <div class="info-item">D - 16 : 프로젝트 기반 공공데이터 아키텍처 설계</div>
-        <div class="info-item">D - 39 : 애플리케이션 테스트 수행</div>
-        <div class="info-item">D - 52 : 애플리케이션 배포</div>
-        <div class="info-item">D - 61 : 파이널 프로젝트 발표</div>
-        <div class="info-item">D - 70 : 수료</div>
-      </div>
-    </div>
+	<div style="border: 1px solid #f8f9fa;" class="border">
+	  <div class="hclass-info-title">${ loginMember.memClassName } class 일정
+	    <c:if test="${loginMember.adminYN eq 'Y'}">
+	      <button id="addScheduleBtn" style="float:right;">추가</button>
+	    </c:if>
+	  </div>
+	  <hr>
+	  <div class="hclass-info-list" id="scheduleList">
+	    
+	    <div class="info-item">
+	      D - 5 : 프로젝트 기반 공공 데이터 활용 <!-- 여기가 스케줄 올 자리 -->
+	      <c:if test="${loginMember.adminYN eq 'Y'}">
+	        <button class="edit-btn" data-day="5" data-title="프로젝트 기반 공공 데이터 활용">수정</button>
+	        <button class="delete-btn" data-day="5">삭제</button>
+	      </c:if>
+	    </div>
+	    
+	    <!-- 이하 반복 -->
+	    
+	  </div>
+	</div>
+	
+	<!-- 모달 -->
+	<div id="scheduleEditModal" style="display:none; position:fixed; top:30%; left:40%; background:white; border:1px solid #ccc; padding:20px; z-index:999;">
+	  <h3>일정 수정</h3>
+	  <input type="date" id="editDay" placeholder="D-Day" style="display:block; margin-bottom:10px;">
+	  <input type="text" id="editTitle" placeholder="일정 제목" style="display:block; margin-bottom:10px;">
+	  <button id="saveScheduleBtn">저장</button>
+	  <button id="cancelScheduleBtn">취소</button>
+	</div>
+    
   </div>
   
   <!-- 스크립트 -->
   <script>
+  
+  $(document).ready(function(){
+	  let loginMemberAdminYN = "${loginMember.adminYN}";
+	  $.ajax({
+	        url: 'selectScheduleList.do',
+	        data: { scClassCode: "${loginMember.memClassCode}" },
+	        method: 'GET',
+	        success: function(list) {
+
+	            let html = "";
+
+	            const today = new Date();
+	            today.setHours(0, 0, 0, 0); // 오늘 날짜의 시간을 00:00:00으로 맞춰 정확히 비교
+
+	            list.forEach(function(schedule) {
+	                const targetDate = new Date(schedule.scDate);
+	                targetDate.setHours(0, 0, 0, 0); // 마찬가지로 시간 초기화
+
+	                const timeDiff = targetDate.getTime() - today.getTime(); // 밀리초 차이
+	                const dayDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24)); // 일수 차이
+
+	                if (dayDiff < 0) {
+	                    // 지난 일정은 무시 (아예 화면에 추가 안함)
+	                    return;
+	                }
+
+	                let dDayText = "";
+
+	                if (dayDiff === 0) {
+	                    dDayText = "D-day";
+	                } else {
+	                    dDayText = `D - \${dayDiff}`;
+	                }
+
+	                html += `<div class="info-item">
+	                            \${dDayText} : \${schedule.scTitle}`;
+	                
+	                if (loginMemberAdminYN === 'Y') {
+	                    html += `
+	                        <button class="edit-btn" data-id="\${schedule.scId}" data-title="\${schedule.scTitle}" data-date="\${schedule.scDate}">수정</button>
+	                        <button class="delete-btn" data-id="\${schedule.scId}">삭제</button>
+	                    `;
+	                }
+
+	                html += `</div>`;
+	            });
+
+	            $("#scheduleList").html(html);
+	        },
+	        error: function() {
+	            console.log("일정 목록 불러오기 실패!");
+	        }
+	    });
+
+	  
+	  
+	  
+
+	  // 수정 버튼
+	  $(document).on('click', '.edit-btn', function() {
+	    const scId = $(this).data('id');
+	    const title = $(this).data('title');
+	    const date = $(this).data('date').split(' ')[0];
+
+	    
+	    $("#scheduleEditModal").data('mode', 'edit'); // 수정 모드
+	    $("#scheduleEditModal").data('scId', scId);   // 수정할 아이디 저장
+
+	    $("#editDay").val(date);
+	    $("#editTitle").val(title);
+	    $("#scheduleEditModal").show();
+	  });
+
+	  // 저장 버튼 (수정 & 추가)
+	  $("#saveScheduleBtn").click(function(){
+		  const mode = $("#scheduleEditModal").data('mode'); // 현재 모드를 읽어옴
+		    const scClassCode = "${loginMember.memClassCode}";
+		    const scDate = $("#editDay").val();
+		    const scTitle = $("#editTitle").val();
+
+		    // ⭐ 입력값 비어있는지 검사
+		    if (!scDate || !scTitle) {
+		        alert("날짜와 제목을 모두 입력해주세요!");
+		        return; // ❌ 저장 중단 (ajax 안보냄)
+		    }
+		    
+		    if (mode === 'add') {
+		        // 추가
+		        $.ajax({
+		            url: 'insertSchedule.do',
+		            method: 'POST',
+		            data: {
+		                scClassCode: scClassCode,
+		                scDate: scDate,
+		                scTitle: scTitle
+		            },
+		            success: function(response){
+		                alert("추가 완료!");
+		                location.reload();
+		            },
+		            error: function(){
+		                alert("추가 실패");
+		            }
+		        });
+
+		    } else if (mode === 'edit') {
+		        // 수정
+		        const scId = $("#scheduleEditModal").data('scId'); // 수정할 아이디도 읽어옴
+
+		        $.ajax({
+		            url: 'updateSchedule.do',
+		            method: 'POST',
+		            data: {
+		                scId: scId,
+		                scClassCode: scClassCode,
+		                scDate: scDate,
+		                scTitle: scTitle
+		            },
+		            success: function(response){
+		                alert("수정 완료!");
+		                location.reload();
+		            },
+		            error: function(){
+		                alert("수정 실패");
+		            }
+		        });
+		    }
+	  });
+
+	  // 취소 버튼
+	  $("#cancelScheduleBtn").click(function(){
+	    $("#scheduleEditModal").hide();
+	  });
+
+	  // 삭제 버튼
+	  $(document).on('click', '.delete-btn', function() {
+	    const scId = $(this).data('id');
+	    if(confirm('정말 삭제할까요?')){
+	      $.ajax({
+	        url: 'deleteSchedule.do',
+	        method: 'POST',
+	        data: { scId: scId },
+	        success: function(response){
+	          alert("삭제 완료!");
+	          location.reload();
+	        },
+	        error: function(){
+	          alert("삭제 실패");
+	        }
+	      });
+	    }
+	  });
+
+	  // 추가 버튼
+	  $("#addScheduleBtn").click(function(){
+	    $("#scheduleEditModal").data('mode', 'add'); // 추가 모드
+	    $("#editDay").val(""); // 입력창 초기화
+	    $("#editTitle").val("");
+	    $("#scheduleEditModal").show();
+	  });
+
+	});
+
+  
   let globalFriendList = [];  // 모든 친구 리스트 저장
-  console.log("📦 globalFriendList 선언바로 후 내용:", globalFriendList);
   
     // 모달 관련 기능
     function openProfileModal2(memNo) {
+	  
       // 모달 컨테이너 생성
       const modalContainer = document.createElement('div');
       modalContainer.id = 'modalContainer';
@@ -639,7 +891,6 @@
        method: 'GET',
        data: { classCode: classCode },
        success: function(response) {
-   	   		console.log("📦 globalFriendList 내용zz:", globalFriendList);
          // 리스트 초기화
          listElement.innerHTML = '';
 
@@ -669,6 +920,7 @@
             // 👉 클릭 이벤트 추가
 	        li.addEventListener('click', function() {
 	          openProfileModal2(memNo);
+	
 	        });
             
            listElement.appendChild(li);
@@ -678,7 +930,12 @@
          alert('멤버 조회 실패!');
        }
      });
+     
+     
    }
+   
+   
+
 
    
    
@@ -716,8 +973,7 @@
     });
     
     
-    
-    
+
     
     document.addEventListener("DOMContentLoaded", function () {
   	  fetch('/tt/weather/today')
@@ -767,8 +1023,6 @@
 	   loadFriendList(myMemNo);
 	   loadWaitingList(myMemNo);
 	   
-	   console.log("📦 loadFriendList 바깥 위에 있는 globalFriendList 내용:", globalFriendList);
-	   
 	   function loadFriendList(memNo) {
 	        $.ajax({
 	          url: 'selectFriendList.me',
@@ -777,9 +1031,6 @@
 	          success: function(response) {
       	 	 	globalFriendList = response;  // ✅ 전역에 저장
       	 	 	
-      	 		console.log("📦 loadFriendList에 있는 globalFriendList 내용:", globalFriendList);
-
-      	 	 	
 	            renderFriendList(response);
 	          },
 	          error: function() {
@@ -787,9 +1038,6 @@
 	          }
 	        });
 	      }
-	   
-	 console.log("📦 loadFriendList 바깥 아래에 있는 globalFriendList 내용:", globalFriendList);
-	   
 	   
 		// 대기중 목록
 	   function loadWaitingList(memNo) {
@@ -805,9 +1053,6 @@
 	       }
 	     });
 	   }
-		
-	 console.log("📦 globalFriendList 대기중 다음 내용zz:", globalFriendList);
-	   
 	     
 	   function renderFriendList(friendList) {
 	        const container = document.querySelector('.chat-list-container'); // 친구목록을 넣을 곳
@@ -914,7 +1159,6 @@
   	    const chatIcon = e.target.closest('.chat-message-icon');
   	    if (chatIcon && chatIcon.dataset.targetUserId) {
   	        const targetUserId = chatIcon.dataset.targetUserId;
-  	        console.log('✅ 클릭한 targetUserId:', targetUserId);
   	
   	        // 서버로 채팅방 생성 요청
   	        fetch('/tt/chattingRoom/startChat', {
@@ -926,10 +1170,8 @@
   	        })
   	        .then(response => response.json())
   	        .then(data => {
-  	            console.log('✅ 서버 응답 데이터:', data); // <- 추가
   	            if (data.success) {
   	                const roomId = data.roomId;
-  	                console.log('✅ 이동할 roomId:', roomId); // <- 추가
   	                location.href = `/tt/message/messageForm?roomId=\${roomId}`;
   	            } else {
   	                alert('❌ 채팅방 생성 실패');
@@ -965,6 +1207,10 @@
   	    console.error('❌ 채팅방 생성 오류', error);
   	  });
   	}
+
+  	
+
+    
   	
   </script>
   

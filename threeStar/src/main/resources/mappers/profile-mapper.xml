@@ -22,6 +22,7 @@
       <result column="status" property="status"/>
       <result column="online_st" property="onlineSt"/>
       <result column="admin_yn" property="adminYN"/>
+      <result column="profile_url" property="profileURL"/>
       <result column="to_Nickname" property="toNickname"/>
    </resultMap>
 
@@ -132,4 +133,27 @@
 	   and from_mem = #{fromMem}
 	   and are_we_friend = 'Y'
 	</update>
+	
+ 	<select id="selectFriend" resultMap="memberResult">
+	   select 
+	          mem_no
+	        , mem_id
+	        , mem_pwd
+	        , mem_name
+	        , email
+	        , phone
+	        , mem_class_code
+	        , sns_key
+	        , status
+	        , online_st
+	        , admin_yn
+	        , profile_url
+	        , to_Nickname
+	     from member
+	     join friends on (to_mem = mem_no)
+	    where are_we_friend = 'Y'
+	      and from_mem = #{fromMem}
+	      and to_mem = #{toMem}
+   </select>
+	
 </mapper>

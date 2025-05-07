@@ -670,7 +670,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <script>
     const nickname = "<%= ((com.kh.tt.member.model.vo.Member)session.getAttribute("loginMember")).getMemName() %>";
-    const myMemNo = <%= ((com.kh.tt.member.model.vo.Member)session.getAttribute("loginMember")).getMemNo() %>;
+    const myMemNo = "<%= ((com.kh.tt.member.model.vo.Member)session.getAttribute("loginMember")).getMemNo() %>";
 </script>
 
 <script>
@@ -784,6 +784,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
+
+
 </script>
 
 <!-- 이전채팅가져오기 -->
@@ -791,14 +793,21 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
 	  const urlParams = new URLSearchParams(window.location.search);
 	  const roomId = urlParams.get("roomId");
+console.log("내 번호:", myMemNo);
 
 	  fetch(`/tt/message/history?roomId=\${roomId}`)  // ✅ 백틱 사용 → 템플릿 리터럴
 	    .then(response => response.json())
 	    .then(messages => {
-	      messages.forEach(msg => {
-	    	 const type = msg.msMemNo == myMemNo ? "received" : "sent";
-	        appendMessage(msg, type);
-	      });
+	    	
+	    	messages.forEach(msg => {
+	    	    console.log("메시지 보낸 사람:", msg.sender, "내 닉네임:", nickname);
+
+	    	    const myName = nickname.trim().toLowerCase();
+	    	    const senderName = msg.sender?.trim().toLowerCase();   // ✅ 여기 msg.sender 임
+
+	    	    const type = myName === senderName ? "sent" : "received";
+	    	    appendMessage(msg, type);  // ✅ msg 로 append
+	    	});
 	    })
 	    .catch(err => {
 	      console.error("❌ 이전 메시지 불러오기 실패:", err);
@@ -806,8 +815,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	});
 
 </script>
-
-
 
 </body>
 </html>

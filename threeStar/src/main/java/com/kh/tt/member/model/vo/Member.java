@@ -25,6 +25,7 @@ public class Member {
 	private String adminYN;
 	private String profileURL;
 	private String toNickname;
+	private String memClassName;
 }
 
 
