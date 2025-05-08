@@ -764,43 +764,26 @@ let socket;
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
-
-    // JWT 토큰 (실제 토큰으로 교체)
-    const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbmEiLCJtZW1ObyI6MSwibWVtTmFtZSI6Iuq0gOumrOyekCJ9.GrFjymLAjAiEyIZYnRX7uSU5TRSu6bcs9GvBgHxCOX4";
+    const token = "여기에_토큰_넣기"; // JWT 토큰
 
     if (!roomId) return;
 
-<<<<<<< HEAD
     const ip = location.hostname;
     const encodedToken = encodeURIComponent(token);
-=======
-    const ip = location.hostname;  // 자동으로 localhost / 192.168.x.x 구분
-    
-    const encodedToken = encodeURIComponent(token);
-    
-    const wsUrl = `ws://\${ip}:8333/tt/chat/\${roomId}/\${encodedToken}`;
-    
-   socket = new WebSocket(wsUrl);
-    
-    socket = new WebSocket("ws://" + ip + ":8333/tt/chat/" + roomId + "/" + token);
-    //socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);   // ✅ 여기에 할당
->>>>>>> d2f6964b56f3d8db44da4d5be5ea767a7d211211
 
     const wsUrl = `ws://\${ip}:8333/tt/chat/\${roomId}?token=\${encodedToken}`;
-    console.log("최종 WebSocket 연결 URL:", wsUrl);
+    console.log("WebSocket 연결 URL:", wsUrl);
 
     socket = new WebSocket(wsUrl);
 
-    socket.onopen = () => console.log('✅ WebSocket 연결 성공');
+    socket.onopen = () => console.log("✅ WebSocket 연결 성공");
     socket.onerror = (error) => console.error("❌ WebSocket 에러", error);
-    socket.onclose = () => console.log('🔌 WebSocket 종료됨');
-
+    socket.onclose = () => console.log("🔌 WebSocket 종료됨");
 
     const chatInput = document.querySelector(".chat-input");
     const chatSendBtn = document.querySelector(".chat-send-btn");
 
     chatSendBtn.addEventListener("click", sendMessage);
-
     chatInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
@@ -829,6 +812,7 @@ document.addEventListener("DOMContentLoaded", function () {
         chatInput.value = "";
     }
 });
+
 
 
 

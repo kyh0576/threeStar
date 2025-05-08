@@ -28,17 +28,16 @@ public class HandshakeInterceptor extends HttpSessionHandshakeInterceptor {
             ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
             HttpSession session = servletRequest.getServletRequest().getSession(false);
 
-            // 1. 세션 인증
+            // 1. 세션 인증 우선
             if (session != null) {
                 Object loginMember = session.getAttribute("loginMember");
                 if (loginMember != null) {
                     attributes.put("loginMember", loginMember);
-                    System.out.println("[HandshakeInterceptor] 세션 인증 성공");
                     return super.beforeHandshake(request, response, wsHandler, attributes);
                 }
             }
 
-            // 2. JWT 인증
+            // 2. 토큰 기반 인증
             String token = servletRequest.getServletRequest().getParameter("token");
 
             if (token != null && !token.isEmpty()) {
@@ -49,33 +48,25 @@ public class HandshakeInterceptor extends HttpSessionHandshakeInterceptor {
                                         .getBody();
 
                     String memId = claims.getSubject();
-                    Object memNoObj = claims.get("memNo");
-                    int memNo = 0;
-                    if (memNoObj instanceof Integer) memNo = (Integer) memNoObj;
-                    else if (memNoObj instanceof String) memNo = Integer.parseInt((String) memNoObj);
-                    else if (memNoObj instanceof Double) memNo = ((Double) memNoObj).intValue();
+                    int memNo = claims.get("memNo", Integer.class);
+                    String memName = claims.get("memName", String.class);
 
-                    String memName = (String) claims.get("memName");
+                    Member member = new Member();
+                    member.setMemId(memId);
+                    member.setMemNo(memNo);
+                    member.setMemName(memName);
 
-                    Member tokenUser = new Member();
-                    tokenUser.setMemId(memId);
-                    tokenUser.setMemNo(memNo);
-                    tokenUser.setMemName(memName);
+                    attributes.put("loginMember", member);
 
-                    attributes.put("loginMember", tokenUser);
-                    System.out.println("[HandshakeInterceptor] JWT 인증 성공 → " + memId);
                     return super.beforeHandshake(request, response, wsHandler, attributes);
-
                 } catch (Exception e) {
                     System.out.println("[HandshakeInterceptor] JWT 인증 실패");
                     return false;
                 }
             }
-
-            System.out.println("[HandshakeInterceptor] 인증 실패 → 연결 거부");
-            return false;
         }
 
-        return super.beforeHandshake(request, response, wsHandler, attributes);
+        System.out.println("인증 실패 → 연결 거부");
+        return false;
     }
 }

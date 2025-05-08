@@ -21,9 +21,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(chatWebSocketHandler, "/chat/{roomId}")
-                .setAllowedOrigins("*")
-                .addInterceptors(new HttpSessionHandshakeInterceptor());
+    	registry.addHandler(chatWebSocketHandler, "/chat/{roomId}")
+        .setAllowedOrigins("*")
+        .addInterceptors(new HttpSessionHandshakeInterceptor());
     }
 }
 
