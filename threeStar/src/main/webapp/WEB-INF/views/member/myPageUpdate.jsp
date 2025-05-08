@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -174,10 +175,17 @@
 	                        <label>연락처</label>
 	                        <input type="tel" class="form-control" placeholder="010-1234-5678" pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" maxlength="13" id="phone" name="phone" value="${ loginMember.phone }">
 	                    </div>
-	                    <div class="form-group">
-	                        <label>이메일</label>
-	                        <input type="email" class="form-control" placeholder="example@email.com" id="email" name="email" value="${ loginMember.email }">
-	                    </div>
+						<div class="form-group">
+					        <label>이메일</label>
+					        <c:choose>
+					            <c:when test="${fn:endsWith(loginMember.email, '@gmail.com')}">
+					                <input type="email" class="form-control" placeholder="example@email.com" id="email" name="email" value="${loginMember.email}" readonly>
+					            </c:when>
+					            <c:otherwise>
+					                <input type="email" class="form-control" placeholder="example@email.com" id="email" name="email" value="${loginMember.email}">
+					            </c:otherwise>
+					        </c:choose>
+					    </div>
 	                </div>
 	
 	                <c:if test="${ loginMember.adminYN == 'Y' }">

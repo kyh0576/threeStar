@@ -166,7 +166,7 @@
         }
 
         .chat-header {
-            padding: 15px 20px;
+            padding: 18px 20px;
             border-bottom: 1px solid #e1e1e1;
             display: flex;
             align-items: center;
@@ -325,7 +325,7 @@
         }
 
         .right-sidebar-header {
-            padding: 15px 20px;
+            padding: 25px 20px;
             border-bottom: 1px solid #e1e1e1;
             display: flex;
             align-items: center;
@@ -513,8 +513,10 @@
         
         <div class="chat-input-container">
             <div class="chat-input-actions">
-                <button class="chat-input-btn">➕</button>
-                <button class="chat-input-btn">📎</button>
+            
+            	<input type="file" id="selectedFile" style="display: none;" />
+				<button type="button" class="chat-input-btn" id="fileSelectBtn">📎</button>
+                
             </div>
             <input type="text" class="chat-input" placeholder="Type a message...">
             <button class="chat-send-btn">➤</button>
@@ -530,8 +532,7 @@
         
         <div class="right-sidebar-content">
             <div class="section-header">
-                <div>Member <span>2</span></div>
-                <div class="section-toggle">^</div>
+                <div>Member</div>
             </div>
             
             <div class="member-list">
@@ -563,7 +564,6 @@
             
             <div class="section-header">
                 <div>디서함</div>
-                <div class="section-toggle">^</div>
             </div>
             
             <div class="file-list">
@@ -588,7 +588,6 @@
             
             <div class="section-header">
                 <div>캘린더</div>
-                <div class="section-toggle">^</div>
             </div>
             
             <div style="padding: 15px 20px;">
@@ -685,24 +684,74 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 <script>
-// ✅ 전역에서 사용 가능하게
+//✅ 전역에서 사용 가능하게
+function isImageFile(filename) {
+    return /\.(jpg|jpeg|png|gif)$/i.test(filename);
+}
+
 function appendMessage(data, type) {
     const bubble = document.createElement("div");
     bubble.classList.add("message-bubble", type);
-    bubble.innerHTML =
-    	(type === 'received' ? '<div><strong>' + data.sender + '</strong></div>' : '') +
-        '<div>' + data.text + '</div>' +
-        '<div class="message-time">' + formatTime(data.time) + '</div>';
-    
+    console.log("받은 데이터 확인", data);
+    let content = "";
+
+    if (type === 'received') {
+        content += `<div><strong>\${data.sender}</strong></div>`;
+    }
+
+    const contextPath = "/tt";
+
+    // ✅ 새로 보낸 파일 → 이미지 처리
+    if (data.type === "file" && data.file && data.file.type.startsWith("image")) {
+        const imageUrl = contextPath + data.file.fileUrl;
+
+        content += `<div class="chat-attachment">
+            <img src="\${imageUrl}" alt="\${data.file.name}" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" />
+        </div>`;
+    }
+    // ✅ 이전 메시지 → originName + changeName 둘다 있으면 이미지
+else if (data.changeName && isImageFile(data.changeName)) {
+    const contextPath = "/tt";
+    const imageUrl = contextPath + "/resources/uploadFiles/" + data.changeName;
+
+    content += `<div class="chat-attachment">
+        <img src="\${imageUrl}" alt="\${data.originName ?? ''}" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" />
+    </div>`;
+}
+
+
+
+    // ✅ 이전 메시지 → originName만 있고 changeName이 없으면 그냥 파일명 출력
+    else if (data.originName && !data.changeName) {
+        content += `<div>\${data.originName}</div>`;
+    }
+    // ✅ 일반 텍스트
+    else {
+        const textContent = data.text ?? data.messageContent ?? '';
+        content += `<div>\${textContent}</div>`;
+    }
+
+    content += `<div class="message-time">\${formatTime(data.time || data.sendTime)}</div>`;
+
+    bubble.innerHTML = content;
+
     document.querySelector(".chat-messages").appendChild(bubble);
     document.querySelector(".chat-messages").scrollTop =
         document.querySelector(".chat-messages").scrollHeight;
 }
 
+
+
+
+
+
+
+
 function formatTime(isoString) {
     const date = new Date(isoString);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
+
 </script>
 
 
@@ -710,17 +759,21 @@ function formatTime(isoString) {
 
 
 <script>
+
+let socket;  // ✅ 전역으로 뺌
+
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
 
     if (!roomId) {
         console.warn("ℹ️ roomId가 없으므로 WebSocket 연결 없이 목록만 표시합니다.");
-        return; // 여기서 WebSocket 로직 실행 막음
+        return;
     }
 
     console.log("📌 roomId:", roomId);
-    const socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);
+    socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);   // ✅ 여기에 할당
+    //socket = new WebSocket('ws://192.168.20.49:8333/tt/chat/' + roomId);   // ✅ 여기에 할당
 
     socket.onopen = function () {
         console.log('✅ WebSocket 연결 성공 roomId:', roomId);
@@ -730,6 +783,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("❌ WebSocket 연결 실패", error);
     };
 
+    
     const chatInput = document.querySelector(".chat-input");
     const chatSendBtn = document.querySelector(".chat-send-btn");
     const chatMessages = document.querySelector(".chat-messages");
@@ -802,32 +856,35 @@ document.addEventListener("DOMContentLoaded", function () {
 <!-- 이전채팅가져오기 -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-	  const urlParams = new URLSearchParams(window.location.search);
-	  const roomId = urlParams.get("roomId");
-console.log("내 번호:", myMemNo);
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get("roomId");
 
-	  fetch(`/tt/message/history?roomId=\${roomId}`)  // ✅ 백틱 사용 → 템플릿 리터럴
-	    .then(response => response.json())
-	    .then(messages => {
-	    	
-	    	messages.forEach(msg => {
-	    	    console.log("메시지 보낸 사람:", msg.sender, "내 닉네임:", nickname);
+    console.log("내 번호:", myMemNo);
 
-	    	    const myName = nickname.trim().toLowerCase();
-	    	    const senderName = msg.sender?.trim().toLowerCase();   // ✅ 여기 msg.sender 임
+    fetch(`/tt/message/history?roomId=\${roomId}`)  // ✅ 백틱 사용 → 템플릿 리터럴
+        .then(response => response.json())
+        .then(messages => {
+            console.log("가져온 이전 메시지들:", messages);
 
-	    	    const type = myName === senderName ? "sent" : "received";
-	    	    appendMessage(msg, type);  // ✅ msg 로 append
-	    	});
-	    })
-	    .catch(err => {
-	      console.error("❌ 이전 메시지 불러오기 실패:", err);
-	    });
-	});
+            messages.forEach(msg => {
+                console.log("메시지 보낸 사람:", msg.msMemNo, "내 회원번호:", myMemNo);
+
+                // ✅ 회원번호로 보낸 사람 판별
+                const type = parseInt(msg.msMemNo) === parseInt(myMemNo) ? "sent" : "received";
+
+                appendMessage(msg, type);
+            });
+        })
+        .catch(err => {
+            console.error("❌ 이전 메시지 불러오기 실패:", err);
+        });
+});
+
 
 </script>
 
-<!-- ✅ 여기 바로 밑이나 위에 넣으면 됨 -->
+<!-- ------------------------------------------------------------------ -->
+<!-- 채팅방 이름 채팅방 內 사용자 이름 변경 -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
@@ -863,8 +920,64 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
-</script>
 
+//==============================================================
+	
+const fileInput = document.getElementById("selectedFile");   // ✅ 이거 추가 필요
+const fileSelectBtn = document.getElementById("fileSelectBtn");
+	
+fileSelectBtn.addEventListener("click", () => {
+    fileInput.click();
+});
+	
+fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // ⭐ 선택 후 바로 fetch 하지 말고 → 살짝 딜레이 주기 (UI 안정화)
+    setTimeout(() => {
+        fetch('upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(result => result.json())
+.then(data => {
+    if (!data.imageUrl) {
+        console.error("❌ 이미지 업로드 실패");
+        return;
+    }
+
+    const fileUrl = data.imageUrl;
+    const changeName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+
+    const payload = {
+        sender: nickname,
+        text: file.name,          // ✅ 원본 파일명으로
+        time: new Date().toISOString(),
+        type: "file",
+        file: {
+            name: changeName,     // ✅ 변경된 파일명으로
+            type: file.type,
+            fileUrl: fileUrl
+        }
+    };
+
+    console.log("보낼 데이터:", payload);
+    socket.send(JSON.stringify(payload));
+})
+        .catch(err => {
+            console.error("❌ 업로드 또는 전송 실패:", err);
+        });
+    }, 100);  // ⭐ 100ms 정도 딜레이 주면 UI 완전 안정화됨
+});
+
+
+
+</script>
+<!-- ------------------------------------------------------------------ -->
 
 </body>
 </html>

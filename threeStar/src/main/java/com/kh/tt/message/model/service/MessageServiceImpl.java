@@ -11,21 +11,24 @@ import com.kh.tt.message.model.vo.Message;
 
 @Service
 public class MessageServiceImpl implements MessageService {
-	
+
     @Autowired 
     private MessageDao mDao; 
     
     @Autowired 
     private SqlSessionTemplate sqlSession;
-	   
+
+    // 메시지 저장 (일반 텍스트 + 파일 포함)
     @Override
     public int saveMessage(Message msg) {
         return mDao.insertMessage(sqlSession, msg);
     }
 
-//이전메시지 불러오기============================
-	@Override
-	public List<Message> sendMessage(int roomId) {
-		return mDao.sendMessage(sqlSession, roomId);
-	}
+    // 이전 메시지 불러오기 (히스토리)
+    @Override
+    public List<Message> sendMessage(int roomId) {
+        return mDao.sendMessage(sqlSession, roomId);
+    }
+    
+    // (Optional) → 파일 전용 메시지 불러오기도 추후 필요하면 여기에 추가
 }
