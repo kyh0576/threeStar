@@ -772,8 +772,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     console.log("📌 roomId:", roomId);
-    socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);   // ✅ 여기에 할당
-    //socket = new WebSocket('ws://192.168.20.49:8333/tt/chat/' + roomId);   // ✅ 여기에 할당
+    //socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);   // ✅ 여기에 할당
+    socket = new WebSocket('ws://192.168.20.49:8333/tt/chat/' + roomId);   // ✅ 여기에 할당
 
     socket.onopen = function () {
         console.log('✅ WebSocket 연결 성공 roomId:', roomId);
