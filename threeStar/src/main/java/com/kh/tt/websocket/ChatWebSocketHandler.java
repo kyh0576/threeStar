@@ -37,7 +37,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
         ChatRoomManager.addSession(roomId, session);
     }
-//===========================================================================
+
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
@@ -48,10 +48,12 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
         // 로그인 사용자
         Member loginMember = (Member) session.getAttributes().get("loginMember");
+        
+        System.out.println("📌 [채팅방 목록] loginMember: " + loginMember);
 
         if (loginMember != null) {
-            msg.setMsMemNo(loginMember.getMemNo());  // 보낸 사람 번호
-            msg.setSender(loginMember.getMemName());  // 보낸 사람 닉네임 → ✅ 추가
+            msg.setMsMemNo(loginMember.getMemNo());  
+            msg.setSender(loginMember.getMemName());
             System.out.println("✅ handleTextMessage - loginMember 있음: " + loginMember.getMemId());
         } else {
             System.out.println("⚠️ handleTextMessage - loginMember 없음");
@@ -59,6 +61,28 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
         // 메세지 내용
         msg.setMessageContent((String) messageMap.get("text"));
+
+        // 메시지 타입 (chat or file)
+        msg.setType((String) messageMap.get("type"));
+
+        // 파일이 있으면 originName, fileType 저장
+        Map<String, Object> fileMap = (Map<String, Object>) messageMap.get("file");
+
+        if ("file".equals(msg.getType()) && fileMap != null) {   
+            msg.setOriginName((String) fileMap.get("name"));  
+            msg.setFileType((String) fileMap.get("type"));    
+            msg.setChangeName((String) fileMap.get("name"));  
+
+            // 추가
+            msg.setFileUrl((String) fileMap.get("fileUrl"));
+
+            // 추가 → 브로드캐스트용 messageMap 에도 넣어야함 (이게 없으면 JS 에서 fileUrl 없음 오류)
+            ((Map<String, Object>)messageMap.get("file")).put("fileUrl", fileMap.get("fileUrl"));
+        }
+
+
+
+        System.out.println("fileMap 데이터 : " + fileMap);
 
         // 방 번호
         String roomIdStr = getRoomId(session);
@@ -74,7 +98,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         messageService.saveMessage(msg);
 
         // 브로드캐스트 → sender 포함해서 다시 payload 생성
-        messageMap.put("sender", loginMember.getMemName()); // ✅ 브로드캐스트용 sender 추가
+        messageMap.put("sender", loginMember.getMemName());
         String sendPayload = objectMapper.writeValueAsString(messageMap);
 
         for (WebSocketSession sess : ChatRoomManager.getRoomSessions(roomIdStr)) {
@@ -83,7 +107,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             }
         }
     }
-//===========================================================================
+
     @Override
     public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) throws Exception {
         String roomId = getRoomId(session);
@@ -94,12 +118,9 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         String uri = session.getUri().toString();
         return uri.substring(uri.lastIndexOf("/") + 1);
     }
-    
-    // 사용자 ID 얻는 메소드
+
     private int getUserId(WebSocketSession session) {
-        // WebSocket 핸드쉐이크 때 세션에 로그인한 사용자 정보 넣어둔 경우 꺼내기
         Object userNo = session.getAttributes().get("loginMemberNo");
         return userNo != null ? (Integer) userNo : 0;
-        
     }
 }

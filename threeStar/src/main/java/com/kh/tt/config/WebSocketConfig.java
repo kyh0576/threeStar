@@ -17,13 +17,14 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Autowired
     private ChatWebSocketHandler chatWebSocketHandler;  // ✅ 주입받기
-
+    
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-    	registry.addHandler(chatWebSocketHandler, "/chat/{roomId}")
-        .setAllowedOrigins("*")
-        .addInterceptors(new HttpSessionHandshakeInterceptor());  // ✅ 여기 오타 없애기 // ✅ 기본 인터셉터만 등록
+        registry.addHandler(chatWebSocketHandler, "/chat/{roomId}")
+            .setAllowedOrigins("*")
+            .addInterceptors(new HttpSessionHandshakeInterceptor());
     }
+    
     
     
 }
