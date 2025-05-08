@@ -772,8 +772,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     console.log("📌 roomId:", roomId);
-    socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);   // ✅ 여기에 할당
-    //socket = new WebSocket('ws://192.168.20.49:8333/tt/chat/' + roomId);   // ✅ 여기에 할당
+    //socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);   // ✅ 여기에 할당
+
+    const sessionId = document.cookie.match(/JSESSIONID=([^;]+)/)[1];  // 쿠키에서 세션ID 가져오기
+	socket = new WebSocket('ws://192.168.20.49:8333/tt/chat/' + roomId + '?jsessionid=' + sessionId);
 
     socket.onopen = function () {
         console.log('✅ WebSocket 연결 성공 roomId:', roomId);
