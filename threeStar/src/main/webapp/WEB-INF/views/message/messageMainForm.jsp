@@ -770,21 +770,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!roomId) return;
 
-    //const ip = location.hostname;  // 자동으로 localhost / 192.168.x.x 구분
-    
+    const ip = location.hostname;
     const encodedToken = encodeURIComponent(token);
-    
-    //const wsUrl = `ws://\${ip}:8333/tt/chat/\${roomId}/\${encodedToken}`;
-    
-    //socket = new WebSocket(wsUrl);
-    
-    //socket = new WebSocket("ws://" + ip + ":8333/tt/chat/" + roomId + "/" + token);
-    socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);   // ✅ 여기에 할당
 
+    const wsUrl = `ws://\${ip}:8333/tt/chat/\${roomId}?token=\${encodedToken}`;
+    console.log("최종 WebSocket 연결 URL:", wsUrl);
+
+    socket = new WebSocket(wsUrl);
 
     socket.onopen = () => console.log('✅ WebSocket 연결 성공');
     socket.onerror = (error) => console.error("❌ WebSocket 에러", error);
     socket.onclose = () => console.log('🔌 WebSocket 종료됨');
+
 
     const chatInput = document.querySelector(".chat-input");
     const chatSendBtn = document.querySelector(".chat-send-btn");
