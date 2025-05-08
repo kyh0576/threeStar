@@ -134,7 +134,7 @@
                 <div class="menu-icon">📚</div>
                 <div>티서랍</div>
             </a>
-            <a href="${pageContext.request.contextPath}/calendarDetail/main" class="menu-item ${page eq 'calendar' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/calendarDetail.do" class="menu-item ${page eq 'calendar' ? 'active' : ''}">
                 <div class="menu-icon">📅</div>
                 <div>캘린더</div>
             </a>
@@ -196,7 +196,7 @@
 	        height: 666px;
 	        border: none;
 	        border-radius: 10px;
-	        // background: transparent;
+	        background: transparent;
 	    `;
 	    
 	    // 모달 컨테이너에 iframe 추가
@@ -207,7 +207,7 @@
 	    
 	    // 모달 외부 클릭 시 닫기
 	    modalContainer.addEventListener('click', function(event) {
-	    	const closeButton = document.getElementById('#cancelBtn');
+	    	const closeButton = document.getElementById('cancelBtn');
 	        if (event.target === modalContainer || event.target === closeButton) {
 	            closeModal();
 	        }

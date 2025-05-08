@@ -210,23 +210,23 @@
             <span>OR</span>
         </div>
         
-		<div id="g_id_onload"
-		     data-client_id="939670547310-mjuf549e4q081qu90jtle7uk7fvhcplr.apps.googleusercontent.com"
-		     data-context="signin"
-		     data-ux_mode="popup"
-		     data-callback="handleCredentialResponse"
-		     data-auto_prompt="false">
-		</div>
+	    <div
+	      id="g_id_onload"
+	      data-auto_prompt="false"
+	      data-callback="handleCredentialResponse"
+	      data-client_id="988243476840-8gjc4u9a1aahr0uvhubcc8aosff07nk1.apps.googleusercontent.com"
+	    ></div>
 		
-		<div class="g_id_signin"
-		     data-type="standard"
-		     data-shape="rectangular"
-		     data-theme="outline"
-		     data-text="signin_with"
-		     data-size="large"
-		     data-logo_alignment="left">
-		</div>
+	    <div
+	      class="g_id_signin"
+	      data-theme="filled_blue"
+	      data-text="signup_with"
+	    ></div>
 		<!-- data-login_uri="http://localhost:8333/tt/signinForm.me"  -->
+		<input type="hidden" id="memName" name="memName" value="${ memName }">
+		<input type="hidden" id="email" name="email" value="${ email }">
+		<input type="hidden" id="snsKey" name="snsKey" value="${ snsKey }">
+		
     </form>
 
     <script>
@@ -280,6 +280,7 @@
 			
 			const responsePayload = decodeJwtResponse(id_token);
 			
+			console.log("unique identifier: " + responsePayload.jti)
 			console.log("ID: " + responsePayload.sub);
 			console.log('Full Name: ' + responsePayload.name);
 			console.log('Given Name: ' + responsePayload.given_name);
@@ -314,8 +315,8 @@
 			googleloginForm.style.display = "none";
 		    googleloginForm.method = "POST"; // POST 요청 방식
 		    // googleloginForm.action = "signinForm.me"; // 요청을 보낼 URL
-		    googleloginForm.action = "googleLogin.do";
-		    
+		   	googleloginForm.action = "googleLogin.do";
+
 			// 토큰 값을 보낼 input태그 만들기
 		    let snsKeyField = document.createElement("input");
 		    snsKeyField.type = "hidden"; // 폼에 표시되지 않도록 숨김 필드로 설정
@@ -351,7 +352,6 @@
 		    googleloginForm.submit();
 		    
 		}
-		
 	</script>
     
 </body>
