@@ -17,8 +17,8 @@ public class GoogleLoginServiceImpl implements GoogleLoginService{
 	private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public int SelectGoogleLogin(Member g) {
-		return gDao.SelectGoogleLogin(sqlSession, g);
+	public int loginUrlGoogle(Member g) {
+		return gDao.loginUrlGoogle(sqlSession, g);
 	}
 	
 }

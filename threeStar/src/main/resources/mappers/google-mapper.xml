@@ -23,20 +23,22 @@
       <result column="online_st" property="onlineSt"/>
       <result column="admin_yn" property="adminYN"/>
    </resultMap>
-
-   <resultMap id="friendResult" type="Friend">
-   		<result column="from_mem" property="fromMem"/>
-  		<result column="to_mem" property="toMem"/>
-  		<result column="arw_we_friend" property="areWeFriend"/>
-  		<result column="to_nickname" property="toNickname"/>
+   
+   <resultMap id="googleResult" type="Member">
+      <result column="mem_name" property="memName"/>
+      <result column="email" property="email"/>
+      <result column="sns_key" property="snsKey"/>
    </resultMap>
    
-   <select id="SelectGoogleLogin" resultMap="profileResult">
+   <select id="loginUrlGoogle" resultMap="googleResult">
    		select
    			  mem_name
+   			, email
+   			, sns_key
    		  from
    		  	  member
-   		where mem_id = #{memId}
+   		where status = 'Y'
+   		  and sns_key = #{snsKey}
    </select>
 	
 	

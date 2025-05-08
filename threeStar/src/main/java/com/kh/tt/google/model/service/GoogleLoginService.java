@@ -4,6 +4,6 @@ import com.kh.tt.member.model.vo.Member;
 
 public interface GoogleLoginService {
 	
-	int SelectGoogleLogin(Member g);
+	int loginUrlGoogle(Member g);
 
 }
