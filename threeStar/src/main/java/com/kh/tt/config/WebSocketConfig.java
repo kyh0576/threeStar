@@ -10,22 +10,21 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 import com.kh.tt.websocket.ChatWebSocketHandler;
+import com.kh.tt.websocket.HandshakeInterceptor;
 
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
     @Autowired
-    private ChatWebSocketHandler chatWebSocketHandler;  // ✅ 주입받기
-    
+    private ChatWebSocketHandler chatWebSocketHandler;
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(chatWebSocketHandler, "/chat/{roomId}")
-            .setAllowedOrigins("*")
-            .addInterceptors(new HttpSessionHandshakeInterceptor());
+                .setAllowedOrigins("*")
+                .addInterceptors(new HttpSessionHandshakeInterceptor());
     }
-    
-    
-    
 }
+
 

@@ -48,7 +48,6 @@ public class MemberController {
          session.setAttribute("loginMember", loginMember);
          session.setAttribute("cList", cList);
          
-         session.setAttribute("alertMsg", "성공적으로 로그인 되었습니다.");
          mv.setViewName("redirect:/main.me");
       }else {
          // 로그인 실패

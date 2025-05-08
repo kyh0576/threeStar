@@ -15,6 +15,21 @@
       <result column="online_st" property="onlineSt"/>
       <result column="admin_yn" property="adminYN"/>
       <result column="profile_url" property="profileURL"/>
+   </resultMap>
+   
+   <resultMap id="memberFriendResult" type="Member">
+      <result column="mem_no" property="memNo"/>
+      <result column="mem_id" property="memId"/>
+      <result column="mem_pwd" property="memPwd"/>
+      <result column="mem_name" property="memName"/>
+      <result column="email" property="email"/>
+      <result column="phone" property="phone"/>
+      <result column="mem_class_code" property="memClassCode"/>
+      <result column="sns_key" property="snsKey"/>
+      <result column="status" property="status"/>
+      <result column="online_st" property="onlineSt"/>
+      <result column="admin_yn" property="adminYN"/>
+      <result column="profile_url" property="profileURL"/>
       <result column="to_Nickname" property="toNickname"/>
    </resultMap>
    
@@ -165,7 +180,7 @@
     where mem_id = #{memId}
    </update>
    
-   <select id="selectFriendList" resultMap="memberResult">
+   <select id="selectFriendList" resultMap="memberFriendResult">
    select 
           mem_no
         , mem_id
