@@ -759,68 +759,69 @@ function formatTime(isoString) {
 
 
 <script>
-
-let socket;  // ✅ 전역으로 뺌
+let socket;
 
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
 
-    if (!roomId) {
-        console.warn("ℹ️ roomId가 없으므로 WebSocket 연결 없이 목록만 표시합니다.");
-        return;
-    }
+    // JWT 토큰 (실제 토큰으로 교체)
+    const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbmEiLCJtZW1ObyI6MSwibWVtTmFtZSI6Iuq0gOumrOyekCJ9.GrFjymLAjAiEyIZYnRX7uSU5TRSu6bcs9GvBgHxCOX4";
 
-    console.log("📌 roomId:", roomId);
-    //socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);   // ✅ 여기에 할당
+    if (!roomId) return;
 
-    const sessionId = document.cookie.match(/JSESSIONID=([^;]+)/)[1];  // 쿠키에서 세션ID 가져오기
-	socket = new WebSocket('ws://192.168.20.49:8333/tt/chat/' + roomId + '?jsessionid=' + sessionId);
-
-    socket.onopen = function () {
-        console.log('✅ WebSocket 연결 성공 roomId:', roomId);
-    };
-
-    socket.onerror = function (error) {
-        console.error("❌ WebSocket 연결 실패", error);
-    };
-
+    //const ip = location.hostname;  // 자동으로 localhost / 192.168.x.x 구분
     
+    const encodedToken = encodeURIComponent(token);
+    
+    //const wsUrl = `ws://\${ip}:8333/tt/chat/\${roomId}/\${encodedToken}`;
+    
+    //socket = new WebSocket(wsUrl);
+    
+    //socket = new WebSocket("ws://" + ip + ":8333/tt/chat/" + roomId + "/" + token);
+    socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);   // ✅ 여기에 할당
+
+
+    socket.onopen = () => console.log('✅ WebSocket 연결 성공');
+    socket.onerror = (error) => console.error("❌ WebSocket 에러", error);
+    socket.onclose = () => console.log('🔌 WebSocket 종료됨');
+
     const chatInput = document.querySelector(".chat-input");
     const chatSendBtn = document.querySelector(".chat-send-btn");
-    const chatMessages = document.querySelector(".chat-messages");
 
-    chatSendBtn.addEventListener("click", function () {
-        const msg = chatInput.value.trim();
-        if (msg !== "") {
-            const payload = {
-                sender: nickname,
-                text: msg,
-                time: new Date().toISOString(),
-                type: "chat"
-            };
-            socket.send(JSON.stringify(payload));
-            chatInput.value = "";
-        }
-    });
+    chatSendBtn.addEventListener("click", sendMessage);
 
-    chatInput.addEventListener("keydown", function (e) {
+    chatInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            chatSendBtn.click();
+            sendMessage();
         }
     });
 
-    socket.onmessage = function (event) {
+    socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         const type = data.sender === nickname ? "sent" : "received";
         appendMessage(data, type);
     };
 
-    socket.onclose = function () {
-        console.log('🔌 WebSocket 연결 종료됨');
-    };
+    function sendMessage() {
+        const msg = chatInput.value.trim();
+        if (!msg) return;
+
+        const payload = {
+            sender: nickname,
+            text: msg,
+            time: new Date().toISOString(),
+            type: "chat"
+        };
+
+        socket.send(JSON.stringify(payload));
+        chatInput.value = "";
+    }
 });
+
+
+
 
 </script>
 
