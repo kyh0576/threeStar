@@ -13,7 +13,7 @@
     <result column="ms_mem_no" property="msMemNo"/>
     <result column="type" property="type"/> <!-- ✅ 추가 -->
     <result column="file_type" property="fileType"/> <!-- ✅ 추가 -->
-    <result column="MEM_NAME" property="sender"/>
+    <result column="sender" property="sender"/>
     <result column="TEXT" property="text"/>
     <result column="time" property="time"/>
 </resultMap>
