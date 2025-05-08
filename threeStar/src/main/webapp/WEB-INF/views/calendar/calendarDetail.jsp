@@ -437,19 +437,11 @@
                     <span class="search-icon">🔍</span>
                     <input type="text" placeholder="일정 검색">
                 </div>
-                <div class="user-profile">
-                    <img src="/api/placeholder/40/40" alt="사용자 프로필">
-                </div>
-            </div>
-            
-            <!-- 캘린더 탭 -->
-            <div class="calendar-view-tabs">
-                <button class="tab-button active">월별 일정표</button>
             </div>
             
             <!-- 캘린더 헤더 -->
             <div class="calendar-header">
-                <div class="year-month" id="currentYearMonth"></div>
+                <div class="year-month" id="calendarYearMonth"></div>
                 <div class="calendar-nav">
                     <button class="nav-button" id="prevMonth">◀</button>
                     <button class="nav-button" id="nextMonth">▶</button>
@@ -482,7 +474,9 @@
                 <div class="modal-title">일정 추가</div>
                 <button class="close-button" id="closeModal">&times;</button>
             </div>
-            <form class="modal-form" id="eventForm">
+            <form action="" class="modal-form" id="eventForm">
+                <input type="hidden" id="calId" name="calId" value="${ calId }">
+                <input type="hidden" id="calWriter" name="calWriter" value="${ memNo }">
                 <div class="form-group">
                     <label for="eventTitle">일정 제목</label>
                     <input type="text" id="eventTitle" required>
@@ -490,14 +484,6 @@
                 <div class="form-group">
                     <label for="eventDate">날짜</label>
                     <input type="date" id="eventDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="eventCategory">카테고리</label>
-                    <select id="eventCategory">
-                        <option value="default">기본 일정</option>
-                        <option value="holiday">휴일</option>
-                        <option value="important">중요 일정</option>
-                    </select>
                 </div>
                 <div class="form-group">
                     <label for="eventDesc">설명</label>
@@ -513,9 +499,10 @@
     
     <script>
         // 현재 날짜 정보
+        let calendarMonth, calendarYear;
         let today = new Date();
-        let currentMonth = today.getMonth();
-        let currentYear = today.getFullYear();
+        // let calendarMonth = today.getMonth();
+        // let calendarYear = today.getFullYear();
         
         // 모든 일정을 저장할 객체
         let events = {};
@@ -527,9 +514,12 @@
         // 요일 이름
         const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
         
+        let calendarDays, calendarYearMonthElement, prevMonthButton, nextMonthButton, todayButton;
+        let eventModal, closeModalButton, cancelButton, eventForm, eventDateInput;
+        /*
         // DOM 요소
         const calendarDays = document.getElementById('calendarDays');
-        const currentYearMonthElement = document.getElementById('currentYearMonth');
+        const calendarYearMonthElement = document.getElementById('calendarYearMonth');
         const prevMonthButton = document.getElementById('prevMonth');
         const nextMonthButton = document.getElementById('nextMonth');
         const todayButton = document.getElementById('todayButton');
@@ -538,6 +528,7 @@
         const cancelButton = document.getElementById('cancelButton');
         const eventForm = document.getElementById('eventForm');
         const eventDateInput = document.getElementById('eventDate');
+        */
         
         // 윤년 확인 함수
         function isLeapYear(year) {
@@ -563,23 +554,25 @@
         // 캘린더 렌더링 함수
         function renderCalendar() {
             // 현재 연도와 월 표시
-            currentYearMonthElement.textContent = `${currentYear}년 ${monthNames[currentMonth]}`;
+            calendarYearMonthElement.textContent = `${calendarYear}년 ${monthNames[calendarMonth]}`;
             // 캘린더 초기화
             calendarDays.innerHTML = '';
             
+            console.log(calendarYearMonthElement);
+
             // 해당 월의 첫 날
-            const firstDay = new Date(currentYear, currentMonth, 1);
+            const firstDay = new Date(calendarYear, calendarMonth, 1);
             // 해당 월의 마지막 날
-            const lastDay = new Date(currentYear, currentMonth, getDaysInMonth(currentYear, currentMonth));
+            const lastDay = new Date(calendarYear, calendarMonth, getDaysInMonth(calendarYear, calendarMonth));
             
             // 이전 달의 날짜 표시
             const firstDayOfWeek = firstDay.getDay();
             if (firstDayOfWeek > 0) {
-                const prevMonthLastDate = new Date(currentYear, currentMonth, 0).getDate();
+                const prevMonthLastDate = new Date(calendarYear, calendarMonth, 0).getDate();
                 for (let i = 0; i < firstDayOfWeek; i++) {
                     const dayNumber = prevMonthLastDate - firstDayOfWeek + i + 1;
-                    const prevMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
-                    const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+                    const prevMonthYear = calendarMonth === 0 ? calendarYear - 1 : calendarYear;
+                    const prevMonth = calendarMonth === 0 ? 11 : calendarMonth - 1;
 					const dateString = prevMonthYear + '-' + 
 					                  (prevMonth + 1 < 10 ? '0' + (prevMonth + 1) : prevMonth + 1) + '-' + 
 					                  (dayNumber < 10 ? '0' + dayNumber : dayNumber);
@@ -589,11 +582,11 @@
             }
             
          	// 현재 달의 날짜 표시
-            for (let i = 1; i <= getDaysInMonth(currentYear, currentMonth); i++) {
-                const dateString = currentYear + '-' + 
-                                  (currentMonth + 1 < 10 ? '0' + (currentMonth + 1) : currentMonth + 1) + '-' + 
+            for (let i = 1; i <= getDaysInMonth(calendarYear, calendarMonth); i++) {
+                const dateString = calendarYear + '-' + 
+                                  (calendarMonth + 1 < 10 ? '0' + (calendarMonth + 1) : calendarMonth + 1) + '-' + 
                                   (i < 10 ? '0' + i : i);
-                const isToday = i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
+                const isToday = i === today.getDate() && calendarMonth === today.getMonth() && calendarYear === today.getFullYear();
                 const dayCell = createDayCell(i, false, dateString, isToday);
                 calendarDays.append(dayCell);
             }
@@ -602,15 +595,18 @@
             const lastDayOfWeek = lastDay.getDay();
             if (lastDayOfWeek < 6) {
                 for (let i = 1; i <= 6 - lastDayOfWeek; i++) {
-                    const nextMonthYear = currentMonth === 11 ? currentYear + 1 : currentYear;
-                    const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+                    const nextMonthYear = calendarMonth === 11 ? calendarYear + 1 : calendarYear;
+                    const nextMonth = calendarMonth === 11 ? 0 : calendarMonth + 1;
                     const dateString = nextMonthYear + '-' + 
                                      (nextMonth + 1 < 10 ? '0' + (nextMonth + 1) : nextMonth + 1) + '-' + 
                                      (i < 10 ? '0' + i : i);
                     const dayCell = createDayCell(i, true, dateString);
-                    calendarDays.appendChild(dayCell);
+                    calendarDays.append(dayCell);
                 }
             }
+            
+         	// ✅ 기본 일정 추가 (이제 DOM이 있음)
+            addDefaultEvents();
             
             // 날짜 이동 후 이벤트 다시 표시
             displayEvents();
@@ -635,13 +631,13 @@
                 dayNumber.classList.add('current-day');
             }
             
-            dayCell.appendChild(dayNumber);
+            dayCell.append(dayNumber);
             
             // 이벤트 컨테이너 추가
             const eventsContainer = document.createElement('div');
             eventsContainer.className = 'events-container';
             eventsContainer.dataset.date = dateString;
-            dayCell.appendChild(eventsContainer);
+            dayCell.append(eventsContainer);
             
             // 클릭 이벤트 처리
             dayCell.addEventListener('click', function() {
@@ -661,16 +657,17 @@
                 const dateString = container.dataset.date;
                 const dateEvents = events[dateString] || [];
                 
+                console.log("📆", dateString, "→ 이벤트 수 : ", dateEvents.length);
+                
                 // 컨테이너 초기화
                 container.innerHTML = '';
                 
                 // 이벤트 표시
                 dateEvents.forEach(event => {
                     const eventElement = document.createElement('div');
-                    eventElement.className = `event ${event.category}`;
                     eventElement.textContent = event.title;
                     eventElement.title = event.description || event.title;
-                    container.appendChild(eventElement);
+                    container.append(eventElement);
                 });
             });
         }
@@ -685,7 +682,6 @@
             
             // 이벤트 객체 데이터 초기화
             document.getElementById('eventTitle').value = '';
-            document.getElementById('eventCategory').value = 'default';
             document.getElementById('eventDesc').value = '';
         }
         
@@ -708,16 +704,15 @@
         // 기본 일정 데이터 추가
         function addDefaultEvents() {
             // 현재 월의 공휴일 또는 특별한 날 추가
-            const thisYear = today.getFullYear();
-            const thisMonth = today.getMonth();
+            const thisYear = calendarYear;
+            const thisMonth = calendarMonth;
             
             // 어린이날
             if (thisMonth === 4) { // 5월
                 addEvent({
                     title: "어린이날",
                     date: `${thisYear}-05-05`,
-                    category: "holiday",
-                    description: "어린이날 공휴일"
+                    description: "어린이날"
                 });
             }
             
@@ -727,8 +722,7 @@
                 addEvent({
                     title: "설날",
                     date: `${thisYear}-02-10`, // 예시: 2월 10일이라고 가정
-                    category: "holiday",
-                    description: "설날 연휴"
+                    description: "설날"
                 });
             }
             
@@ -737,73 +731,40 @@
                 addEvent({
                     title: "추석",
                     date: `${thisYear}-09-15`, // 예시: 9월 15일이라고 가정
-                    category: "holiday",
-                    description: "추석 연휴"
+                    description: "추석"
                 });
             }
             
-            // 더미 일정 몇 개 추가
-            const currentMonthStr = String(currentMonth + 1).padStart(2, '0');
-            
-            // 더미 회의 일정
-            addEvent({
-                title: "팀 회의",
-                date: `${currentYear}-${currentMonthStr}-09`,
-                category: "default",
-                description: "주간 팀 회의"
-            });
-            
-            // 더미 생일 일정
-            addEvent({
-                title: "성태 생일",
-                date: `${currentYear}-${currentMonthStr}-12`,
-                category: "important",
-                description: "생일 축하 파티"
-            });
-            
-            // 더미 데드라인 일정
-            addEvent({
-                title: "프로젝트 데드라인",
-                date: `${currentYear}-${currentMonthStr}-16`,
-                category: "important",
-                description: "프로젝트 최종 제출일"
-            });
-            
-            // 더미 정기 일정
-            addEvent({
-                title: "네트워크 점검",
-                date: `${currentYear}-${currentMonthStr}-25`,
-                category: "default",
-                description: "월간 네트워크 점검"
-            });
+            displayEvents();
+
         }
         
         // 이벤트 리스너 설정
         function setupEventListeners() {
             // 이전 달 버튼
             prevMonthButton.addEventListener('click', function() {
-                currentMonth--;
-                if (currentMonth < 0) {
-                    currentMonth = 11;
-                    currentYear--;
+                calendarMonth--;
+                if (calendarMonth < 0) {
+                    calendarMonth = 11;
+                    calendarYear--;
                 }
                 renderCalendar();
             });
             
             // 다음 달 버튼
             nextMonthButton.addEventListener('click', function() {
-                currentMonth++;
-                if (currentMonth > 11) {
-                    currentMonth = 0;
-                    currentYear++;
+                calendarMonth++;
+                if (calendarMonth > 11) {
+                    calendarMonth = 0;
+                    calendarYear++;
                 }
                 renderCalendar();
             });
             
             // 오늘 버튼
             todayButton.addEventListener('click', function() {
-                currentMonth = today.getMonth();
-                currentYear = today.getFullYear();
+                calendarMonth = today.getMonth();
+                calendarYear = today.getFullYear();
                 renderCalendar();
             });
             
@@ -829,36 +790,44 @@
                 e.preventDefault();
                 const title = document.getElementById('eventTitle').value;
                 const date = document.getElementById('eventDate').value;
-                const category = document.getElementById('eventCategory').value;
                 const description = document.getElementById('eventDesc').value;
                 
                 addEvent({
                     title,
                     date,
-                    category,
                     description
                 });
                 
                 eventModal.style.display = 'none';
             });
         }
-        
-        // 초기화 함수
-        function init() {
-            renderCalendar();
-            setupEventListeners();
-            addDefaultEvents();
-        }
-        
+     
         function init() {
             console.log("🌟 init 실행됨!");
+            
+            // 날짜 초기화
+            calendarMonth = today.getMonth();
+            calendarYear = today.getFullYear();
+            
+            // DOM 참조
+            calendarDays = document.getElementById('calendarDays');
+            calendarYearMonthElement = document.getElementById('calendarYearMonth');
+            prevMonthButton = document.getElementById('prevMonth');
+            nextMonthButton = document.getElementById('nextMonth');
+            todayButton = document.getElementById('todayButton');
+            eventModal = document.getElementById('eventModal');
+            closeModalButton = document.getElementById('closeModal');
+            cancelButton = document.getElementById('cancelButton');
+            eventForm = document.getElementById('eventForm');
+            eventDateInput = document.getElementById('eventDate');
+            
             renderCalendar();
             setupEventListeners();
-            addDefaultEvents();
         }
         
         // 페이지 로드시 초기화
-        window.addEventListener('DOMContentLoaded', init);
+        // window.addEventListener('DOMContentLoaded', init);
+		window.onload = init;
     </script>
     
 </body>

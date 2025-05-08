@@ -134,7 +134,7 @@
                 <div class="menu-icon">📚</div>
                 <div>티서랍</div>
             </a>
-            <a href="${pageContext.request.contextPath}/calendarDetail.do" class="menu-item ${page eq 'calendar' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/calendarDetail.do?email=${loginMember.email}" class="menu-item ${page eq 'calendar' ? 'active' : ''}">
                 <div class="menu-icon">📅</div>
                 <div>캘린더</div>
             </a>

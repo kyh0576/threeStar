@@ -42,12 +42,7 @@ public class LoginController {
 		g.setEmail(email);
 		g.setSnsKey(snsKey);
 		
-		System.out.println("멤버 g name값 : " + g.getMemName());
-		System.out.println("멤버 g email값 : " + g.getEmail());
-		System.out.println("멤버 g snsKey값 : " + g.getSnsKey());
-		
 		int result = gService.loginUrlGoogle(g);
-		System.out.println("구글 로긴Result : " + result);
 		
 		if(result > 0) {
 	        mv.addObject("snsKey", snsKey);
@@ -55,9 +50,7 @@ public class LoginController {
 	        mv.addObject("email", email);
 	        
 	        Member loginMember = gService.loginGoogleMember(g);
-	        System.out.println("구글 로긴Member : " + loginMember);
 			ArrayList<Classes> cList = mService.selectClass();
-			System.out.println("구글 로긴cList : " + cList);
 			
 			if(loginMember != null) {
 				mService.online(loginMember);
