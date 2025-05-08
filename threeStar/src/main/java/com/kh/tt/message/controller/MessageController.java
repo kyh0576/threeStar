@@ -27,6 +27,9 @@ public class MessageController {
 
     @Autowired
     private MessageService messageService;
+    
+    @Autowired
+    private ChattingRoomService chattingRoomService;
 
 
     // 메시지 메인 화면 이동
@@ -54,6 +57,23 @@ public class MessageController {
     @ResponseBody
     public List<Message> getChatHistory(@RequestParam("roomId") int roomId) {
         return messageService.sendMessage(roomId);
+    }
+    
+    @RequestMapping("/roomForm")
+    public String showMainForm(@RequestParam("roomId") int roomId,
+                                   HttpSession session,
+                                   Model model) {
+
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        int myMemNo = loginMember.getMemNo();
+
+        // 여기가 findTargetMember 호출!
+        Member targetMember = chattingRoomService.findTargetMember(roomId, myMemNo);
+
+        model.addAttribute("targetNickname", targetMember.getMemName());
+        model.addAttribute("roomId", roomId);
+
+        return "message/mainMessageForm";
     }
     
 }

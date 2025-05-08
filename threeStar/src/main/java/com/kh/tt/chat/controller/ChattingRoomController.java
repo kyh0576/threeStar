@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.tt.chat.model.service.ChattingRoomService;
@@ -74,6 +75,32 @@ public class ChattingRoomController {
         if (loginUser == null) return Collections.emptyList();  // 로그인 안 한 경우
 
         return chattingRoomService.getChatRoomsByMemberId(loginUser.getMemId());
+    }
+    
+    
+    // ==================== ====================  
+    @GetMapping(value = "/roomName", produces = "text/plain; charset=UTF-8")
+    @ResponseBody
+    public String getChatRoomName(@RequestParam("roomId") int roomId, HttpSession session) {
+
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        int myMemNo = loginMember.getMemNo();
+
+        // 채팅방 정보 가져오기
+        ChattingRoom room = chattingRoomService.selectChatRoomById(roomId);
+
+        // 기본 이름 세팅
+        String resultName = room != null ? room.getChatName() : "이름없음";
+
+        // 만약 채팅방 이름이 "채팅방"이면 → 상대방 닉네임 가져와서 세팅
+        if ("채팅방".equals(resultName)) {
+            Member targetMember = chattingRoomService.findTargetMember(roomId, myMemNo);
+            if (targetMember != null) {
+                resultName = targetMember.getMemName();
+            }
+        }
+
+        return resultName;
     }
 
 

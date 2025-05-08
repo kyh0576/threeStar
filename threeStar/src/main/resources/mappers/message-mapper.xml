@@ -12,7 +12,7 @@
       <result column="ms_chat_id" property="msChatId"/>
       <result column="ms_mem_no" property="msMemNo"/>
    </resultMap>
-   
+
     <insert id="insertMessage" parameterType="Message">
         INSERT INTO MESSAGE (
             MESSAGE_NO, 
@@ -34,7 +34,7 @@
             #{msMemNo}
         )
     </insert>
-    
+
 <!-- messageMapper.xml -->
 <select id="sendMessage" parameterType="_int" resultType="Message">
   SELECT 
@@ -60,5 +60,5 @@
 
 
 
-    
+
 </mapper>

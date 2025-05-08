@@ -53,29 +53,80 @@ WHERE (cr.CH_MEM_NO = #{myMemNo} AND cr.CHAT_ID IN (
            'Y'
        )
    </insert>
+  
    
 <select id="selectRoomsByMemberId" parameterType="String" resultType="Chat">
-  SELECT 
-	  CR.CHAT_ID AS chatId,
-	  CR.CH_MEM_NO AS chMemNo,
-	  CR.CHAT_NAME AS chatName,
-	  CR.STATUS AS status,
-	  M.LAST_MESSAGE AS lastMessage
-	FROM CHATTING_ROOM CR
-	LEFT JOIN (
-	    SELECT MS_CHAT_ID, MESSAGE_CONTENT AS LAST_MESSAGE
-	    FROM (
-	        SELECT MS_CHAT_ID, MESSAGE_CONTENT, 
-	               ROW_NUMBER() OVER (PARTITION BY MS_CHAT_ID ORDER BY SEND_TIME DESC) AS RN
-	        FROM MESSAGE
-	    )
-	    WHERE RN = 1
-	) M ON CR.CHAT_ID = M.MS_CHAT_ID
-	WHERE CR.CH_MEM_NO = (
-	  SELECT MEM_NO FROM MEMBER WHERE MEM_ID = #{memId}
-	)
+SELECT 
+    CR.CHAT_ID AS chatId,
+    CR.CH_MEM_NO AS chMemNo,
+    
+    -- ✅ 만약 채팅방 이름이 "채팅방"이면 상대방 이름 가져오기
+    CASE 
+        WHEN CR.CHAT_NAME = '채팅방' THEN (
+            SELECT MEM_NAME 
+            FROM MEMBER 
+            WHERE MEM_NO = (
+                SELECT CH_MEM_NO 
+                FROM CHATTING_ROOM 
+                WHERE CHAT_ID = CR.CHAT_ID 
+                AND CH_MEM_NO != CR.CH_MEM_NO
+                AND ROWNUM = 1
+            )
+        )
+        ELSE CR.CHAT_NAME
+    END AS chatName,
+    
+    CR.STATUS AS status,
+    M.LAST_MESSAGE AS lastMessage
+
+FROM CHATTING_ROOM CR
+
+LEFT JOIN (
+    SELECT MS_CHAT_ID, MESSAGE_CONTENT AS LAST_MESSAGE
+    FROM (
+        SELECT MS_CHAT_ID, MESSAGE_CONTENT, ROW_NUMBER() OVER (PARTITION BY MS_CHAT_ID ORDER BY SEND_TIME DESC) AS RN
+        FROM MESSAGE
+    )
+    WHERE RN = 1
+) M ON CR.CHAT_ID = M.MS_CHAT_ID
+
+WHERE CR.CH_MEM_NO = (SELECT MEM_NO FROM MEMBER WHERE MEM_ID = #{memId})
 
 </select>
 
+      <!-- 상대방 멤버 가져오기 -->
+   <select id="findTargetMember" parameterType="map" resultType="Member">
+       SELECT 
+	       	MEM_NO AS memNo,
+	        MEM_ID AS memId,
+	        MEM_PWD AS memPwd,
+	        MEM_NAME AS memName,  -- ✅ 이거 중요!!
+	        EMAIL AS email,
+	        PHONE AS phone,
+	        MEM_CLASS_CODE AS memClassCode,
+	        SNS_KEY AS snsKey,
+	        STATUS AS status,
+	        ONLINE_ST AS onlineSt,
+	        ADMIN_YN AS adminYN,
+	        PROFILE_URL AS profileURL
+       FROM MEMBER
+       WHERE MEM_NO IN (
+           SELECT CH_MEM_NO FROM CHATTING_ROOM
+           WHERE CHAT_ID = #{roomId}
+           AND CH_MEM_NO != #{myMemNo}
+       )
+   </select>
+
+<select id="selectChatRoomById" parameterType="int" resultType="Chat">
+SELECT 
+    CHAT_ID AS chatId,
+    CH_MEM_NO AS chMemNo,
+    CHAT_NAME AS chatName,
+    STATUS AS status
+FROM CHATTING_ROOM
+WHERE CHAT_ID = #{roomId}
+AND ROWNUM = 1
+
+</select>
 
 </mapper>
