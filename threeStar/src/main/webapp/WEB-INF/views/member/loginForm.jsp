@@ -223,9 +223,10 @@
 	      data-text="signup_with"
 	    ></div>
 		<!-- data-login_uri="http://localhost:8333/tt/signinForm.me"  -->
-		<input type="hidden" id="snsKey" name="snsKey" value="${ snsKey }">
 		<input type="hidden" id="memName" name="memName" value="${ memName }">
 		<input type="hidden" id="email" name="email" value="${ email }">
+		<input type="hidden" id="snsKey" name="snsKey" value="${ snsKey }">
+		
     </form>
 
     <script>
@@ -279,6 +280,7 @@
 			
 			const responsePayload = decodeJwtResponse(id_token);
 			
+			console.log("unique identifier: " + responsePayload.jti)
 			console.log("ID: " + responsePayload.sub);
 			console.log('Full Name: ' + responsePayload.name);
 			console.log('Given Name: ' + responsePayload.given_name);

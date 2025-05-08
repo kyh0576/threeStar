@@ -21,4 +21,9 @@ public class GoogleLoginServiceImpl implements GoogleLoginService{
 		return gDao.loginUrlGoogle(sqlSession, g);
 	}
 	
+	@Override
+	public Member loginGoogleMember(Member g) {
+		return gDao.loginGoogleMember(sqlSession, g);
+	}
+	
 }

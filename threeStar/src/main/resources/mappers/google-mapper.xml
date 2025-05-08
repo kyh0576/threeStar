@@ -24,23 +24,32 @@
       <result column="admin_yn" property="adminYN"/>
    </resultMap>
    
-   <resultMap id="googleResult" type="Member">
-      <result column="mem_name" property="memName"/>
-      <result column="email" property="email"/>
-      <result column="sns_key" property="snsKey"/>
-   </resultMap>
-   
-   <select id="loginUrlGoogle" resultMap="googleResult">
-   		select
-   			  mem_name
-   			, email
-   			, sns_key
-   		  from
-   		  	  member
-   		where status = 'Y'
-   		  and sns_key = #{snsKey}
-   </select>
+	<select id="loginUrlGoogle" parameterType="map" resultMap="memberResult">
+		select
+	            mem_name
+	          , email
+	          , sns_key
+		  from
+		  	  member
+	     where email = #{email}
+	       and status = 'Y'
+	</select>
 	
-	
+	<select id="loginGoogleMember" parameterType="map" resultMap="memberResult">
+	     select
+	            mem_id
+	          , mem_pwd
+	          , mem_name
+	          , email
+	          , phone
+	          , mem_class_code
+	          , sns_key
+	          , status
+	          , online_st
+	          , admin_yn
+	       from member
+	     where email = #{email}
+	       and status = 'Y'
+	  </select>
 
 </mapper>
