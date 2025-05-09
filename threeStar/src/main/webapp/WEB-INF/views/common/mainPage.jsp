@@ -1161,7 +1161,7 @@
   	        const targetUserId = chatIcon.dataset.targetUserId;
   	
   	        // 서버로 채팅방 생성 요청
-  	        fetch('/tt/chattingRoom/startChat', {
+  	        fetch('${pageContext.request.contextPath}/chattingRoom/startChat', {
   	            method: 'POST',
   	            headers: {
   	                'Content-Type': 'application/json'
@@ -1172,7 +1172,7 @@
   	        .then(data => {
   	            if (data.success) {
   	                const roomId = data.roomId;
-  	                location.href = `/tt/message/messageForm?roomId=\${roomId}`;
+  	                location.href = `${pageContext.request.contextPath}/message/messageForm?roomId=\${roomId}`;
   	            } else {
   	                alert('❌ 채팅방 생성 실패');
   	            }
@@ -1187,7 +1187,7 @@
   	
   	//================= 채팅 이모지 클릭 시 startChat 함수 실행 =================
   	function startChat(targetUserId) {
-  	  fetch('/tt/chattingRoom/startChat', {  // ✅ URL도 실제 컨트롤러 매핑에 맞게 /tt/message/startChat 등으로 수정
+  	  fetch('${pageContext.request.contextPath}/chattingRoom/startChat', {  // ✅ URL도 실제 컨트롤러 매핑에 맞게 /tt/message/startChat 등으로 수정
   	    method: 'POST',
   	    headers: {
   	      'Content-Type': 'application/json' 
@@ -1198,7 +1198,7 @@
   	  .then(data => {
   	    if (data.success) {
   	      const roomId = data.roomId;
-  	      location.href = `/tt/message/messageForm?roomId=\${roomId}`;  // ✅ 백틱(`) 사용
+  	      location.href = `${pageContext.request.contextPath}/message/messageForm?roomId=\${roomId}`;  // ✅ 백틱(`) 사용
   	    } else {
   	      alert('❌ 채팅방 생성에 실패했습니다.');
   	    }
