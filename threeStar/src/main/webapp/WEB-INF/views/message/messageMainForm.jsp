@@ -963,15 +963,26 @@ document.addEventListener("DOMContentLoaded", function () {
 //==============채팅방 나가기=============================
 document.addEventListener("DOMContentLoaded", function () {
     const leaveBtn = document.getElementById("leaveRoomBtn");
+
     leaveBtn.addEventListener("click", function () {
         if (confirm("정말 이 채팅방에서 나가시겠습니까?")) {
             const roomId = new URLSearchParams(window.location.search).get("roomId");
+            const memNo = myMemNo;
 
-            fetch(`/tt/chattingRoom/leave?roomId=\${roomId}`, {
-                method: "POST"
+            fetch("/tt/chattingRoom/exit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `chatId=\${roomId}&memNo=\${memNo}`
             })
             .then(res => {
-                if (res.ok) {
+                console.log("응답 상태:", res.status);
+                return res.text();
+            })
+            .then(data => {
+                console.log("결과:", data);
+                if (data === "success") {
                     alert("채팅방에서 나갔습니다.");
                     window.location.href = "/tt/message/mainForm";
                 } else {
@@ -984,6 +995,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+
 
 
 

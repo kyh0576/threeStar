@@ -59,7 +59,6 @@ SELECT
     CR.CHAT_ID AS chatId,
     CR.CH_MEM_NO AS chMemNo,
     
-    -- ✅ 만약 채팅방 이름이 "채팅방"이면 상대방 이름 가져오기
     CASE 
         WHEN CR.CHAT_NAME = '채팅방' THEN (
             SELECT MEM_NAME 
@@ -90,8 +89,9 @@ LEFT JOIN (
 ) M ON CR.CHAT_ID = M.MS_CHAT_ID
 
 WHERE CR.CH_MEM_NO = (SELECT MEM_NO FROM MEMBER WHERE MEM_ID = #{memId})
-
+  AND CR.STATUS = 'Y'
 </select>
+
 
       <!-- 상대방 멤버 가져오기 -->
    <select id="findTargetMember" parameterType="map" resultType="Member">
@@ -129,11 +129,11 @@ AND ROWNUM = 1
 </select>
 
 <!-- chatMapper.xml -->
-<update id="exitChatRoom" parameterType="map">
-    UPDATE chatting_room
-    SET status = 'N'
+<delete id="exitChatRoom" parameterType="map">
+    DELETE FROM chatting_room
     WHERE chat_id = #{chatId}
       AND ch_mem_no = #{memNo}
-</update>
+</delete>
+
 
 </mapper>
