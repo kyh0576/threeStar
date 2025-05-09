@@ -817,7 +817,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const ip = location.hostname;
     const encodedToken = encodeURIComponent(token);
 
-    const wsUrl = `ws://\${ip}:8333/tt/chat/\${roomId}?token=\${encodedToken}`;
+    const wsUrl = `ws://\${ip}:8333/${pageContext.request.contextPath}/chat/\${roomId}?token=\${encodedToken}`;
     console.log("WebSocket 연결 URL:", wsUrl);
 
     socket = new WebSocket(wsUrl);
