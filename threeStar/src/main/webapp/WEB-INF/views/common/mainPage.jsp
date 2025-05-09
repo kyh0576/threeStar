@@ -976,7 +976,7 @@
 
     
     document.addEventListener("DOMContentLoaded", function () {
-  	  fetch('/tt/weather/today')
+  	  fetch('${pageContext.request.contextPath}/weather/today')
   	    .then(res => res.json())
   	    .then(data => {
   	      const items = data?.response?.body?.items?.item;
