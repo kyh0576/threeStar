@@ -757,7 +757,7 @@ function appendMessage(data, type) {
     }
     // ✅ 이전 메시지 → originName + changeName 둘다 있으면 이미지
 else if (data.changeName && isImageFile(data.changeName)) {
-    const contextPath = "/tt";
+    const contextPath = "${pageContext.request.contextPath}";
     const imageUrl = contextPath + "/resources/uploadFiles/" + data.changeName;
 
     content += `<div class="chat-attachment">
