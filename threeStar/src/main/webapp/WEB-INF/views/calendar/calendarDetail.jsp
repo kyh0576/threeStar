@@ -14,7 +14,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <!-- Latest compiled JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
- <style>
+<style>
 /* 전체 컨테이너 */
 .container {
     display: flex;
@@ -142,6 +142,23 @@
     color: #555;
 }
 
+.weekday:nth-child(7) {  /* 토요일 */
+    color: blue;
+}
+
+.weekday:nth-child(1) {  /* 일요일 */
+    color: red;
+}
+
+/* 날짜 셀 내 숫자 색상 */
+.calendar-days .day-cell:nth-child(7n) .day-number {  /* 토요일 */
+    color: blue;
+}
+
+.calendar-days .day-cell:nth-child(7n+1) .day-number {  /* 일요일 */
+    color: red;
+}
+
 .calendar-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -174,10 +191,12 @@
 
 .today {
     background-color: #e6f0fd;
+    border-radius: 10%;
 }
 
 .current-day {
     background-color: #4a89dc;
+    font-weight: bold;
     color: white;
     border-radius: 50%;
     width: 25px;
@@ -634,9 +653,8 @@
 
         // 중복 방지를 위한 기본 이벤트 목록
         const defaultEvents = [
-            "새해 첫날", "삼일절", "어린이날", "현충일",
-            "광복절", "개천절", "한글날", "성탄절",
-            "설날", "추석"
+            "신정", "임시공휴일", "설날", "삼일절", "삼일절(대체공휴일)", "어린이날", "부처님오신날(대체공휴일)",
+            "현충일", "대통령 선거날", "광복절", "개천절", "한글날", "추석", "성탄절"
         ];
 
         // 기존 기본 이벤트 제거
@@ -649,10 +667,12 @@
         // 각 월별로 공휴일 조건에 따라 추가
         if (calendarMonth === 0) { // 1월
         	const dateString = yearStr + "-01-01";
-        	const dateString1 = yearStr + "-01-28";
-        	const dateString2 = yearStr + "-01-29";
-        	const dateString3 = yearStr + "-01-30";
-            addEvent({ title: "새해 첫날", date: dateString, description: "새해 첫날" });
+        	const dateString0 = "2025-01-27";
+        	const dateString1 = "2025-01-28";
+        	const dateString2 = "2025-01-29";
+        	const dateString3 = "2025-01-30";
+            addEvent({ title: "신정", date: dateString, description: "신정" });
+            addEvent({ title: "임시공휴일", date: dateString0, description: "임시공휴일" });
             addEvent({ title: "설날", date: dateString1, description: "설날" }); // 고정된 음력 날짜 예시
             addEvent({ title: "설날", date: dateString2, description: "설날" });
             addEvent({ title: "설날", date: dateString3, description: "설날" });
@@ -660,28 +680,28 @@
 
         if (calendarMonth === 2) { // 3월
         	const dateString = yearStr + "-03-01";
+        	const dateString1 = "2025-03-03";
             addEvent({ title: "삼일절", date: dateString, description: "삼일절" });
+            addEvent({ title: "삼일절(대체공휴일)", date: dateString1, description: "삼일절(대체공휴일)" });
         }
 
         if (calendarMonth === 4) { // 5월
         	const dateString = yearStr + "-05-05";
+        	const dateString1 = "2025-05-06";
             addEvent({ title: "어린이날", date: dateString, description: "어린이날" });
-            addEvent({ title: "부처님오신날", date: dateString, description: "부처님오신날" });
+            addEvent({ title: "부처님오신날(대체공휴일)", date: dateString1, description: "부처님오신날(대체공휴일)" });
         }
 
         if (calendarMonth === 5) { // 6월
         	const dateString = yearStr + "-06-06";
+        	const dateString1 = "2025-06-03";
             addEvent({ title: "현충일", date: dateString, description: "현충일" });
+            addEvent({ title: "대통령 선거날", date: dateString1, description: "대통령 선거날" });
         }
 
         if (calendarMonth === 7) { // 8월
         	const dateString = yearStr + "-08-15";
             addEvent({ title: "광복절", date: dateString, description: "광복절" });
-        }
-
-        if (calendarMonth === 8) { // 9월
-        	const dateString = yearStr + "-09-15";
-            addEvent({ title: "추석", date: dateString, description: "추석" }); // 고정된 음력 날짜 예시
         }
 
         if (calendarMonth === 9) { // 10월
