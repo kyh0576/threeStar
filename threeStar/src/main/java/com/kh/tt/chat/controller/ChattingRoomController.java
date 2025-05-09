@@ -102,6 +102,19 @@ public class ChattingRoomController {
 
         return resultName;
     }
+    
+    
+    // ====================채팅방 나가기====================  
 
+    @PostMapping("/exit")
+    @ResponseBody
+    public String exitChatRoom(@RequestParam("chatId") int chatId,
+                               @RequestParam("memNo") int memNo) {
+        System.out.println("🔥 받은 chatId: " + chatId);
+        System.out.println("🔥 받은 memNo: " + memNo);
+        
+        int result = chattingRoomService.exitChatRoom(chatId, memNo);
+        return result > 0 ? "success" : "fail";
+    }
 
 }

@@ -463,6 +463,38 @@
             height: 1px;
             background-color: #e1e1e1;
         }
+        
+        
+        
+        .modal {
+		  position: fixed;
+		  top: 0; left: 0;
+		  width: 100%; height: 100%;
+		  background-color: rgba(0,0,0,0.6);
+		  display: flex;
+		  justify-content: center;
+		  align-items: center;
+		  z-index: 9999;
+		}
+		
+		.modal-content {
+		  background-color: #fff;
+		  padding: 30px;
+		  border-radius: 10px;
+		  width: 400px;
+		  max-height: 80%;
+		  overflow-y: auto;
+		  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+		  position: relative;
+		}
+		
+		.close {
+		  position: absolute;
+		  top: 15px;
+		  right: 20px;
+		  font-size: 24px;
+		  cursor: pointer;
+		}
     </style>
 
 </head>
@@ -501,7 +533,7 @@
                 <span style="margin-left: 10px; color: #888; font-size: 14px;">2 participants</span>
             </div>
             <div class="chat-actions">
-                <button class="chat-action-btn">🔍</button>
+                <button class="chat-action-btn" id="leaveRoomBtn">🚪</button>
                 <button class="chat-action-btn" id="toggleRightSidebar">👥</button>
                 <button class="chat-action-btn" id="toggleMenu">⋮</button>
             </div>
@@ -556,14 +588,28 @@
                     </div>
                 </div>
                 
-                <div class="add-member">
-                    <div style="font-size: 20px;">+</div>
-                    <div>Add</div>
-                </div>
+                <div class="add-member" onclick="openInviteModal()">
+				  <div style="font-size: 20px;">+</div>
+				  <div> Add </div>
+				</div>
+				
+				<!-- ✅ 모달창 -->
+				<div id="inviteModal" class="modal" style="display:none;">
+				  <div class="modal-content">
+				    <span class="close" onclick="closeInviteModal()">&times;</span>
+				    <h2>친구 초대</h2>
+				    <div id="friend-list">
+				      <!-- 여기에 친구 목록 동적 생성 -->
+				    </div>
+				  </div>
+				</div>
+				
+				
             </div>
             
+            
             <div class="section-header">
-                <div>디서함</div>
+                <div>티서랍</div>
             </div>
             
             <div class="file-list">
@@ -759,72 +805,65 @@ function formatTime(isoString) {
 
 
 <script>
-
-let socket;  // ✅ 전역으로 뺌
+let socket;
 
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
+    const token = "여기에_토큰_넣기"; // JWT 토큰
 
-    if (!roomId) {
-        console.warn("ℹ️ roomId가 없으므로 WebSocket 연결 없이 목록만 표시합니다.");
-        return;
-    }
+    if (!roomId) return;
 
-    console.log("📌 roomId:", roomId);
-    socket = new WebSocket('ws://localhost:8333/tt/chat/' + roomId);   // ✅ 여기에 할당
+    const ip = location.hostname;
+    const encodedToken = encodeURIComponent(token);
 
-    socket.onopen = function () {
-        console.log('✅ WebSocket 연결 성공 roomId:', roomId);
-    };
+    const wsUrl = `ws://\${ip}:8333/tt/chat/\${roomId}?token=\${encodedToken}`;
+    console.log("WebSocket 연결 URL:", wsUrl);
 
-    socket.onerror = function (error) {
-        console.error("❌ WebSocket 연결 실패", error);
-    };
+    socket = new WebSocket(wsUrl);
 
-    
+    socket.onopen = () => console.log("✅ WebSocket 연결 성공");
+    socket.onerror = (error) => console.error("❌ WebSocket 에러", error);
+    socket.onclose = () => console.log("🔌 WebSocket 종료됨");
+
     const chatInput = document.querySelector(".chat-input");
     const chatSendBtn = document.querySelector(".chat-send-btn");
-    const chatMessages = document.querySelector(".chat-messages");
 
-    chatSendBtn.addEventListener("click", function () {
-        const msg = chatInput.value.trim();
-        if (msg !== "") {
-            const payload = {
-                sender: nickname,
-                text: msg,
-                time: new Date().toISOString(),
-                type: "chat"
-            };
-            socket.send(JSON.stringify(payload));
-            chatInput.value = "";
-        }
-    });
-
-    chatInput.addEventListener("keydown", function (e) {
+    chatSendBtn.addEventListener("click", sendMessage);
+    chatInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            chatSendBtn.click();
+            sendMessage();
         }
     });
 
-    socket.onmessage = function (event) {
+    socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         const type = data.sender === nickname ? "sent" : "received";
         appendMessage(data, type);
     };
 
-    socket.onclose = function () {
-        console.log('🔌 WebSocket 연결 종료됨');
-    };
-});
+    function sendMessage() {
+        const msg = chatInput.value.trim();
+        if (!msg) return;
 
+        const payload = {
+            sender: nickname,
+            text: msg,
+            time: new Date().toISOString(),
+            type: "chat"
+        };
+
+        socket.send(JSON.stringify(payload));
+        chatInput.value = "";
+    }
+});
 </script>
 
 <!-- 채팅방 목록 -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    fetch("/tt/chattingRoom/rooms")  // 🔁 백엔드에서 참여중인 채팅방 목록 호출
+    fetch("${pageContext.request.contextPath}/chattingRoom/rooms")  // 🔁 백엔드에서 참여중인 채팅방 목록 호출
         .then(response => response.json())
         .then(rooms => {
             const list = document.querySelector(".message-list");
@@ -860,7 +899,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log("내 번호:", myMemNo);
 
-    fetch(`/tt/message/history?roomId=\${roomId}`)  // ✅ 백틱 사용 → 템플릿 리터럴
+    fetch(`${pageContext.request.contextPath}/message/history?roomId=\${roomId}`)  // ✅ 백틱 사용 → 템플릿 리터럴
         .then(response => response.json())
         .then(messages => {
             console.log("가져온 이전 메시지들:", messages);
@@ -891,7 +930,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!roomId) return;
 
-    fetch("/tt/chattingRoom/roomName?roomId=" + roomId)
+    fetch("${pageContext.request.contextPath}/chattingRoom/roomName?roomId=" + roomId)
         .then(response => response.text())
         .then(name => {
             document.querySelector("#chatRoomTitle").textContent = name;
@@ -906,7 +945,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
 
-    fetch("/tt/chattingRoom/roomName?roomId=" + roomId)
+    fetch("${pageContext.request.contextPath}/chattingRoom/roomName?roomId=" + roomId)
         .then(response => response.text())
         .then(name => {
             const targetNameDom = document.querySelector("#targetNicknameArea");
@@ -920,7 +959,49 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-//==============================================================
+
+//==============채팅방 나가기=============================
+document.addEventListener("DOMContentLoaded", function () {
+    const leaveBtn = document.getElementById("leaveRoomBtn");
+
+    leaveBtn.addEventListener("click", function () {
+        if (confirm("정말 이 채팅방에서 나가시겠습니까?")) {
+            const roomId = new URLSearchParams(window.location.search).get("roomId");
+            const memNo = myMemNo;
+
+            fetch("${pageContext.request.contextPath}/chattingRoom/exit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `chatId=\${roomId}&memNo=\${memNo}`
+            })
+            .then(res => {
+                console.log("응답 상태:", res.status);
+                return res.text();
+            })
+            .then(data => {
+                console.log("결과:", data);
+                if (data === "success") {
+                    alert("채팅방에서 나갔습니다.");
+                    window.location.href = "/tt/message/mainForm";
+                } else {
+                    alert("채팅방 나가기 실패");
+                }
+            })
+            .catch(err => {
+                console.error("❌ 채팅방 나가기 에러:", err);
+            });
+        }
+    });
+});
+
+
+
+
+
+
+//===================모달 add눌렀을 때====================================
 	
 const fileInput = document.getElementById("selectedFile");   // ✅ 이거 추가 필요
 const fileSelectBtn = document.getElementById("fileSelectBtn");
@@ -974,8 +1055,39 @@ fileInput.addEventListener("change", () => {
 });
 
 
-
 </script>
+
+<script>
+function openInviteModal() {
+	  document.getElementById("inviteModal").style.display = "flex";
+
+	  fetch("/tt/friends/list?memNo=" + myMemNo)
+	    .then(response => response.json())
+	    .then(friends => {
+	      const container = document.getElementById("friend-list");
+	      container.innerHTML = "";
+
+	      friends.forEach(friend => {
+	        const div = document.createElement("div");
+	        div.textContent = friend.memName + " (" + friend.memId + ")";
+	        div.classList.add("friend-item");
+	        div.onclick = () => inviteFriend(friend.memNo, friend.memName);
+	        container.appendChild(div);
+	      });
+	    })
+	    .catch(err => console.error("❌ 친구 목록 불러오기 실패", err));
+	}
+
+function closeInviteModal() {
+  document.getElementById("inviteModal").style.display = "none";
+}
+
+function inviteFriend(friendId, friendName) {
+  alert(friendName + "님을 초대했습니다.");
+  // 🔁 여기에 AJAX로 서버에 초대 요청 보내는 코드 작성 가능
+}
+</script>
+
 <!-- ------------------------------------------------------------------ -->
 
 </body>

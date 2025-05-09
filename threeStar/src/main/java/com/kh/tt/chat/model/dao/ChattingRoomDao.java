@@ -50,4 +50,14 @@ public class ChattingRoomDao {
     public ChattingRoom selectChatRoomById(SqlSessionTemplate sqlSession, int roomId) {
         return sqlSession.selectOne("chatMapper.selectChatRoomById", roomId);
     }
+    
+    //=======채팅방 나가기=================================================
+    public int exitChatRoom(SqlSessionTemplate sqlSession, int chatId, int memNo) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("chatId", chatId);
+        param.put("memNo", memNo);
+        System.out.println("🔥 받은 chatId2: " + chatId);
+        System.out.println("🔥 받은 memNo2: " + memNo);
+        return sqlSession.update("chatMapper.exitChatRoom", param);
+    }
 }

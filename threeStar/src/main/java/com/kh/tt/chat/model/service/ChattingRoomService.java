@@ -24,5 +24,7 @@ public interface ChattingRoomService {
     
     ChattingRoom selectChatRoomById(int roomId);
     
+// 채팅방 나가기
+    int exitChatRoom(int chatId, int memNo);
     
 }

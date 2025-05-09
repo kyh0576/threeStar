@@ -64,5 +64,14 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
 		public ChattingRoom selectChatRoomById(int roomId) {
 		    return mDao.selectChatRoomById(sqlSession, roomId);
 		}
+		
+ //=======채팅방 나가기=================================================
+		 @Override
+		    public int exitChatRoom(int chatId, int memNo) {
+		        System.out.println("🔥 받은 chatId1: " + chatId);
+		        System.out.println("🔥 받은 memNo1: " + memNo);
+		        return mDao.exitChatRoom(sqlSession,chatId, memNo);
+		        
+		    }
 
 }
