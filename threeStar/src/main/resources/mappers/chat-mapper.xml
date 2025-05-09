@@ -11,12 +11,11 @@
    
    <!-- 1. 기존 채팅방 있는지 조회 -->
    <select id="findChatRoom" parameterType="map" resultType="int">
-       SELECT cr.CHAT_ID
+	SELECT cr.CHAT_ID
 		FROM chatting_room cr
-		WHERE (cr.CH_MEM_NO = #{myMemNo} AND cr.CHAT_ID IN (
-		         SELECT cr2.CHAT_ID FROM chatting_room cr2 WHERE cr2.CH_MEM_NO = #{targetMemNo}
+		WHERE (cr.CH_MEM_NO = 1 AND cr.CHAT_ID IN (
+		         SELECT cr2.CHAT_ID FROM chatting_room cr2 WHERE cr2.CH_MEM_NO = 2
 		      ))
-
    </select>
 
    <!-- 2. 내 채팅방 INSERT (내가 먼저 생성) -->
@@ -128,5 +127,13 @@ WHERE CHAT_ID = #{roomId}
 AND ROWNUM = 1
 
 </select>
+
+<!-- chatMapper.xml -->
+<update id="exitChatRoom" parameterType="map">
+    UPDATE chatting_room
+    SET status = 'N'
+    WHERE chat_id = #{chatId}
+      AND ch_mem_no = #{memNo}
+</update>
 
 </mapper>

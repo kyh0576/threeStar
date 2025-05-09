@@ -17,4 +17,8 @@ public class Friend {
 	private int toMem;
 	private String areWeFriend;
 	private String toNickname;
+	
+	
+	
+	private String receiver;
 }

@@ -463,6 +463,38 @@
             height: 1px;
             background-color: #e1e1e1;
         }
+        
+        
+        
+        .modal {
+		  position: fixed;
+		  top: 0; left: 0;
+		  width: 100%; height: 100%;
+		  background-color: rgba(0,0,0,0.6);
+		  display: flex;
+		  justify-content: center;
+		  align-items: center;
+		  z-index: 9999;
+		}
+		
+		.modal-content {
+		  background-color: #fff;
+		  padding: 30px;
+		  border-radius: 10px;
+		  width: 400px;
+		  max-height: 80%;
+		  overflow-y: auto;
+		  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+		  position: relative;
+		}
+		
+		.close {
+		  position: absolute;
+		  top: 15px;
+		  right: 20px;
+		  font-size: 24px;
+		  cursor: pointer;
+		}
     </style>
 
 </head>
@@ -501,7 +533,7 @@
                 <span style="margin-left: 10px; color: #888; font-size: 14px;">2 participants</span>
             </div>
             <div class="chat-actions">
-                <button class="chat-action-btn">🔍</button>
+                <button class="chat-action-btn" id="leaveRoomBtn">🚪</button>
                 <button class="chat-action-btn" id="toggleRightSidebar">👥</button>
                 <button class="chat-action-btn" id="toggleMenu">⋮</button>
             </div>
@@ -556,11 +588,25 @@
                     </div>
                 </div>
                 
-                <div class="add-member">
-                    <div style="font-size: 20px;">+</div>
-                    <div>Add</div>
-                </div>
+                <div class="add-member" onclick="openInviteModal()">
+				  <div style="font-size: 20px;">+</div>
+				  <div> Add </div>
+				</div>
+				
+				<!-- ✅ 모달창 -->
+				<div id="inviteModal" class="modal" style="display:none;">
+				  <div class="modal-content">
+				    <span class="close" onclick="closeInviteModal()">&times;</span>
+				    <h2>친구 초대</h2>
+				    <div id="friend-list">
+				      <!-- 여기에 친구 목록 동적 생성 -->
+				    </div>
+				  </div>
+				</div>
+				
+				
             </div>
+            
             
             <div class="section-header">
                 <div>티서랍</div>
@@ -913,7 +959,36 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-//==============================================================
+
+//==============채팅방 나가기=============================
+document.addEventListener("DOMContentLoaded", function () {
+    const leaveBtn = document.getElementById("leaveRoomBtn");
+    leaveBtn.addEventListener("click", function () {
+        if (confirm("정말 이 채팅방에서 나가시겠습니까?")) {
+            const roomId = new URLSearchParams(window.location.search).get("roomId");
+
+            fetch(`/tt/chattingRoom/leave?roomId=\${roomId}`, {
+                method: "POST"
+            })
+            .then(res => {
+                if (res.ok) {
+                    alert("채팅방에서 나갔습니다.");
+                    window.location.href = "/tt/message/mainForm";
+                } else {
+                    alert("채팅방 나가기 실패");
+                }
+            })
+            .catch(err => {
+                console.error("❌ 채팅방 나가기 에러:", err);
+            });
+        }
+    });
+});
+
+
+
+
+//===================모달 add눌렀을 때====================================
 	
 const fileInput = document.getElementById("selectedFile");   // ✅ 이거 추가 필요
 const fileSelectBtn = document.getElementById("fileSelectBtn");
@@ -967,8 +1042,39 @@ fileInput.addEventListener("change", () => {
 });
 
 
-
 </script>
+
+<script>
+function openInviteModal() {
+	  document.getElementById("inviteModal").style.display = "flex";
+
+	  fetch("/tt/friends/list?memNo=" + myMemNo)
+	    .then(response => response.json())
+	    .then(friends => {
+	      const container = document.getElementById("friend-list");
+	      container.innerHTML = "";
+
+	      friends.forEach(friend => {
+	        const div = document.createElement("div");
+	        div.textContent = friend.memName + " (" + friend.memId + ")";
+	        div.classList.add("friend-item");
+	        div.onclick = () => inviteFriend(friend.memNo, friend.memName);
+	        container.appendChild(div);
+	      });
+	    })
+	    .catch(err => console.error("❌ 친구 목록 불러오기 실패", err));
+	}
+
+function closeInviteModal() {
+  document.getElementById("inviteModal").style.display = "none";
+}
+
+function inviteFriend(friendId, friendName) {
+  alert(friendName + "님을 초대했습니다.");
+  // 🔁 여기에 AJAX로 서버에 초대 요청 보내는 코드 작성 가능
+}
+</script>
+
 <!-- ------------------------------------------------------------------ -->
 
 </body>
