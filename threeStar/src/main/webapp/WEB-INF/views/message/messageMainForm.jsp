@@ -745,7 +745,7 @@ function appendMessage(data, type) {
         content += `<div><strong>\${data.sender}</strong></div>`;
     }
 
-    const contextPath = "/tt";
+    const contextPath = "${pageContext.request.contextPath}";
 
     // ✅ 새로 보낸 파일 → 이미지 처리
     if (data.type === "file" && data.file && data.file.type.startsWith("image")) {
