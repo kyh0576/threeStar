@@ -745,7 +745,7 @@ function appendMessage(data, type) {
         content += `<div><strong>\${data.sender}</strong></div>`;
     }
 
-    const contextPath = "/tt";
+    const contextPath = "${pageContext.request.contextPath}";
 
     // ✅ 새로 보낸 파일 → 이미지 처리
     if (data.type === "file" && data.file && data.file.type.startsWith("image")) {
@@ -757,7 +757,7 @@ function appendMessage(data, type) {
     }
     // ✅ 이전 메시지 → originName + changeName 둘다 있으면 이미지
 else if (data.changeName && isImageFile(data.changeName)) {
-    const contextPath = "/tt";
+    const contextPath = "${pageContext.request.contextPath}";
     const imageUrl = contextPath + "/resources/uploadFiles/" + data.changeName;
 
     content += `<div class="chat-attachment">
@@ -810,7 +810,7 @@ let socket;
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
-    const token = "여기에_토큰_넣기"; // JWT 토큰
+    const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbmEiLCJtZW1ObyI6MSwibWVtTmFtZSI6Iuq0gOumrOyekCJ9.GrFjymLAjAiEyIZYnRX7uSU5TRSu6bcs9GvBgHxCOX4"; // JWT 토큰
 
     if (!roomId) return;
 
