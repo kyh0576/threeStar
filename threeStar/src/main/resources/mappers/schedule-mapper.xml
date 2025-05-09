@@ -19,22 +19,20 @@
 	 where sc_class_code = #{scClassCode}
    </select>
    
-   <insert id="insertSchedule">
-   INSERT INTO SCHEDULE
-	(
-	     SC_ID
-	   , SC_TITLE
-	   , SC_DATE
-	   , SC_CLASS_CODE
-	)
-	VALUES
-	(
-	     SEQ_SC_ID.NEXTVAL
-	   , #{scTitle}
-	   , #{scDate}
-	   , #{scClassCode}
-	)
-   </insert>
+	<insert id="insertSchedule">
+	   INSERT INTO SCHEDULE (
+	        SC_ID,
+	        SC_TITLE,
+	        SC_DATE,
+	        SC_CLASS_CODE
+	   )
+	   VALUES (
+	        SEQ_SC_ID.NEXTVAL,
+	        #{scTitle},
+	        TO_DATE(#{scDate}, 'YYYY-MM-DD'),
+	        #{scClassCode}
+	   )
+	</insert>
    
    <delete id="deleteSchedule">
 	DELETE FROM SCHEDULE
@@ -44,7 +42,7 @@
    <update id="updateSchedule">
       update schedule
          set sc_title = #{scTitle}
-           , sc_date = #{scDate}
+           , sc_date = TO_DATE(#{scDate}, 'YYYY-MM-DD')
         where sc_id = #{scId}   
    </update>
 </mapper>
