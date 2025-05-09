@@ -707,9 +707,9 @@
         if (calendarMonth === 9) { // 10월
         	const dateString1 = yearStr + "-10-03";
         	const dateString2 = yearStr + "-10-09";
-        	const dateString3 = yearStr + "-10-05";
-        	const dateString4 = yearStr + "-10-06";
-        	const dateString5 = yearStr + "-10-07";
+        	const dateString3 = "2025-10-05";
+        	const dateString4 = "2025-10-06";
+        	const dateString5 = "2025-10-07";
             addEvent({ title: "개천절", date: dateString1, description: "개천절" });
             addEvent({ title: "한글날", date: dateString2, description: "한글날" });
             addEvent({ title: "추석", date: dateString3, description: "추석" });
