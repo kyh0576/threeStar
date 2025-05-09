@@ -808,6 +808,7 @@ function formatTime(isoString) {
 let socket;
 
 document.addEventListener("DOMContentLoaded", function () {
+	let path = '${pageContext.request.contextPath}';
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
     const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbmEiLCJtZW1ObyI6MSwibWVtTmFtZSI6Iuq0gOumrOyekCJ9.GrFjymLAjAiEyIZYnRX7uSU5TRSu6bcs9GvBgHxCOX4"; // JWT 토큰
@@ -817,7 +818,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const ip = location.hostname;
     const encodedToken = encodeURIComponent(token);
 
-    const wsUrl = `ws://\${ip}:8333/\${pageContext.request.contextPath}/chat/\${roomId}?token=\${encodedToken}`;
+    let wsUrl = `ws://`;
+    wsUrl += ip + ':8333';
+    wsUrl += path;
+    wsUrl += `/chat/\${roomId}?token=\${encodedToken}`;
+    console.log(wsUrl);
     console.log("WebSocket 연결 URL:", wsUrl);
 
     socket = new WebSocket(wsUrl);
@@ -843,7 +848,7 @@ document.addEventListener("DOMContentLoaded", function () {
         appendMessage(data, type);
     };
 
-    function sendMessage() {
+    function sendMessage() { 
         const msg = chatInput.value.trim();
         if (!msg) return;
 
