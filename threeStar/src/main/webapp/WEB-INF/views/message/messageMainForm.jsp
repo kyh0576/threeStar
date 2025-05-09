@@ -863,7 +863,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <!-- 채팅방 목록 -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    fetch("/tt/chattingRoom/rooms")  // 🔁 백엔드에서 참여중인 채팅방 목록 호출
+    fetch("${pageContext.request.contextPath}/chattingRoom/rooms")  // 🔁 백엔드에서 참여중인 채팅방 목록 호출
         .then(response => response.json())
         .then(rooms => {
             const list = document.querySelector(".message-list");
@@ -899,7 +899,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log("내 번호:", myMemNo);
 
-    fetch(`/tt/message/history?roomId=\${roomId}`)  // ✅ 백틱 사용 → 템플릿 리터럴
+    fetch(`${pageContext.request.contextPath}/message/history?roomId=\${roomId}`)  // ✅ 백틱 사용 → 템플릿 리터럴
         .then(response => response.json())
         .then(messages => {
             console.log("가져온 이전 메시지들:", messages);
@@ -930,7 +930,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!roomId) return;
 
-    fetch("/tt/chattingRoom/roomName?roomId=" + roomId)
+    fetch("${pageContext.request.contextPath}/chattingRoom/roomName?roomId=" + roomId)
         .then(response => response.text())
         .then(name => {
             document.querySelector("#chatRoomTitle").textContent = name;
@@ -945,7 +945,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
 
-    fetch("/tt/chattingRoom/roomName?roomId=" + roomId)
+    fetch("${pageContext.request.contextPath}/chattingRoom/roomName?roomId=" + roomId)
         .then(response => response.text())
         .then(name => {
             const targetNameDom = document.querySelector("#targetNicknameArea");
@@ -969,7 +969,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const roomId = new URLSearchParams(window.location.search).get("roomId");
             const memNo = myMemNo;
 
-            fetch("/tt/chattingRoom/exit", {
+            fetch("${pageContext.request.contextPath}/chattingRoom/exit", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
