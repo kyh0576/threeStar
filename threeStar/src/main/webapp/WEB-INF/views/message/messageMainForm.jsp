@@ -563,7 +563,7 @@
             </div>
             
             <div class="section-header">
-                <div>디서함</div>
+                <div>티서랍</div>
             </div>
             
             <div class="file-list">
@@ -812,11 +812,6 @@ document.addEventListener("DOMContentLoaded", function () {
         chatInput.value = "";
     }
 });
-
-
-
-
-
 </script>
 
 <!-- 채팅방 목록 -->
