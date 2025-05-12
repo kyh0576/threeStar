@@ -31,8 +31,9 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
-          source: "target/threeStar.war"
+          source: "threeStar/target/threeStar.war"
           target: "/home/ubuntu"
+
 
       - name: ▶️ Run remote deploy.sh
         uses: appleboy/ssh-action@v0.1.8
