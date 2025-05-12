@@ -31,8 +31,9 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
-          source: "threeStar/target/threeStar.war"
-          target: "/home/ubuntu"
+          source: "threeStar/target/tt-1.0.0-BUILD-SNAPSHOT.war"
+          target: "/home/ubuntu/threeStar.war"
+
 
 
       - name: ▶️ Run remote deploy.sh
