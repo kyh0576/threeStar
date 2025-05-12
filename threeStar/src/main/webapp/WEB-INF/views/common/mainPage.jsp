@@ -650,6 +650,7 @@
 		    dataType: 'json',
 		    success: function(data) {
 		    	console.log(data)
+		    	console.log("push 배포 테스트")
 		      // 멤버 영역 초기화
 		      $('#online-members').empty();
 
