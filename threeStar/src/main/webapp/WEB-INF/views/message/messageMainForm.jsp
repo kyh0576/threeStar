@@ -11,7 +11,8 @@
     String roomIdParam = request.getParameter("roomId");
     int roomId = roomIdParam != null ? Integer.parseInt(roomIdParam) : -1;
 %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
 <html>
@@ -624,14 +625,6 @@
                     <div class="file-download">⬇️</div>
                 </div>
                 
-                <div class="file-item">
-                    <div class="file-icon">📄</div>
-                    <div class="file-info">
-                        <div class="file-name">수정본.pdf</div>
-                        <div class="file-meta">150 kB</div>
-                    </div>
-                    <div class="file-download">⬇️</div>
-                </div>
             </div>
             
             <div class="section-header">
@@ -747,32 +740,53 @@ function appendMessage(data, type) {
         content += `<div><strong>\${data.sender}</strong></div>`;
     }
 
-    const contextPath = "/${pageContext.request.contextPath}";
+    const contextPath = "${pageContext.request.contextPath}";
+    
 
-    // ✅ 새로 보낸 파일 → 이미지 처리
+ // ✅ 새로 보낸 파일 → 이미지 처리
     if (data.type === "file" && data.file && data.file.type.startsWith("image")) {
         const imageUrl = data.file.fileUrl;
+        const fileName = data.file.name;
 
-        content += `<div class="chat-attachment">
-            <img src="\${imageUrl}" alt="\${data.file.name}" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" />
-        </div>`;
+        content += `
+            <a href="\${imageUrl}" download="\${fileName}" class="chat-attachment">
+                <img src="\${imageUrl}" alt="\${fileName}" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" />
+            </a>`;
     }
     // ✅ 이전 메시지 → originName + changeName 둘다 있으면 이미지
-else if (data.changeName && isImageFile(data.changeName)) {
-    const contextPath = "${pageContext.request.contextPath}";
-    const imageUrl = contextPath + "/resources/uploadFiles/" + data.changeName;
+    else if (data.changeName && isImageFile(data.changeName)) {
+        const imageUrl = contextPath + "/resources/uploadFiles/" + data.changeName;
+        const fileName = data.originName ?? "";
 
-    content += `<div class="chat-attachment">
-        <img src="\${imageUrl}" alt="\${data.originName ?? ''}" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" />
-    </div>`;
-}
-
-
-
-    // ✅ 이전 메시지 → originName만 있고 changeName이 없으면 그냥 파일명 출력
-    else if (data.originName && !data.changeName) {
-        content += `<div>\${data.originName}</div>`;
+        content += `
+            <a href="\${imageUrl}" download="\${fileName}" class="chat-attachment">
+                <img src="\${imageUrl}" alt="\${fileName}" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" />
+            </a>`;
+            
+            
+    }else if(data.type === "file" && data.file){
+    	const fileUrl = data.file.fileUrl;
+        const fileName = data.file.name;
+        
+        content += `
+            <a href="\${fileUrl}" download="\${fileName}" class="chat-attachment"
+               style="display: inline-block; background: #eaeaea; padding: 10px; border-radius: 10px; margin-top: 5px;">
+                📄 \${fileName}
+            </a>`;
+            
+            
+    }else if(data.changeName && !isImageFile(data.changeName)){
+    	const fileUrl = contextPath + "/resources/uploadFiles/" + data.changeName;
+        const fileName = data.originName;
+        
+        content += `
+            <a href="\${fileUrl}" download="\${fileName}" class="chat-attachment"
+               style="display: inline-block; background: #eaeaea; padding: 10px; border-radius: 10px; margin-top: 5px;">
+                📄 \${fileName}
+            </a>`;
     }
+ 
+
     // ✅ 일반 텍스트
     else {
         const textContent = data.text ?? data.messageContent ?? '';
@@ -997,6 +1011,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+//==이미지 업로드 時====
 	
 const fileInput = document.getElementById("selectedFile");
 const fileSelectBtn = document.getElementById("fileSelectBtn");
@@ -1078,6 +1093,75 @@ fileInput.addEventListener("change", () => {
 
 
 
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const roomId = new URLSearchParams(window.location.search).get("roomId");
+    console.log(`\${contextPath}/download/files?roomId=\${roomId}`);
+    
+    fetch(`\${contextPath}/download/files?roomId=\${roomId}`)
+        .then(response => response.json())
+        .then(files => {
+            const fileListDiv = document.querySelector(".file-list");
+            fileListDiv.innerHTML = ""; // 기존 초기화
+
+            files.forEach(file => {
+                const isImage = /\.(jpg|jpeg|png|gif)$/i.test(file.originName);
+                const fileSizeKb = file.fileSize ? Math.round(file.fileSize / 1024) : "?";
+                const downloadUrl = `\${contextPath}/message/download?fileName=\${encodeURIComponent(file.changeName)}`;
+
+                // 요소 생성
+                const fileItem = document.createElement("div");
+                fileItem.className = "file-item";
+
+                const icon = document.createElement("div");
+                icon.className = "file-icon";
+                icon.textContent = isImage ? "🖼️" : "📄";
+
+                const info = document.createElement("div");
+                info.className = "file-info";
+
+                const fileNameDiv = document.createElement("div");
+                fileNameDiv.className = "file-name";
+                fileNameDiv.textContent = file.originName;
+
+                const meta = document.createElement("div");
+                meta.className = "file-meta";
+                meta.textContent = `\${fileSizeKb} kB`;
+
+                const download = document.createElement("a");
+                download.className = "file-download";
+                download.href = downloadUrl;
+                download.download = "";
+                download.textContent = "⬇️";
+
+                info.appendChild(fileNameDiv);
+                info.appendChild(meta);
+
+                fileItem.appendChild(icon);
+                fileItem.appendChild(info);
+                fileItem.appendChild(download);
+
+                fileListDiv.appendChild(fileItem);
+            });
+        })
+        .catch(err => {
+            console.error("❌ 파일 목록 불러오기 실패:", err);
+        });
+});
+
+
+
+
+
+
+
+
+
+
 </script>
 
 <script>
@@ -1112,6 +1196,9 @@ function inviteFriend(friendId, friendName) {
   // 🔁 여기에 AJAX로 서버에 초대 요청 보내는 코드 작성 가능
 }
 </script>
+
+
+
 
 <!-- ------------------------------------------------------------------ -->
 

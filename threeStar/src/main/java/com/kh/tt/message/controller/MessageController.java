@@ -1,6 +1,9 @@
 package com.kh.tt.message.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +14,11 @@ import javax.servlet.http.HttpSession;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -115,8 +123,31 @@ public class MessageController {
         return result;
     }
 
+    @GetMapping("/download")
+    @ResponseBody
+    public ResponseEntity<Resource> download(@RequestParam("fileName") String fileName,
+                                             HttpServletRequest request) throws IOException {
+        // 1. 저장 경로
+        String savePath = request.getSession().getServletContext().getRealPath("/resources/uploadFiles/");
+        System.out.println(savePath);
+        
+        File file = new File(savePath, fileName);
 
+        if (!file.exists()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
 
+        // 2. 리소스 객체로 변환
+        Resource resource = new FileSystemResource(file);
+
+        // 3. 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, 
+                    "attachment; filename=\"" + URLEncoder.encode(fileName, "UTF-8") + "\"");
+        headers.add(HttpHeaders.CONTENT_TYPE, Files.probeContentType(file.toPath()));
+
+        return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+    }
 }
 
 
