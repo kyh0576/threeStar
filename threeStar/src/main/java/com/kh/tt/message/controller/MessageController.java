@@ -148,6 +148,14 @@ public class MessageController {
 
         return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
     }
+    
+    @GetMapping("/download/files")
+    @ResponseBody
+    public List<Message> getFilesByRoomId(@RequestParam("roomId") int roomId) {
+        System.out.println("📁 티서랍 파일 목록 요청 - roomId: " + roomId);
+        return messageService.getFilesByRoomId(roomId);
+    }
+    
 }
 
 

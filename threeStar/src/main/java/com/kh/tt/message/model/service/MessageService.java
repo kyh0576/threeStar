@@ -14,5 +14,5 @@ public interface MessageService {
     
     List<Message> getUploadedFiles(int roomId);
     
-    // (Optional) 파일만 불러오기 메서드도 추후 필요하면 여기에 추가 가능
+    List<Message> getFilesByRoomId(int roomId);
 }

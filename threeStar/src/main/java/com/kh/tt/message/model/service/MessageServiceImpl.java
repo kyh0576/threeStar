@@ -35,5 +35,10 @@ public class MessageServiceImpl implements MessageService {
         return mDao.getUploadedFiles(sqlSession,roomId);
     }
     
+    
     // (Optional) → 파일 전용 메시지 불러오기도 추후 필요하면 여기에 추가
+    @Override
+    public List<Message> getFilesByRoomId(int roomId) {
+        return mDao.getFilesByRoomId(sqlSession,roomId);
+    }
 }

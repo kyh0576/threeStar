@@ -24,4 +24,8 @@ public class MessageDao {
     public List<Message> getUploadedFiles(SqlSessionTemplate sqlSession, int roomId) {
         return sqlSession.selectList("messageMapper.getUploadedFiles", roomId);
     }
+    
+    public List<Message> getFilesByRoomId(SqlSessionTemplate sqlSession,int roomId) {
+        return sqlSession.selectList("messageMapper.getFilesByRoomId", roomId);
+    }
 }

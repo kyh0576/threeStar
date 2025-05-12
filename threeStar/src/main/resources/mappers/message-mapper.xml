@@ -16,6 +16,7 @@
     <result column="sender" property="sender"/>
     <result column="TEXT" property="text"/>
     <result column="time" property="time"/>
+     <result column="fileSize" property="fileSize"/> <!-- ✅ 추가 -->
     
 </resultMap>
 
@@ -94,8 +95,21 @@
 </select>
 
 
-
-
+<select id="getFilesByRoomId" parameterType="_int" resultMap="messageResult">
+    SELECT 
+        MESSAGE_NO,
+        ORIGIN_NAME,
+        CHANGE_NAME,
+        FILE_TYPE,
+        LENGTH(CHANGE_NAME) AS fileSize,
+        MS_CHAT_ID,
+        MS_MEM_NO,
+        SEND_TIME
+    FROM MESSAGE
+    WHERE MS_CHAT_ID = #{roomId}
+      AND TYPE = 'file'
+    ORDER BY SEND_TIME DESC
+</select>
 
 
 </mapper>

@@ -616,13 +616,7 @@
             </div>
             
             <div class="file-list">
-                <div class="file-item">
-                    <div class="file-icon">📄</div>
-                    <div class="file-info">
-                        <div class="file-name">자소서.pdf</div>
-                        <div class="file-meta">120 kB</div>
-                    </div>
-                    <div class="file-download">⬇️</div>
+               
                 </div>
                 
             </div>
@@ -1092,60 +1086,42 @@ fileInput.addEventListener("change", () => {
 });
 
 
-
-
-
-
-
-
+//티 서랍
 document.addEventListener("DOMContentLoaded", function () {
-    const roomId = new URLSearchParams(window.location.search).get("roomId");
-    console.log(`\${contextPath}/download/files?roomId=\${roomId}`);
-    
-    fetch(`\${contextPath}/download/files?roomId=\${roomId}`)
-        .then(response => response.json())
+    const roomId = <%= roomId %>;
+    const contextPath = "<%= request.getContextPath() %>";
+
+    console.log("roomId:", roomId);
+    console.log("contextPath:", contextPath);
+
+    fetch(`\${contextPath}/message/download/files?roomId=\${roomId}`)
+        .then(response => {
+            if (!response.ok) throw new Error("404 or server error");
+            return response.json();
+        })
         .then(files => {
             const fileListDiv = document.querySelector(".file-list");
-            fileListDiv.innerHTML = ""; // 기존 초기화
+            fileListDiv.innerHTML = "";
 
             files.forEach(file => {
                 const isImage = /\.(jpg|jpeg|png|gif)$/i.test(file.originName);
                 const fileSizeKb = file.fileSize ? Math.round(file.fileSize / 1024) : "?";
                 const downloadUrl = `\${contextPath}/message/download?fileName=\${encodeURIComponent(file.changeName)}`;
 
-                // 요소 생성
-                const fileItem = document.createElement("div");
-                fileItem.className = "file-item";
-
-                const icon = document.createElement("div");
-                icon.className = "file-icon";
-                icon.textContent = isImage ? "🖼️" : "📄";
-
-                const info = document.createElement("div");
-                info.className = "file-info";
-
-                const fileNameDiv = document.createElement("div");
-                fileNameDiv.className = "file-name";
-                fileNameDiv.textContent = file.originName;
-
-                const meta = document.createElement("div");
-                meta.className = "file-meta";
-                meta.textContent = `\${fileSizeKb} kB`;
-
-                const download = document.createElement("a");
-                download.className = "file-download";
-                download.href = downloadUrl;
-                download.download = "";
-                download.textContent = "⬇️";
-
-                info.appendChild(fileNameDiv);
-                info.appendChild(meta);
-
-                fileItem.appendChild(icon);
-                fileItem.appendChild(info);
-                fileItem.appendChild(download);
-
-                fileListDiv.appendChild(fileItem);
+                const html = `
+                    <div class="file-item">
+                        <div class="file-icon">${isImage ? "🖼️" : "📄"}</div>
+                        <div class="file-info">
+                            <div class="file-name">\${file.originName}</div>
+                            <div class="file-meta">\${fileSizeKb} kB</div>
+                        </div>
+                        <a class="file-download" 
+                           href="\${downloadUrl}" 
+                           download="\${file.originName}" 
+                           target="_blank">⬇️</a>
+                    </div>
+                `;
+                fileListDiv.innerHTML += html;
             });
         })
         .catch(err => {
@@ -1153,16 +1129,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
-
-
-
-
-
-
-
-
-
 </script>
+
 
 <script>
 
