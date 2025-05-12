@@ -20,7 +20,9 @@ jobs:
           distribution: 'temurin'
 
       - name: 🔨 Build WAR with Maven
-        run: mvn clean package -DskipTests=true
+        run: |
+          cd ..
+          mvn clean package -DskipTests=true
 
       - name: 🚀 Deploy to EC2
         uses: appleboy/scp-action@v0.1.4
