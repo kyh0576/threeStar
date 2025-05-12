@@ -587,24 +587,15 @@
   
   <!-- 오른쪽 사이드바 -->
   <div class="right-sidebar">
+  
     <div style="border: 1px solid #f8f9fa;" class="border">
-      <div class="today-header">온라인 - 3명</div>
+      <div class="today-header">온라인</div>
       <hr>
-      <div class="today-members">
-        <div class="member-item">
-          <div class="member-avatar avatar-red">김</div>
-          <span class="member-name">김시연</span>
-        </div>
+      <div class="today-members" id="online-members">
+      
+        <!-- 온라인 유저 올 자리 -->
         
-        <div class="member-item">
-          <div class="member-avatar avatar-purple">동</div>
-          <span class="member-name">동진이 형</span>
-        </div>
         
-        <div class="member-item">
-          <div class="member-avatar avatar-purple">현</div>
-          <span class="member-name">현정 누나</span>
-        </div>
       </div>
     </div>
     
@@ -649,6 +640,45 @@
   <script>
   
   $(document).ready(function(){
+	  
+	  // 온라인 유저 조회
+	  function fetchOnlineMembers() {
+		  $.ajax({
+		    url: 'getOnlineMembers.me', // 이 URL에 맞는 컨트롤러 만들어야 함
+		    data: {memNo:"${loginMember.memNo}"},
+		    method: 'GET',
+		    dataType: 'json',
+		    success: function(data) {
+		    	console.log(data)
+		      // 멤버 영역 초기화
+		      $('#online-members').empty();
+
+		      // 인원 수 갱신
+		      $('#online-count').text(data.length);
+
+		      // 반복문으로 멤버 추가
+		      data.forEach(member => {
+		        const firstLetter = member.memName.charAt(0);
+		        const html = `
+		          <div class="member-item">
+		            <div class="member-avatar avatar-red">\${firstLetter}</div>
+		            <span class="member-name">\${member.memName}</span>
+		          </div>
+		        `;
+		        $('#online-members').append(html);
+		      });
+		    },
+		    error: function() {
+		      console.error('온라인 멤버 정보를 불러오는데 실패했습니다.');
+		    }
+		  });
+		}
+
+		// 최초 1회 실행 + 주기적 갱신
+		fetchOnlineMembers();
+		setInterval(fetchOnlineMembers, 5000); // 5초마다 갱신
+	  
+	  
 	  let loginMemberAdminYN = "${loginMember.adminYN}";
 	  $.ajax({
 	        url: 'selectScheduleList.do',

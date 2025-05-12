@@ -258,5 +258,26 @@
 	       OR (FROM_MEM = #{toMem} AND TO_MEM = #{fromMem})
 	</delete>
 	
+	<select id="getOnlineMembers" resultMap="memberResult">
+      select
+             mem_no
+           , mem_id
+           , mem_pwd
+           , mem_name
+           , email
+           , phone
+           , mem_class_code
+           , sns_key
+           , status
+           , online_st
+           , admin_yn
+           , profile_url
+        from member
+        join friends on (to_mem = mem_no)
+       where status = 'Y'
+         and online_st = 'Y'
+         and are_we_friend = 'Y'
+         and from_mem = #{memNo}
+   </select>
 
 </mapper>
