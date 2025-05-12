@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page isELIgnored="true" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -379,9 +380,19 @@
                     <input type="text" id="eventTitle" required>
                 </div>
                 <div class="form-group">
+				    <label for="eventStartDate">시작 날짜</label>
+				    <input type="date" id="eventStartDate" required>
+				</div>
+				<div class="form-group">
+				    <label for="eventEndDate">종료 날짜</label>
+				    <input type="date" id="eventEndDate" required>
+				</div>
+                <!-- 
+                <div class="form-group">
                     <label for="eventDate">날짜</label>
                     <input type="date" id="eventDate" required>
                 </div>
+                 -->
                 <div class="form-group">
                     <label for="eventDesc">설명</label>
                     <textarea id="eventDesc"></textarea>
@@ -394,6 +405,554 @@
         </div>
     </div>
     
+    <script>
+ // 현재 날짜 정보 - 전역 변수로 분명하게 설정
+    let today = new Date();
+    let calendarMonth = today.getMonth();
+    let calendarYear = today.getFullYear();
+
+    // 디버깅용 - 전역 변수 확인
+    console.log("🌍 전역 변수 초기화 - 현재 연도:", calendarYear, "현재 월:", calendarMonth);
+
+    // 모든 일정을 저장할 객체
+    let events = {};
+
+    // 월 이름
+    const monthNames = ["1월", "2월", "3월", "4월", "5월", "6월",
+                       "7월", "8월", "9월", "10월", "11월", "12월"];
+
+    // 요일 이름
+    const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+
+    // DOM 요소를 위한 전역 변수
+    let calendarDays, calendarYearMonthElement, prevMonthButton, nextMonthButton, todayButton;
+    let eventModal, closeModalButton, cancelButton, eventForm, eventStartDateInput, eventEndDateInput;
+
+    // 윤년 확인 함수
+    function isLeapYear(year) {
+        return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+    }
+
+    // 월별 일수 계산 함수
+    function getDaysInMonth(year, month) {
+        // 31일인 월: 1, 3, 5, 7, 8, 10, 12
+        if ([0, 2, 4, 6, 7, 9, 11].includes(month)) {
+            return 31;
+        } 
+        // 30일인 월: 4, 6, 9, 11
+        else if ([3, 5, 8, 10].includes(month)) {
+            return 30;
+        } 
+        // 2월: 윤년이면 29일, 아니면 28일
+        else {
+            return isLeapYear(year) ? 29 : 28;
+        }
+    }
+
+ // 날짜 형식 변환 함수 (yyyy-mm-dd)
+	function formatDate(date) {
+	  if (!date) return '';
+	  const yyyy = date.getFullYear();
+	  const mm = String(date.getMonth() + 1).padStart(2, '0');
+	  const dd = String(date.getDate()).padStart(2, '0');
+	  return `${yyyy}-${mm}-${dd}`;
+	}
+
+ // 두 날짜 사이의 모든 날짜를 배열로 반환하는 함수
+	function getDatesInRange(start, end) {
+	  console.log("📅 getDatesInRange 호출됨 - start:", start, "end:", end);
+	
+	  const date = new Date(start);
+	  const dates = [];
+	
+	  while (date <= end) {
+	    const formatted = formatDate(date);
+	    console.log("📆 formatDate 결과:", formatted);
+	    dates.push(formatted);
+	    date.setDate(date.getDate() + 1);
+	  }
+	
+	  return dates;
+	}
+
+    // 캘린더 렌더링 함수
+    function renderCalendar() {
+        // DOM 요소가 있는지 확인
+        if (!calendarDays || !calendarYearMonthElement) {
+            console.error("캘린더 DOM 요소를 찾을 수 없습니다!");
+            return;
+        }
+        
+        // 현재 연도와 월 표시 - 명시적 문자열 변환 추가
+        try {
+            let yearStr = String(calendarYear);
+            let monthStr = monthNames[calendarMonth];
+            console.log("렌더링 시도: ", yearStr, monthStr);
+            calendarYearMonthElement.textContent = yearStr + "년 " + monthStr;
+        } catch (e) {
+            console.error("연도/월 표시 오류:", e);
+        }
+        
+        // 캘린더 초기화
+        calendarDays.innerHTML = '';
+        
+        console.log("🧩 renderCalendar", calendarYear, calendarMonth);
+
+        // 해당 월의 첫 날
+        const firstDay = new Date(calendarYear, calendarMonth, 1);
+        // 해당 월의 마지막 날
+        const lastDay = new Date(calendarYear, calendarMonth, getDaysInMonth(calendarYear, calendarMonth));
+        
+        // 이전 달의 날짜 표시
+        const firstDayOfWeek = firstDay.getDay();
+        if (firstDayOfWeek > 0) {
+            const prevMonthLastDate = new Date(calendarYear, calendarMonth, 0).getDate();
+            for (let i = 0; i < firstDayOfWeek; i++) {
+                const dayNumber = prevMonthLastDate - firstDayOfWeek + i + 1;
+                const prevMonthYear = calendarMonth === 0 ? calendarYear - 1 : calendarYear;
+                const prevMonth = calendarMonth === 0 ? 11 : calendarMonth - 1;
+                const dateString = prevMonthYear + '-' + 
+                                  (prevMonth + 1 < 10 ? '0' + (prevMonth + 1) : prevMonth + 1) + '-' + 
+                                  (dayNumber < 10 ? '0' + dayNumber : dayNumber);
+                const dayCell = createDayCell(dayNumber, true, dateString);
+                calendarDays.appendChild(dayCell);  // append 대신 appendChild 사용
+                
+                console.log("📌 이전 달 날짜 셀 생성 - dayNumber:", dayNumber, "→ dateString:", dateString);
+            }
+        }
+        
+         // 현재 달의 날짜 표시
+        for (let i = 1; i <= getDaysInMonth(calendarYear, calendarMonth); i++) {
+            const dateString = calendarYear + '-' + 
+                              (calendarMonth + 1 < 10 ? '0' + (calendarMonth + 1) : calendarMonth + 1) + '-' + 
+                              (i < 10 ? '0' + i : i);
+            const isToday = i === today.getDate() && calendarMonth === today.getMonth() && calendarYear === today.getFullYear();
+            const dayCell = createDayCell(i, false, dateString, isToday);
+            calendarDays.appendChild(dayCell);  // append 대신 appendChild 사용
+        }
+
+        // 다음 달의 날짜 표시
+        const lastDayOfWeek = lastDay.getDay();
+        if (lastDayOfWeek < 6) {
+            for (let i = 1; i <= 6 - lastDayOfWeek; i++) {
+                const nextMonthYear = calendarMonth === 11 ? calendarYear + 1 : calendarYear;
+                const nextMonth = calendarMonth === 11 ? 0 : calendarMonth + 1;
+                const dateString = nextMonthYear + '-' + 
+                                 (nextMonth + 1 < 10 ? '0' + (nextMonth + 1) : nextMonth + 1) + '-' + 
+                                 (i < 10 ? '0' + i : i);
+                const dayCell = createDayCell(i, true, dateString);
+                calendarDays.appendChild(dayCell);  // append 대신 appendChild 사용
+            }
+        }
+        
+        // 기본 일정 추가
+        addDefaultEvents();
+        
+        // 날짜 이동 후 이벤트 다시 표시
+        displayEvents();
+    }
+
+ // 날짜 셀 생성 함수
+    function createDayCell(day, isOtherMonth, dateString, isToday = false) {
+        const dayCell = document.createElement('div');
+        dayCell.className = 'day-cell';
+        if (isOtherMonth) {
+            dayCell.classList.add('other-month');
+        }
+        if (isToday) {
+            dayCell.classList.add('today');
+        }
+        
+        const dayNumber = document.createElement('div');
+        dayNumber.className = 'day-number';
+        dayNumber.textContent = day;
+        
+        if (isToday) {
+            dayNumber.classList.add('current-day');
+        }
+        
+        dayCell.appendChild(dayNumber);  // append 대신 appendChild 사용
+        
+        // 이벤트 컨테이너 추가
+        const eventsContainer = document.createElement('div');
+        eventsContainer.className = 'events-container';
+        
+        // 날짜 문자열이 유효한지 확인
+        if (dateString && dateString !== 'undefined') {
+        	console.log("✔️ 유효한 날짜 문자열:", dateString);
+            eventsContainer.dataset.date = dateString;
+        } else {
+            console.error("❌ 잘못된 날짜 문자열:", dateString);
+        }
+        
+        dayCell.appendChild(eventsContainer);  // append 대신 appendChild 사용
+        
+        // 클릭 이벤트 처리
+        dayCell.addEventListener('click', function() {
+            // 날짜 문자열 확인
+            if (dateString && dateString !== 'undefined') {
+                showAddEventModal(dateString);
+                console.log("🆑 유효한 클릭 이벤트 문자열: ", dateString);
+            } else {
+                console.error("클릭된 셀에 유효한 날짜가 없습니다");
+            }
+        });
+        
+        return dayCell;
+    }
+
+ // 일정 표시 함수
+    function displayEvents() {
+        // 현재 이벤트 상태 로깅
+        console.log("🧾 displayEvents에서 모든 이벤트 상태:", JSON.stringify(events, null, 2));
+        
+        // 모든 날짜별 이벤트 컨테이너 가져오기
+        const eventContainers = document.querySelectorAll('.events-container');
+        console.log(`🔍 이벤트 컨테이너 수: ${eventContainers.length}`);
+        
+        // 각 컨테이너에 해당 날짜의 이벤트 표시
+        eventContainers.forEach(container => {
+            const dateString = container.dataset.date;
+            console.log(`🔎 컨테이너 날짜 확인: "${dateString}"`);
+            
+            if (!dateString || dateString === "undefined") {
+                console.error("❌ 날짜 문자열이 없거나 undefined:", container);
+                return;
+            }
+            
+            // 해당 날짜의 이벤트 가져오기
+            const dateEvents = events[dateString] || [];
+            
+            console.log(`📆 "${dateString}" → 이벤트 수: ${dateEvents.length}`);
+            
+            // 컨테이너 초기화
+            container.innerHTML = '';
+            
+            // 이벤트 표시
+            dateEvents.forEach(event => {
+                const eventElement = document.createElement('div');
+                eventElement.className = 'event-item';
+                
+                // 다중 날짜 이벤트 표시 스타일 적용
+                if (event.isMultiDay) {
+                    eventElement.classList.add('multi-day-event');
+                    
+                    // 시작일, 종료일에 특별 클래스 추가
+                    if (dateString === event.startDate) {
+                        eventElement.classList.add('event-start');
+                    } else if (dateString === event.endDate) {
+                        eventElement.classList.add('event-end');
+                    } else {
+                        eventElement.classList.add('event-middle');
+                    }
+                }
+                
+                eventElement.textContent = event.title;
+                eventElement.title = `${event.title}\n${event.startDate}${event.endDate !== event.startDate ? ' ~ ' + event.endDate : ''}\n${event.description || ''}`;
+                container.appendChild(eventElement);  // append 대신 appendChild 사용
+                
+                // 디버깅: 추가된 이벤트 표시
+                console.log("이벤트 추가됨 (DOM):", dateString, event.title);
+            });
+        });
+
+        // 이벤트 키값 확인을 위한 추가 로깅
+        console.log("💫 events 객체의 모든 키:");
+        for (const dateKey in events) {
+            console.log(`- "\${dateKey}" (\${typeof dateKey}): \${events[dateKey].length}개 이벤트`);
+        }
+    }
+
+    // 일정 추가 모달 표시 함수
+    function showAddEventModal(dateString) {
+        // 모달이 존재하는지 확인
+        if (!eventModal || !eventStartDateInput || !eventEndDateInput) {
+            console.error("모달 DOM 요소를 찾을 수 없습니다!");
+            return;
+        }
+        
+        // 모달 열기
+        eventModal.style.display = 'flex';
+        
+        // 날짜 필드 설정 (시작일과 종료일을 클릭한 날짜로 초기화)
+        eventStartDateInput.value = dateString;
+        eventEndDateInput.value = dateString;
+        
+        // 이벤트 객체 데이터 초기화
+        document.getElementById('eventTitle').value = '';
+        document.getElementById('eventDesc').value = '';
+    }
+    
+    function addEvent(event) {
+        console.log("📂 현재 events 상태:", JSON.stringify(events, null, 2));
+
+        const startDate = event.startDate;
+        const endDate = event.endDate ? event.endDate : event.startDate;
+
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+            console.error("날짜 형식이 올바르지 않습니다:", startDate, endDate);
+            return;
+        }
+
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+
+        // 🔁 복사본을 써야 원본이 안 망가짐
+        const loopDate = new Date(start);
+
+        while (loopDate <= end) {
+            const dateString = formatDate(loopDate);
+            const container = document.querySelector(`.events-container[data-date="${dateString}"]`);
+            if (container) {
+                const eventDiv = document.createElement("div");
+                eventDiv.classList.add("event");
+                eventDiv.textContent = event.title;
+
+                eventDiv.addEventListener("click", function () {
+                    openEventModal(dateString, event);
+                });
+
+                container.appendChild(eventDiv);
+                console.log("✅ 이벤트 추가됨 (DOM):", dateString, event.title);
+            }
+            loopDate.setDate(loopDate.getDate() + 1); // 🔁 복사본만 수정
+        }
+
+        // ✅ 원본 start, end를 그대로 사용 가능
+        const rangeDates = getDatesInRange(start, end);
+        rangeDates.forEach(date => {
+            if (!events[date]) events[date] = [];
+            events[date].push({ ...event, isMultiDay: startDate !== endDate });
+        });
+
+        displayEvents();
+    }
+    
+    // 기본 일정 데이터 추가
+    function addDefaultEvents() {
+        // 디버깅: calendarYear 값 확인
+        console.log("🔍 addDefaultEvents 내부 - calendarYear:", calendarYear, "calendarMonth:", calendarMonth);
+        // 현재 월의 공휴일 또는 특별한 날 추가
+        console.log("📌 addDefaultEvents:", calendarYear, calendarMonth);    
+
+        if (typeof calendarYear === 'undefined' || calendarYear === null) {
+            console.error("⚠️ calendarYear가 정의되지 않았습니다. 현재 날짜를 사용합니다.");
+            calendarYear = new Date().getFullYear();
+        }
+
+        // 중복 방지를 위한 기본 이벤트 목록
+        const defaultEvents = [
+            "신정", "임시공휴일", "설날", "삼일절", "삼일절(대체공휴일)", "어린이날", "부처님오신날(대체공휴일)",
+            "현충일", "대통령 선거날", "광복절", "개천절", "한글날", "추석", "성탄절"
+        ];
+
+        // 기존 기본 이벤트 제거
+        for (const dateKey in events) {
+            events[dateKey] = events[dateKey].filter(event => !defaultEvents.includes(event.title));
+        }
+
+        const yearStr = String(calendarYear);
+
+        // 각 월별로 공휴일 조건에 따라 추가
+        if (calendarMonth === 0) { // 1월
+            const dateString = yearStr + "-01-01";
+            const dateString0 = "2025-01-27";
+            const dateString1 = "2025-01-28";
+            const dateString2 = "2025-01-29";
+            const dateString3 = "2025-01-30";
+            addEvent({ title: "신정", startDate: dateString, description: "신정" });
+            addEvent({ title: "임시공휴일", startDate: dateString0, description: "임시공휴일" });
+            addEvent({ 
+                title: "설날", 
+                startDate: dateString1, 
+                endDate: dateString3, 
+                description: "설날" 
+            });
+        }
+
+        if (calendarMonth === 2) { // 3월
+            const dateString = yearStr + "-03-01";
+            const dateString1 = "2025-03-03";
+            addEvent({ title: "삼일절", startDate: dateString, description: "삼일절" });
+            addEvent({ title: "삼일절(대체공휴일)", startDate: dateString1, description: "삼일절(대체공휴일)" });
+        }
+
+        if (calendarMonth === 4) { // 5월
+            const dateString = yearStr + "-05-05";
+            const dateString1 = "2025-05-06";
+            addEvent({ title: "어린이날", startDate: dateString, description: "어린이날" });
+            addEvent({ title: "부처님오신날(대체공휴일)", startDate: dateString1, description: "부처님오신날(대체공휴일)" });
+        }
+
+        if (calendarMonth === 5) { // 6월
+            const dateString = yearStr + "-06-06";
+            const dateString1 = "2025-06-03";
+            addEvent({ title: "현충일", startDate: dateString, description: "현충일" });
+            addEvent({ title: "대통령 선거날", startDate: dateString1, description: "대통령 선거날" });
+        }
+
+        if (calendarMonth === 7) { // 8월
+            const dateString = yearStr + "-08-15";
+            addEvent({ title: "광복절", startDate: dateString, description: "광복절" });
+        }
+
+        if (calendarMonth === 9) { // 10월
+            const dateString1 = yearStr + "-10-03";
+            const dateString2 = yearStr + "-10-09";
+            const dateString3 = "2025-10-05";
+            const dateString5 = "2025-10-07";
+            addEvent({ title: "개천절", startDate: dateString1, description: "개천절" });
+            addEvent({ title: "한글날", startDate: dateString2, description: "한글날" });
+            addEvent({ 
+                title: "추석", 
+                startDate: dateString3, 
+                endDate: dateString5,
+                description: "추석" 
+            });
+        }
+
+        if (calendarMonth === 11) { // 12월
+            const dateString = yearStr + "-12-25";
+            addEvent({ title: "성탄절", startDate: dateString, description: "성탄절" });
+        }
+    }
+
+    // 이벤트 리스너 설정
+    function setupEventListeners() {
+        // DOM 요소가 있는지 확인
+        if (!prevMonthButton || !nextMonthButton || !todayButton || 
+            !closeModalButton || !cancelButton || !eventForm) {
+            console.error("버튼 또는 폼 DOM 요소를 찾을 수 없습니다!");
+            return;
+        }
+        
+        // 이전 달 버튼
+        prevMonthButton.addEventListener('click', function() {
+            calendarMonth--;
+            if (calendarMonth < 0) {
+                calendarMonth = 11;
+                calendarYear--;
+            }
+            renderCalendar();
+        });
+        
+        // 다음 달 버튼
+        nextMonthButton.addEventListener('click', function() {
+            calendarMonth++;
+            if (calendarMonth > 11) {
+                calendarMonth = 0;
+                calendarYear++;
+            }
+            renderCalendar();
+        });
+        
+        // 오늘 버튼
+        todayButton.addEventListener('click', function() {
+            calendarMonth = today.getMonth();
+            calendarYear = today.getFullYear();
+            renderCalendar();
+        });
+        
+        // 모달 닫기 버튼
+        closeModalButton.addEventListener('click', function() {
+            eventModal.style.display = 'none';
+        });
+        
+        // 취소 버튼
+        cancelButton.addEventListener('click', function() {
+            eventModal.style.display = 'none';
+        });
+        
+        // 배경 클릭시 모달 닫기
+        window.addEventListener('click', function(event) {
+            if (event.target === eventModal) {
+                eventModal.style.display = 'none';
+            }
+        });
+        
+        // 이벤트 폼 제출
+        eventForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const title = document.getElementById('eventTitle').value;
+            const startDate = document.getElementById('eventStartDate').value;
+            const endDate = document.getElementById('eventEndDate').value;
+            const description = document.getElementById('eventDesc').value;
+            
+            addEvent({
+                title,
+                startDate,
+                endDate,
+                description
+            });
+            
+            eventModal.style.display = 'none';
+        });
+        
+        // 시작일 변경 시 종료일 최소 날짜 설정
+        document.getElementById('eventStartDate').addEventListener('change', function() {
+            document.getElementById('eventEndDate').min = this.value;
+            // 만약 현재 종료일이 시작일보다 이전이라면 종료일을 시작일과 같게 설정
+            if (document.getElementById('eventEndDate').value < this.value) {
+                document.getElementById('eventEndDate').value = this.value;
+            }
+        });
+    }
+
+    // 페이지 초기화 함수
+    function init() {
+        console.log("🌟 init 실행됨!");
+        
+        try {
+            // 전역 변수 초기화 확인
+            console.log("init 내부 - calendarYear:", calendarYear, "calendarMonth:", calendarMonth);
+            
+            // DOM 참조
+            calendarDays = document.getElementById('calendarDays');
+            calendarYearMonthElement = document.getElementById('calendarYearMonth');
+            prevMonthButton = document.getElementById('prevMonth');
+            nextMonthButton = document.getElementById('nextMonth');
+            todayButton = document.getElementById('todayButton');
+            eventModal = document.getElementById('eventModal');
+            closeModalButton = document.getElementById('closeModal');
+            cancelButton = document.getElementById('cancelButton');
+            eventForm = document.getElementById('eventForm');
+            eventStartDateInput = document.getElementById('eventStartDate');
+            eventEndDateInput = document.getElementById('eventEndDate');
+            
+            // DOM 요소 확인 및 디버깅
+            console.log("calendarDays:", calendarDays ? "OK" : "Missing");
+            console.log("calendarYearMonthElement:", calendarYearMonthElement ? "OK" : "Missing");
+            
+            // DOM 요소가 모두 있는지 확인
+            if (!calendarDays || !calendarYearMonthElement) {
+                console.error("캘린더 필수 DOM 요소를 찾을 수 없습니다!");
+                return;
+            }
+            
+            // 이벤트 리스너 설정
+            setupEventListeners();
+            
+            // 캘린더 렌더링
+            renderCalendar();
+            
+        } catch (e) {
+            console.error("초기화 중 오류 발생:", e);
+        }
+    }
+
+    // 페이지 로드 완료 후 초기화
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        // DOMContentLoaded가 이미 발생했다면 바로 초기화
+        init();
+    }
+    </script>
+    
+    
+    
+    
+    <!-- 
     <script>
  // 현재 날짜 정보 - 전역 변수로 분명하게 설정
     let today = new Date();
@@ -843,6 +1402,6 @@
         init();
     }
     </script>
-  
+	-->
 </body>
 </html>
