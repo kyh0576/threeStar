@@ -8,6 +8,7 @@
 /threeStar/target/
 /build/
 /bin/
+/threeStar/src/main/webapp/WEB-INF/spring
 
 application-prod.properties
 *.pem
