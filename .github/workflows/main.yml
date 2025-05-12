@@ -33,6 +33,9 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           source: "threeStar/target/tt-1.0.0-BUILD-SNAPSHOT.war"
           target: "/home/ubuntu/threeStar.war"
+          strip_components: 0
+          rm: true
+
 
 
 
