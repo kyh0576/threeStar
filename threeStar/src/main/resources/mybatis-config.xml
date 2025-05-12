@@ -21,5 +21,6 @@
         <mapper resource="mappers/chat-mapper.xml"/>
         <mapper resource="mappers/schedule-mapper.xml"/>
         <mapper resource="mappers/google-mapper.xml"/>
+        <mapper resource="mappers/calendar-mapper.xml"/>
     </mappers>
 </configuration>

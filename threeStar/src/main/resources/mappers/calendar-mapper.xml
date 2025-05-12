@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="calendarMapper">
+	
+   <resultMap id="" type="">
+      <result column="mem_no" property="memNo"/>
+      <result column="mem_id" property="memId"/>
+      <result column="mem_pwd" property="memPwd"/>
+      <result column="mem_name" property="memName"/>
+      <result column="email" property="email"/>
+      <result column="phone" property="phone"/>
+      <result column="mem_class_code" property="memClassCode"/>
+      <result column="sns_key" property="snsKey"/>
+      <result column="status" property="status"/>
+      <result column="online_st" property="onlineSt"/>
+      <result column="admin_yn" property="adminYN"/>
+   </resultMap>
+	  
+	<insert id="InsertCalendar">
+      insert
+        into calendar
+            (
+             cal_id
+           , cal_writer
+           , cal_title
+           , cal_content
+           , cal_start
+           , cal_end
+           )
+      values
+          (
+            SEQ_CAL_ID.nextval
+          , #{calId}
+          , #{calTitle}
+          , #{calContent}
+          , #{calStart}
+          , #{calEnd}
+          )
+   </insert>
+
+</mapper>
