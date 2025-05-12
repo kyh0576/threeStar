@@ -21,8 +21,9 @@ jobs:
 
       - name: 🔨 Build WAR with Maven
         run: |
-          cd ..
+          cd threeStar
           mvn clean package -DskipTests=true
+
 
       - name: 🚀 Deploy to EC2
         uses: appleboy/scp-action@v0.1.4
