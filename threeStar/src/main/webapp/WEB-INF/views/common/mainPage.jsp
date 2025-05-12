@@ -589,7 +589,7 @@
   <div class="right-sidebar">
   
     <div style="border: 1px solid #f8f9fa;" class="border">
-      <div class="today-header">온라인 - 3명</div>
+      <div class="today-header">온라인</div>
       <hr>
       <div class="today-members" id="online-members">
       
