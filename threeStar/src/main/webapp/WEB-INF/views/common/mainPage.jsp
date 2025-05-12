@@ -1153,15 +1153,22 @@
   		}
 
 
-  	//================= 채팅 이모지 클릭 시 =================
-  	
+  //================= 채팅 이모지 클릭 시 =================
+
+  	const contextPath = "<%= request.getContextPath() %>";
+
   	document.addEventListener('click', function(e) {
   	    const chatIcon = e.target.closest('.chat-message-icon');
+
+  	    // ✅ 친구 삭제 버튼은 무시하고, 채팅 아이콘에만 반응하도록 필터
+  	    const isDeleteIcon = e.target.closest('svg[onclick^="rejectFriend"]');
+  	    if (isDeleteIcon) return;
+
   	    if (chatIcon && chatIcon.dataset.targetUserId) {
   	        const targetUserId = chatIcon.dataset.targetUserId;
-  	
+
   	        // 서버로 채팅방 생성 요청
-  	        fetch('${pageContext.request.contextPath}/chattingRoom/startChat', {
+  	        fetch(contextPath + '/chattingRoom/startChat', {
   	            method: 'POST',
   	            headers: {
   	                'Content-Type': 'application/json'
@@ -1172,7 +1179,8 @@
   	        .then(data => {
   	            if (data.success) {
   	                const roomId = data.roomId;
-  	                location.href = `${pageContext.request.contextPath}/message/messageForm?roomId=\${roomId}`;
+  	                console.log("✅ 이동할 채팅방:", roomId);
+  	                location.href = `\${contextPath}/message/messageForm?roomId=\${roomId}`;  // ✅ 수정됨
   	            } else {
   	                alert('❌ 채팅방 생성 실패');
   	            }
@@ -1182,30 +1190,31 @@
   	        });
   	    }
   	});
-  	
-  	
-  	
-  	//================= 채팅 이모지 클릭 시 startChat 함수 실행 =================
+
+
+  	//================= 필요 시 직접 호출용 함수 =================
+
   	function startChat(targetUserId) {
-  	  fetch('${pageContext.request.contextPath}/chattingRoom/startChat', {  // ✅ URL도 실제 컨트롤러 매핑에 맞게 /tt/message/startChat 등으로 수정
-  	    method: 'POST',
-  	    headers: {
-  	      'Content-Type': 'application/json' 
-  	    },
-  	    body: JSON.stringify({ targetUserId })
-  	  })
-  	  .then(response => response.json())
-  	  .then(data => {
-  	    if (data.success) {
-  	      const roomId = data.roomId;
-  	      location.href = `${pageContext.request.contextPath}/message/messageForm?roomId=\${roomId}`;  // ✅ 백틱(`) 사용
-  	    } else {
-  	      alert('❌ 채팅방 생성에 실패했습니다.');
-  	    }
-  	  })
-  	  .catch(error => {
-  	    console.error('❌ 채팅방 생성 오류', error);
-  	  });
+  	    fetch(contextPath + '/chattingRoom/startChat', {
+  	        method: 'POST',
+  	        headers: {
+  	            'Content-Type': 'application/json' 
+  	        },
+  	        body: JSON.stringify({ targetUserId })
+  	    })
+  	    .then(response => response.json())
+  	    .then(data => {
+  	        if (data.success) {
+  	            const roomId = data.roomId;
+  	            console.log("✅ startChat() → 이동할 채팅방:", roomId);
+  	            location.href = `\${contextPath}/message/messageForm?roomId=\${roomId}`;  // ✅ 수정됨
+  	        } else {
+  	            alert('❌ 채팅방 생성에 실패했습니다.');
+  	        }
+  	    })
+  	    .catch(error => {
+  	        console.error('❌ 채팅방 생성 오류', error);
+  	    });
   	}
 
   	

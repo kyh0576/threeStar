@@ -42,7 +42,7 @@ public class MessageController {
     @PostMapping("/save")
     @ResponseBody
     public String saveMessage(@RequestBody Message message) {
-        // 파일이 포함된 메시지일 경우도 저장 (DB에는 originName, changeName만 저장 가능)
+        System.out.println("🔔 DB 저장 요청 받은 메시지: " + message);
         int result = messageService.saveMessage(message);
         return result > 0 ? "success" : "fail";
     }
@@ -87,34 +87,35 @@ public class MessageController {
         Map<String, Object> result = new HashMap<>();
 
         try {
-            // 📌 올바른 ServletContext 가져오기
             ServletContext context = request.getSession().getServletContext();
             String savePath = context.getRealPath("/resources/uploadFiles/");
 
             File folder = new File(savePath);
             if (!folder.exists()) folder.mkdirs();
 
-            // 파일 이름 생성
             String originName = file.getOriginalFilename();
             String saveName = System.currentTimeMillis() + "_" + originName;
-            
-            System.out.println(originName);
-            System.out.println(saveName);
 
-            // 파일 저장
+            // 저장
             File targetFile = new File(savePath, saveName);
             file.transferTo(targetFile);
+            
+            System.out.println("💡 저장 경로: " + savePath);
+            System.out.println("💡 파일명: " + saveName);
 
-            // 클라이언트가 접근 가능한 URL로 반환
-            result.put("imageUrl", "/resources/uploadFiles/" + saveName);
+            // ✅ 응답에 반드시 imageUrl 포함!
+            String contextPath = request.getContextPath();
+            result.put("imageUrl", contextPath + "/resources/uploadFiles/" + saveName);
 
         } catch (Exception e) {
             e.printStackTrace();
-            result.put("imageUrl", null);
+            result.put("imageUrl", null);  // ❌ 이게 프론트에서 에러 나는 이유!
         }
 
         return result;
     }
+
+
 
 }
 

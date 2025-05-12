@@ -16,6 +16,7 @@
     <result column="sender" property="sender"/>
     <result column="TEXT" property="text"/>
     <result column="time" property="time"/>
+    
 </resultMap>
 
     <insert id="insertMessage" parameterType="Message">

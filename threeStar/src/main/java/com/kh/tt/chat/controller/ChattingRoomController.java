@@ -51,8 +51,7 @@ public class ChattingRoomController {
             if (existingRoomId != null) {
                 roomId = existingRoomId;
             } else {
-            	chattingRoomService.createChatRoom(myMemNo, targetMemNo);  // insert만 하고
-            	roomId = chattingRoomService.selectLastChatId();
+            	roomId = chattingRoomService.createChatRoom(myMemNo, targetMemNo);
             }
 
             response.put("success", true);

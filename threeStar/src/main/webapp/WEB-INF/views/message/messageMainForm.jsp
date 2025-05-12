@@ -7,7 +7,9 @@
     com.kh.tt.member.model.vo.Member loginMember = (com.kh.tt.member.model.vo.Member) session.getAttribute("loginMember");
     String myNickname = loginMember.getMemName();   // 내 닉네임
     String targetNickname = (String) request.getAttribute("targetNickname"); // 상대방 닉네임
-    int roomId = (Integer) request.getAttribute("roomId");
+    
+    String roomIdParam = request.getParameter("roomId");
+    int roomId = roomIdParam != null ? Integer.parseInt(roomIdParam) : -1;
 %>
 
 
@@ -745,11 +747,11 @@ function appendMessage(data, type) {
         content += `<div><strong>\${data.sender}</strong></div>`;
     }
 
-    const contextPath = "${pageContext.request.contextPath}";
+    const contextPath = "/${pageContext.request.contextPath}";
 
     // ✅ 새로 보낸 파일 → 이미지 처리
     if (data.type === "file" && data.file && data.file.type.startsWith("image")) {
-        const imageUrl = contextPath + data.file.fileUrl;
+        const imageUrl = data.file.fileUrl;
 
         content += `<div class="chat-attachment">
             <img src="\${imageUrl}" alt="\${data.file.name}" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" />
@@ -861,10 +863,8 @@ document.addEventListener("DOMContentLoaded", function () {
         chatInput.value = "";
     }
 });
-</script>
 
 <!-- 채팅방 목록 -->
-<script>
 document.addEventListener("DOMContentLoaded", function () {
     fetch("${pageContext.request.contextPath}/chattingRoom/rooms")  // 🔁 백엔드에서 참여중인 채팅방 목록 호출
         .then(response => response.json())
@@ -892,10 +892,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-</script>
 
 <!-- 이전채팅가져오기 -->
-<script>
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
@@ -922,14 +920,13 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-</script>
 
 <!-- ------------------------------------------------------------------ -->
 <!-- 채팅방 이름 채팅방 內 사용자 이름 변경 -->
-<script>
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
+    console.log(roomId);
 
     if (!roomId) return;
 
@@ -987,7 +984,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("결과:", data);
                 if (data === "success") {
                     alert("채팅방에서 나갔습니다.");
-                    window.location.href = "/tt/message/mainForm";
+                    window.location.href = contextPath + "/message/mainForm";
                 } else {
                     alert("채팅방 나가기 실패");
                 }
@@ -1000,19 +997,16 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
-
-
-//===================모달 add눌렀을 때====================================
 	
-const fileInput = document.getElementById("selectedFile");   // ✅ 이거 추가 필요
+const fileInput = document.getElementById("selectedFile");
 const fileSelectBtn = document.getElementById("fileSelectBtn");
-	
+
+// 📎 버튼 클릭 → 파일 선택창 열기
 fileSelectBtn.addEventListener("click", () => {
     fileInput.click();
 });
-	
+
+// 파일 선택 후 이벤트
 fileInput.addEventListener("change", () => {
     const file = fileInput.files[0];
     if (!file) return;
@@ -1020,47 +1014,75 @@ fileInput.addEventListener("change", () => {
     const formData = new FormData();
     formData.append("file", file);
 
-    // ⭐ 선택 후 바로 fetch 하지 말고 → 살짝 딜레이 주기 (UI 안정화)
+    // ✅ 안정화 위한 딜레이 (UI 렌더링 고려)
     setTimeout(() => {
-        fetch('upload', {
-            method: 'POST',
+        fetch(`\${contextPath}/message/upload`, {
+            method: "POST",
             body: formData
         })
-        .then(result => result.json())
-.then(data => {
-    if (!data.imageUrl) {
-        console.error("❌ 이미지 업로드 실패");
-        return;
-    }
+        .then(response => response.json())
+        .then(data => {
+            if (!data.imageUrl) {
+                console.error("❌ 이미지 업로드 실패");
+                return;
+            }
 
-    const fileUrl = data.imageUrl;
-    const changeName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+            const fileUrl = data.imageUrl;
+            const changeName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
 
-    const payload = {
-        sender: nickname,
-        text: file.name,          // ✅ 원본 파일명으로
-        time: new Date().toISOString(),
-        type: "file",
-        file: {
-            name: changeName,     // ✅ 변경된 파일명으로
-            type: file.type,
-            fileUrl: fileUrl
-        }
-    };
+            // ✅ WebSocket으로 실시간 전송
+            const payload = {
+                sender: nickname,
+                text: file.name,
+                time: new Date().toISOString(),
+                type: "file",
+                file: {
+                    name: changeName,
+                    type: file.type,
+                    fileUrl: fileUrl
+                }
+            };
 
-    console.log("보낼 데이터:", payload);
-    socket.send(JSON.stringify(payload));
-})
+            socket.send(JSON.stringify(payload));
+
+            // ✅ DB 저장용 요청 (Message 테이블용)
+            fetch(`\${contextPath}/message/save`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    sender: nickname,
+                    messageContent: file.name,
+                    originName: file.name,
+                    changeName: changeName,
+                    fileType: file.type,
+                    type: "file",
+                    msChatId: roomId,
+                    msMemNo: myMemNo
+                })
+            })
+            .then(res => res.text())
+            .then(result => {
+                if (result !== "success") {
+                    console.error("❌ DB 저장 실패");
+                }
+            });
+
+        })
         .catch(err => {
             console.error("❌ 업로드 또는 전송 실패:", err);
         });
-    }, 100);  // ⭐ 100ms 정도 딜레이 주면 UI 완전 안정화됨
+    }, 100);
 });
+
 
 
 </script>
 
 <script>
+
+//===================모달 add눌렀을 때====================================
 function openInviteModal() {
 	  document.getElementById("inviteModal").style.display = "flex";
 
