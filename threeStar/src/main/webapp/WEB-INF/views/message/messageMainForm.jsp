@@ -802,6 +802,9 @@ function formatTime(isoString) {
 
 
 <!-- ================웹소켓====================== -->
+<script>
+    const contextPath = "<%= request.getContextPath() %>";
+</script>
 
 <script>
 let socket;
@@ -817,11 +820,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const ip = location.hostname;
     const encodedToken = encodeURIComponent(token);
 
-    let wsUrl = `ws://`;
-    wsUrl += ip + ':8333';
-    wsUrl += path;
-    wsUrl += `/chat/\${roomId}?token=\${encodedToken}`;
-    console.log(wsUrl);
+    const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
     console.log("WebSocket 연결 URL:", wsUrl);
 
     socket = new WebSocket(wsUrl);
