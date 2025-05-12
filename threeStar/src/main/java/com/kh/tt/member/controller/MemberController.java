@@ -227,6 +227,14 @@ public class MemberController {
 			return "common/mainPage";
 		}
 	}
+	
+    // 온라인 유저 조회
+	@RequestMapping(value = "getOnlineMembers.me", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public ArrayList<Member> getOnlineMembers(Member m) {
+		ArrayList<Member> mList = mService.getOnlineMembers(m); // friend = 'N'만 조회
+	    return mList;
+	}
 
 	
 }

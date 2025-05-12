@@ -80,6 +80,10 @@ public class MemberDao {
 		return sqlSession.delete("memberMapper.rejectFriend", friend);
 	}
 
+	public ArrayList<Member> getOnlineMembers(SqlSessionTemplate sqlSession, Member m) {
+		return (ArrayList)sqlSession.selectList("memberMapper.getOnlineMembers", m);
+	}
+
 
    
 }
