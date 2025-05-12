@@ -18,6 +18,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -127,27 +128,26 @@ public class MessageController {
     @ResponseBody
     public ResponseEntity<Resource> download(@RequestParam("fileName") String fileName,
                                              HttpServletRequest request) throws IOException {
-        // 1. 저장 경로
         String savePath = request.getSession().getServletContext().getRealPath("/resources/uploadFiles/");
-        System.out.println(savePath);
-        
         File file = new File(savePath, fileName);
 
         if (!file.exists()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        // 2. 리소스 객체로 변환
         Resource resource = new FileSystemResource(file);
 
-        // 3. 헤더 설정
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, 
-                    "attachment; filename=\"" + URLEncoder.encode(fileName, "UTF-8") + "\"");
-        headers.add(HttpHeaders.CONTENT_TYPE, Files.probeContentType(file.toPath()));
+        String encodedFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
 
-        return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+        // ✅ UTF-8로 명시적으로 처리 (브라우저 호환성 ↑)
+        headers.add("Content-Disposition", "attachment; filename*=UTF-8''" + encodedFileName);
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
+
     
     @GetMapping("/download/files")
     @ResponseBody
