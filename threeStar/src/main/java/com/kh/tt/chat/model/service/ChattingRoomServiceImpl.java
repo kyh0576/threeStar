@@ -65,6 +65,12 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
 		    return mDao.selectChatRoomById(sqlSession, roomId);
 		}
 		
+		@Override
+		public List<Member> getChatRoomMembers(int roomId) {
+			return mDao.getChatRoomMembers(sqlSession, roomId);
+		}
+
+		
  //=======채팅방 나가기=================================================
 		 @Override
 		    public int exitChatRoom(int chatId, int memNo) {
@@ -73,5 +79,22 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
 		        return mDao.exitChatRoom(sqlSession,chatId, memNo);
 		        
 		    }
+//=======================그룹채팅=====================================
+		@Override
+		public int createGroupChatRoom(List<Integer> memberNos) {
+		    // 1. 방 생성자 insert
+		    int firstMemNo = memberNos.get(0);
+		    mDao.insertChatRoom(sqlSession, firstMemNo, "그룹 채팅");
+
+		    // 2. 방 id 가져오기
+		    int roomId = mDao.selectLastChatId(sqlSession);
+
+		    // 3. 나머지 멤버 추가
+		    for (int i = 1; i < memberNos.size(); i++) {
+		        mDao.insertRoomMember(sqlSession, roomId, memberNos.get(i), "그룹 채팅");
+		    }
+
+		    return roomId;
+		}
 
 }

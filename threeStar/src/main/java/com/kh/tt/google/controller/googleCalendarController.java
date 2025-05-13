@@ -35,13 +35,11 @@ public class googleCalendarController {
 
 			if(loginMember.getSnsKey() != null) {
 				session.setAttribute("loginMember", loginMember);
-				
-				session.setAttribute("alertMsg", "구글 캘린더로 이동합니다.");
 				mv.setViewName("calendar/googleCalendar");
 
 			}else {
-				mv.addObject("alertMsg", "일반 캘린더로 이동합니다.");
 				mv.setViewName("calendar/calendarDetail");
+				
 			}
 
 		return mv;

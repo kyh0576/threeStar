@@ -4,10 +4,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -102,6 +104,12 @@ public class ChattingRoomController {
         return resultName;
     }
     
+    //==============오른쪽에 채팅방 맴버 뜨는거===============
+    @GetMapping(value = "/members")
+    @ResponseBody
+    public List<Member> getChatRoomMembers(@RequestParam("roomId") int roomId) {
+        return chattingRoomService.getChatRoomMembers(roomId);
+    }
     
     // ====================채팅방 나가기====================  
 
@@ -115,5 +123,30 @@ public class ChattingRoomController {
         int result = chattingRoomService.exitChatRoom(chatId, memNo);
         return result > 0 ? "success" : "fail";
     }
+    
+    
+    //=================================== 그룹채팅 ===================================
 
+    @PostMapping("/startGroupChat")
+    @ResponseBody
+    public Map<String, Object> startGroupChat(@RequestBody Map<String, Object> body, HttpSession session) {
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        int myMemNo = loginMember.getMemNo();
+
+        List<Object> rawList = (List<Object>) body.get("members");
+        List<Integer> members = rawList.stream()
+            .map(obj -> Integer.parseInt(obj.toString()))
+            .collect(Collectors.toList());
+
+        if (!members.contains(myMemNo)) {
+            members.add(myMemNo); // 본인도 포함
+        }
+
+        int roomId = chattingRoomService.createGroupChatRoom(members);
+
+        return Map.of("success", true, "roomId", roomId);
+    }
+
+
+    
 }
