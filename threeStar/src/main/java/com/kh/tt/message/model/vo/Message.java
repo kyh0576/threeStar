@@ -32,7 +32,6 @@ public class Message {
     private String fileType;   // ✅ 파일의 MIME 타입 (image/png 등)
     private String fileUrl;    // ✅ 파일 경로(base64 또는 서버 저장 url)
     
-    private Integer fileSize;  // ✅ 파일 크기 (쿼리에서 LENGTH(CHANGE_NAME) 또는 직접 계산)
     
 
     // ✅ 내부 파일 메타 정보용 (option)

@@ -467,37 +467,58 @@
             background-color: #e1e1e1;
         }
         
-        
-        
-        .modal {
-		  position: fixed;
-		  top: 0; left: 0;
-		  width: 100%; height: 100%;
-		  background-color: rgba(0,0,0,0.6);
-		  display: flex;
-		  justify-content: center;
-		  align-items: center;
-		  z-index: 9999;
-		}
+
+		/* ✅ 전체 모달 박스 스타일 */
+#inviteModal {
+   position: fixed;
+  top: 100px;        /* 헤더 아래 적당히 내려오기 */
+  left: 100px;       /* 사이드바 오른쪽에 붙이기 */
+  z-index: 9999;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  display: none;
+  min-width: 300px;
+}
+
+/* ✅ 닫기 버튼 */
+#closeModalBtn {
+  float: right;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #888;
+}
+
+#closeModalBtn:hover {
+  color: #ff4444;
+}
+
+/* ✅ 친구 리스트 영역 */
+#friend-list {
+  margin-top: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* ✅ 개별 친구 항목 */
+.friend-item {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 6px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.friend-item:hover {
+  background-color: #e6f0ff;
+}
+
 		
-		.modal-content {
-		  background-color: #fff;
-		  padding: 30px;
-		  border-radius: 10px;
-		  width: 400px;
-		  max-height: 80%;
-		  overflow-y: auto;
-		  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-		  position: relative;
-		}
-		
-		.close {
-		  position: absolute;
-		  top: 15px;
-		  right: 20px;
-		  font-size: 24px;
-		  cursor: pointer;
-		}
     </style>
 
 </head>
@@ -515,6 +536,13 @@
                 </svg>
               </button>           
           </div>
+          
+		<div id="inviteModal">
+		  <button id="closeModalBtn">✕</button>
+		  <h3>친구 목록</h3>
+		  <div id="friend-list">여기에 친구 목록이 표시될 예정입니다.</div>
+		</div>
+
   
   <div class="message-tabs">
     <div class="tab active">All</div>
@@ -591,20 +619,9 @@
                     </div>
                 </div>
                 
-                <div class="add-member" onclick="openInviteModal()">
+                <div class="add-member">
 				  <div style="font-size: 20px;">+</div>
 				  <div> Add </div>
-				</div>
-				
-				<!-- ✅ 모달창 -->
-				<div id="inviteModal" class="modal" style="display:none;">
-				  <div class="modal-content">
-				    <span class="close" onclick="closeInviteModal()">&times;</span>
-				    <h2>친구 초대</h2>
-				    <div id="friend-list">
-				      <!-- 여기에 친구 목록 동적 생성 -->
-				    </div>
-				  </div>
 				</div>
 				
 				
@@ -1113,7 +1130,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         <div class="file-icon">${isImage ? "🖼️" : "📄"}</div>
                         <div class="file-info">
                             <div class="file-name">\${file.originName}</div>
-                            <div class="file-meta">\${fileSizeKb} kB</div>
                         </div>
                         <a class="file-download" 
                            href="\${downloadUrl}" 
@@ -1132,38 +1148,59 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 
+
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const newChatBtn = document.getElementById('newChat');
+  const inviteModal = document.getElementById('inviteModal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  const friendListDiv = document.getElementById('friend-list');
 
-//===================모달 add눌렀을 때====================================
-function openInviteModal() {
-	  document.getElementById("inviteModal").style.display = "flex";
+  // ✅ 친구 목록 불러오는 함수
+  function loadFriendList() {
+    friendListDiv.innerHTML = '';
+    console.log("👉 친구 목록 fetch 요청:", `\${contextPath}/friends/list?memNo=\${myMemNo}`);
 
-	  fetch("/tt/friends/list?memNo=" + myMemNo)
-	    .then(response => response.json())
-	    .then(friends => {
-	      const container = document.getElementById("friend-list");
-	      container.innerHTML = "";
+    fetch(contextPath + `/friends/list?memNo=\${myMemNo}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.length === 0) {
+        friendListDiv.innerHTML = '<p>친구가 없습니다.</p>';
+      } else {
+    	  
+        data.forEach(friend => {
+        		  if (!friend || !friend.toNickname) {
+        		    console.warn("친구 정보 오류:", friend);
+        		    return;
+        		  }
 
-	      friends.forEach(friend => {
-	        const div = document.createElement("div");
-	        div.textContent = friend.memName + " (" + friend.memId + ")";
-	        div.classList.add("friend-item");
-	        div.onclick = () => inviteFriend(friend.memNo, friend.memName);
-	        container.appendChild(div);
-	      });
-	    })
-	    .catch(err => console.error("❌ 친구 목록 불러오기 실패", err));
-	}
+        		  const friendItem = document.createElement("div");
+        		  friendItem.classList.add("friend-item");
+        		  friendItem.textContent = friend.toNickname;
+        		  friendListDiv.appendChild(friendItem);
+        		});
+      }
+    })
+    .catch(error => {
+      console.error('❌ 친구 목록 로딩 실패:', error);
+      friendListDiv.innerHTML = '<p>친구 목록을 불러오는 중 오류가 발생했습니다.</p>';
+    });
 
-function closeInviteModal() {
-  document.getElementById("inviteModal").style.display = "none";
-}
+  }
 
-function inviteFriend(friendId, friendName) {
-  alert(friendName + "님을 초대했습니다.");
-  // 🔁 여기에 AJAX로 서버에 초대 요청 보내는 코드 작성 가능
-}
+  // ✅ + 버튼 클릭 시 모달 열고 친구 목록 로드
+  newChatBtn.addEventListener('click', function () {
+    inviteModal.style.display = 'block';
+    loadFriendList();
+  });
+
+  // ✖ 닫기 버튼
+  closeModalBtn.addEventListener('click', function () {
+    inviteModal.style.display = 'none';
+  });
+});
 </script>
+
 
 
 

@@ -16,7 +16,6 @@
     <result column="sender" property="sender"/>
     <result column="TEXT" property="text"/>
     <result column="time" property="time"/>
-     <result column="fileSize" property="fileSize"/> <!-- ✅ 추가 -->
     
 </resultMap>
 
@@ -101,7 +100,6 @@
         ORIGIN_NAME,
         CHANGE_NAME,
         FILE_TYPE,
-        LENGTH(CHANGE_NAME) AS fileSize,
         MS_CHAT_ID,
         MS_MEM_NO,
         SEND_TIME
