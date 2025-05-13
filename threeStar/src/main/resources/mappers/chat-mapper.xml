@@ -9,6 +9,11 @@
       <result column="status" property="status"/>
    </resultMap>
    
+   <resultMap id="chatRoomMemberMap" type="Member">
+  <result property="memNo" column="MEM_NO"/>
+  <result property="memName" column="MEM_NAME"/>
+</resultMap>
+   
    <!-- 1. 기존 채팅방 있는지 조회 -->
    <select id="findChatRoom" parameterType="map" resultType="int">
 	SELECT cr.CHAT_ID
@@ -18,7 +23,13 @@
      SELECT cr2.CHAT_ID 
      FROM chatting_room cr2 
      WHERE cr2.CH_MEM_NO = #{targetMemNo}
-  )
+	  )
+	   AND cr.CHAT_ID IN (
+	    SELECT CHAT_ID 
+	    FROM chatting_room 
+	    GROUP BY CHAT_ID 
+	    HAVING COUNT(*) = 2
+	  )
    </select>
 
    <!-- 2. 내 채팅방 INSERT (내가 먼저 생성) -->
@@ -119,7 +130,7 @@ WHERE CR.CH_MEM_NO = (SELECT MEM_NO FROM MEMBER WHERE MEM_ID = #{memId})
        )
    </select>
 
-<select id="selectChatRoomById" parameterType="int" resultType="Chat">
+<select id="selectChatRoomById" parameterType="_int" resultType="Chat">
 SELECT 
     CHAT_ID AS chatId,
     CH_MEM_NO AS chMemNo,
@@ -131,6 +142,19 @@ AND ROWNUM = 1
 
 </select>
 
+
+<select id="getChatRoomMembers" parameterType="_int" resultMap="chatRoomMemberMap">
+  SELECT M.MEM_NO, M.MEM_NAME, M.PROFILE_URL
+  FROM CHATTING_ROOM CR
+  JOIN MEMBER M ON CR.CH_MEM_NO = M.MEM_NO
+  WHERE CR.CHAT_ID = #{roomId}
+</select>
+
+
+
+
+
+
 <!-- chatMapper.xml -->
 <delete id="exitChatRoom" parameterType="map">
     DELETE FROM chatting_room
@@ -138,5 +162,33 @@ AND ROWNUM = 1
       AND ch_mem_no = #{memNo}
 </delete>
 
+<!-- 그룹채팅방 생성 -->
+<insert id="insertChatRoom" parameterType="map" useGeneratedKeys="false">
+    INSERT INTO CHATTING_ROOM (
+        CHAT_ID,
+        CH_MEM_NO,
+        CHAT_NAME,
+        STATUS
+    ) VALUES (
+        SEQ_CHAT_ID.NEXTVAL,
+        #{memNo},
+        #{chatName},
+        'Y'
+    )
+</insert>
+
+<insert id="insertRoomMember" parameterType="map">
+    INSERT INTO CHATTING_ROOM (
+        CHAT_ID,
+        CH_MEM_NO,
+        CHAT_NAME,
+        STATUS
+    ) VALUES (
+        #{chatId},
+        #{memNo},
+        #{chatName},
+        'Y'
+    )
+</insert>
 
 </mapper>

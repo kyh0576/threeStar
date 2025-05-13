@@ -51,11 +51,33 @@ public class ChattingRoomDao {
         return sqlSession.selectOne("chatMapper.selectChatRoomById", roomId);
     }
     
+    public List<Member> getChatRoomMembers(SqlSessionTemplate sqlSession, int roomId){
+    	System.out.println("룸아이디 : "+roomId);
+    	List<Member> memmem =  sqlSession.selectList("chatMapper.getChatRoomMembers",roomId);
+    	System.out.println("반환씨발형: " + memmem);
+    	return memmem;
+    }
+    
     //=======채팅방 나가기=================================================
     public int exitChatRoom(SqlSessionTemplate sqlSession, int chatId, int memNo) {
         Map<String, Object> param = new HashMap<>();
         param.put("chatId", chatId);
         param.put("memNo", memNo);
         return sqlSession.delete("chatMapper.exitChatRoom", param);
+    }
+    
+    //======그룹채팅방 생성=================================================
+    
+    
+ // 채팅방 생성자 1명 insert
+    public int insertChatRoom(SqlSessionTemplate sqlSession, int memNo, String chatName) {
+        Map<String, Object> param = Map.of("memNo", memNo, "chatName", chatName);
+        return sqlSession.insert("chatMapper.insertChatRoom", param);
+    }
+
+    // 다른 멤버들 추가
+    public int insertRoomMember(SqlSessionTemplate sqlSession, int chatId, int memNo, String chatName) {
+        Map<String, Object> param = Map.of("chatId", chatId, "memNo", memNo, "chatName", chatName);
+        return sqlSession.insert("chatMapper.insertRoomMember", param);
     }
 }

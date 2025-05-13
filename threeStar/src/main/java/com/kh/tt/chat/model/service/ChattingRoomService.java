@@ -18,6 +18,7 @@ public interface ChattingRoomService {
 //    ============채팅방===========
     List<ChattingRoom> getChatRoomsByMemberId(String memId);
     
+    List<Member> getChatRoomMembers(int roomId);
     
 //  ============채팅방 이름===========    
     Member findTargetMember(int roomId, int myMemNo);
@@ -26,5 +27,9 @@ public interface ChattingRoomService {
     
 // 채팅방 나가기
     int exitChatRoom(int chatId, int memNo);
+    
+    //그룹채팅
+    int createGroupChatRoom (List<Integer> memberNos);
+    
     
 }
