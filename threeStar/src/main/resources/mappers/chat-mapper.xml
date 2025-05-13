@@ -162,6 +162,23 @@ AND ROWNUM = 1
       AND ch_mem_no = #{memNo}
 </delete>
 
+<!-- 채팅방 생성 전 동일한 채팅방 있는지 확인 -->
+<select id="findGroupChatRoom" parameterType="list" resultType="int">
+  SELECT CHAT_ID
+  FROM (
+      SELECT CHAT_ID
+      FROM CHATTING_ROOM
+      GROUP BY CHAT_ID
+      HAVING COUNT(*) = #{memberCount}
+         AND SUM(CASE WHEN CH_MEM_NO IN 
+             <foreach item="memNo" collection="list" open="(" separator="," close=")">
+               #{memNo}
+             </foreach>
+             THEN 1 ELSE 0 END
+         ) = #{memberCount}
+  )
+</select>
+
 <!-- 그룹채팅방 생성 -->
 <insert id="insertChatRoom" parameterType="map" useGeneratedKeys="false">
     INSERT INTO CHATTING_ROOM (
