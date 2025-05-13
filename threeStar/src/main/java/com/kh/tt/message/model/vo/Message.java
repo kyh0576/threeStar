@@ -31,6 +31,8 @@ public class Message {
     private String type;       // ✅ chat, file 구분 (이미 있음)
     private String fileType;   // ✅ 파일의 MIME 타입 (image/png 등)
     private String fileUrl;    // ✅ 파일 경로(base64 또는 서버 저장 url)
+    
+    
 
     // ✅ 내부 파일 메타 정보용 (option)
     @Getter

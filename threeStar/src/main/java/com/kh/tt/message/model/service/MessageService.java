@@ -12,5 +12,7 @@ public interface MessageService {
     // 메시지 불러오기 (히스토리)
     List<Message> sendMessage(int roomId);
     
-    // (Optional) 파일만 불러오기 메서드도 추후 필요하면 여기에 추가 가능
+    List<Message> getUploadedFiles(int roomId);
+    
+    List<Message> getFilesByRoomId(int roomId);
 }

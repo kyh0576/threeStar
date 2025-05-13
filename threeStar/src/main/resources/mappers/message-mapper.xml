@@ -16,6 +16,7 @@
     <result column="sender" property="sender"/>
     <result column="TEXT" property="text"/>
     <result column="time" property="time"/>
+    
 </resultMap>
 
     <insert id="insertMessage" parameterType="Message">
@@ -73,11 +74,40 @@
 </select>
 
 
+<select id="getUploadedFiles" parameterType="_int" resultMap="messageResult">
+    SELECT 
+        MESSAGE_NO,
+        MESSAGE_CONTENT,
+        CREATE_DATE,
+        SEND_TIME,
+        ORIGIN_NAME,
+        CHANGE_NAME,
+        FILE_TYPE,
+        MS_CHAT_ID,
+        MS_MEM_NO,
+        TYPE,
+        TO_CHAR(SEND_TIME, 'YYYY-MM-DD\"T\"HH24:MI:SS') AS TIME
+    FROM MESSAGE
+    WHERE MS_CHAT_ID = #{roomId}
+      AND TYPE = 'file'
+    ORDER BY SEND_TIME
+</select>
 
 
-
-
-
+<select id="getFilesByRoomId" parameterType="_int" resultMap="messageResult">
+    SELECT 
+        MESSAGE_NO,
+        ORIGIN_NAME,
+        CHANGE_NAME,
+        FILE_TYPE,
+        MS_CHAT_ID,
+        MS_MEM_NO,
+        SEND_TIME
+    FROM MESSAGE
+    WHERE MS_CHAT_ID = #{roomId}
+      AND TYPE = 'file'
+    ORDER BY SEND_TIME DESC
+</select>
 
 
 </mapper>

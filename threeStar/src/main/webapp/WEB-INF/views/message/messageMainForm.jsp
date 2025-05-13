@@ -7,9 +7,12 @@
     com.kh.tt.member.model.vo.Member loginMember = (com.kh.tt.member.model.vo.Member) session.getAttribute("loginMember");
     String myNickname = loginMember.getMemName();   // 내 닉네임
     String targetNickname = (String) request.getAttribute("targetNickname"); // 상대방 닉네임
-    int roomId = (Integer) request.getAttribute("roomId");
+    
+    String roomIdParam = request.getParameter("roomId");
+    int roomId = roomIdParam != null ? Integer.parseInt(roomIdParam) : -1;
 %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
 <html>
@@ -464,37 +467,58 @@
             background-color: #e1e1e1;
         }
         
-        
-        
-        .modal {
-		  position: fixed;
-		  top: 0; left: 0;
-		  width: 100%; height: 100%;
-		  background-color: rgba(0,0,0,0.6);
-		  display: flex;
-		  justify-content: center;
-		  align-items: center;
-		  z-index: 9999;
-		}
+
+		/* ✅ 전체 모달 박스 스타일 */
+#inviteModal {
+   position: fixed;
+  top: 100px;        /* 헤더 아래 적당히 내려오기 */
+  left: 100px;       /* 사이드바 오른쪽에 붙이기 */
+  z-index: 9999;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  display: none;
+  min-width: 300px;
+}
+
+/* ✅ 닫기 버튼 */
+#closeModalBtn {
+  float: right;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #888;
+}
+
+#closeModalBtn:hover {
+  color: #ff4444;
+}
+
+/* ✅ 친구 리스트 영역 */
+#friend-list {
+  margin-top: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* ✅ 개별 친구 항목 */
+.friend-item {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 6px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.friend-item:hover {
+  background-color: #e6f0ff;
+}
+
 		
-		.modal-content {
-		  background-color: #fff;
-		  padding: 30px;
-		  border-radius: 10px;
-		  width: 400px;
-		  max-height: 80%;
-		  overflow-y: auto;
-		  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-		  position: relative;
-		}
-		
-		.close {
-		  position: absolute;
-		  top: 15px;
-		  right: 20px;
-		  font-size: 24px;
-		  cursor: pointer;
-		}
     </style>
 
 </head>
@@ -512,6 +536,13 @@
                 </svg>
               </button>           
           </div>
+          
+		<div id="inviteModal">
+		  <button id="closeModalBtn">✕</button>
+		  <h3>친구 목록</h3>
+		  <div id="friend-list">여기에 친구 목록이 표시될 예정입니다.</div>
+		</div>
+
   
   <div class="message-tabs">
     <div class="tab active">All</div>
@@ -588,20 +619,9 @@
                     </div>
                 </div>
                 
-                <div class="add-member" onclick="openInviteModal()">
+                <div class="add-member">
 				  <div style="font-size: 20px;">+</div>
 				  <div> Add </div>
-				</div>
-				
-				<!-- ✅ 모달창 -->
-				<div id="inviteModal" class="modal" style="display:none;">
-				  <div class="modal-content">
-				    <span class="close" onclick="closeInviteModal()">&times;</span>
-				    <h2>친구 초대</h2>
-				    <div id="friend-list">
-				      <!-- 여기에 친구 목록 동적 생성 -->
-				    </div>
-				  </div>
 				</div>
 				
 				
@@ -613,23 +633,9 @@
             </div>
             
             <div class="file-list">
-                <div class="file-item">
-                    <div class="file-icon">📄</div>
-                    <div class="file-info">
-                        <div class="file-name">자소서.pdf</div>
-                        <div class="file-meta">120 kB</div>
-                    </div>
-                    <div class="file-download">⬇️</div>
+               
                 </div>
                 
-                <div class="file-item">
-                    <div class="file-icon">📄</div>
-                    <div class="file-info">
-                        <div class="file-name">수정본.pdf</div>
-                        <div class="file-meta">150 kB</div>
-                    </div>
-                    <div class="file-download">⬇️</div>
-                </div>
             </div>
             
             <div class="section-header">
@@ -746,31 +752,52 @@ function appendMessage(data, type) {
     }
 
     const contextPath = "${pageContext.request.contextPath}";
+    
 
-    // ✅ 새로 보낸 파일 → 이미지 처리
+ // ✅ 새로 보낸 파일 → 이미지 처리
     if (data.type === "file" && data.file && data.file.type.startsWith("image")) {
-        const imageUrl = contextPath + data.file.fileUrl;
+        const imageUrl = data.file.fileUrl;
+        const fileName = data.file.name;
 
-        content += `<div class="chat-attachment">
-            <img src="\${imageUrl}" alt="\${data.file.name}" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" />
-        </div>`;
+        content += `
+            <a href="\${imageUrl}" download="\${fileName}" class="chat-attachment">
+                <img src="\${imageUrl}" alt="\${fileName}" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" />
+            </a>`;
     }
     // ✅ 이전 메시지 → originName + changeName 둘다 있으면 이미지
-else if (data.changeName && isImageFile(data.changeName)) {
-    const contextPath = "${pageContext.request.contextPath}";
-    const imageUrl = contextPath + "/resources/uploadFiles/" + data.changeName;
+    else if (data.changeName && isImageFile(data.changeName)) {
+        const imageUrl = contextPath + "/resources/uploadFiles/" + data.changeName;
+        const fileName = data.originName ?? "";
 
-    content += `<div class="chat-attachment">
-        <img src="\${imageUrl}" alt="\${data.originName ?? ''}" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" />
-    </div>`;
-}
-
-
-
-    // ✅ 이전 메시지 → originName만 있고 changeName이 없으면 그냥 파일명 출력
-    else if (data.originName && !data.changeName) {
-        content += `<div>\${data.originName}</div>`;
+        content += `
+            <a href="\${imageUrl}" download="\${fileName}" class="chat-attachment">
+                <img src="\${imageUrl}" alt="\${fileName}" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" />
+            </a>`;
+            
+            
+    }else if(data.type === "file" && data.file){
+    	const fileUrl = data.file.fileUrl;
+        const fileName = data.file.name;
+        
+        content += `
+            <a href="\${fileUrl}" download="\${fileName}" class="chat-attachment"
+               style="display: inline-block; background: #eaeaea; padding: 10px; border-radius: 10px; margin-top: 5px;">
+                📄 \${fileName}
+            </a>`;
+            
+            
+    }else if(data.changeName && !isImageFile(data.changeName)){
+    	const fileUrl = contextPath + "/resources/uploadFiles/" + data.changeName;
+        const fileName = data.originName;
+        
+        content += `
+            <a href="\${fileUrl}" download="\${fileName}" class="chat-attachment"
+               style="display: inline-block; background: #eaeaea; padding: 10px; border-radius: 10px; margin-top: 5px;">
+                📄 \${fileName}
+            </a>`;
     }
+ 
+
     // ✅ 일반 텍스트
     else {
         const textContent = data.text ?? data.messageContent ?? '';
@@ -861,10 +888,8 @@ document.addEventListener("DOMContentLoaded", function () {
         chatInput.value = "";
     }
 });
-</script>
 
 <!-- 채팅방 목록 -->
-<script>
 document.addEventListener("DOMContentLoaded", function () {
     fetch("${pageContext.request.contextPath}/chattingRoom/rooms")  // 🔁 백엔드에서 참여중인 채팅방 목록 호출
         .then(response => response.json())
@@ -892,10 +917,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-</script>
 
 <!-- 이전채팅가져오기 -->
-<script>
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
@@ -922,14 +945,13 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-</script>
 
 <!-- ------------------------------------------------------------------ -->
 <!-- 채팅방 이름 채팅방 內 사용자 이름 변경 -->
-<script>
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
+    console.log(roomId);
 
     if (!roomId) return;
 
@@ -987,7 +1009,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("결과:", data);
                 if (data === "success") {
                     alert("채팅방에서 나갔습니다.");
-                    window.location.href = "/tt/message/mainForm";
+                    window.location.href = contextPath + "/message/mainForm";
                 } else {
                     alert("채팅방 나가기 실패");
                 }
@@ -1000,19 +1022,17 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
-
-
-//===================모달 add눌렀을 때====================================
+//==이미지 업로드 時====
 	
-const fileInput = document.getElementById("selectedFile");   // ✅ 이거 추가 필요
+const fileInput = document.getElementById("selectedFile");
 const fileSelectBtn = document.getElementById("fileSelectBtn");
-	
+
+// 📎 버튼 클릭 → 파일 선택창 열기
 fileSelectBtn.addEventListener("click", () => {
     fileInput.click();
 });
-	
+
+// 파일 선택 후 이벤트
 fileInput.addEventListener("change", () => {
     const file = fileInput.files[0];
     if (!file) return;
@@ -1020,76 +1040,170 @@ fileInput.addEventListener("change", () => {
     const formData = new FormData();
     formData.append("file", file);
 
-    // ⭐ 선택 후 바로 fetch 하지 말고 → 살짝 딜레이 주기 (UI 안정화)
+    // ✅ 안정화 위한 딜레이 (UI 렌더링 고려)
     setTimeout(() => {
-        fetch('upload', {
-            method: 'POST',
+        fetch(`\${contextPath}/message/upload`, {
+            method: "POST",
             body: formData
         })
-        .then(result => result.json())
-.then(data => {
-    if (!data.imageUrl) {
-        console.error("❌ 이미지 업로드 실패");
-        return;
-    }
+        .then(response => response.json())
+        .then(data => {
+            if (!data.imageUrl) {
+                console.error("❌ 이미지 업로드 실패");
+                return;
+            }
 
-    const fileUrl = data.imageUrl;
-    const changeName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+            const fileUrl = data.imageUrl;
+            const changeName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
 
-    const payload = {
-        sender: nickname,
-        text: file.name,          // ✅ 원본 파일명으로
-        time: new Date().toISOString(),
-        type: "file",
-        file: {
-            name: changeName,     // ✅ 변경된 파일명으로
-            type: file.type,
-            fileUrl: fileUrl
-        }
-    };
+            // ✅ WebSocket으로 실시간 전송
+            const payload = {
+                sender: nickname,
+                text: file.name,
+                time: new Date().toISOString(),
+                type: "file",
+                file: {
+                    name: changeName,
+                    type: file.type,
+                    fileUrl: fileUrl
+                }
+            };
 
-    console.log("보낼 데이터:", payload);
-    socket.send(JSON.stringify(payload));
-})
+            socket.send(JSON.stringify(payload));
+
+            // ✅ DB 저장용 요청 (Message 테이블용)
+            fetch(`\${contextPath}/message/save`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    sender: nickname,
+                    messageContent: file.name,
+                    originName: file.name,
+                    changeName: changeName,
+                    fileType: file.type,
+                    type: "file",
+                    msChatId: roomId,
+                    msMemNo: myMemNo
+                })
+            })
+            .then(res => res.text())
+            .then(result => {
+                if (result !== "success") {
+                    console.error("❌ DB 저장 실패");
+                }
+            });
+
+        })
         .catch(err => {
             console.error("❌ 업로드 또는 전송 실패:", err);
         });
-    }, 100);  // ⭐ 100ms 정도 딜레이 주면 UI 완전 안정화됨
+    }, 100);
 });
 
 
+//티 서랍
+document.addEventListener("DOMContentLoaded", function () {
+    const roomId = <%= roomId %>;
+    const contextPath = "<%= request.getContextPath() %>";
+
+    console.log("roomId:", roomId);
+    console.log("contextPath:", contextPath);
+
+    fetch(`\${contextPath}/message/download/files?roomId=\${roomId}`)
+        .then(response => {
+            if (!response.ok) throw new Error("404 or server error");
+            return response.json();
+        })
+        .then(files => {
+            const fileListDiv = document.querySelector(".file-list");
+            fileListDiv.innerHTML = "";
+
+            files.forEach(file => {
+                const isImage = /\.(jpg|jpeg|png|gif)$/i.test(file.originName);
+                const fileSizeKb = file.fileSize ? Math.round(file.fileSize / 1024) : "?";
+                const downloadUrl = `\${contextPath}/message/download?fileName=\${encodeURIComponent(file.changeName)}`;
+
+                const html = `
+                    <div class="file-item">
+                        <div class="file-icon">${isImage ? "🖼️" : "📄"}</div>
+                        <div class="file-info">
+                            <div class="file-name">\${file.originName}</div>
+                        </div>
+                        <a class="file-download" 
+                           href="\${downloadUrl}" 
+                           download="\${file.originName}" 
+                           target="_blank">⬇️</a>
+                    </div>
+                `;
+                fileListDiv.innerHTML += html;
+            });
+        })
+        .catch(err => {
+            console.error("❌ 파일 목록 불러오기 실패:", err);
+        });
+});
+
 </script>
+
+
 
 <script>
-function openInviteModal() {
-	  document.getElementById("inviteModal").style.display = "flex";
+document.addEventListener('DOMContentLoaded', function () {
+  const newChatBtn = document.getElementById('newChat');
+  const inviteModal = document.getElementById('inviteModal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  const friendListDiv = document.getElementById('friend-list');
 
-	  fetch("/tt/friends/list?memNo=" + myMemNo)
-	    .then(response => response.json())
-	    .then(friends => {
-	      const container = document.getElementById("friend-list");
-	      container.innerHTML = "";
+  // ✅ 친구 목록 불러오는 함수
+  function loadFriendList() {
+    friendListDiv.innerHTML = '';
+    console.log("👉 친구 목록 fetch 요청:", `\${contextPath}/friends/list?memNo=\${myMemNo}`);
 
-	      friends.forEach(friend => {
-	        const div = document.createElement("div");
-	        div.textContent = friend.memName + " (" + friend.memId + ")";
-	        div.classList.add("friend-item");
-	        div.onclick = () => inviteFriend(friend.memNo, friend.memName);
-	        container.appendChild(div);
-	      });
-	    })
-	    .catch(err => console.error("❌ 친구 목록 불러오기 실패", err));
-	}
+    fetch(contextPath + `/friends/list?memNo=\${myMemNo}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.length === 0) {
+        friendListDiv.innerHTML = '<p>친구가 없습니다.</p>';
+      } else {
+    	  
+        data.forEach(friend => {
+        		  if (!friend || !friend.toNickname) {
+        		    console.warn("친구 정보 오류:", friend);
+        		    return;
+        		  }
 
-function closeInviteModal() {
-  document.getElementById("inviteModal").style.display = "none";
-}
+        		  const friendItem = document.createElement("div");
+        		  friendItem.classList.add("friend-item");
+        		  friendItem.textContent = friend.toNickname;
+        		  friendListDiv.appendChild(friendItem);
+        		});
+      }
+    })
+    .catch(error => {
+      console.error('❌ 친구 목록 로딩 실패:', error);
+      friendListDiv.innerHTML = '<p>친구 목록을 불러오는 중 오류가 발생했습니다.</p>';
+    });
 
-function inviteFriend(friendId, friendName) {
-  alert(friendName + "님을 초대했습니다.");
-  // 🔁 여기에 AJAX로 서버에 초대 요청 보내는 코드 작성 가능
-}
+  }
+
+  // ✅ + 버튼 클릭 시 모달 열고 친구 목록 로드
+  newChatBtn.addEventListener('click', function () {
+    inviteModal.style.display = 'block';
+    loadFriendList();
+  });
+
+  // ✖ 닫기 버튼
+  closeModalBtn.addEventListener('click', function () {
+    inviteModal.style.display = 'none';
+  });
+});
 </script>
+
+
+
+
 
 <!-- ------------------------------------------------------------------ -->
 
