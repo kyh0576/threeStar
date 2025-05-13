@@ -11,4 +11,8 @@ public interface CalendarService {
 	
 	public List<Calendar> SelectCalendar(Calendar c);
 	
+	public int updateCalendar(Calendar c);
+	
+	public int deleteCalendar(Calendar c);
+	
 }

@@ -29,4 +29,14 @@ public class CalendarServiceImpl implements CalendarService {
 		return cDao.SelectCalendar(sqlSession, c);
 	}
 	
+	@Override
+	public int updateCalendar(Calendar c) {
+		return cDao.updateCalendar(sqlSession, c);
+	}
+	
+	@Override
+	public int deleteCalendar(Calendar c) {
+		return cDao.deleteCalendar(sqlSession, c);
+	}
+	
 }

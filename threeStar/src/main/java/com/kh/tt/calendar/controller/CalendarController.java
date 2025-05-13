@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -63,21 +64,50 @@ public class CalendarController {
 		    
 	}
 
-//	@ResponseBody
-//	@RequestMapping(value="/calendar/getCalendarEvents.do", produces = "application/json; charset=UTF-8")
-//	public List<Calendar> SelectCalendarAjax(HttpSession session) {
-//		Member loginMember = (Member) session.getAttribute("loginMember");
-//		
-//	    if (loginMember == null) {
-//	        return new ArrayList<>(); // 비로그인 상태면 빈 리스트 리턴
-//	    }
-//		
-//	    Calendar c = new Calendar();
-//	    c.setCalWriter(loginMember.getMemNo());
-//
-//	    return cService.SelectCalendar(c);
-//	    
-//	}
+
+	@RequestMapping(value="/calendar/update.do", method=RequestMethod.POST)
+	public String updateCalendar(Calendar c, HttpSession session, Model model) {
+		Member loginMember = (Member)session.getAttribute("loginMember");
+		
+		if(loginMember != null) {
+			c.setCalWriter(loginMember.getMemNo());
+		}else {
+			model.addAttribute("errorMsg", "로그인이 필요합니다.");
+			return "redirect:/";
+		}
+		
+		int result = cService.updateCalendar(c);
+	    
+		if(result > 0) {
+			session.setAttribute("alertMsg", "수정이 완료됐습니다.");
+			return "calendar/calendarDetail";
+		}else {
+			model.addAttribute("errorMsg", "수정에 실패했습니다.");
+			return "calendar/calendarDetail";
+		}
+	}
+	
+	@RequestMapping(value="/calendar/delete.do", method=RequestMethod.POST)
+	public String deleteCalendar(Calendar c, HttpSession session, Model model) {
+		Member loginMember = (Member)session.getAttribute("loginMember");
+		
+		if(loginMember != null) {
+			c.setCalWriter(loginMember.getMemNo());
+		}else {
+			model.addAttribute("errorMsg", "로그인이 필요합니다.");
+			return "redirect:/";
+		}
+		
+		int result = cService.deleteCalendar(c);
+	    
+		if(result > 0) {
+			session.setAttribute("alertMsg", "삭제 완료됐습니다.");
+			return "calendar/calendarDetail";
+		}else {
+			model.addAttribute("errorMsg", "삭제 실패했습니다.");
+			return "calendar/calendarDetail";
+		}
+	}
 
 
 }

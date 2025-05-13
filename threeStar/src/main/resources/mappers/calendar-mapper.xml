@@ -35,7 +35,8 @@
    
    <select id="SelectCalendar" resultMap="calendarResult">
 		select
-             cal_writer
+			 cal_id
+           , cal_writer
            , cal_title
            , cal_content
            , cal_start
@@ -44,5 +45,25 @@
 			calendar
    		where cal_writer = #{calWriter}
    </select>
+   
+   <update id="updateCalendar">
+   		update
+   			calendar
+   		set
+   			 cal_title = #{calTitle}
+           , cal_content = #{calContent}
+           , cal_start = TO_DATE(#{calStart}, 'YYYY-MM-DD')
+           , cal_end = TO_DATE(#{calEnd}, 'YYYY-MM-DD')
+       	where cal_id = #{calId}
+       	  and cal_writer = #{calWriter}
+   </update>
+   
+   <delete id="deleteCalendar">
+   		delete
+   		from
+   			calendar
+   		where cal_id = #{calId}
+   		  and cal_writer = #{calWriter}
+   </delete>
 
 </mapper>
