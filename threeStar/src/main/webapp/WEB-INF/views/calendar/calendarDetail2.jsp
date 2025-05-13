@@ -17,25 +17,20 @@
 <!-- Latest compiled JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-}
-
-body {
+/* 전체 컨테이너 */
+.container {
     display: flex;
-    background-color: #f9f9f9;
-    min-height: 100vh;
+    height: 100vh;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 /* 메인 콘텐츠 영역 */
 .main-content {
-    flex-glow: 1;
-    padding: 30px;
-    overflow: auto;
-    max-width: calc(100% - 280px); /* 사이드바 폭뺀만큼 */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #f9f9f9;
 }
 
 /* 헤더 스타일 */
@@ -176,7 +171,7 @@ body {
 .day-cell {
     border: 1px solid #e0e0e0;
     padding: 8px;
-    min-height: 120px;
+    min-height: 80px;
     position: relative;
     cursor: pointer;
     transition: background-color 0.2s;
@@ -249,7 +244,7 @@ body {
 .modal-content {
     background-color: white;
     border-radius: 10px;
-    width: 500px;
+    width: 400px;
     max-width: 90%;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
@@ -336,53 +331,46 @@ body {
 
 /* 기존 스타일은 그대로 유지 */
 
-.button-danger {
-    background-color: #ff3b30;
-    color: white;
-}
-
-.button-danger:hover {
-    background-color: #ff453a;
-}
-
 </style>
 </head>
 <body>
-    <!-- 사이드바 -->
-	<jsp:include page="/WEB-INF/views/common/mainMenu.jsp"/>
+    <div class="container">
+        <!-- 사이드바 -->
+		<jsp:include page="/WEB-INF/views/common/mainMenu.jsp"/>
         
-    <!-- 메인 콘텐츠 -->
-    <div class="main-content">
-        <!-- 헤더 -->
-        <div class="header">
-            <div class="logo">
-                <span class="logo-icon">📅</span> 티캘린더
+        <!-- 메인 콘텐츠 -->
+        <div class="main-content">
+            <!-- 헤더 -->
+            <div class="header">
+                <div class="logo">
+                    <span class="logo-icon">📅</span> 티캘린더
+                </div>
             </div>
-        </div>
-        
-        <!-- 캘린더 헤더 -->
-        <div class="calendar-header">
-            <div class="year-month" id="calendarYearMonth"></div>
-            <div class="calendar-nav">
-                <button class="nav-button" id="prevMonth">◀</button>
-                <button class="nav-button" id="nextMonth">▶</button>
-                <button class="today-button" id="todayButton">오늘</button>
+            
+            <!-- 캘린더 헤더 -->
+            <div class="calendar-header">
+                <div class="year-month" id="calendarYearMonth"></div>
+                <div class="calendar-nav">
+                    <button class="nav-button" id="prevMonth">◀</button>
+                    <button class="nav-button" id="nextMonth">▶</button>
+                    <button class="today-button" id="todayButton">오늘</button>
+                </div>
             </div>
-        </div>
-        
-        <!-- 캘린더 그리드 -->
-        <div class="calendar-grid">
-            <div class="weekdays">
-                <div class="weekday">일</div>
-                <div class="weekday">월</div>
-                <div class="weekday">화</div>
-                <div class="weekday">수</div>
-                <div class="weekday">목</div>
-                <div class="weekday">금</div>
-                <div class="weekday">토</div>
-            </div>
-            <div class="calendar-days" id="calendarDays">
-                <!-- 여기에 JavaScript로 날짜가 생성됩니다 -->
+            
+            <!-- 캘린더 그리드 -->
+            <div class="calendar-grid">
+                <div class="weekdays">
+                    <div class="weekday">일</div>
+                    <div class="weekday">월</div>
+                    <div class="weekday">화</div>
+                    <div class="weekday">수</div>
+                    <div class="weekday">목</div>
+                    <div class="weekday">금</div>
+                    <div class="weekday">토</div>
+                </div>
+                <div class="calendar-days" id="calendarDays">
+                    <!-- 여기에 JavaScript로 날짜가 생성됩니다 -->
+                </div>
             </div>
         </div>
     </div>
@@ -395,9 +383,6 @@ body {
                 <button class="close-button" id="closeModal">&times;</button>
             </div>
             <form action="" class="modal-form" id="eventForm" method="POST">
-            	<div>
-            		<input type="hidden" id="eventCalId" name="calId" value="${ calendar.calId }">
-            	</div>
                 <div class="form-group">
                     <label for="eventTitle">일정 제목</label>
                     <input type="text" id="eventTitle" name="calTitle" required>
@@ -412,7 +397,7 @@ body {
 				</div>
                 <div class="form-group">
                     <label for="eventDesc">설명</label>
-                    <input type="text" id="eventDesc" name="calContent" required>
+                    <input type="text" id="eventDesc" name="calContent">
                 </div>
                 <div class="button-group">
                 	<button type="submit" class="button button-primary">저장</button>
@@ -618,7 +603,7 @@ body {
         return dayCell;
     }
 
- // 1. 먼저 기존 displayEvents 함수를 수정하여 event-item에 클릭 이벤트를 추가합니다
+ // 일정 표시 함수
     function displayEvents() {
         // 현재 이벤트 상태 로깅
         console.log("🧾 displayEvents에서 모든 이벤트 상태:", JSON.stringify(events, null, 2));
@@ -671,14 +656,7 @@ body {
                 
                 eventElement.textContent = event.title;
                 eventElement.title = `${event.title}\n${event.startDate}${event.endDate !== event.startDate ? ' ~ ' + event.endDate : ''}\n${event.description || ''}`;
-                
-                // 여기에 클릭 이벤트 추가 - 수정 모달을 열기 위한 부분
-                eventElement.addEventListener('click', function(e) {
-                    e.stopPropagation(); // 부모 요소(날짜 셀)의 클릭 이벤트가 발생하지 않도록 함
-                    showEditEventModal(event);
-                });
-                
-                container.appendChild(eventElement);
+                container.appendChild(eventElement);  // append 대신 appendChild 사용
                 
                 // 디버깅: 추가된 이벤트 표시
                 console.log("이벤트 추가됨 (DOM):", dateString, event.title);
@@ -688,80 +666,17 @@ body {
         // 이벤트 키값 확인을 위한 추가 로깅
         console.log("💫 events 객체의 모든 키:");
         for (const dateKey in events) {
-            console.log(`- "${dateKey}" (${typeof dateKey}): ${events[dateKey].length}개 이벤트`);
+            console.log(`- "\${dateKey}" (\${typeof dateKey}): \${events[dateKey].length}개 이벤트`);
         }
     }
 
- // 2. 일정 수정 모달을 표시하는 함수 추가
-    function showEditEventModal(event) {
-        // 모달 오픈
-        
-        // 수정 모드 플래그 설정
-        eventForm.dataset.mode = 'edit';
-        
-        // 모달이 존재하는지 확인
-        if (!eventModal || !eventStartDateInput || !eventEndDateInput) {
-            console.error("모달 DOM 요소를 찾을 수 없습니다!");
-            return;
-        }
-        
-        // 모달 타이틀 변경
-        document.querySelector('.modal-title').textContent = '일정 수정';
-        
-        // 모달 열기
-        eventModal.style.display = 'flex';
-        
-        // 이벤트 데이터로 폼 필드 채우기
-        document.getElementById('eventTitle').value = event.title || '';
-        document.getElementById('eventStartDate').value = event.startDate || '';
-        document.getElementById('eventEndDate').value = event.endDate || event.startDate || '';
-        document.getElementById('eventDesc').value = event.description || '';
-        document.getElementById('eventCalId').value = event.calId || '';
-        
-        // calId가 있으면 hidden 필드에 저장 (폼 제출 시 사용)
-        if (!document.getElementById('eventCalId')) {
-            const hiddenField = document.createElement('input');
-            hiddenField.type = 'hidden';
-            hiddenField.id = 'eventCalId';
-            hiddenField.name = 'calId';
-            eventForm.appendChild(hiddenField);
-        }
-        document.getElementById('eventCalId').value = event.calId || '';
-        
-        // 삭제 버튼 추가 (없으면)
-        if (!document.getElementById('deleteButton')) {
-            const deleteBtn = document.createElement('button');
-            deleteBtn.type = 'button';
-            deleteBtn.id = 'deleteButton';
-            deleteBtn.className = 'button button-danger';
-            deleteBtn.textContent = '삭제';
-            document.querySelector('.button-group').appendChild(deleteBtn);
-            
-            // 삭제 버튼 이벤트 리스너
-            deleteBtn.addEventListener('click', function() {
-                if (confirm('정말로 이 일정을 삭제하시겠습니까?')) {
-                    deleteEvent(event);
-                }
-            });
-        } else {
-            // 이미 버튼이 있으면 보이게 설정
-            document.getElementById('deleteButton').style.display = 'inline-block';
-        }
-    }
- 
- // 3. 일정 추가 모달 표시 함수 수정 (모드 구분 추가)
+    // 일정 추가 모달 표시 함수
     function showAddEventModal(dateString) {
-        // 추가 모드 플래그 설정
-        eventForm.dataset.mode = 'add';
-	 	
         // 모달이 존재하는지 확인
         if (!eventModal || !eventStartDateInput || !eventEndDateInput) {
             console.error("모달 DOM 요소를 찾을 수 없습니다!");
             return;
         }
-        
-        // 모달 타이틀 변경
-        document.querySelector('.modal-title').textContent = '일정 추가';
         
         // 모달 열기
         eventModal.style.display = 'flex';
@@ -773,16 +688,6 @@ body {
         // 이벤트 객체 데이터 초기화
         document.getElementById('eventTitle').value = '';
         document.getElementById('eventDesc').value = '';
-        
-        // calId 초기화
-        if (document.getElementById('eventCalId')) {
-            document.getElementById('eventCalId').value = '';
-        }
-        
-        // 삭제 버튼 숨기기 (있으면)
-        if (document.getElementById('deleteButton')) {
-            document.getElementById('deleteButton').style.display = 'none';
-        }
     }
     
     function addEvent(event) {
@@ -966,100 +871,62 @@ body {
         });
         
         // 배경 클릭시 모달 닫기
-        //window.addEventListener('click', function(event) {
-        //    if (event.target === eventModal) {
-        //        eventModal.style.display = 'none';
-        //    }
-        //});
+        window.addEventListener('click', function(event) {
+            if (event.target === eventModal) {
+                eventModal.style.display = 'none';
+            }
+        });
         
-	     // 4. 폼 제출 이벤트 핸들러 수정
-	     // 이벤트 리스너 설정 함수 내의 eventForm.addEventListener 부분을 대체
-	     eventForm.addEventListener('submit', function(e) {
-	         e.preventDefault(); // 기본 제출 동작 방지
-	         
-	         // 폼 데이터 가져오기
-	         const title = document.getElementById('eventTitle').value.trim();
-	         const startDate = document.getElementById('eventStartDate').value.trim();
-	         const endDate = document.getElementById('eventEndDate').value.trim();
-	         const description = document.getElementById('eventDesc').value.trim();
-	         const calId = document.getElementById('eventCalId') ? document.getElementById('eventCalId').value : '';
-	         
-	         // 입력값 검증
-	         if (title === '' || startDate === '') {
-	             alert('제목과 날짜는 필수 입력 항목입니다.');
-	             return;
-	         }
-	         
-	         // 새 이벤트 객체 생성
-	         const eventData = {
-	             title: title,
-	             startDate: startDate,
-	             endDate: endDate || startDate,
-	             description: description
-	         };
-	         
-	         // 추가 또는 수정 모드 확인
-	         const isEditMode = eventForm.dataset.mode === 'edit' && calId;
-	         
-	         if (isEditMode) {
-	             // 기존 이벤트 제거
-	             removeEventFromCalendar(calId);
-	             
-	             // 수정된 이벤트 추가 (서버 전송 전에 로컬에 먼저 반영)
-	             eventData.calId = calId;
-	             eventData.fromDB = true;
-	             addEvent(eventData);
-	             
-	             // 서버로 수정 요청 전송
-	             $.ajax({
-	                 url: '/tt/calendar/update.do',
-	                 method: 'POST',
-	                 data: {
-	                     calId: calId,
-	                     calTitle: title,
-	                     calStart: startDate,
-	                     calEnd: endDate || startDate,
-	                     calContent: description
-	                 },
-	                 success: function(response) {
-	                     console.log("일정이 성공적으로 수정되었습니다:", response);
-	                     alert('일정이 수정되었습니다.');
-	                     location.reload();
-	                 },
-	                 error: function(xhr, status, error) {
-	                     console.error("일정 수정 실패:", error);
-	                     alert('일정 수정에 실패했습니다. 다시 시도해주세요.');
-	                 }
-	             });
-	         } else {
-	             // 로컬 캘린더에 추가
-	             addEvent(eventData);
-	             
-	             // 서버로 추가 요청 전송
-	             $.ajax({
-	                 url: '/tt/calendar.do',
-	                 method: 'POST',
-	                 data: {
-	                     calTitle: title,
-	                     calStart: startDate,
-	                     calEnd: endDate || startDate,
-	                     calContent: description
-	                 },
-	                 success: function(response) {
-	                     console.log("이벤트가 DB에 성공적으로 저장되었습니다:", response);
-	                     alert('일정이 저장되었습니다.');
-	                     location.reload();
-	                 },
-	                 error: function(xhr, status, error) {
-	                     console.error("일정 저장 실패:", error);
-	                     alert('일정 저장에 실패했습니다. 다시 시도해주세요.');
-	                 }
-	             });
-	         }
-	         
-	         // 모달 닫기
-	         eventModal.style.display = 'none';
-	     });
+        eventForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+            
+            // Get form values
+            const title = document.getElementById('eventTitle').value.trim();
+            const startDate = document.getElementById('eventStartDate').value.trim();
+            const endDate = document.getElementById('eventEndDate').value.trim();
+            const description = document.getElementById('eventDesc').value.trim();
+            
+            // Validate inputs
+            if (title === '' || startDate === '' || endDate === '' || description === '') {
+                alert('모든 항목을 입력해주세요.');
+                return;
+            }
+            
+            // First add event to local calendar
+            const newEvent = {
+                title: title,
+                startDate: startDate,
+                endDate: endDate,
+                description: description
+            };
+            
+            // Add to local calendar
+            addEvent(newEvent);
+            
+            // Then send to server via Ajax
+            $.ajax({
+                url: '/tt/calendar.do',
+                method: 'POST',
+                data: {
+                    calTitle: title,
+                    calStart: startDate,  // Use server-expected parameter names
+                    calEnd: endDate,
+                    calContent: description
+                },
+                success: function(response) {
+                    console.log("이벤트가 DB에 성공적으로 저장되었습니다:", response);
+                    alert('일정이 저장되었습니다.');
+                    // No need to reload since we've already added the event locally
+                },
+                error: function(xhr, status, error) {
+                    console.error("일정 저장 실패:", error);
+                    alert('일정 저장에 실패했습니다. 다시 시도해주세요.');
+                }
+            });
+            
+            // Close the modal
+            eventModal.style.display = 'none';
+        });
         
         // 시작일 변경 시 종료일 최소 날짜 설정
         document.getElementById('eventStartDate').addEventListener('change', function() {
@@ -1069,49 +936,6 @@ body {
                 document.getElementById('eventEndDate').value = this.value;
             }
         });
-    }
-    
- // 5. 일정 삭제 함수 추가
-    function deleteEvent(event) {
-        if (!event || !event.calId) {
-            console.error("삭제할 일정 정보가 유효하지 않습니다.");
-            return;
-        }
-        
-        // 로컬 캘린더에서 이벤트 제거
-        removeEventFromCalendar(event.calId);
-        
-        // 서버에 삭제 요청 전송
-        $.ajax({
-            url: '/tt/calendar/delete.do',
-            method: 'POST',
-            data: { calId: event.calId },
-            success: function(response) {
-                console.log("일정이 성공적으로 삭제되었습니다:", response);
-                alert('일정이 삭제되었습니다.');
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                console.error("일정 삭제 실패:", error);
-                alert('일정 삭제에 실패했습니다. 다시 시도해주세요.');
-            }
-        });
-        
-        // 모달 닫기
-        eventModal.style.display = 'none';
-    }
- 
- // 6. 캘린더에서 이벤트 제거 함수
-    function removeEventFromCalendar(calId) {
-        // calId로 events 객체에서 해당 이벤트 찾아 제거
-        for (const dateKey in events) {
-            events[dateKey] = events[dateKey].filter(event => {
-                return !(event.calId && event.calId == calId);
-            });
-        }
-        
-        // 캘린더 표시 갱신
-        displayEvents();
     }
 
     // 페이지 초기화 함수
@@ -1216,7 +1040,7 @@ body {
                 endDate: formatDateFromDB(event.calEnd),
                 description: event.calContent || '',
                 fromDB: true, // DB에서 온 이벤트 표시
-                calId: event.calId // DB ID 저장 (수정/삭제 위함)
+                calNo: event.calNo // DB ID 저장 (수정/삭제 위함)
             };
             
             // 유효성 검사
