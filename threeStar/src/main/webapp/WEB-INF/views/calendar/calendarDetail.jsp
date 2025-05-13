@@ -35,7 +35,7 @@ body {
     flex-glow: 1;
     padding: 30px;
     overflow: auto;
-    max-width: calc(100% - 280px); /* 사이드바 폭뺀만큼 */
+    width: calc(100% - 280px); /* 사이드바 폭뺀만큼 */
 }
 
 /* 헤더 스타일 */
@@ -176,6 +176,7 @@ body {
 .day-cell {
     border: 1px solid #e0e0e0;
     padding: 8px;
+    min-weight: 120px;
     min-height: 120px;
     position: relative;
     cursor: pointer;
@@ -291,8 +292,8 @@ body {
 }
 
 .form-group input, .form-group textarea {
-    width: 100%;
-    padding: 8px;
+    width: 90%;
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 14px;
