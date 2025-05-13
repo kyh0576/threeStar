@@ -82,6 +82,11 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
 //=======================그룹채팅=====================================
 		@Override
 		public int createGroupChatRoom(List<Integer> memberNos) {
+			  Integer existingRoomId = mDao.findGroupChatRoom(sqlSession, memberNos);
+			    if (existingRoomId != null) {
+			        return existingRoomId;  // ✅ 이미 있으면 그 방으로 리턴
+			    }
+			    
 		    // 1. 방 생성자 insert
 		    int firstMemNo = memberNos.get(0);
 		    mDao.insertChatRoom(sqlSession, firstMemNo, "그룹 채팅");

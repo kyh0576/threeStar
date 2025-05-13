@@ -66,6 +66,8 @@ public class ChattingRoomDao {
         return sqlSession.delete("chatMapper.exitChatRoom", param);
     }
     
+    
+    
     //======그룹채팅방 생성=================================================
     
     public Integer findGroupChatRoom(SqlSessionTemplate sqlSession,List<Integer> memberNos) {
