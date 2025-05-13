@@ -467,58 +467,155 @@
             background-color: #e1e1e1;
         }
         
+        
+        
+        /* 채팅 친구 리스트 등*/
 
-		/* ✅ 전체 모달 박스 스타일 */
-#inviteModal {
-   position: fixed;
-  top: 100px;        /* 헤더 아래 적당히 내려오기 */
-  left: 100px;       /* 사이드바 오른쪽에 붙이기 */
-  z-index: 9999;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  display: none;
-  min-width: 300px;
-}
-
-/* ✅ 닫기 버튼 */
-#closeModalBtn {
-  float: right;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  background: none;
-  border: none;
-  color: #888;
-}
-
-#closeModalBtn:hover {
-  color: #ff4444;
-}
-
-/* ✅ 친구 리스트 영역 */
-#friend-list {
-  margin-top: 15px;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-/* ✅ 개별 친구 항목 */
-.friend-item {
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 6px;
-  background-color: #f8f9fa;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.friend-item:hover {
-  background-color: #e6f0ff;
-}
-
+		/* ✅ 왼쪽 모달 (새 채팅용) */
+		#inviteModal {
+		  position: fixed;
+		  top: 120px;
+		  left: 100px;
+		  z-index: 9999;
+		  background: white;
+		  padding: 20px;
+		  border-radius: 8px;
+		  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+		  display: none;
+		  min-width: 300px;
+		}
 		
+		/* ✅ 왼쪽 닫기 버튼 */
+		#closeModalBtn {
+		  float: right;
+		  font-size: 18px;
+		  font-weight: bold;
+		  cursor: pointer;
+		  background: none;
+		  border: none;
+		  color: #888;
+		}
+		#closeModalBtn:hover {
+		  color: #ff4444;
+		}
+		
+		/* ✅ 왼쪽 친구 리스트 */
+		#friend-list-left {
+		  margin-top: 15px;
+		  max-height: 300px;
+		  overflow-y: auto;
+		}
+		
+		/* ✅ 오른쪽 모달 (초대용) */
+		#inviteModalRight {
+		  position: fixed;
+		  top: 120px;
+		  right: 320px;
+		  z-index: 9999;
+		  background: white;
+		  padding: 20px;
+		  border-radius: 8px;
+		  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+		  display: none;
+		  min-width: 300px;
+		}
+		
+		/* ✅ 오른쪽 닫기 버튼 */
+		#inviteModalRight .close-modal {
+		  float: right;
+		  font-size: 18px;
+		  font-weight: bold;
+		  cursor: pointer;
+		  background: none;
+		  border: none;
+		  color: #888;
+		}
+		#inviteModalRight .close-modal:hover {
+		  color: #ff4444;
+		}
+		
+		/* ✅ 오른쪽 친구 리스트 */
+		#friend-list-right {
+		  margin-top: 15px;
+		  max-height: 300px;
+		  overflow-y: auto;
+		}
+		
+		/* ✅ 친구 항목 공통 */
+		.friend-item {
+		  padding: 10px;
+		  border-radius: 5px;
+		  margin-bottom: 6px;
+		  background-color: #f8f9fa;
+		  cursor: pointer;
+		  transition: background-color 0.2s;
+		}
+		.friend-item:hover {
+		  background-color: #e6f0ff;
+		}
+		
+		/* ✅ 버튼: 공통 적용 가능 */
+		#startChatBtnLeft,
+		#startChatBtnRight {
+		  display: block;
+		  width: 100%;
+		  padding: 12px 16px;
+		  margin-top: 15px;
+		  background-color: #4a8cff;
+		  color: white;
+		  font-size: 16px;
+		  font-weight: bold;
+		  border: none;
+		  border-radius: 6px;
+		  cursor: pointer;
+		  transition: background-color 0.2s ease;
+		  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+		#startChatBtnLeft:hover,
+		#startChatBtnRight:hover {
+		  background-color: #367ee6;
+		}
+		#startChatBtnLeft:active,
+		#startChatBtnRight:active {
+		  background-color: #2c6dd9;
+		}
+
+		/* ✅ 공통 친구 리스트 스타일 */
+		#friend-list-left,
+		#friend-list-right {
+		  margin-top: 15px;
+		  max-height: 300px; /* 세로 길이 제한 */
+		  overflow-y: auto;  /* 스크롤 */
+		  display: flex;
+		  flex-direction: column;
+		  gap: 6px;
+		}
+		
+		/* ✅ label 스타일 세로 정렬 + 카드 스타일 */
+		#friend-list-left label,
+		#friend-list-right label {
+		  display: flex;
+		  align-items: center;
+		  padding: 10px;
+		  background-color: #f8f9fa;
+		  border-radius: 6px;
+		  cursor: pointer;
+		  transition: background-color 0.2s;
+		}
+		
+		#friend-list-left label:hover,
+		#friend-list-right label:hover {
+		  background-color: #e6f0ff;
+		}
+		
+		#friend-list-left input[type="checkbox"],
+		#friend-list-right input[type="checkbox"] {
+		  margin-right: 10px;
+		}
+				
+				
+				
+				
     </style>
 
 </head>
@@ -540,7 +637,8 @@
 		<div id="inviteModal">
 		  <button id="closeModalBtn">✕</button>
 		  <h3>친구 목록</h3>
-		  <div id="friend-list">여기에 친구 목록이 표시될 예정입니다.</div>
+		  <div id="friend-list-left">여기에 친구 목록이 표시될 예정입니다.</div>
+		  <button id="startChatBtnLeft" style="margin-top: 10px;">✅ 선택한 친구들과 채팅 시작</button>
 		</div>
 
   
@@ -619,11 +717,18 @@
                     </div>
                 </div>
                 
-                <div class="add-member">
+                <div class="add-member" id ="addMem">
 				  <div style="font-size: 20px;">+</div>
 				  <div> Add </div>
 				</div>
 				
+				<!-- 오른쪽: 그룹 채팅용 -->
+				<div id="inviteModalRight" class="invite-modal">
+				  <button class="close-modal">✕</button>
+				  <h3>친구 목록</h3>
+				  <div id="friend-list-right">여기에 친구 목록이 표시될 예정입니다.</div>
+				  <button id="startChatBtnRight" style="margin-top: 10px;">선택한 친구 초대</button>
+				</div>
 				
             </div>
             
@@ -949,38 +1054,44 @@ document.addEventListener("DOMContentLoaded", function () {
 <!-- ------------------------------------------------------------------ -->
 <!-- 채팅방 이름 채팅방 內 사용자 이름 변경 -->
 document.addEventListener("DOMContentLoaded", function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const roomId = urlParams.get("roomId");
-    console.log(roomId);
-
+    const roomId = new URLSearchParams(window.location.search).get("roomId");
     if (!roomId) return;
 
-    fetch("${pageContext.request.contextPath}/chattingRoom/roomName?roomId=" + roomId)
-        .then(response => response.text())
+    // 채팅방 이름 설정
+    fetch(`\${contextPath}/chattingRoom/roomName?roomId=\${roomId}`)
+        .then(res => res.text())
         .then(name => {
             document.querySelector("#chatRoomTitle").textContent = name;
-        })
-        .catch(err => {
-            console.error("❌ 채팅방 이름 가져오기 실패:", err);
         });
-});
 
+    
+    // 채팅방 참여자 목록 표시
+    fetch(`\${contextPath}/chattingRoom/members?roomId=\${roomId}`)
+    .then(response => response.json())
+    .then(data => {
+      const memberList = document.querySelector(".member-list");
+      memberList.innerHTML = ""; // 초기화
 
-document.addEventListener("DOMContentLoaded", function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const roomId = urlParams.get("roomId");
+      data.forEach(member => {
+        const memberItem = document.createElement("div");
+        memberItem.className = "member-item";
 
-    fetch("${pageContext.request.contextPath}/chattingRoom/roomName?roomId=" + roomId)
-        .then(response => response.text())
-        .then(name => {
-            const targetNameDom = document.querySelector("#targetNicknameArea");
-            if (targetNameDom) {
-                targetNameDom.textContent = name;
-            }
-        })
-        .catch(err => {
-            console.error("❌ People 상대방 닉네임 가져오기 실패", err);
-        });
+        memberItem.innerHTML = `
+          <div class="profile-img">
+            <img src="\${member.profileUrl || '/tt/resources/images/profile-default.png'}" alt="프로필">
+          </div>
+          <div class="member-info">
+            <div class="member-name">\${member.memName}</div>
+            <div class="member-status">온라인</div>
+          </div>
+        `;
+
+        memberList.appendChild(memberItem);
+      });
+    })
+    .catch(err => {
+      console.error("❌ 채팅방 멤버 목록 가져오기 실패:", err);
+    });
 });
 
 
@@ -1103,7 +1214,7 @@ fileInput.addEventListener("change", () => {
 });
 
 
-//티 서랍
+//티 서랍==============================================================
 document.addEventListener("DOMContentLoaded", function () {
     const roomId = <%= roomId %>;
     const contextPath = "<%= request.getContextPath() %>";
@@ -1148,57 +1259,166 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 
-
+<!-- +버튼 눌렀을 때 채팅방 생성 -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  const newChatBtn = document.getElementById('newChat');
-  const inviteModal = document.getElementById('inviteModal');
-  const closeModalBtn = document.getElementById('closeModalBtn');
-  const friendListDiv = document.getElementById('friend-list');
+	  const newChatBtn = document.getElementById('newChat');
+	  const inviteModalLeft = document.getElementById('inviteModal');
+	  const closeModalBtn = document.getElementById('closeModalBtn');
 
-  // ✅ 친구 목록 불러오는 함수
-  function loadFriendList() {
-    friendListDiv.innerHTML = '';
-    console.log("👉 친구 목록 fetch 요청:", `\${contextPath}/friends/list?memNo=\${myMemNo}`);
+	  newChatBtn.addEventListener('click', function () {
+	    inviteModalLeft.style.display = 'block';
+	    loadFriendListForNewChat();
+	  });
 
-    fetch(contextPath + `/friends/list?memNo=\${myMemNo}`)
-    .then(response => response.json())
-    .then(data => {
-      if (data.length === 0) {
-        friendListDiv.innerHTML = '<p>친구가 없습니다.</p>';
-      } else {
-    	  
-        data.forEach(friend => {
-        		  if (!friend || !friend.toNickname) {
-        		    console.warn("친구 정보 오류:", friend);
-        		    return;
-        		  }
+	  closeModalBtn.addEventListener('click', function () {
+	    inviteModalLeft.style.display = 'none';
+	  });
 
-        		  const friendItem = document.createElement("div");
-        		  friendItem.classList.add("friend-item");
-        		  friendItem.textContent = friend.toNickname;
-        		  friendListDiv.appendChild(friendItem);
-        		});
-      }
-    })
-    .catch(error => {
-      console.error('❌ 친구 목록 로딩 실패:', error);
-      friendListDiv.innerHTML = '<p>친구 목록을 불러오는 중 오류가 발생했습니다.</p>';
-    });
+	  function loadFriendListForNewChat() {
+	    const container = document.getElementById('friend-list-left');
+	    container.innerHTML = '';
 
-  }
+	    fetch(`\${contextPath}/friends/list?memNo=\${myMemNo}`)
+	      .then(response => response.json())
+	      .then(data => {
+	        if (data.length === 0) {
+	          container.innerHTML = '<p>친구가 없습니다.</p>';
+	        } else {
+	          data.forEach(friend => {
+	            const label = document.createElement('label');
+	            label.classList.add('friend-item');
+	            label.innerHTML = `
+	              <input type="checkbox" class="chat-select" value="\${friend.toMem}">
+	              \${friend.toNickname}
+	            `;
+	            container.appendChild(label);
+	          });
+	        }
+	      })
+	      .catch(err => {
+	        console.error("❌ 친구 목록 로딩 실패", err);
+	      });
+	  }
 
-  // ✅ + 버튼 클릭 시 모달 열고 친구 목록 로드
-  newChatBtn.addEventListener('click', function () {
-    inviteModal.style.display = 'block';
-    loadFriendList();
-  });
+	  
+	  
+	  
+	  document.getElementById("startChatBtnLeft").addEventListener("click", () => {
+	    const checked = [...document.querySelectorAll(".chat-select:checked")];
+	    const selectedIds = checked.map(cb => parseInt(cb.value));
 
-  // ✖ 닫기 버튼
-  closeModalBtn.addEventListener('click', function () {
-    inviteModal.style.display = 'none';
-  });
-});
+	    if (selectedIds.length === 0) {
+	      alert("최소 한 명 이상 선택하세요.");
+	      return;
+	    }
+
+	    if (selectedIds.length === 1) {
+	      // 1:1 채팅
+	      fetch(`\${contextPath}/chattingRoom/startChat`, {
+	        method: "POST",
+	        headers: { "Content-Type": "application/json" },
+	        body: JSON.stringify({ targetUserId: selectedIds[0] })
+	      })
+	        .then(res => res.json())
+	        .then(result => {
+	          if (result.success && result.roomId) {
+	            location.href = `\${contextPath}/message/messageForm?roomId=\${result.roomId}`;
+	          } else {
+	            alert("❌ 채팅방 생성 실패");
+	          }
+	        });
+	    
+	    } else {
+	      // 그룹 채팅
+	      fetch(`\${contextPath}/chattingRoom/startGroupChat`, {
+	        method: "POST",
+	        headers: { "Content-Type": "application/json" },
+	        body: JSON.stringify({
+	          initiator: myMemNo,
+	          members: selectedIds
+	        })
+	      })
+	        .then(response => response.json())
+	        .then(result => {
+	          if (result.success && result.roomId) {
+	            location.href = `\${contextPath}/message/messageForm?roomId=\${result.roomId}`;
+	          } else {
+	            alert("❌ 그룹 채팅 생성 실패");
+	          }
+	        });
+	    }
+	  });
+	});
+
+
+//오른쪽 +add 눌렀을 때 동작
+document.addEventListener('DOMContentLoaded', function () {
+	  const addMemBtn = document.getElementById('addMem');
+	  const inviteModalRight = document.getElementById('inviteModalRight');
+	  const closeModalRight = inviteModalRight.querySelector('.close-modal');
+
+	  addMemBtn.addEventListener('click', () => {
+	    inviteModalRight.style.display = 'block';
+	    loadFriendListForInvite();
+	  });
+
+	  closeModalRight.addEventListener('click', () => {
+	    inviteModalRight.style.display = 'none';
+	  });
+
+	  function loadFriendListForInvite() {
+	    const container = document.getElementById('friend-list-right');
+	    container.innerHTML = '';
+
+	    fetch(`\${contextPath}/friends/list?memNo=\${myMemNo}`)
+	      .then(response => response.json())
+	      .then(data => {
+	        data.forEach(friend => {
+	          const label = document.createElement('label');
+	          label.classList.add('friend-item');
+	          label.innerHTML = `
+	            <input type="checkbox" class="invite-select" value="\${friend.toMem}">
+	            \${friend.toNickname}
+	          `;
+	          container.appendChild(label);
+	        });
+	      });
+	  }
+
+	  document.getElementById("startChatBtnRight").addEventListener("click", () => {
+	    const checked = [...document.querySelectorAll(".invite-select:checked")];
+	    const selectedIds = checked.map(cb => parseInt(cb.value));
+
+	    if (selectedIds.length === 0) {
+	      alert("초대할 친구를 선택하세요.");
+	      return;
+	    }
+
+	    const roomId = new URLSearchParams(window.location.search).get("roomId");
+
+	    fetch(`${contextPath}/chattingRoom/invite`, {
+	      method: "POST",
+	      headers: { "Content-Type": "application/json" },
+	      body: JSON.stringify({
+	        chatId: roomId,
+	        members: selectedIds
+	      })
+	    })
+	      .then(res => res.text())
+	      .then(result => {
+	        if (result === "success") {
+	          alert("✅ 초대 완료");
+	          location.reload();
+	        } else {
+	          alert("❌ 초대 실패");
+	        }
+	      });
+	  });
+	});
+
+
+
 </script>
 
 
