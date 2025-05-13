@@ -40,7 +40,8 @@ public class googleCalendarController {
 				mv.setViewName("calendar/googleCalendar");
 
 			}else {
-				mv.addObject("alertMsg", "일반 캘린더로 이동합니다.");
+				session.setAttribute("loginMember", loginMember);
+				session.setAttribute("alertMsg", "일반 캘린더로 이동합니다.");
 				mv.setViewName("calendar/calendarDetail");
 			}
 

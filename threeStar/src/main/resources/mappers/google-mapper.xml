@@ -29,7 +29,8 @@
 	
 	<select id="loginGoogleMember" parameterType="map" resultMap="memberResult">
 	     select
-	            mem_id
+	     	    mem_no
+	          , mem_id
 	          , mem_pwd
 	          , mem_name
 	          , email

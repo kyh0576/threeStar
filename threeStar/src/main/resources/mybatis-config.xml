@@ -12,6 +12,7 @@
         <typeAlias type="com.kh.tt.chat.model.vo.ChattingRoom" alias="Chat"/>
         <typeAlias type="com.kh.tt.profile.model.vo.Friend" alias="Friend"/>
         <typeAlias type="com.kh.tt.schedule.model.vo.Schedule" alias="Schedule"/>
+        <typeAlias type="com.kh.tt.calendar.model.vo.Calendar" alias="Calendar"/>
     </typeAliases>
 
     <mappers>

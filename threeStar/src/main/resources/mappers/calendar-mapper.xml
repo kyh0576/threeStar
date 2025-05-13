@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
 <mapper namespace="calendarMapper">
+
+	<resultMap id="calendarResult" type="Calendar">
+      <result column="cal_id" property="calId"/>
+      <result column="cal_writer" property="calWriter"/>
+      <result column="cal_title" property="calTitle"/>
+      <result column="cal_content" property="calContent"/>
+      <result column="cal_start" property="calStart"/>
+      <result column="cal_end" property="calEnd"/>
+	</resultMap>
 	
-   <resultMap id="" type="">
-      <result column="mem_no" property="memNo"/>
-      <result column="mem_id" property="memId"/>
-      <result column="mem_pwd" property="memPwd"/>
-      <result column="mem_name" property="memName"/>
-      <result column="email" property="email"/>
-      <result column="phone" property="phone"/>
-      <result column="mem_class_code" property="memClassCode"/>
-      <result column="sns_key" property="snsKey"/>
-      <result column="status" property="status"/>
-      <result column="online_st" property="onlineSt"/>
-      <result column="admin_yn" property="adminYN"/>
-   </resultMap>
-	  
 	<insert id="InsertCalendar">
       insert
         into calendar
@@ -29,13 +24,25 @@
            )
       values
           (
-            SEQ_CAL_ID.nextval
-          , #{calId}
+            SEQ_CAL_ID.NEXTVAL
+          , #{calWriter}
           , #{calTitle}
           , #{calContent}
-          , #{calStart}
-          , #{calEnd}
+          , TO_DATE(#{calStart}, 'YYYY-MM-DD')
+          , TO_DATE(#{calEnd}, 'YYYY-MM-DD')
           )
    </insert>
+   
+   <select id="SelectCalendar" resultMap="calendarResult">
+		select
+             cal_writer
+           , cal_title
+           , cal_content
+           , cal_start
+           , cal_end
+		  from
+			calendar
+   		where cal_writer = #{calWriter}
+   </select>
 
 </mapper>
