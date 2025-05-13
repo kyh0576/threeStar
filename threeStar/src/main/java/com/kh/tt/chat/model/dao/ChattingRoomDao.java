@@ -68,6 +68,12 @@ public class ChattingRoomDao {
     
     //======그룹채팅방 생성=================================================
     
+    public Integer findGroupChatRoom(SqlSessionTemplate sqlSession,List<Integer> memberNos) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("list", memberNos);
+        param.put("memberCount", memberNos.size());
+        return sqlSession.selectOne("chatMapper.findGroupChatRoom", param);
+    }
     
  // 채팅방 생성자 1명 insert
     public int insertChatRoom(SqlSessionTemplate sqlSession, int memNo, String chatName) {

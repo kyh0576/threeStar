@@ -30,7 +30,7 @@
 
     /* 메시지 목록 사이드바 */
     .message-sidebar {
-        width: 300px;
+        width: 320px;
         background-color: white;
         border-right: 1px solid #e1e1e1;
         display: flex;
