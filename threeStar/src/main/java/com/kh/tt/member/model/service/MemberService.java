@@ -58,5 +58,6 @@ public interface MemberService {
     // 친구요청 거절
     int rejectFriend(Friend friend);
     
-
+    // 온라인 맴버 조회
+    ArrayList<Member> getOnlineMembers(Member m);
 }

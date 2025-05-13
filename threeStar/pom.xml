@@ -269,6 +269,7 @@
 	
 	
     <build>
+    	<finalName>threeStar</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-eclipse-plugin</artifactId>

@@ -1,6 +1,9 @@
 package com.kh.tt.message.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +14,12 @@ import javax.servlet.http.HttpSession;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +51,7 @@ public class MessageController {
     @PostMapping("/save")
     @ResponseBody
     public String saveMessage(@RequestBody Message message) {
-        // 파일이 포함된 메시지일 경우도 저장 (DB에는 originName, changeName만 저장 가능)
+        System.out.println("🔔 DB 저장 요청 받은 메시지: " + message);
         int result = messageService.saveMessage(message);
         return result > 0 ? "success" : "fail";
     }
@@ -87,35 +96,66 @@ public class MessageController {
         Map<String, Object> result = new HashMap<>();
 
         try {
-            // 📌 올바른 ServletContext 가져오기
             ServletContext context = request.getSession().getServletContext();
             String savePath = context.getRealPath("/resources/uploadFiles/");
 
             File folder = new File(savePath);
             if (!folder.exists()) folder.mkdirs();
 
-            // 파일 이름 생성
             String originName = file.getOriginalFilename();
             String saveName = System.currentTimeMillis() + "_" + originName;
-            
-            System.out.println(originName);
-            System.out.println(saveName);
 
-            // 파일 저장
+            // 저장
             File targetFile = new File(savePath, saveName);
             file.transferTo(targetFile);
+            
+            System.out.println("💡 저장 경로: " + savePath);
+            System.out.println("💡 파일명: " + saveName);
 
-            // 클라이언트가 접근 가능한 URL로 반환
-            result.put("imageUrl", "/resources/uploadFiles/" + saveName);
+            // ✅ 응답에 반드시 imageUrl 포함!
+            String contextPath = request.getContextPath();
+            result.put("imageUrl", contextPath + "/resources/uploadFiles/" + saveName);
 
         } catch (Exception e) {
             e.printStackTrace();
-            result.put("imageUrl", null);
+            result.put("imageUrl", null);  // ❌ 이게 프론트에서 에러 나는 이유!
         }
 
         return result;
     }
 
+    @GetMapping("/download")
+    @ResponseBody
+    public ResponseEntity<Resource> download(@RequestParam("fileName") String fileName,
+                                             HttpServletRequest request) throws IOException {
+        String savePath = request.getSession().getServletContext().getRealPath("/resources/uploadFiles/");
+        File file = new File(savePath, fileName);
+
+        if (!file.exists()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        Resource resource = new FileSystemResource(file);
+
+        String encodedFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+        // ✅ UTF-8로 명시적으로 처리 (브라우저 호환성 ↑)
+        headers.add("Content-Disposition", "attachment; filename*=UTF-8''" + encodedFileName);
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+    }
+
+    
+    @GetMapping("/download/files")
+    @ResponseBody
+    public List<Message> getFilesByRoomId(@RequestParam("roomId") int roomId) {
+        System.out.println("📁 티서랍 파일 목록 요청 - roomId: " + roomId);
+        return messageService.getFilesByRoomId(roomId);
+    }
+    
 }
 
 

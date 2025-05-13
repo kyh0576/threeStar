@@ -102,6 +102,11 @@ public class MemberServiceImpl implements MemberService{
 	public int rejectFriend(Friend friend) {
 		return mDao.rejectFriend(sqlSession, friend);
 	}
+
+	@Override
+	public ArrayList<Member> getOnlineMembers(Member m) {
+		return mDao.getOnlineMembers(sqlSession, m);
+	}
 	
 
 

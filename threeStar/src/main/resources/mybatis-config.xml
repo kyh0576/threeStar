@@ -10,8 +10,8 @@
         <typeAlias type="com.kh.tt.member.model.vo.Classes" alias="Classes"/>
         <typeAlias type="com.kh.tt.message.model.vo.Message" alias="Message"/>
         <typeAlias type="com.kh.tt.chat.model.vo.ChattingRoom" alias="Chat"/>
-        <typeAlias type="com.kh.tt.profile.model.vo.Friend" alias="Friend"/>
         <typeAlias type="com.kh.tt.schedule.model.vo.Schedule" alias="Schedule"/>
+        <typeAlias type="com.kh.tt.profile.model.vo.Friend" alias="Friend"/>
         <typeAlias type="com.kh.tt.calendar.model.vo.Calendar" alias="Calendar"/>
     </typeAliases>
 
@@ -22,6 +22,7 @@
         <mapper resource="mappers/chat-mapper.xml"/>
         <mapper resource="mappers/schedule-mapper.xml"/>
         <mapper resource="mappers/google-mapper.xml"/>
+        <mapper resource="mappers/friends-mapper.xml"/>
         <mapper resource="mappers/calendar-mapper.xml"/>
     </mappers>
 </configuration>

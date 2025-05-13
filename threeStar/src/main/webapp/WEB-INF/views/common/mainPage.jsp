@@ -587,24 +587,15 @@
   
   <!-- 오른쪽 사이드바 -->
   <div class="right-sidebar">
+  
     <div style="border: 1px solid #f8f9fa;" class="border">
-      <div class="today-header">온라인 - 3명</div>
+      <div class="today-header">온라인</div>
       <hr>
-      <div class="today-members">
-        <div class="member-item">
-          <div class="member-avatar avatar-red">김</div>
-          <span class="member-name">김시연</span>
-        </div>
+      <div class="today-members" id="online-members">
+      
+        <!-- 온라인 유저 올 자리 -->
         
-        <div class="member-item">
-          <div class="member-avatar avatar-purple">동</div>
-          <span class="member-name">동진이 형</span>
-        </div>
         
-        <div class="member-item">
-          <div class="member-avatar avatar-purple">현</div>
-          <span class="member-name">현정 누나</span>
-        </div>
       </div>
     </div>
     
@@ -649,6 +640,46 @@
   <script>
   
   $(document).ready(function(){
+	  
+	  // 온라인 유저 조회
+	  function fetchOnlineMembers() {
+		  $.ajax({
+		    url: 'getOnlineMembers.me', // 이 URL에 맞는 컨트롤러 만들어야 함
+		    data: {memNo:"${loginMember.memNo}"},
+		    method: 'GET',
+		    dataType: 'json',
+		    success: function(data) {
+		    	console.log(data)
+		    	console.log("push 배포 테스트 3번째")
+		      // 멤버 영역 초기화
+		      $('#online-members').empty();
+
+		      // 인원 수 갱신
+		      $('#online-count').text(data.length);
+
+		      // 반복문으로 멤버 추가
+		      data.forEach(member => {
+		        const firstLetter = member.memName.charAt(0);
+		        const html = `
+		          <div class="member-item">
+		            <div class="member-avatar avatar-red">\${firstLetter}</div>
+		            <span class="member-name">\${member.memName}</span>
+		          </div>
+		        `;
+		        $('#online-members').append(html);
+		      });
+		    },
+		    error: function() {
+		      console.error('온라인 멤버 정보를 불러오는데 실패했습니다.');
+		    }
+		  });
+		}
+
+		// 최초 1회 실행 + 주기적 갱신
+		fetchOnlineMembers();
+		setInterval(fetchOnlineMembers, 5000); // 5초마다 갱신
+	  
+	  
 	  let loginMemberAdminYN = "${loginMember.adminYN}";
 	  $.ajax({
 	        url: 'selectScheduleList.do',
@@ -1153,15 +1184,22 @@
   		}
 
 
-  	//================= 채팅 이모지 클릭 시 =================
-  	
+  //================= 채팅 이모지 클릭 시 =================
+
+  	const contextPath = "<%= request.getContextPath() %>";
+
   	document.addEventListener('click', function(e) {
   	    const chatIcon = e.target.closest('.chat-message-icon');
+
+  	    // ✅ 친구 삭제 버튼은 무시하고, 채팅 아이콘에만 반응하도록 필터
+  	    const isDeleteIcon = e.target.closest('svg[onclick^="rejectFriend"]');
+  	    if (isDeleteIcon) return;
+
   	    if (chatIcon && chatIcon.dataset.targetUserId) {
   	        const targetUserId = chatIcon.dataset.targetUserId;
-  	
+
   	        // 서버로 채팅방 생성 요청
-  	        fetch('${pageContext.request.contextPath}/chattingRoom/startChat', {
+  	        fetch(contextPath + '/chattingRoom/startChat', {
   	            method: 'POST',
   	            headers: {
   	                'Content-Type': 'application/json'
@@ -1172,7 +1210,8 @@
   	        .then(data => {
   	            if (data.success) {
   	                const roomId = data.roomId;
-  	                location.href = `${pageContext.request.contextPath}/message/messageForm?roomId=\${roomId}`;
+  	                console.log("✅ 이동할 채팅방:", roomId);
+  	                location.href = `\${contextPath}/message/messageForm?roomId=\${roomId}`;  // ✅ 수정됨
   	            } else {
   	                alert('❌ 채팅방 생성 실패');
   	            }
@@ -1182,30 +1221,31 @@
   	        });
   	    }
   	});
-  	
-  	
-  	
-  	//================= 채팅 이모지 클릭 시 startChat 함수 실행 =================
+
+
+  	//================= 필요 시 직접 호출용 함수 =================
+
   	function startChat(targetUserId) {
-  	  fetch('${pageContext.request.contextPath}/chattingRoom/startChat', {  // ✅ URL도 실제 컨트롤러 매핑에 맞게 /tt/message/startChat 등으로 수정
-  	    method: 'POST',
-  	    headers: {
-  	      'Content-Type': 'application/json' 
-  	    },
-  	    body: JSON.stringify({ targetUserId })
-  	  })
-  	  .then(response => response.json())
-  	  .then(data => {
-  	    if (data.success) {
-  	      const roomId = data.roomId;
-  	      location.href = `${pageContext.request.contextPath}/message/messageForm?roomId=\${roomId}`;  // ✅ 백틱(`) 사용
-  	    } else {
-  	      alert('❌ 채팅방 생성에 실패했습니다.');
-  	    }
-  	  })
-  	  .catch(error => {
-  	    console.error('❌ 채팅방 생성 오류', error);
-  	  });
+  	    fetch(contextPath + '/chattingRoom/startChat', {
+  	        method: 'POST',
+  	        headers: {
+  	            'Content-Type': 'application/json' 
+  	        },
+  	        body: JSON.stringify({ targetUserId })
+  	    })
+  	    .then(response => response.json())
+  	    .then(data => {
+  	        if (data.success) {
+  	            const roomId = data.roomId;
+  	            console.log("✅ startChat() → 이동할 채팅방:", roomId);
+  	            location.href = `\${contextPath}/message/messageForm?roomId=\${roomId}`;  // ✅ 수정됨
+  	        } else {
+  	            alert('❌ 채팅방 생성에 실패했습니다.');
+  	        }
+  	    })
+  	    .catch(error => {
+  	        console.error('❌ 채팅방 생성 오류', error);
+  	    });
   	}
 
   	

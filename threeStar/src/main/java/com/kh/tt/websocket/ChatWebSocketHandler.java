@@ -44,12 +44,24 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         Message msg = new Message();
         msg.setMsMemNo(loginMember.getMemNo());
         msg.setSender(loginMember.getMemName());
-        msg.setMessageContent((String) messageMap.get("text"));
-        msg.setType((String) messageMap.get("type"));
         msg.setMsChatId(Integer.parseInt(roomId));
+        msg.setType((String) messageMap.get("type"));
 
+        // ✅ 공통 텍스트 메시지 처리
+        msg.setMessageContent((String) messageMap.get("text"));
+
+        // ✅ 파일 메시지일 경우, originName / changeName / fileType 설정
+        if ("file".equals(msg.getType()) && messageMap.get("file") instanceof Map) {
+            Map<String, Object> fileMap = (Map<String, Object>) messageMap.get("file");
+
+            msg.setOriginName(msg.getMessageContent());  // 원래 파일명은 text에 저장됨
+            msg.setChangeName((String) fileMap.get("name"));
+            msg.setFileType((String) fileMap.get("type"));
+        }
+        // ✅ DB 저장
         messageService.saveMessage(msg);
 
+        // ✅ 다시 클라이언트에게 전송
         messageMap.put("sender", loginMember.getMemName());
         String sendPayload = objectMapper.writeValueAsString(messageMap);
 

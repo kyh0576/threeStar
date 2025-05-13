@@ -19,4 +19,13 @@ public class MessageDao {
     public List<Message> sendMessage(SqlSessionTemplate sqlSession, int roomId) {
         return sqlSession.selectList("messageMapper.sendMessage", roomId);
     }
+    
+ // 저장된 메시지 불러오기 (메시지 히스토리)
+    public List<Message> getUploadedFiles(SqlSessionTemplate sqlSession, int roomId) {
+        return sqlSession.selectList("messageMapper.getUploadedFiles", roomId);
+    }
+    
+    public List<Message> getFilesByRoomId(SqlSessionTemplate sqlSession,int roomId) {
+        return sqlSession.selectList("messageMapper.getFilesByRoomId", roomId);
+    }
 }
