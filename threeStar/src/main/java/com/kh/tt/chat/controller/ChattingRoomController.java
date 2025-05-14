@@ -83,7 +83,6 @@ public class ChattingRoomController {
     @GetMapping(value = "/roomName", produces = "text/plain; charset=UTF-8")
     @ResponseBody
     public String getChatRoomName(@RequestParam("roomId") int roomId, HttpSession session) {
-
         Member loginMember = (Member) session.getAttribute("loginMember");
         int myMemNo = loginMember.getMemNo();
 
@@ -93,16 +92,17 @@ public class ChattingRoomController {
         // 기본 이름 세팅
         String resultName = room != null ? room.getChatName() : "이름없음";
 
-        // 만약 채팅방 이름이 "채팅방"이면 → 상대방 닉네임 가져와서 세팅
+        // 기본값이면 상대방 닉네임으로 변경
         if ("채팅방".equals(resultName)) {
-            Member targetMember = chattingRoomService.findTargetMember(roomId, myMemNo);
-            if (targetMember != null) {
-                resultName = targetMember.getMemName();
+            List<Member> targetMemberList = chattingRoomService.findTargetMember(roomId, myMemNo);
+            if (targetMemberList != null && !targetMemberList.isEmpty()) {
+                resultName = targetMemberList.get(0).getMemName();  // ✅ 첫 번째 상대 이름
             }
         }
 
         return resultName;
     }
+
     
     //==============오른쪽에 채팅방 맴버 뜨는거===============
     @GetMapping(value = "/members")
@@ -145,6 +145,42 @@ public class ChattingRoomController {
         int roomId = chattingRoomService.createGroupChatRoom(members);
 
         return Map.of("success", true, "roomId", roomId);
+    }
+
+  //=================================== 오른쪽 +add친구초대 ===================================
+
+    @PostMapping("invite")
+    @ResponseBody
+    public String inviteFriend(@RequestBody Map<String, Object> body, HttpSession session) {
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        if (loginMember == null) return "fail";
+
+        int chatId = Integer.parseInt(body.get("chatId").toString());
+        List<Integer> membersToInvite = ((List<?>) body.get("members")).stream()
+                .map(obj -> Integer.parseInt(obj.toString()))
+                .collect(Collectors.toList());
+
+        try {
+            // ✅ 이미 참여 중인 멤버 필터링
+            List<Integer> existingMembers = chattingRoomService.findExistingMembersInRoom(chatId, membersToInvite);
+
+            for (int memNo : membersToInvite) {
+                if (!existingMembers.contains(memNo)) {
+                    chattingRoomService.insertRoomMember(chatId, memNo, "그룹 채팅");
+                }
+            }
+
+            // ✅ 채팅방 이름을 현재 멤버 전체 이름 기준으로 업데이트
+            List<String> allMemberNames = chattingRoomService.findMemberNamesInRoom(chatId);
+            String updatedName = String.join(", ", allMemberNames);
+            chattingRoomService.updateChatRoomName(chatId, updatedName);
+
+            return "success";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
     }
 
 
