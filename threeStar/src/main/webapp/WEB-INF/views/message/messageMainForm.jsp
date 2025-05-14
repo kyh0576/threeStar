@@ -223,7 +223,8 @@
         .chat-action-btn.active {
             color: #4a8cff;
         }
-
+        
+/*
         .chat-messages {
             flex-grow: 1;
             overflow-y: auto;
@@ -233,6 +234,17 @@
             flex-direction: column;
             gap: 15px;
         }
+  */      
+  
+		.chat-messages {
+		    display: flex;
+		    flex-direction: column; /* ✅ 다시 아래로 쌓기 */
+		    overflow-y: auto;
+		    padding: 20px;
+		    gap: 15px;
+		    background-color: #f5f5f5;
+		    height: calc(100vh - 180px); /* 적절히 높이 주기 */
+		}
 
         .message-bubble {
             max-width: 70%;
@@ -865,7 +877,6 @@ function isImageFile(filename) {
 function appendMessage(data, type) {
     const bubble = document.createElement("div");
     bubble.classList.add("message-bubble", type);
-    console.log("받은 데이터 확인", data);
     let content = "";
 
     if (type === 'received') {
@@ -930,13 +941,15 @@ function appendMessage(data, type) {
     bubble.innerHTML = content;
 
     document.querySelector(".chat-messages").appendChild(bubble);
-    document.querySelector(".chat-messages").scrollTop =
-        document.querySelector(".chat-messages").scrollHeight;
+    scrollToBottom(); // ✅ 맨 아래로 이동
 }
 
 
 
-
+function scrollToBottom() {
+    const chatBox = document.querySelector(".chat-messages");
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
 
 
 
@@ -955,22 +968,21 @@ function formatTime(isoString) {
 </script>
 
 <script>
+window.isNotificationOn = true;// 🔔 기본 ON 상태
 let socket;
 
 document.addEventListener("DOMContentLoaded", function () {
-   let path = '${pageContext.request.contextPath}';
+    const contextPath = '${pageContext.request.contextPath}';
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
-    const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbmEiLCJtZW1ObyI6MSwibWVtTmFtZSI6Iuq0gOumrOyekCJ9.GrFjymLAjAiEyIZYnRX7uSU5TRSu6bcs9GvBgHxCOX4"; // JWT 토큰
+    const token = "ey..."; // JWT 토큰 (생략 가능)
 
     if (!roomId) return;
 
     const ip = location.hostname;
     const encodedToken = encodeURIComponent(token);
 
-    //const wsUrl = `wss://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
-    const wsUrl = `wss://threestar.r-e.kr/threeStar/chat/\${roomId}?token=\${encodedToken}`;
-    
+    const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
     console.log("WebSocket 연결 URL:", wsUrl);
 
     socket = new WebSocket(wsUrl);
@@ -990,27 +1002,31 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // 🔔 종 아이콘 클릭 → 알림 on/off 토글
+    const alarmIcon = document.querySelector(".alarm-icon");
+    if (alarmIcon) {
+    	alarmIcon.addEventListener("click", () => {
+    	    window.isNotificationOn = !window.isNotificationOn;
+    	    alarmIcon.classList.toggle("muted", !window.isNotificationOn);
+    	    console.log("🔔 알림 상태:", window.isNotificationOn);
+    	});
+    }
+
     socket.onmessage = (event) => {
-    	  const data = JSON.parse(event.data);
-    	  const type = data.sender === nickname ? "sent" : "received";
-    	  appendMessage(data, type);
+        const data = JSON.parse(event.data);
+        const type = data.sender === nickname ? "sent" : "received";
+        appendMessage(data, type);
 
-    	  // 🔔 상대방 메시지일 때만 알림
-    	  if (data.sender !== nickname && !document.hasFocus()) {
-    	    showNotification(data.sender, data.text || data.messageContent || "📎 파일이 도착했어요!");
-    	  }
-    	};
+        if (window.isNotificationOn && data.sender !== nickname && !document.hasFocus()) {
+            showNotification(data.sender, data.text || data.messageContent || "📎 파일이 도착했어요!");
+        }
+    };
 
-    
-    
-    
- // 🔔 알림 권한 요청 + 알림 출력 함수
     function showNotification(sender, message) {
         if (Notification.permission !== "granted") {
             Notification.requestPermission().then(permission => {
                 if (permission === "granted") {
                     createNotification(sender, message);
-                    console.log("센더ㅓㅓㅓㅓㅓ"+sender)
                 }
             });
         } else {
@@ -1019,13 +1035,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function createNotification(sender, message) {
-    	  const notification = new Notification(`💬 \${sender}님이 보낸 메시지`, {
-    	    body: message,
-    	    icon: '/tt/resources/images/chat-icon.png'
-    	  });
+        const notification = new Notification(`💬 \${sender}님이 보낸 메시지`, {
+            body: message,
+            icon: '/tt/resources/images/chat-icon.png'
+        });
 
-    	  notification.onclick = () => window.focus();
-    	}
+        notification.onclick = () => window.focus();
+    }
 
 
 
@@ -1099,6 +1115,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 appendMessage(msg, type);
             });
+            scrollToBottom(); // ✅ 로딩 끝나고 아래로 이동
         })
         .catch(err => {
             console.error("❌ 이전 메시지 불러오기 실패:", err);

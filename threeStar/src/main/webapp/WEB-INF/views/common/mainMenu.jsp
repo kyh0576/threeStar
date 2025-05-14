@@ -168,6 +168,10 @@
         const isOn = icon.classList.contains('fa-bell');
         icon.classList.toggle('fa-bell');
         icon.classList.toggle('fa-bell-slash');
+        
+        // ✅ 알림 전역 상태도 함께 변경
+        window.isNotificationOn = !isOn;
+        console.log("🔔 알림 상태 변경됨 →", window.isNotificationOn);
 
        
     }
