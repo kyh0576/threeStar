@@ -412,6 +412,10 @@
             gap: 10px;
             cursor: pointer;
         }
+        
+        .add-cal {
+        	cursor: pointer;
+        }
 
         .file-item {
             padding: 10px 20px;
@@ -759,6 +763,7 @@
             
             <div class="section-header">
                 <div>캘린더</div>
+                <div class="add-cal" style="font-size: 20px;" onclick="addCal()">+</div>
             </div>
             
             <div style="padding: 15px 20px;">
@@ -1434,7 +1439,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	  });
 	});
 
-
+	function addCal(){
+		  
+		  
+	}
 
 </script>
 
