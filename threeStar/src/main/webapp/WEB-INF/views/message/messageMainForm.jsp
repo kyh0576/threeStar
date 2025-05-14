@@ -757,6 +757,9 @@
                     <div style="font-size: 12px; color: #888;">KH정보교육원 강남실험 1관</div>
                 </div>
                 
+                
+                
+                
                 <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
                     <div style="font-weight: bold;">4.16</div>
                     <div style="font-size: 12px; color: #ff8c4a;">오늘</div>
