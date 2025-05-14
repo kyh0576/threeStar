@@ -42,10 +42,32 @@ public class MessageController {
 
     // 메시지 메인 화면 이동
     @RequestMapping("/mainForm")
-    public String showMessageMainForm(Model model) {
-        model.addAttribute("page", "chat");
+    public String showMessageMainForm(@RequestParam(value = "roomId", required = false) Integer roomId,
+                                      HttpSession session,
+                                      Model model) {
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        if (loginMember == null) return "redirect:/";
+
+        // roomId가 없는 일반 채팅 목록 진입
+        if (roomId == null) {
+            model.addAttribute("page", "chat");
+            return "message/messageMainForm";
+        }
+
+        // ✅ 채팅방 입장 시 추가 데이터 처리
+        List<Member> memberList = chattingRoomService.getChatRoomMembers(roomId);
+        model.addAttribute("chatRoomMembers", memberList);
+
+        Member target = memberList.stream()
+                .filter(m -> m.getMemNo() != loginMember.getMemNo())
+                .findFirst()
+                .orElse(null);
+        model.addAttribute("targetNickname", target != null ? target.getMemName() : "이름없음");
+
+        model.addAttribute("roomId", roomId);
         return "message/messageMainForm";
     }
+
 
     // 메시지 저장 요청 처리
     @PostMapping("/save")
@@ -77,15 +99,21 @@ public class MessageController {
         Member loginMember = (Member) session.getAttribute("loginMember");
         int myMemNo = loginMember.getMemNo();
 
-        Member targetMember = chattingRoomService.findTargetMember(roomId, myMemNo);
+        // 🔁 멤버 리스트 전체 가져오기
+        List<Member> memberList = chattingRoomService.getChatRoomMembers(roomId);
+        model.addAttribute("chatRoomMembers", memberList);
 
-        model.addAttribute("targetNickname", targetMember.getMemName());
+        // ✅ 상대 닉네임 추출 (본인 제외)
+        Member targetMember = memberList.stream()
+            .filter(m -> m.getMemNo() != myMemNo)
+            .findFirst()
+            .orElse(null);
+
+        model.addAttribute("targetNickname", targetMember != null ? targetMember.getMemName() : "이름없음");
         model.addAttribute("roomId", roomId);
 
-        return "message/mainMessageForm";
+        return "message/mainMessageForm"; // 📄 JSP 경로
     }
-
-    // [✅ 추가 가능성] -> 추후 서버에 파일 저장을 원하면 여기에 파일 업로드 메서드 추가 가능
     
     
     

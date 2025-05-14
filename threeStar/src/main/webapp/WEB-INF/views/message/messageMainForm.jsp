@@ -1,3 +1,5 @@
+<%@page import="com.kh.tt.member.model.vo.Member"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%> 
     
@@ -11,6 +13,13 @@
     String roomIdParam = request.getParameter("roomId");
     int roomId = roomIdParam != null ? Integer.parseInt(roomIdParam) : -1;
 %>
+
+<%
+    List<Member> chatRoomMembers = (List<Member>) request.getAttribute("chatRoomMembers");
+    int memberCount = chatRoomMembers != null ? chatRoomMembers.size() : 0;
+
+%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -658,9 +667,17 @@
                 <div class="chat-profile-img">
                     <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=팀" alt="프로필">
                 </div>
-                <h3 id="chatRoomTitle"><%= targetNickname == null ? "이름없음" : targetNickname %></h3>
-                <span style="margin-left: 10px; color: #888; font-size: 14px;">2 participants</span>
+               <h3 id="chatRoomTitle"><%= targetNickname == null ? "채팅방을 선택해주세요" : targetNickname %></h3>
+				<span style="color: #888;"> &nbsp;
+				    <%= memberCount %> participants
+				    <%
+					    System.out.println("✅ JSP에서 확인: chatRoomMembers = " + chatRoomMembers);
+					%>
+				</span>
+
+
             </div>
+            
             <div class="chat-actions">
                 <button class="chat-action-btn" id="leaveRoomBtn">🚪</button>
                 <button class="chat-action-btn" id="toggleRightSidebar">👥</button>
@@ -703,7 +720,6 @@
                     </div>
                     <div class="member-info">
                         <div class="member-name"><%= myNickname %></div>
-                        <div class="member-status">온라인</div>
                     </div>
                 </div>
                 
@@ -713,10 +729,10 @@
                     </div>
                     <div class="member-info">
                         <div class="member-name" id="targetNicknameArea">상대방 닉네임 로딩중...</div>
-                        <div class="member-status">온라인</div>
                     </div>
                 </div>
-                
+            </div>
+            
                 <div class="add-member" id ="addMem">
 				  <div style="font-size: 20px;">+</div>
 				  <div> Add </div>
@@ -729,8 +745,6 @@
 				  <div id="friend-list-right">여기에 친구 목록이 표시될 예정입니다.</div>
 				  <button id="startChatBtnRight" style="margin-top: 10px;">선택한 친구 초대</button>
 				</div>
-				
-            </div>
             
             
             <div class="section-header">
@@ -1082,7 +1096,6 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
           <div class="member-info">
             <div class="member-name">\${member.memName}</div>
-            <div class="member-status">온라인</div>
           </div>
         `;
 
@@ -1386,6 +1399,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	      });
 	  }
 
+	  
 	  document.getElementById("startChatBtnRight").addEventListener("click", () => {
 	    const checked = [...document.querySelectorAll(".invite-select:checked")];
 	    const selectedIds = checked.map(cb => parseInt(cb.value));
@@ -1397,7 +1411,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	    const roomId = new URLSearchParams(window.location.search).get("roomId");
 
-	    fetch(`${contextPath}/chattingRoom/invite`, {
+	    fetch(`\${contextPath}/chattingRoom/invite`, {
 	      method: "POST",
 	      headers: { "Content-Type": "application/json" },
 	      body: JSON.stringify({
@@ -1405,11 +1419,11 @@ document.addEventListener('DOMContentLoaded', function () {
 	        members: selectedIds
 	      })
 	    })
-	      .then(res => res.text())
+	      .then(result => result.text())
 	      .then(result => {
 	        if (result === "success") {
 	          alert("✅ 초대 완료");
-	          location.reload();
+	          location.reload(); //현재 페이지 리로드하기
 	        } else {
 	          alert("❌ 초대 실패");
 	        }

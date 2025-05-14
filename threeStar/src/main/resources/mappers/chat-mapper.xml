@@ -151,10 +151,6 @@ AND ROWNUM = 1
 </select>
 
 
-
-
-
-
 <!-- chatMapper.xml -->
 <delete id="exitChatRoom" parameterType="map">
     DELETE FROM chatting_room
@@ -194,6 +190,7 @@ AND ROWNUM = 1
     )
 </insert>
 
+<!--  방에 사람 초대 -->
 <insert id="insertRoomMember" parameterType="map">
     INSERT INTO CHATTING_ROOM (
         CHAT_ID,
@@ -207,5 +204,31 @@ AND ROWNUM = 1
         'Y'
     )
 </insert>
+
+<!-- 채팅방 멤버 존재 여부 확인 -->
+<select id="findExistingMembersInRoom" resultType="int">
+  SELECT CH_MEM_NO
+  FROM CHATTING_ROOM
+  WHERE CHAT_ID = #{chatId}
+    AND CH_MEM_NO IN
+    <foreach item="memNo" collection="memNos" open="(" separator="," close=")">
+        #{memNo}
+    </foreach>
+</select>
+
+<!-- 채팅방 멤버 이름 리스트 가져오기 -->
+<select id="findMemberNamesInRoom" parameterType="int" resultType="string">
+  SELECT M.MEM_NAME
+  FROM CHATTING_ROOM CR
+  JOIN MEMBER M ON CR.CH_MEM_NO = M.MEM_NO
+  WHERE CR.CHAT_ID = #{chatId}
+</select>
+
+<!-- 채팅방 이름 업데이트 -->
+<update id="updateChatRoomName" parameterType="map">
+  UPDATE CHATTING_ROOM
+  SET CHAT_NAME = #{chatName}
+  WHERE CHAT_ID = #{chatId}
+</update>
 
 </mapper>

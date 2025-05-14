@@ -1,6 +1,8 @@
 package com.kh.tt.chat.model.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +58,7 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
 //채팅방 이름 변경=========================================================================
         
 		@Override
-		public Member findTargetMember(int roomId, int myMemNo) {
+		public List<Member> findTargetMember(int roomId, int myMemNo) {
 			return mDao.findTargetMember(sqlSession, roomId, myMemNo);
 		}
 		
@@ -100,6 +102,29 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
 		    }
 
 		    return roomId;
+		}
+//=======================친구초대===========================
+		@Override
+		public List<Integer> findExistingMembersInRoom(int chatId, List<Integer> memNos) {
+		    return mDao.findExistingMembersInRoom(sqlSession, chatId, memNos);
+		}
+
+		@Override
+		public int insertRoomMember(int chatId, int memNo, String chatName) {
+			return mDao.insertRoomMember(sqlSession,chatId, memNo, chatName);
+		}
+
+		@Override
+		public List<String> findMemberNamesInRoom(int chatId) {
+			return mDao.findMemberNamesInRoom(sqlSession, chatId);
+		}
+
+		@Override
+		public int updateChatRoomName(int chatId, String chatName) {
+		    Map<String, Object> param = new HashMap<>();
+		    param.put("chatId", chatId);
+		    param.put("chatName", chatName);
+		    return mDao.updateChatRoomName(sqlSession, param);
 		}
 
 }
