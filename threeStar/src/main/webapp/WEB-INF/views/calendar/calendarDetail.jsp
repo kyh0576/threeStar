@@ -1013,7 +1013,7 @@ body {
 	             
 	             // 서버로 수정 요청 전송
 	             $.ajax({
-	                 url: '/tt/calendar/update.do',
+	                 url: '/threeStar/calendar/update.do',
 	                 method: 'POST',
 	                 data: {
 	                     calId: calId,
@@ -1038,7 +1038,7 @@ body {
 	             
 	             // 서버로 추가 요청 전송
 	             $.ajax({
-	                 url: '/tt/calendar.do',
+	                 url: '/threeStar/calendar.do',
 	                 method: 'POST',
 	                 data: {
 	                     calTitle: title,
@@ -1084,7 +1084,7 @@ body {
         
         // 서버에 삭제 요청 전송
         $.ajax({
-            url: '/tt/calendar/delete.do',
+            url: '/threeStar/calendar/delete.do',
             method: 'POST',
             data: { calId: event.calId },
             success: function(response) {
@@ -1180,7 +1180,7 @@ body {
     <script>
     javascript// 서버에서 일정 데이터를 불러오는 Ajax 함수
     function loadEventsFromServer() {
-        fetch('/tt/calendar/getEvents.do')
+        fetch('/threeStar/calendar/getEvents.do')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('서버 응답 오류: ' + response.status);
