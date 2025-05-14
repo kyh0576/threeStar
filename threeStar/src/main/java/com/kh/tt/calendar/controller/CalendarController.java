@@ -25,6 +25,7 @@ public class CalendarController {
 	
 	@RequestMapping(value="calendar.do", method=RequestMethod.POST)
 	public String InsertCalendar(Calendar c, HttpSession session, Model model) {
+
 		Member loginMember = (Member)session.getAttribute("loginMember");
 		
 		if(loginMember != null) {

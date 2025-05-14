@@ -24,5 +24,6 @@
         <mapper resource="mappers/google-mapper.xml"/>
         <mapper resource="mappers/friends-mapper.xml"/>
         <mapper resource="mappers/calendar-mapper.xml"/>
+        <mapper resource="mappers/drawer-mapper.xml"/>
     </mappers>
 </configuration>
