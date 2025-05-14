@@ -41,9 +41,6 @@
         margin-top: 70px;
     }
     
-
-    
-    
     .profile-name {
         text-align: center;
         color: white;

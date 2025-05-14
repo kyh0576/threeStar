@@ -848,7 +848,7 @@
       modalIframe.src = 'profile.do' + (memNo ? '?memNo=' + memNo : '');
       modalIframe.style.cssText = `
         width: 500px;
-        height: 430px;
+        height: 262px;
         align-items : center;
         border: none;
         border-radius: 20px;

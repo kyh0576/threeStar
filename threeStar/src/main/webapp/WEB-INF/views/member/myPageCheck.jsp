@@ -53,12 +53,6 @@
         overflow: hidden;
     }
     
-    .profile-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
     .profile-name {
         text-align: center;
         color: white;
