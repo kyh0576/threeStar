@@ -681,7 +681,7 @@
             </div>
             
             <div class="chat-actions">
-                <button class="chat-action-btn" id="leaveRoomBtn">🚪</button>
+                <button class="chat-action-btn" id="leaveRoomBtn"> 🚪</button>
                 <button class="chat-action-btn" id="toggleRightSidebar">👥</button>
                 <button class="chat-action-btn" id="toggleMenu">⋮</button>
             </div>
