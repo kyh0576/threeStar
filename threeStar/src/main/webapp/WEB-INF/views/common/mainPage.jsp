@@ -221,24 +221,6 @@
       align-items: flex-start;
     }
     
-    .search-container {
-      width: 100%;
-      max-width: 1000px;
-      margin-bottom: 20px;
-    }
-    
-    .search-box {
-      width: 100%;
-      padding: 10px 15px;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      font-size: 14px;
-      background-image: url('/api/placeholder/16/16');
-      background-repeat: no-repeat;
-      background-position: 10px center;
-      padding-left: 30px;
-    }
-    
     .chat-list-container, .chat-list-container-wait {
       width: 100%;
       max-width: 1000px;
@@ -562,9 +544,7 @@
   
   <!-- 메인 컨텐츠 -->
   <div class="main-content">
-    <div class="search-container">
-      <input type="text" class="search-box" placeholder="Search...">
-    </div>
+    
 
     <div><b>&nbsp;친구 목록</b></div><br>
     

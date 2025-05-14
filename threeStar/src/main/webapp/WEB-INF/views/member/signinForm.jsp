@@ -118,6 +118,12 @@ body {
     margin-top: 5px;
 }
 
+.success-text {
+    font-size: 12px;
+    color: #4CAF50;
+    margin-top: 5px;
+}
+
 .input-with-button {
     display: flex;
     gap: 10px;
@@ -202,7 +208,8 @@ body {
                     비밀번호 <span class="required">*</span>
                 </label>
                 <input type="password" id="password" name="memPwd" placeholder="비밀번호 입력 (문자, 숫자, 특수문자 포함 8~20자)" required>
-                <p class="help-text">20자 이내의 비밀번호를 입력해주세요</p>
+                <p class="help-text" id="pwd-guide">문자, 숫자, 특수문자 포함 8~20자</p>
+                <p class="warning-text" id="pwd-format-warning">비밀번호 형식이 올바르지 않습니다</p>
             </div>
             
             <div class="form-group">
@@ -210,7 +217,7 @@ body {
                     비밀번호 확인 <span class="required">*</span>
                 </label>
                 <input type="password" id="password-confirm" placeholder="비밀번호 재입력" required>
-                <p class="warning-text" id="pwd-warning">비밀번호가 일치하지 않습니다</p>
+                <p class="warning-text" id="pwd-match-warning">비밀번호가 일치하지 않습니다</p>
             </div>
             
             <div class="form-group">
@@ -285,6 +292,7 @@ body {
             
             <input type="hidden" id="snsKey" name="snsKey" value="${ snsKey }">
             <input type="hidden" id="is-password-valid" value="false">
+            <input type="hidden" id="is-password-format-valid" value="false">
             <input type="hidden" id="is-id-valid" value="false">
             
             <div class="btn-group">
@@ -299,14 +307,18 @@ body {
             const signupForm = document.getElementById('signup-form');
             const password = document.getElementById('password');
             const passwordConfirm = document.getElementById('password-confirm');
-            const warningText = document.getElementById('pwd-warning');
+            const pwdMatchWarning = document.getElementById('pwd-match-warning');
+            const pwdFormatWarning = document.getElementById('pwd-format-warning');
+            const pwdGuide = document.getElementById('pwd-guide');
             const idMessage = document.getElementById('id-message');
             const isPasswordValid = document.getElementById('is-password-valid');
+            const isPasswordFormatValid = document.getElementById('is-password-format-valid');
             const isIdValid = document.getElementById('is-id-valid');
             const phoneInput = document.getElementById('phone');
             
             // 초기에는 경고 메시지 숨기기
-            warningText.style.display = 'none';
+            pwdMatchWarning.style.display = 'none';
+            pwdFormatWarning.style.display = 'none';
             idMessage.style.display = 'none';
             
             // 전화번호 입력 시 하이픈 자동 추가
@@ -327,23 +339,81 @@ body {
                 }
             });
             
+            // 비밀번호 형식 검증
+            password.addEventListener('input', function() {
+                const pwd = password.value;
+                // 비밀번호 형식 검증 (문자, 숫자, 특수문자 포함 8~20자)
+                const hasLetter = /[a-zA-Z]/.test(pwd);
+                const hasNumber = /[0-9]/.test(pwd);
+                const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
+                const validLength = pwd.length >= 8 && pwd.length <= 20;
+                
+                if (hasLetter && hasNumber && hasSpecial && validLength) {
+                    pwdFormatWarning.style.display = 'block';
+                    pwdFormatWarning.className = 'success-text';
+                    pwdFormatWarning.textContent = '사용 가능한 비밀번호 형식입니다';
+                    isPasswordFormatValid.value = 'true';
+                } else {
+                    pwdFormatWarning.style.display = 'block';
+                    pwdFormatWarning.className = 'warning-text';
+                    
+                    if (!validLength) {
+                        pwdFormatWarning.textContent = '비밀번호는 8~20자 사이여야 합니다';
+                    } else if (!hasLetter) {
+                        pwdFormatWarning.textContent = '비밀번호에 문자가 포함되어야 합니다';  
+                    } else if (!hasNumber) {
+                        pwdFormatWarning.textContent = '비밀번호에 숫자가 포함되어야 합니다';
+                    } else if (!hasSpecial) {
+                        pwdFormatWarning.textContent = '비밀번호에 특수문자가 포함되어야 합니다';
+                    }
+                    
+                    isPasswordFormatValid.value = 'false';
+                }
+                
+                // 비밀번호 변경 시 확인란과 일치 여부 검사
+                if (passwordConfirm.value && password.value !== passwordConfirm.value) {
+                    pwdMatchWarning.style.display = 'block';
+                    pwdMatchWarning.className = 'warning-text';
+                    pwdMatchWarning.textContent = '비밀번호가 일치하지 않습니다';
+                    isPasswordValid.value = 'false';
+                } else if (passwordConfirm.value) {
+                    pwdMatchWarning.style.display = 'block';
+                    pwdMatchWarning.className = 'success-text';
+                    pwdMatchWarning.textContent = '비밀번호가 일치합니다';
+                    isPasswordValid.value = 'true';
+                }
+            });
+            
             // 비밀번호 확인 검증
             passwordConfirm.addEventListener('input', function() {
                 if (password.value !== passwordConfirm.value) {
-                    warningText.style.display = 'block';
-                    warningText.style.color = '#ff6b6b';
-                    warningText.textContent = '비밀번호가 일치하지 않습니다';
+                    pwdMatchWarning.style.display = 'block';
+                    pwdMatchWarning.className = 'warning-text';
+                    pwdMatchWarning.textContent = '비밀번호가 일치하지 않습니다';
                     isPasswordValid.value = 'false';
                 } else {
-                    warningText.style.display = 'block';
-                    warningText.style.color = '#4CAF50';
-                    warningText.textContent = '비밀번호가 일치합니다';
+                    pwdMatchWarning.style.display = 'block';
+                    pwdMatchWarning.className = 'success-text';
+                    pwdMatchWarning.textContent = '비밀번호가 일치합니다';
                     isPasswordValid.value = 'true';
                 }
             });
             
             // 폼 검증 함수
             window.validateForm = function() {
+                // 비밀번호 형식 검증
+                const pwd = password.value;
+                const hasLetter = /[a-zA-Z]/.test(pwd);
+                const hasNumber = /[0-9]/.test(pwd);
+                const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
+                const validLength = pwd.length >= 8 && pwd.length <= 20;
+                
+                if (!(hasLetter && hasNumber && hasSpecial && validLength)) {
+                    alert('비밀번호는 문자, 숫자, 특수문자를 포함한 8~20자여야 합니다.');
+                    password.focus();
+                    return false;
+                }
+                
                 // 비밀번호 일치 여부 확인
                 if (password.value !== passwordConfirm.value) {
                     alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
