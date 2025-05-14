@@ -157,6 +157,7 @@
 
         .message-name {
             font-weight: bold;
+            width: 234px;
             margin-bottom: 5px;
         }
 
@@ -166,6 +167,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            width: 234px;
         }
 
         /* 메인 콘텐츠 영역 */
@@ -987,10 +989,48 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        const type = data.sender === nickname ? "sent" : "received";
-        appendMessage(data, type);
-    };
+    	  const data = JSON.parse(event.data);
+    	  const type = data.sender === nickname ? "sent" : "received";
+    	  appendMessage(data, type);
+
+    	  // 🔔 상대방 메시지일 때만 알림
+    	  if (data.sender !== nickname && !document.hasFocus()) {
+    	    showNotification(data.sender, data.text || data.messageContent || "📎 파일이 도착했어요!");
+    	  }
+    	};
+
+    
+    
+    
+ // 🔔 알림 권한 요청 + 알림 출력 함수
+    function showNotification(sender, message) {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    createNotification(sender, message);
+                    console.log("센더ㅓㅓㅓㅓㅓ"+sender)
+                }
+            });
+        } else {
+            createNotification(sender, message);
+        }
+    }
+
+    function createNotification(sender, message) {
+    	  const notification = new Notification(`💬 \${sender}님이 보낸 메시지`, {
+    	    body: message,
+    	    icon: '/tt/resources/images/chat-icon.png'
+    	  });
+
+    	  notification.onclick = () => window.focus();
+    	}
+
+
+
+    
+    
+    
+    
 
     function sendMessage() { 
         const msg = chatInput.value.trim();
