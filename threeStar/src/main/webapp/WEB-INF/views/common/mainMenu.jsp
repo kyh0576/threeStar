@@ -89,12 +89,16 @@
         cursor: pointer;
     }
 
-    .profile-img-me {
+    .profile-icon {
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        object-fit: cover;
+        background-color: #f0f5ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         border: 2px solid #4a8cff;
+        color: #4a8cff;
     }
 
     .logout-icon,
@@ -150,7 +154,9 @@
 		    <i class="fas fa-right-from-bracket fa-lg"></i>
 		</a>
 		<div class="modalId" MEM_ID="${ loginMember.memId }">
-        	<img src="59dc3eec-fd50-4286-b086-11fc490dec87.png" alt="프로필" class="profile-img-me">
+        	<div class="profile-icon">
+                <i class="fas fa-user"></i>
+            </div>
     	</div>
     </div>
 </div>
@@ -190,10 +196,10 @@
 	    
 	    // iframe 생성
 	    const modalIframe = document.createElement('iframe');
-	    modalIframe.src = "/tt/profileCheck.do";
+	    modalIframe.src = "${pageContext.request.contextPath}/profileCheck.do";
 	    modalIframe.style.cssText = `
 	        width: 600px;
-	        height: 666px;
+	        height: 600px;
 	        border: none;
 	        border-radius: 10px;
 	        background: transparent;
