@@ -35,33 +35,10 @@
         overflow: hidden;
     }
     
-    .profile-header {
-        background-color: #86e0f9;
-        height: 150px;
-        position: relative;
-    }
-    
     .profile-content {
         background-color: #9f9fd6;
-        padding: 70px 20px 20px;
-    }
-    
-    .profile-image {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        position: absolute;
-        left: 50%;
-        top: 120px;
-        transform: translateX(-50%);
-        border: 3px solid white;
-        overflow: hidden;
-    }
-    
-    .profile-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        padding: 20px;
+        margin-top: 70px;
     }
     
     .profile-name {
@@ -145,12 +122,8 @@
 </head>
 <body>
     <div class="container">
-        <div class="profile-header"></div>
         <div class="profile-content">
         <form id="profileUpdate" action="" method="POST">
-            <div class="profile-image">
-                <img src="/api/placeholder/100/100" alt="프로필 이미지">
-            </div>
             <h1 class="profile-name">
                 <input type="hidden" class="form-control" id="memId" name="memId" value="${ loginMember.memId }">
             </h1>
