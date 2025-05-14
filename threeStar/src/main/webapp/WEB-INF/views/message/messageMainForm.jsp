@@ -171,14 +171,12 @@
         }
 
         /* 메인 콘텐츠 영역 */
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
-        }
-
+		.main-content {
+		    display: flex;
+		    flex-direction: column;
+		    flex-grow: 1;
+		    height: 100vh;  /* 전체 높이 지정 */
+		}
         .chat-header {
             padding: 18px 20px;
             border-bottom: 1px solid #e1e1e1;
@@ -237,13 +235,13 @@
   */      
   
 		.chat-messages {
-		    display: flex;
-		    flex-direction: column; /* ✅ 다시 아래로 쌓기 */
+		    flex-grow: 1;   /* 나머지 공간 다 채움 */
 		    overflow-y: auto;
 		    padding: 20px;
 		    gap: 15px;
 		    background-color: #f5f5f5;
-		    height: calc(100vh - 180px); /* 적절히 높이 주기 */
+		    display: flex;
+		    flex-direction: column;
 		}
 
         .message-bubble {
@@ -1063,7 +1061,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
         socket.send(JSON.stringify(payload));
         chatInput.value = "";
+        
+     // 채팅방 preview 갱신
+        const previewSelector = `.message-item .message-name`;
+        document.querySelectorAll(previewSelector).forEach(nameEl => {
+          if (nameEl.textContent === document.querySelector("#chatRoomTitle").textContent) {
+            const previewEl = nameEl.parentElement.querySelector(".message-preview");
+            if (previewEl) previewEl.textContent = msg;
+          }
+        });
     }
+});
+
+const previewSelector = `.message-item .message-name`;
+document.querySelectorAll(previewSelector).forEach(nameEl => {
+  if (nameEl.textContent === document.querySelector("#chatRoomTitle").textContent) {
+    const previewEl = nameEl.parentElement.querySelector(".message-preview");
+    if (previewEl) previewEl.textContent = msg;
+  }
 });
 
 <!-- 채팅방 목록 -->
