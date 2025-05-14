@@ -35,15 +35,10 @@
         overflow: hidden;
     }
     
-    .profile-header {
-        background-color: #86e0f9;
-        height: 150px;
-        position: relative;
-    }
-    
     .profile-content {
         background-color: #9f9fd6;
-        padding: 70px 20px 20px;
+        padding: 20px;
+        margin-top: 145px;
     }
     
     .profile-image {
@@ -56,12 +51,6 @@
         transform: translateX(-50%);
         /* border: 3px solid white; */
         overflow: hidden;
-    }
-    
-    .profile-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
     }
     
     .profile-name {
@@ -145,7 +134,6 @@
 </head>
 <body>
     <div class="container">
-        <div class="profile-header"></div>
         <div class="profile-content">
         <form id="profileUpdate" action="" method="POST">
             <div class="profile-image">

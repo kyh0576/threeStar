@@ -43,8 +43,8 @@ public class ChattingRoomDao {
     }
     
     // ===== 채팅방 이름 ================================================
-    public Member findTargetMember(SqlSessionTemplate sqlSession, int roomId, int myMemNo) {
-        return sqlSession.selectOne("chatMapper.findTargetMember", Map.of("roomId", roomId, "myMemNo", myMemNo));
+    public List<Member> findTargetMember(SqlSessionTemplate sqlSession, int roomId, int myMemNo) {
+        return sqlSession.selectList("chatMapper.findTargetMember", Map.of("roomId", roomId, "myMemNo", myMemNo));
     }
     
     public ChattingRoom selectChatRoomById(SqlSessionTemplate sqlSession, int roomId) {
@@ -88,4 +88,22 @@ public class ChattingRoomDao {
         Map<String, Object> param = Map.of("chatId", chatId, "memNo", memNo, "chatName", chatName);
         return sqlSession.insert("chatMapper.insertRoomMember", param);
     }
+    
+    //======친구초대=================================================
+    
+    public List<Integer> findExistingMembersInRoom(SqlSessionTemplate sqlSession, int chatId, List<Integer> memNos) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("chatId", chatId);
+        param.put("memNos", memNos);
+        return sqlSession.selectList("chatMapper.findExistingMembersInRoom", param);
+    }
+    
+    public List<String> findMemberNamesInRoom(SqlSessionTemplate sqlSession, int chatId) {
+        return sqlSession.selectList("chatMapper.findMemberNamesInRoom", chatId);
+    }
+
+    public int updateChatRoomName(SqlSessionTemplate sqlSession, Map<String, Object> param) {
+        return sqlSession.update("chatMapper.updateChatRoomName", param);
+    }
+    
 }

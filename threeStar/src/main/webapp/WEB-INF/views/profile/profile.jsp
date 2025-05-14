@@ -42,31 +42,6 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
     
-    .profile-picture-container {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 30px;
-    }
-    
-    .profile-picture {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        overflow: hidden;
-        background-color: #2b2b2b;
-        /* cursor: pointer; */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-    }
-    
-    .profile-picture img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
     .progress-container {
         display: flex;
         align-items: center;
@@ -149,13 +124,6 @@
     }
 </style>
  <div class="profile-container">
-        <div class="profile-picture-container">
-            <div class="profile-picture" id="profilePicture">
-                <img id="profileImage" src="/api/placeholder/120/120" alt="프로필 이미지">
-                <input type="file" id="fileInput" accept="image/*">
-            </div>
-
-        </div>
         
         <div class="progress-container">
 
@@ -172,14 +140,22 @@
         </div>
         
         <div class="input-container">
-            <input type="text" class="input-field" id="detailInput" placeholder="변경할 닉네임을 입력해주세요">
-        	<c:if test="${ loginMember.memNo != m.memNo }">
-	            <svg class="edit-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-				     onclick="updateFriendName('${m.memNo}')">
-				    <path d="M16.5 3.5C16.8978 3.10217 17.4374 2.87868 18 2.87868C18.2786 2.87868 18.5544 2.93355 18.8118 3.04015C19.0692 3.14676 19.303 3.30301 19.5 3.5C19.697 3.69698 19.8532 3.93083 19.9598 4.18822C20.0665 4.4456 20.1213 4.72142 20.1213 5C20.1213 5.27858 20.0665 5.5544 19.9598 5.81178C19.8532 6.06917 19.697 6.30302 19.5 6.5L7 19L3 20L4 16L16.5 3.5Z" 
-				          stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-				</svg>
-       		</c:if>
+        	<c:choose>
+        		
+	        	<c:when test="${ loginMember.memNo != m.memNo }">
+		            <input type="text" class="input-field" id="detailInput" placeholder="변경할 닉네임을 입력해주세요">
+		            <svg class="edit-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+					     onclick="updateFriendName('${m.memNo}')">
+					    <path d="M16.5 3.5C16.8978 3.10217 17.4374 2.87868 18 2.87868C18.2786 2.87868 18.5544 2.93355 18.8118 3.04015C19.0692 3.14676 19.303 3.30301 19.5 3.5C19.697 3.69698 19.8532 3.93083 19.9598 4.18822C20.0665 4.4456 20.1213 4.72142 20.1213 5C20.1213 5.27858 20.0665 5.5544 19.9598 5.81178C19.8532 6.06917 19.697 6.30302 19.5 6.5L7 19L3 20L4 16L16.5 3.5Z" 
+					          stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>
+	       		</c:when>
+	       		
+	       		<c:otherwise>
+		            <input type="text" class="input-field" id="detailInput" placeholder="자신의 닉네임은 변경할 수 없습니다." disabled>
+	       		</c:otherwise>
+	       		
+       		</c:choose>
         </div>
 
         <div class="button-group">
