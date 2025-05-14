@@ -190,10 +190,10 @@
 	    
 	    // iframe 생성
 	    const modalIframe = document.createElement('iframe');
-	    modalIframe.src = "/tt/profileCheck.do";
+	    modalIframe.src = "${pageContext.request.contextPath}/profileCheck.do";
 	    modalIframe.style.cssText = `
 	        width: 600px;
-	        height: 666px;
+	        height: 600px;
 	        border: none;
 	        border-radius: 10px;
 	        background: transparent;
