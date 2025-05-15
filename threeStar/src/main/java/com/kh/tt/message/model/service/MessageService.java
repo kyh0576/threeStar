@@ -15,4 +15,6 @@ public interface MessageService {
     List<Message> getUploadedFiles(int roomId);
     
     List<Message> getFilesByRoomId(int roomId);
+    
+    int deleteMessage(int messageNo);
 }

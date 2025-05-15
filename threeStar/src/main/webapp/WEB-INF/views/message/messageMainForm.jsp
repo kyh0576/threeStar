@@ -1017,13 +1017,56 @@ function appendMessage(data, type) {
         `;
 
         wrapper.appendChild(menuWrapper);  // 왼쪽
+        
+        const deleteBtn = menuWrapper.querySelector(".message-action.delete");
+        deleteBtn.addEventListener("click", function () {
+            if (confirm("정말 이 메시지를 삭제하시겠습니까?")) {
+
+                const messageNo = data.messageNo;
+                console.log("메segi넘버"+messageNo);
+
+                if (!messageNo) {
+                    console.warn("❌ messageNo 없음, 삭제 요청 생략");
+                    return;
+                }
+                
+                const formData = new URLSearchParams();
+                console.log("formDate si ble" + formData);
+                formData.append("messageNo", messageNo);
+
+                fetch(`\${contextPath}/message/delete`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `messageNo=\${messageNo}`
+                })
+                .then(res => res.text())
+                .then(result => {
+                    if (result === "success") {
+                        alert("메시지를 삭제했습니다.");
+                        wrapper.remove();
+                    } else {
+                        alert("❌ 메시지 삭제 실패");
+                    }
+                })
+                .catch(err => {
+                    console.error("❌ 메시지 삭제 에러:", err);
+                });
+            }
+        });
+
+       
     }
+    
+    
     
     
     wrapper.appendChild(bubble); // 오른쪽
     document.querySelector(".chat-messages").appendChild(wrapper);
     scrollToBottom(); // ✅ 맨 아래로 이동
 }
+
 
 
 function scrollToBottom() {
@@ -1086,8 +1129,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const ip = location.hostname;
     const encodedToken = encodeURIComponent(token);
 
-    //const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
-    const wsUrl = `wss://threestar.r-e.kr/threeStar/chat/\${roomId}?token=\${encodedToken}`;
+    const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
+    //const wsUrl = `wss://threestar.r-e.kr/threeStar/chat/\${roomId}?token=\${encodedToken}`;
     
     alert("WebSocket 연결 URL:" + wsUrl);
 

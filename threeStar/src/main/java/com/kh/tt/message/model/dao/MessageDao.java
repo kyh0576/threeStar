@@ -28,4 +28,9 @@ public class MessageDao {
     public List<Message> getFilesByRoomId(SqlSessionTemplate sqlSession,int roomId) {
         return sqlSession.selectList("messageMapper.getFilesByRoomId", roomId);
     }
+    
+    public int deleteMessage (SqlSessionTemplate sqlSession,int messageNo) {
+    	System.out.println("메시지 다오 " + messageNo);
+    	 return sqlSession.delete("messageMapper.deleteMessage", messageNo);
+    }
 }
