@@ -424,6 +424,10 @@
             gap: 10px;
             cursor: pointer;
         }
+        
+        .add-cal {
+        	cursor: pointer;
+        }
 
         .file-item {
             padding: 10px 20px;
@@ -821,6 +825,7 @@
             
             <div class="section-header">
                 <div>캘린더</div>
+                <div class="add-cal" style="font-size: 20px;" onclick="addCal()">+</div>
             </div>
             
             <div style="padding: 15px 20px;">
@@ -832,6 +837,9 @@
                     <div style="font-weight: bold;">물리 중간고사</div>
                     <div style="font-size: 12px; color: #888;">KH정보교육원 강남실험 1관</div>
                 </div>
+                
+                
+                
                 
                 <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
                     <div style="font-weight: bold;">4.16</div>
@@ -1607,7 +1615,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	  });
 	});
 
-
+	function addCal(){
+		  
+		  
+	}
 
 </script>
 
