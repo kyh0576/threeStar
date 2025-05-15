@@ -163,6 +163,24 @@
 
 <!-- JS: 알림 토글 -->
 <script>
+// 알람 아이콘 눌렀을때 새로고침해도 유지
+document.addEventListener("DOMContentLoaded", () => {
+	  const el = document.querySelector(".alert-icon");  // ✅ 여기를 수정
+	  const icon = el?.querySelector("i");
+	  const saved = localStorage.getItem("isNotificationOn");
+
+	  window.isNotificationOn = saved !== null ? saved === "true" : true;
+
+	  // ✅ 초기 상태 아이콘 모양 반영
+	  if (icon) {
+	    icon.classList.toggle("fa-bell", window.isNotificationOn);
+	    icon.classList.toggle("fa-bell-slash", !window.isNotificationOn);
+	  }
+	});
+
+</script>
+
+<script>
     function toggleAlert(el) {
         const icon = el.querySelector('i');
         const isOn = icon.classList.contains('fa-bell');
@@ -171,6 +189,7 @@
         
         // ✅ 알림 전역 상태도 함께 변경
         window.isNotificationOn = !isOn;
+        localStorage.setItem("isNotificationOn", window.isNotificationOn); // ✅ 상태 저장
         console.log("🔔 알림 상태 변경됨 →", window.isNotificationOn);
 
        
