@@ -1079,7 +1079,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const contextPath = '${pageContext.request.contextPath}';
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
-    const token = "ey..."; // JWT 토큰 (생략 가능)
+    const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbmEiLCJtZW1ObyI6MSwibWVtTmFtZSI6Iuq0gOumrOyekCJ9.GrFjymLAjAiEyIZYnRX7uSU5TRSu6bcs9GvBgHxCOX4"; // JWT 토큰 (생략 가능)
 
     if (!roomId) return;
 
