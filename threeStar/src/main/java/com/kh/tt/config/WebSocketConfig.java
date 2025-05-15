@@ -19,10 +19,13 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Autowired
     private ChatWebSocketHandler chatWebSocketHandler;
 
+    @Autowired
+    private HandshakeInterceptor handshakeInterceptor;
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(chatWebSocketHandler, "/ws/chat/{roomId}")
-        .setAllowedOrigins("*")
-        .addInterceptors(new HttpSessionHandshakeInterceptor());
+                .setAllowedOrigins("*")
+                .addInterceptors(handshakeInterceptor); // ✅ 이걸로 바꿔야 인증 됨
     }
 }
