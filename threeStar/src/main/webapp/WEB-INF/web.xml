@@ -17,6 +17,16 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
+	<!-- Spring Security 필터 등록 ✅ -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 	<!-- Processes application requests -->
 	<servlet>
 		<servlet-name>appServlet</servlet-name>
@@ -32,7 +42,8 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
+
+	<!-- 한글 인코딩 필터 -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -41,25 +52,25 @@
 			<param-value>UTF-8</param-value>
 		</init-param>
 	</filter>
-	
 	<filter-mapping>
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
-	
-	
+
+	<!-- 보안 헤더 필터 -->
 	<filter>
 	  <filter-name>httpHeaderFilter</filter-name>
 	  <filter-class>org.apache.catalina.filters.HttpHeaderSecurityFilter</filter-class>
 	</filter>
+	<filter-mapping>
+	  <filter-name>httpHeaderFilter</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
 
-	
-	<!-- 여기에 추가 -->
+	<!-- 추가 매핑 -->
 	<servlet-mapping>
 	  <servlet-name>appServlet</servlet-name>
 	  <url-pattern>/threeStar/*</url-pattern>
 	</servlet-mapping>
-	
 
 </web-app>
