@@ -1004,7 +1004,7 @@ function appendMessage(data, type) {
     
     bubble.innerHTML = content;
     
-    // ⋮ 버튼 (보낸 메시지만)
+    // 삭제 ⋮ 버튼 (보낸 메시지만)
     if (type === "sent") {
         const menuWrapper = document.createElement("div");
         menuWrapper.className = "message-menu-wrapper";
@@ -1025,6 +1025,15 @@ function appendMessage(data, type) {
     scrollToBottom(); // ✅ 맨 아래로 이동
 }
 
+
+document.addEventListener("DOMContentLoaded", function () {
+	  const logout = document.querySelector(".message-action delete");
+	  if (logout) {
+	    logout.addEventListener("click", function () {
+	      window.location.href = "/logout.me"; // ✅ 절대경로
+	    });
+	  }
+	});
 
 
 function scrollToBottom() {
@@ -1087,8 +1096,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const ip = location.hostname;
     const encodedToken = encodeURIComponent(token);
 
-    //const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
-    const wsUrl = `wss://threestar.r-e.kr/threeStar/chat/\${roomId}?token=\${encodedToken}`;
+    const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
+    //const wsUrl = `wss://threestar.r-e.kr/threeStar/chat/\${roomId}?token=\${encodedToken}`;
     
     console.log("WebSocket 연결 URL:", wsUrl);
 
@@ -1153,7 +1162,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function createNotification(sender, message) {
         const notification = new Notification(`💬 \${sender}님이 보낸 메시지`, {
             body: message,
-            icon: '/tt/resources/images/chat-icon.png'
+            icon: contextPath + '/resources/images/chat-icon.png'
         });
 
         notification.onclick = () => window.focus();
