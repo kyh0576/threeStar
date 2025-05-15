@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kh.tt.chat.model.vo.ChattingRoom;
 import com.kh.tt.member.model.vo.Member;
@@ -104,6 +105,15 @@ public class ChattingRoomDao {
 
     public int updateChatRoomName(SqlSessionTemplate sqlSession, Map<String, Object> param) {
         return sqlSession.update("chatMapper.updateChatRoomName", param);
+    }
+
+//=============================채팅방 이름 변경==============================
+    public int renameChatRoom(SqlSessionTemplate sqlSession, int roomId, int memNo, String newName) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("roomId", roomId);
+        param.put("memNo", memNo); // ✅ 추가
+        param.put("newName", newName);
+        return sqlSession.update("chatMapper.renameChatRoom", param);
     }
     
 }

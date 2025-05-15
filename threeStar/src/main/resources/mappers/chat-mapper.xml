@@ -231,4 +231,12 @@ AND ROWNUM = 1
   WHERE CHAT_ID = #{chatId}
 </update>
 
+<!-- 채팅방 이름 변경 -->
+<update id="renameChatRoom" parameterType="map">
+    UPDATE chatting_room
+    SET chat_name = #{newName}
+    WHERE chat_id = #{roomId}
+    AND ch_mem_no = #{memNo}
+</update>
+
 </mapper>

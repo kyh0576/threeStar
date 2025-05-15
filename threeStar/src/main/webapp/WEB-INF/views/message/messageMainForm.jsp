@@ -690,6 +690,22 @@
 		  background-color: #f5f5f5;
 		}
 
+
+		/*채팅방 이름 변경*/
+		#editRoomNameBtn {
+		    background: none;
+		    border: none;
+		    font-size: 16px;
+		    margin-left: 8px;
+		    cursor: pointer;
+		    color: #888;
+		    transition: color 0.2s ease;
+		}
+		
+		#editRoomNameBtn:hover {
+		    color: #4a8cff;
+		    transform: scale(1.05);
+		}
 										
     </style>
 
@@ -734,12 +750,9 @@
                     <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=팀" alt="프로필">
                 </div>
                <h3 id="chatRoomTitle"><%= targetNickname == null ? "채팅방을 선택해주세요" : targetNickname %></h3>
-				<span style="color: #888;"> &nbsp;
-				    <%= memberCount %> participants
-				    <%
-					    System.out.println("✅ JSP에서 확인: chatRoomMembers = " + chatRoomMembers);
-					%>
+				<span  id="participantCount"> 
 				</span>
+				<button id="editRoomNameBtn" style="margin-left: 10px;">✏️</button>
 
 
             </div>
@@ -1012,7 +1025,7 @@ function appendMessage(data, type) {
         menuWrapper.innerHTML = `
             <button class="message-menu-btn">⋮</button>
             <div class="message-dropdown hidden">
-                <div class="message-action delete">삭제</div>
+                <div class="message-action delete" style="font-size=9">삭제</div>
             </div>
         `;
 
@@ -1152,6 +1165,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    
+    
     // 🔔 종 아이콘 클릭 → 알림 on/off 토글
     const savedNotificationState = localStorage.getItem("isNotificationOn");
     window.isNotificationOn = savedNotificationState !== null ? savedNotificationState === "true" : true;
@@ -1552,7 +1567,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	    }
 
 	    if (selectedIds.length === 1) {
-	      // 1:1 채팅
+	      // =========1:1 채팅==========
 	      fetch(`\${contextPath}/chattingRoom/startChat`, {
 	        method: "POST",
 	        headers: { "Content-Type": "application/json" },
@@ -1568,7 +1583,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	        });
 	    
 	    } else {
-	      // 그룹 채팅
+	      // =========그룹 채팅========
 	      fetch(`\${contextPath}/chattingRoom/startGroupChat`, {
 	        method: "POST",
 	        headers: { "Content-Type": "application/json" },
@@ -1590,7 +1605,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 
 
-//오른쪽 +add 눌렀을 때 동작
+//=================오른쪽 +add 눌렀을 때 동작====================
 document.addEventListener('DOMContentLoaded', function () {
 	  const addMemBtn = document.getElementById('addMem');
 	  const inviteModalRight = document.getElementById('inviteModalRight');
@@ -1656,10 +1671,63 @@ document.addEventListener('DOMContentLoaded', function () {
 	  });
 	});
 
-	function addCal(){
-		  
-		  
-	}
+
+
+
+	document.addEventListener("DOMContentLoaded", function () {
+		  const roomId = new URLSearchParams(window.location.search).get("roomId");
+		  if (!roomId) return;
+	
+		  fetch(`\${contextPath}/chattingRoom/members?roomId=\${roomId}`)
+		    .then(res => res.json())
+		    .then(data => {
+		    	document.querySelector("#chatRoomTitle + span").innerHTML = `&nbsp;\${data.length} participants`;
+
+		    })
+		    .catch(err => {
+		      console.error("❌ 참여자 수 갱신 실패:", err);
+		    });
+		});
+
+	
+	
+	
+	//========================채팅창 이름 변경 ========================
+document.getElementById("editRoomNameBtn").addEventListener("click", () => {
+    const oldName = document.getElementById("chatRoomTitle").textContent;  // ✅ 이전 이름 저장
+    const newName = prompt("채팅방 이름을 입력하세요:", oldName); // 🔁 기존 이름 보여주기
+    console.log("새로운방이름: " + newName);
+    if (!newName || newName === oldName) return;
+
+    const roomId = new URLSearchParams(window.location.search).get("roomId");
+
+    fetch(`\${contextPath}/chattingRoom/rename`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `roomId=\${roomId}&newName=\${encodeURIComponent(newName)}`
+    })
+    .then(res => res.text())
+    .then(result => {
+        if (result === "success") {
+            document.getElementById("chatRoomTitle").textContent = newName;
+
+            // ✅ 왼쪽 메시지 목록 이름도 동기화
+            document.querySelectorAll(".message-item").forEach(item => {
+                const nameEl = item.querySelector(".message-name");
+                if (nameEl && nameEl.textContent === oldName) {
+                    nameEl.textContent = newName;
+                }
+            });
+
+            alert("채팅방 이름이 변경되었습니다.");
+        } else {
+            alert("❌ 채팅방 이름 변경 실패");
+        }
+    });
+});
+
 
 </script>
 

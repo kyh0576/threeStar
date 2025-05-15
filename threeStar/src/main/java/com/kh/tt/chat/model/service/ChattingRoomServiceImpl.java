@@ -16,7 +16,7 @@ import com.kh.tt.message.model.dao.MessageDao;
 public class ChattingRoomServiceImpl implements ChattingRoomService {
 
     @Autowired 
-    private ChattingRoomDao mDao; 
+    private ChattingRoomDao cDao; 
 
     @Autowired 
     private SqlSessionTemplate sqlSession;
@@ -24,52 +24,52 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
     //===================채팅방=================================================
         @Override
         public Integer findChatRoom(int myMemNo, int targetMemNo) {
-            return mDao.findChatRoom(sqlSession, myMemNo, targetMemNo);
+            return cDao.findChatRoom(sqlSession, myMemNo, targetMemNo);
         }
 
         @Override
         public int createChatRoom(int myMemNo, int targetMemNo) {
             // 1. 먼저 나(myMemNo) 채팅방 등록
-            int result = mDao.createChatRoom(sqlSession, myMemNo);
+            int result = cDao.createChatRoom(sqlSession, myMemNo);
 
             // 2. 채팅방 id (chatId) 가져오기
-            int chatId = mDao.selectLastChatId(sqlSession);
+            int chatId = cDao.selectLastChatId(sqlSession);
 
             // 3. 상대방(targetMemNo)도 같은 방에 등록
-            int result2 = mDao.createTargetChatRoom(sqlSession, chatId, targetMemNo, "채팅방");
+            int result2 = cDao.createTargetChatRoom(sqlSession, chatId, targetMemNo, "채팅방");
 
             return chatId;  // ✅ 생성된 채팅방 ID를 반환
         }
 
         @Override
         public int selectLastChatId() {
-            return mDao.selectLastChatId(sqlSession);
+            return cDao.selectLastChatId(sqlSession);
         }
 
         @Override
         public int createTargetChatRoom(int chatId, int targetMemNo, String chatName) {
-            return mDao.createTargetChatRoom(sqlSession,chatId,targetMemNo,chatName);
+            return cDao.createTargetChatRoom(sqlSession,chatId,targetMemNo,chatName);
         }
 //채팅방 생성 ====================================================================
         @Override
         public List<ChattingRoom> getChatRoomsByMemberId(String memId) {
-            return mDao.getChatRoomsByMemberId(sqlSession, memId);
+            return cDao.getChatRoomsByMemberId(sqlSession, memId);
         }
 //채팅방 이름 변경=========================================================================
         
 		@Override
 		public List<Member> findTargetMember(int roomId, int myMemNo) {
-			return mDao.findTargetMember(sqlSession, roomId, myMemNo);
+			return cDao.findTargetMember(sqlSession, roomId, myMemNo);
 		}
 		
 		@Override
 		public ChattingRoom selectChatRoomById(int roomId) {
-		    return mDao.selectChatRoomById(sqlSession, roomId);
+		    return cDao.selectChatRoomById(sqlSession, roomId);
 		}
 		
 		@Override
 		public List<Member> getChatRoomMembers(int roomId) {
-			return mDao.getChatRoomMembers(sqlSession, roomId);
+			return cDao.getChatRoomMembers(sqlSession, roomId);
 		}
 
 		
@@ -78,27 +78,27 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
 		    public int exitChatRoom(int chatId, int memNo) {
 		        System.out.println("🔥 받은 chatId1: " + chatId);
 		        System.out.println("🔥 받은 memNo1: " + memNo);
-		        return mDao.exitChatRoom(sqlSession,chatId, memNo);
+		        return cDao.exitChatRoom(sqlSession,chatId, memNo);
 		        
 		    }
 //=======================그룹채팅=====================================
 		@Override
 		public int createGroupChatRoom(List<Integer> memberNos) {
-			  Integer existingRoomId = mDao.findGroupChatRoom(sqlSession, memberNos);
+			  Integer existingRoomId = cDao.findGroupChatRoom(sqlSession, memberNos);
 			    if (existingRoomId != null) {
 			        return existingRoomId;  // ✅ 이미 있으면 그 방으로 리턴
 			    }
 			    
 		    // 1. 방 생성자 insert
 		    int firstMemNo = memberNos.get(0);
-		    mDao.insertChatRoom(sqlSession, firstMemNo, "그룹 채팅");
+		    cDao.insertChatRoom(sqlSession, firstMemNo, "그룹 채팅");
 
 		    // 2. 방 id 가져오기
-		    int roomId = mDao.selectLastChatId(sqlSession);
+		    int roomId = cDao.selectLastChatId(sqlSession);
 
 		    // 3. 나머지 멤버 추가
 		    for (int i = 1; i < memberNos.size(); i++) {
-		        mDao.insertRoomMember(sqlSession, roomId, memberNos.get(i), "그룹 채팅");
+		        cDao.insertRoomMember(sqlSession, roomId, memberNos.get(i), "그룹 채팅");
 		    }
 
 		    return roomId;
@@ -106,17 +106,17 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
 //=======================친구초대===========================
 		@Override
 		public List<Integer> findExistingMembersInRoom(int chatId, List<Integer> memNos) {
-		    return mDao.findExistingMembersInRoom(sqlSession, chatId, memNos);
+		    return cDao.findExistingMembersInRoom(sqlSession, chatId, memNos);
 		}
 
 		@Override
 		public int insertRoomMember(int chatId, int memNo, String chatName) {
-			return mDao.insertRoomMember(sqlSession,chatId, memNo, chatName);
+			return cDao.insertRoomMember(sqlSession,chatId, memNo, chatName);
 		}
 
 		@Override
 		public List<String> findMemberNamesInRoom(int chatId) {
-			return mDao.findMemberNamesInRoom(sqlSession, chatId);
+			return cDao.findMemberNamesInRoom(sqlSession, chatId);
 		}
 
 		@Override
@@ -124,7 +124,13 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
 		    Map<String, Object> param = new HashMap<>();
 		    param.put("chatId", chatId);
 		    param.put("chatName", chatName);
-		    return mDao.updateChatRoomName(sqlSession, param);
+		    return cDao.updateChatRoomName(sqlSession, param);
+		}
+//==========================채팅방 이름 변경===========================
+		@Override
+		public int renameChatRoom(int roomId, String newName, int memNo) {
+			System.out.println("여긴 서비스 룸아이디"+newName);
+			 return cDao.renameChatRoom(sqlSession, roomId, memNo, newName);
 		}
 
 }

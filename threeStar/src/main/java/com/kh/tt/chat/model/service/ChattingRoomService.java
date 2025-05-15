@@ -36,7 +36,10 @@ public interface ChattingRoomService {
     int insertRoomMember(int chatId, int memNo, String chatName);
     
     List<String> findMemberNamesInRoom(int chatId);
-    int updateChatRoomName(int chatId, String chatName);
+    int updateChatRoomName(int chatId,String chatName);
+    
+    //채팅방 이름 변경
+	int renameChatRoom(int roomId, String newName, int memNo);
     
     
 }
