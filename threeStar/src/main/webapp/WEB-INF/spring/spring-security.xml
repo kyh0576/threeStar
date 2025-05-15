@@ -11,10 +11,10 @@
     <!-- 비밀번호 암호화 -->
     <bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
-    <!-- 정적 리소스 제외 -->
+    <!-- 정적 리소스는 보안 제외 -->
     <security:http security="none" pattern="/resources/**" />
 
-    <!-- 전체 허용 설정 -->
+    <!-- 전체 접근 허용 -->
     <security:http auto-config="true" use-expressions="true">
         <security:intercept-url pattern="/**" access="permitAll"/>
     </security:http>
