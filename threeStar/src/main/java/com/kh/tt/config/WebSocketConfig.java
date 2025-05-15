@@ -18,12 +18,15 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Autowired
     private ChatWebSocketHandler chatWebSocketHandler;
+    
+    @Autowired
+    private HandshakeInterceptor handshakeInterceptor; // ✅ JWT 인증 포함된 인터셉터
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
     	registry.addHandler(chatWebSocketHandler, "/chat/{roomId}")
         .setAllowedOrigins("*")
-        .addInterceptors(new HttpSessionHandshakeInterceptor());
+        .addInterceptors(handshakeInterceptor);  // ✅ 이거로 바꿔야 WebSocket 인증이 동작함!
     }
 }
 
