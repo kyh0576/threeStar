@@ -23,7 +23,7 @@ public class CalendarController {
 	@Autowired
 	private CalendarServiceImpl cService;
 	
-	@RequestMapping(value="calendar.do", method=RequestMethod.POST)
+	@RequestMapping(value="/calendar.do", method=RequestMethod.POST)
 	public String InsertCalendar(Calendar c, HttpSession session, Model model) {
 		Member loginMember = (Member)session.getAttribute("loginMember");
 		
