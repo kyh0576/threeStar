@@ -157,6 +157,7 @@
 
         .message-name {
             font-weight: bold;
+            width: 234px;
             margin-bottom: 5px;
         }
 
@@ -166,17 +167,16 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            width: 234px;
         }
 
         /* 메인 콘텐츠 영역 */
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
-        }
-
+		.main-content {
+		    display: flex;
+		    flex-direction: column;
+		    flex-grow: 1;
+		    height: 100vh;  /* 전체 높이 지정 */
+		}
         .chat-header {
             padding: 18px 20px;
             border-bottom: 1px solid #e1e1e1;
@@ -221,7 +221,8 @@
         .chat-action-btn.active {
             color: #4a8cff;
         }
-
+        
+/*
         .chat-messages {
             flex-grow: 1;
             overflow-y: auto;
@@ -231,6 +232,17 @@
             flex-direction: column;
             gap: 15px;
         }
+  */      
+  
+		.chat-messages {
+		    flex-grow: 1;   /* 나머지 공간 다 채움 */
+		    overflow-y: auto;
+		    padding: 20px;
+		    gap: 15px;
+		    background-color: #f5f5f5;
+		    display: flex;
+		    flex-direction: column;
+		}
 
         .message-bubble {
             max-width: 70%;
@@ -586,7 +598,7 @@
 		}
 		#startChatBtnLeft:hover,
 		#startChatBtnRight:hover {
-		  background-color: #367ee6;
+		  background-color: #367ee6 ;
 		}
 		#startChatBtnLeft:active,
 		#startChatBtnRight:active {
@@ -626,9 +638,59 @@
 		  margin-right: 10px;
 		}
 				
-				
-				
-				
+		
+		/* 메시지 삭제 */
+		.message-wrapper {
+		  display: flex;
+		  align-items: center;
+		  position: relative;
+		  gap: 8px;
+		}
+		
+		.message-wrapper.sent {
+		  justify-content: flex-end;
+		}
+		
+		.message-menu-wrapper {
+		  position: relative;
+		}
+		
+		.message-menu-btn {
+		  background: none;
+		  border: none;
+		  font-size: 18px;
+		  color: #777;
+		  cursor: pointer;
+		}
+		
+		.message-dropdown {
+		  position: absolute;
+		  top: 20px;
+		  left: 0;
+		  background: white;
+		  border: 1px solid #ddd;
+		  border-radius: 6px;
+		  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+		  display: none;
+		  min-width: 80px;
+		  z-index: 1000;
+		}
+		
+		.message-dropdown.show {
+		  display: block;
+		}
+		
+		.message-action {
+		  padding: 8px 12px;
+		  font-size: 14px;
+		  cursor: pointer;
+		}
+		
+		.message-action:hover {
+		  background-color: #f5f5f5;
+		}
+
+										
     </style>
 
 </head>
@@ -683,7 +745,7 @@
             </div>
             
             <div class="chat-actions">
-                <button class="chat-action-btn" id="leaveRoomBtn">🚪</button>
+                <button class="chat-action-btn" id="leaveRoomBtn"> 🚪</button>
                 <button class="chat-action-btn" id="toggleRightSidebar">👥</button>
                 <button class="chat-action-btn" id="toggleMenu">⋮</button>
             </div>
@@ -869,16 +931,23 @@ function isImageFile(filename) {
 }
 
 function appendMessage(data, type) {
+    let content = "";
+    
+    const contextPath = "${pageContext.request.contextPath}";
+
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("message-wrapper", type); // 감싸는 div
+    wrapper.dataset.messageId = data.messageNo ?? "";
+
     const bubble = document.createElement("div");
     bubble.classList.add("message-bubble", type);
-    console.log("받은 데이터 확인", data);
-    let content = "";
 
+    
+    // 발신자 표시 (받은 메시지일 경우)
     if (type === 'received') {
         content += `<div><strong>\${data.sender}</strong></div>`;
     }
 
-    const contextPath = "${pageContext.request.contextPath}";
     
 
  // ✅ 새로 보낸 파일 → 이미지 처리
@@ -932,17 +1001,36 @@ function appendMessage(data, type) {
     }
 
     content += `<div class="message-time">\${formatTime(data.time || data.sendTime)}</div>`;
-
+    
     bubble.innerHTML = content;
+    
+    // ⋮ 버튼 (보낸 메시지만)
+    if (type === "sent") {
+        const menuWrapper = document.createElement("div");
+        menuWrapper.className = "message-menu-wrapper";
 
-    document.querySelector(".chat-messages").appendChild(bubble);
-    document.querySelector(".chat-messages").scrollTop =
-        document.querySelector(".chat-messages").scrollHeight;
+        menuWrapper.innerHTML = `
+            <button class="message-menu-btn">⋮</button>
+            <div class="message-dropdown hidden">
+                <div class="message-action delete">삭제</div>
+            </div>
+        `;
+
+        wrapper.appendChild(menuWrapper);  // 왼쪽
+    }
+    
+    
+    wrapper.appendChild(bubble); // 오른쪽
+    document.querySelector(".chat-messages").appendChild(wrapper);
+    scrollToBottom(); // ✅ 맨 아래로 이동
 }
 
 
 
-
+function scrollToBottom() {
+    const chatBox = document.querySelector(".chat-messages");
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
 
 
 
@@ -951,6 +1039,30 @@ function formatTime(isoString) {
     const date = new Date(isoString);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
+
+
+//메시지 삭제
+document.addEventListener("click", function (e) {
+  // 메뉴 열기
+  if (e.target.matches(".message-menu-btn")) {
+    const dropdown = e.target.nextElementSibling;
+    dropdown.classList.toggle("show");
+  }
+
+  // 삭제 처리
+  if (e.target.classList.contains("delete")) {
+    const bubble = e.target.closest(".message-bubble");
+    if (bubble) bubble.remove(); // 👉 필요 시 DB 삭제 요청 추가
+  }
+
+  // 드롭다운 외부 클릭 시 닫기
+  if (!e.target.closest(".message-menu-wrapper")) {
+    document.querySelectorAll(".message-dropdown").forEach(el => el.classList.remove("show"));
+  }
+});
+
+
+
 
 </script>
 
@@ -961,13 +1073,14 @@ function formatTime(isoString) {
 </script>
 
 <script>
+window.isNotificationOn = true;// 🔔 기본 ON 상태
 let socket;
 
 document.addEventListener("DOMContentLoaded", function () {
-   let path = '${pageContext.request.contextPath}';
+    const contextPath = '${pageContext.request.contextPath}';
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
-    const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbmEiLCJtZW1ObyI6MSwibWVtTmFtZSI6Iuq0gOumrOyekCJ9.GrFjymLAjAiEyIZYnRX7uSU5TRSu6bcs9GvBgHxCOX4"; // JWT 토큰
+    const token = "ey..."; // JWT 토큰 (생략 가능)
 
     if (!roomId) return;
 
@@ -994,11 +1107,60 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // 🔔 종 아이콘 클릭 → 알림 on/off 토글
+    const savedNotificationState = localStorage.getItem("isNotificationOn");
+    window.isNotificationOn = savedNotificationState !== null ? savedNotificationState === "true" : true;
+    
+    const alarmIcon = document.querySelector(".alarm-icon");
+    if (alarmIcon) {
+    	 // ✅ 상태 반영 (새로고침 직후 아이콘 모양 변경)
+        alarmIcon.classList.toggle("muted", !window.isNotificationOn);
+    	 
+        // ✅ 클릭 시 상태 토글 + 저장
+    	alarmIcon.addEventListener("click", () => {
+    	    window.isNotificationOn = !window.isNotificationOn;
+    	    localStorage.setItem("isNotificationOn", window.isNotificationOn); // ✅ 이 줄 추가!
+    	    alarmIcon.classList.toggle("muted", !window.isNotificationOn);
+    	});
+    }
+
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         const type = data.sender === nickname ? "sent" : "received";
         appendMessage(data, type);
+
+        if (window.isNotificationOn && data.sender !== nickname && !document.hasFocus()) {
+            showNotification(data.sender, data.text || data.messageContent || "📎 파일이 도착했어요!");
+        }
     };
+
+    function showNotification(sender, message) {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    createNotification(sender, message);
+                }
+            });
+        } else {
+            createNotification(sender, message);
+        }
+    }
+
+    function createNotification(sender, message) {
+        const notification = new Notification(`💬 \${sender}님이 보낸 메시지`, {
+            body: message,
+            icon: '/tt/resources/images/chat-icon.png'
+        });
+
+        notification.onclick = () => window.focus();
+    }
+
+
+
+    
+    
+    
+    
 
     function sendMessage() { 
         const msg = chatInput.value.trim();
@@ -1013,6 +1175,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
         socket.send(JSON.stringify(payload));
         chatInput.value = "";
+        
+     // 채팅방 preview 갱신
+        const previewSelector = `.message-item .message-name`;
+        document.querySelectorAll(previewSelector).forEach(nameEl => {
+          if (nameEl.textContent === document.querySelector("#chatRoomTitle").textContent) {
+            const previewEl = nameEl.parentElement.querySelector(".message-preview");
+            if (previewEl) previewEl.textContent = msg;
+          }
+        });
     }
 });
 
@@ -1065,6 +1236,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 appendMessage(msg, type);
             });
+            scrollToBottom(); // ✅ 로딩 끝나고 아래로 이동
         })
         .catch(err => {
             console.error("❌ 이전 메시지 불러오기 실패:", err);
