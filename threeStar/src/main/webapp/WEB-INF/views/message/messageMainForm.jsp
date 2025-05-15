@@ -1089,7 +1089,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
     const wsUrl = `wss://threestar.r-e.kr/ws/chat/\${roomId}?token=\${encodedToken}`;
     
-    alert("WebSocket 연결 URL:" + wsUrl);
+    console.log("🧪 연결 시도:", socket.url);
 
     socket = new WebSocket(wsUrl);
 
