@@ -1087,9 +1087,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const encodedToken = encodeURIComponent(token);
 
     //const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
-    const wsUrl = `wss://threestar.r-e.kr/ws/chat/\${roomId}?token=\${encodedToken}`;
+    const wsUrl = `wss://threestar.r-e.kr/threeStar/chat/\${roomId}?token=\${encodedToken}`;
     
-    console.log("🧪 연결 시도:", socket.url);
+    alert("WebSocket 연결 URL:" + wsUrl);
 
     socket = new WebSocket(wsUrl);
 
@@ -1115,15 +1115,15 @@ document.addEventListener("DOMContentLoaded", function () {
     
     const alarmIcon = document.querySelector(".alarm-icon");
     if (alarmIcon) {
-    	 // ✅ 상태 반영 (새로고침 직후 아이콘 모양 변경)
+        // ✅ 상태 반영 (새로고침 직후 아이콘 모양 변경)
         alarmIcon.classList.toggle("muted", !window.isNotificationOn);
-    	 
+        
         // ✅ 클릭 시 상태 토글 + 저장
-    	alarmIcon.addEventListener("click", () => {
-    	    window.isNotificationOn = !window.isNotificationOn;
-    	    localStorage.setItem("isNotificationOn", window.isNotificationOn); // ✅ 이 줄 추가!
-    	    alarmIcon.classList.toggle("muted", !window.isNotificationOn);
-    	});
+       alarmIcon.addEventListener("click", () => {
+           window.isNotificationOn = !window.isNotificationOn;
+           localStorage.setItem("isNotificationOn", window.isNotificationOn); // ✅ 이 줄 추가!
+           alarmIcon.classList.toggle("muted", !window.isNotificationOn);
+       });
     }
 
     socket.onmessage = (event) => {
@@ -1188,6 +1188,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
 
 <!-- 채팅방 목록 -->
 document.addEventListener("DOMContentLoaded", function () {
