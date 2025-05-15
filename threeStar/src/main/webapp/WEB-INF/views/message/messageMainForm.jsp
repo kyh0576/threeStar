@@ -1094,7 +1094,6 @@ document.addEventListener("DOMContentLoaded", function () {
     socket = new WebSocket(wsUrl);
 
     socket.onopen = () => console.log("✅ WebSocket 연결 성공");
-    console.log("ㄻㄴ이ㅓㅏ;ㄻㄴ이ㅓㅏ;림ㄴ어ㅏ;림ㄴ어ㅏ;림ㄴ어ㅏ;ㅓ;라ㅣ림ㄴ어ㅏ;");
     socket.onerror = (error) => console.error("❌ WebSocket 에러", error);
     socket.onclose = () => console.log("🔌 WebSocket 종료됨");
     
