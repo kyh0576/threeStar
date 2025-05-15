@@ -1026,16 +1026,6 @@ function appendMessage(data, type) {
 }
 
 
-document.addEventListener("DOMContentLoaded", function () {
-	  const logout = document.querySelector(".message-action delete");
-	  if (logout) {
-	    logout.addEventListener("click", function () {
-	      window.location.href = "/logout.me"; // ✅ 절대경로
-	    });
-	  }
-	});
-
-
 function scrollToBottom() {
     const chatBox = document.querySelector(".chat-messages");
     chatBox.scrollTop = chatBox.scrollHeight;
