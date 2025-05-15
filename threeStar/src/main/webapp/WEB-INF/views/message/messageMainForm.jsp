@@ -1263,7 +1263,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // 채팅방 참여자 목록 표시
     fetch(`\${contextPath}/chattingRoom/members?roomId=\${roomId}`)
-    .then(response => response.json())
+    .then(response => response.json() )
     .then(data => {
       const memberList = document.querySelector(".member-list");
       memberList.innerHTML = ""; // 초기화
