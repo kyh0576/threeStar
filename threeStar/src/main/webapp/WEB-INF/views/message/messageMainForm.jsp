@@ -594,7 +594,7 @@
 		}
 		#startChatBtnLeft:hover,
 		#startChatBtnRight:hover {
-		  background-color: #367ee6;
+		  background-color: #367ee6 ;
 		}
 		#startChatBtnLeft:active,
 		#startChatBtnRight:active {
