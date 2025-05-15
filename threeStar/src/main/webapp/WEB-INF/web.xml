@@ -58,10 +58,5 @@
 	</filter-mapping>
 
 
-	<!-- 추가 매핑 -->
-	<servlet-mapping>
-	  <servlet-name>appServlet</servlet-name>
-	  <url-pattern>/threeStar/*</url-pattern>
-	</servlet-mapping>
 
 </web-app>
