@@ -134,7 +134,7 @@
                 <div class="menu-icon">💬</div>
                 <div>채팅</div>
             </a>
-            <a href="${pageContext.request.contextPath}/drawerAll/main" class="menu-item ${page eq 'tdrawer' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/drawerSelect.do" class="menu-item ${page eq 'tdrawer' ? 'active' : ''}">
                 <div class="menu-icon">📚</div>
                 <div>티서랍</div>
             </a>
