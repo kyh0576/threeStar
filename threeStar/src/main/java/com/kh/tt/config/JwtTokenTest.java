@@ -15,5 +15,8 @@ public class JwtTokenTest {
                 .compact();
 
         System.out.println("JWT 토큰 발급 → " + token);
+        
+        System.out.println("JWT 토큰 → " + token);
+        System.out.println("검증 결과 → " + Jwts.parser().setSigningKey("secretKey").parseClaimsJws(token));
     }
 }

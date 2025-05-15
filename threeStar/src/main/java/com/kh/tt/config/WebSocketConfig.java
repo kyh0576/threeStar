@@ -18,12 +18,15 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Autowired
     private ChatWebSocketHandler chatWebSocketHandler;
+    
+    @Autowired
+    private HandshakeInterceptor handshakeInterceptor;  // ✅ JWT 검증용 인터셉터
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
     	registry.addHandler(chatWebSocketHandler, "/chat/{roomId}")
         .setAllowedOrigins("*")
-        .addInterceptors(new HttpSessionHandshakeInterceptor());
+        .addInterceptors(handshakeInterceptor);
     }
 }
 
