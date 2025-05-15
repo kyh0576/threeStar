@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:security="http://www.springframework.org/schema/security"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-6.4.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/security 
+        https://www.springframework.org/schema/security/spring-security.xsd">
 
     <bean class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" id="bcryptPasswordEncoder"/>
 
-    <!-- ✅ 전체 접근 허용 -->
+    <!-- ✅ 리소스는 필터 제외 -->
     <security:http security="none" pattern="/resources/**"/>
-    
+
+    <!-- ✅ 전체 접근 허용 -->
     <security:http auto-config="true" use-expressions="true">
         <security:intercept-url pattern="/**" access="permitAll"/>
     </security:http>
+
 </beans>
