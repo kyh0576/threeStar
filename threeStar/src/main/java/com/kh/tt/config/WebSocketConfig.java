@@ -24,7 +24,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(chatWebSocketHandler, "/threeStar/chat/{roomId}")
+        registry.addHandler(chatWebSocketHandler, "/ws/chat/{roomId}")
                 .setAllowedOrigins("*")
                 .addInterceptors(handshakeInterceptor); // ✅ 주입한 걸 넣어야 한다! 
     }
