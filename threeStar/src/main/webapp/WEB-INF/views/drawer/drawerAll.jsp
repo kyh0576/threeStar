@@ -1,3 +1,5 @@
+<%@page import="com.kh.tt.member.model.vo.Member"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -10,6 +12,10 @@
     
     String roomIdParam = request.getParameter("roomId");
     int roomId = roomIdParam != null ? Integer.parseInt(roomIdParam) : -1;
+%>
+<%
+    List<Member> chatRoomMembers = (List<Member>) request.getAttribute("chatRoomMembers");
+    int memberCount = chatRoomMembers != null ? chatRoomMembers.size() : 0;
 %>
 <!DOCTYPE html>
 <html>
@@ -657,7 +663,7 @@
 	            }
 	
 	            list.innerHTML = rooms.map(room => `
-	            <div class="message-item" onclick="location.href='${pageContext.request.contextPath}/message/mainForm?roomId=\${room.chatId}'">
+	            <div class="message-item" onclick="location.href='${pageContext.request.contextPath}/drawerSelect.do?roomId=\${room.chatId}'">
 	                <div class="profile-img"><img src="/resources/images/default-profile.png" alt="프로필"></div>
 	                <div class="message-info">
 	                    <div class="message-name">\${room.chatName}</div> <!-- ✅ 여기 수정 -->

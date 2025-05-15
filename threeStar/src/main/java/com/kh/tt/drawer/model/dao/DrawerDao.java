@@ -10,8 +10,8 @@ import com.kh.tt.message.model.vo.Message;
 @Repository
 public class DrawerDao {
 	
-	public List<Message> selectDrawer(SqlSessionTemplate session, Message d) {
-		return session.selectList("drawerMapper.selectDrawer", d);
+	public List<Message> selectDrawer(SqlSessionTemplate session, Integer roomId) {
+		return session.selectList("drawerMapper.selectDrawer", roomId);
 	}
 
 }

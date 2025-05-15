@@ -20,8 +20,8 @@ public class DrawerServiceImpl implements DrawerService {
 	private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public List<Message> selectDrawer(Message d) {
-		return dDao.selectDrawer(sqlSession, d);
+	public List<Message> selectDrawer(Integer roomId) {
+		return dDao.selectDrawer(sqlSession, roomId);
 	}
 	
 }

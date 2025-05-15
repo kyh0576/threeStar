@@ -30,7 +30,7 @@
         , SEND_TIME
     FROM MESSAGE
     WHERE TYPE = 'file'
-      <!-- and MS_CHAT_ID = #{msChatId}  -->
+      and MS_CHAT_ID = #{roomId}
     ORDER BY SEND_TIME DESC
 </select>
 

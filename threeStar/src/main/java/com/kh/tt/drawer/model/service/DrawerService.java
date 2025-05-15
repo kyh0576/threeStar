@@ -6,6 +6,6 @@ import com.kh.tt.message.model.vo.Message;
 
 public interface DrawerService {
 	
-	public List<Message> selectDrawer(Message d);
+	public List<Message> selectDrawer(Integer roomId);
 
 }
