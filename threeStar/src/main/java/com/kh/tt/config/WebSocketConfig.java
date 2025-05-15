@@ -11,7 +11,7 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 
 import com.kh.tt.websocket.ChatWebSocketHandler;
 import com.kh.tt.websocket.HandshakeInterceptor;
- 
+  
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
