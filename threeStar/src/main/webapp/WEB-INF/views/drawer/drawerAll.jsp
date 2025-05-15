@@ -32,194 +32,301 @@
 <!-- Latest compiled JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    }
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+           font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+       }
 
-    body {
-        display: flex;
-        background-color: #f9f9f9;
-        min-height: 100vh;
-    }
+       body {
+           display: flex;
+           background-color: #f9f9f9;
+           min-height: 100vh;
+       }
 
-    /* 메시지 목록 사이드바 */
-    .message-sidebar {
-        width: 320px; /* 기존 300px보다 살짝 넓게 */
-        background-color: white;
-        border-right: 1px solid #e1e1e1;
-        display: flex;
-        flex-direction: column;
-        }
+      
+       /* 메시지 목록 사이드바 */
+       .message-sidebar {
+           width: 320px; /* 기존 300px보다 살짝 넓게 */
+           background-color: white;
+           border-right: 1px solid #e1e1e1;
+           display: flex;
+           flex-direction: column;
+           }
 
-    .message-header {
-        padding: 20px;
-        border-bottom: 1px solid #e1e1e1;
-        font-size: 18px;
-        font-weight: bold;
-    }
+       .message-tabs {
+           display: flex;
+           border-bottom: 1px solid #e1e1e1;
+       }
 
-    .message-tabs {
-        display: flex;
-        border-bottom: 1px solid #e1e1e1;
-    }
+       .tab {
+           flex: 1;
+           padding: 10px;
+           text-align: center;
+           background-color: #f5f5f5;
+           cursor: pointer;
+       }
 
-    .tab {
-        flex: 1;
-        padding: 10px;
-        text-align: center;
-        background-color: #f5f5f5;
-        cursor: pointer;
-    }
+       .tab.active {
+           background-color: #4a8cff;
+           color: white;
+       }
 
-    .tab.active {
-        background-color: #4a8cff;
-        color: white;
-    }
+       .message-list {
+           overflow-y: auto;
+           flex-grow: 1;
+       }
 
-    .message-list {
-        overflow-y: auto;
-        flex-grow: 1;
-    }
+       .message-item {
+           padding: 15px;
+           border-bottom: 1px solid #f1f1f1;
+           display: flex;
+           align-items: center;
+           cursor: pointer;
+       }
 
-    .message-item {
-        padding: 15px;
-        border-bottom: 1px solid #f1f1f1;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
+       .message-item:hover {
+           background-color: #f9f9f9;
+       }
 
-    .message-item:hover {
-        background-color: #f9f9f9;
-    }
+       .message-item.active {
+           background-color: #f0f7ff;
+       }
 
-    .message-item.active {
-        background-color: #f0f7ff;
-    }
+       .message-header {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           padding: 20px 20px;  /* 🔼 높이 늘림 (기존 16px → 20px) */
+           font-size: 18px;
+           font-weight: bold;
+           border-bottom: 1px solid #e1e1e1;
+           width: 100%;
+           box-sizing: border-box;
+           }
+           
+           .new-chat-btn {
+           width: 36px;
+           height: 36px;
+           background-color: #4a8cff;
+           border: none;
+           border-radius: 50%;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+           cursor: pointer;
+           transition: all 0.2s ease;
+           }
 
-    .message-header {
-	     display: flex;
-	     justify-content: space-between;
-	     align-items: center;
-	     padding: 20px 20px;  /* 🔼 높이 늘림 (기존 16px → 20px) */
-	     font-size: 18px;
-	     font-weight: bold;
-	     border-bottom: 1px solid #e1e1e1;
-	     width: 100%;
-	     box-sizing: border-box;
-     }
-        
-     .new-chat-btn {
-	      width: 36px;
-	      height: 36px;
-	      background-color: #4a8cff;
-	      border: none;
-	      border-radius: 50%;
-	      display: flex;
-	      align-items: center;
-	      justify-content: center;
-	      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-	      cursor: pointer;
-	      transition: all 0.2s ease;
-     }
+           .new-chat-btn:hover {
+           background-color: #367ee6;
+           transform: scale(1.1);
+           }
 
-     .new-chat-btn:hover {
-	      background-color: #367ee6;
-	      transform: scale(1.1);
-     }
+           .new-chat-btn svg {
+           stroke: white;
+           }
 
-     .new-chat-btn svg {
-     	stroke: white;
-     }
-        
-    .profile-img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 15px;
-        overflow: hidden;
-    	border: 2px solid #4a8cff;
-    }
+       .profile-img {
+           width: 40px;
+           height: 40px;
+           border-radius: 50%;
+           margin-right: 15px;
+           overflow: hidden;
+       	border: 2px solid #4a8cff;
+       }
 
-    .profile-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+       .profile-img img {
+           width: 100%;
+           height: 100%;
+           object-fit: cover;
+       }
 
-    .message-info {
-        flex-grow: 1;
-    }
+       .message-info {
+           flex-grow: 1;
+       }
 
-    .message-name {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
+       .message-name {
+           font-weight: bold;
+           width: 234px;
+           margin-bottom: 5px;
+       }
 
-    .message-preview {
-        color: #666;
-        font-size: 14px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    
-    
+       .message-preview {
+           color: #666;
+           font-size: 14px;
+           white-space: nowrap;
+           overflow: hidden;
+           text-overflow: ellipsis;
+           width: 234px;
+       }
+   
+   
+    /* 채팅 친구 리스트 등*/
 	/* ✅ 왼쪽 모달 (새 채팅용) */
 	#inviteModal {
-		position: fixed;
-		top: 120px;
-		left: 100px;
-		z-index: 9999;
-		background: white;
-		padding: 20px;
-		border-radius: 8px;
-		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-		display: none;
-		min-width: 300px;
+	  position: fixed;
+	  top: 120px;
+	  left: 100px;
+	  z-index: 9999;
+	  background: white;
+	  padding: 20px;
+	  border-radius: 8px;
+	  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	  display: none;
+	  min-width: 300px;
 	}
-		
+	
 	/* ✅ 왼쪽 닫기 버튼 */
 	#closeModalBtn {
-		float: right;
-		font-size: 18px;
-		font-weight: bold;
-		cursor: pointer;
-		background: none;
-		border: none;
-		color: #888;
+	  float: right;
+	  font-size: 18px;
+	  font-weight: bold;
+	  cursor: pointer;
+	  background: none;
+	  border: none;
+	  color: #888;
 	}
-		
+	
 	#closeModalBtn:hover {
-		color: #ff4444;
+	  color: #ff4444;
 	}
-		
+	
 	/* ✅ 왼쪽 친구 리스트 */
 	#friend-list-left {
-		margin-top: 15px;
-		max-height: 300px;
-		overflow-y: auto;
+	  margin-top: 15px;
+	  max-height: 300px;
+	  overflow-y: auto;
+	}
+	
+	/* ✅ 오른쪽 모달 (초대용) */
+	#inviteModalRight {
+	  position: fixed;
+	  top: 120px;
+	  right: 320px;
+	  z-index: 9999;
+	  background: white;
+	  padding: 20px;
+	  border-radius: 8px;
+	  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	  display: none;
+	  min-width: 300px;
+	}
+	
+	/* ✅ 오른쪽 닫기 버튼 */
+	#inviteModalRight .close-modal {
+	  float: right;
+	  font-size: 18px;
+	  font-weight: bold;
+	  cursor: pointer;
+	  background: none;
+	  border: none;
+	  color: #888;
+	}
+	#inviteModalRight .close-modal:hover {
+	  color: #ff4444;
+	}
+	
+	/* ✅ 오른쪽 친구 리스트 */
+	#friend-list-right {
+	  margin-top: 15px;
+	  max-height: 300px;
+	  overflow-y: auto;
+	}
+	
+	/* ✅ 친구 항목 공통 */
+	.friend-item {
+	  padding: 10px;
+	  border-radius: 5px;
+	  margin-bottom: 6px;
+	  background-color: #f8f9fa;
+	  cursor: pointer;
+	  transition: background-color 0.2s;
+	}
+	.friend-item:hover {
+	  background-color: #e6f0ff;
+	}
+	
+	/* ✅ 버튼: 공통 적용 가능 */
+	#startChatBtnLeft,
+	#startChatBtnRight {
+	  display: block;
+	  width: 100%;
+	  padding: 12px 16px;
+	  margin-top: 15px;
+	  background-color: #4a8cff;
+	  color: white;
+	  font-size: 16px;
+	  font-weight: bold;
+	  border: none;
+	  border-radius: 6px;
+	  cursor: pointer;
+	  transition: background-color 0.2s ease;
+	  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+	
+	#startChatBtnLeft:hover,
+	#startChatBtnRight:hover {
+	  background-color: #367ee6;
+	}
+	
+	#startChatBtnLeft:active,
+	#startChatBtnRight:active {
+	  background-color: #2c6dd9;
+	}
+
+	/* ✅ 공통 친구 리스트 스타일 */
+	#friend-list-left,
+	#friend-list-right {
+	  margin-top: 15px;
+	  max-height: 300px; /* 세로 길이 제한 */
+	  overflow-y: auto;  /* 스크롤 */
+	  display: flex;
+	  flex-direction: column;
+	  gap: 6px;
+	}
+	
+	/* ✅ label 스타일 세로 정렬 + 카드 스타일 */
+	#friend-list-left label,
+	#friend-list-right label {
+	  display: flex;
+	  align-items: center;
+	  padding: 10px;
+	  background-color: #f8f9fa;
+	  border-radius: 6px;
+	  cursor: pointer;
+	  transition: background-color 0.2s;
+	}
+	
+	#friend-list-left label:hover,
+	#friend-list-right label:hover {
+	  background-color: #e6f0ff;
+	}
+	
+	#friend-list-left input[type="checkbox"],
+	#friend-list-right input[type="checkbox"] {
+	  margin-right: 10px;
 	}
     
 
 	/* 메인 콘텐츠 영역 */
 	.main-content {
-	    flex: 1;
-	    padding: 20px;
-	    margin-left: 340px; /* 메뉴와 메시지 사이드바 너비 합계 */
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	    position: relative;
 	}
 	
 	/* 갤러리 헤더 */
 	.gallery-header {
-	    display: flex;
-	    align-items: center;
-	    justify-content: space-between;
-	    padding-bottom: 20px;
-	    border-bottom: 1px solid #e0e0e0;
-	    margin-bottom: 20px;
+		display: flex;
+		padding: 8px 20px 8px 20px;
+		border-bottom: 1px solid #e1e1e1;
+		align-items: center;
+		background-color: white;
 	}
 	
 	.gallery-profile {
@@ -241,10 +348,15 @@
 	    object-fit: cover;
 	}
 	
-	.gallery-profile h2 {
-	    margin: 0;
-	    font-size: 20px;
-	    color: #333;
+	.gallery-profile h3 {
+		display: block;
+	    font-size: 1.17em;
+	    margin-block-start: 1em;
+	    margin-block-end: 1em;
+	    margin-inline-start: 0px;
+	    margin-inline-end: 0px;
+	    font-weight: bold;
+	    unicode-bidi: isolate;
 	}
 	
 	/* 갤러리 탭 */
@@ -408,102 +520,6 @@
 	    padding: 50px;
 	    color: #999;
 	}
-	
-	/* 메시지 사이드바 */
-	.message-sidebar {
-	    width: 240px;
-	    background-color: #f9f9f9;
-	    border-right: 1px solid #e0e0e0;
-	    position: fixed;
-	    top: 0;
-	    left: 100px; /* 왼쪽 메인 메뉴 너비 */
-	    height: 100%;
-	    z-index: 1;
-	}
-	
-	.message-header {
-	    display: flex;
-	    justify-content: space-between;
-	    align-items: center;
-	    padding: 20px;
-	    border-bottom: 1px solid #e0e0e0;
-	}
-	
-	.message-title {
-	    font-size: 18px;
-	    font-weight: 600;
-	    color: #333;
-	}
-	
-	.new-chat-btn {
-	    background-color: #4a8cff;
-	    border: none;
-	    width: 30px;
-	    height: 30px;
-	    border-radius: 50%;
-	    display: flex;
-	    align-items: center;
-	    justify-content: center;
-	    color: white;
-	    cursor: pointer;
-	}
-	
-	.message-tabs {
-	    display: flex;
-	    border-bottom: 1px solid #e0e0e0;
-	}
-	
-	.tab {
-	    flex: 1;
-	    text-align: center;
-	    padding: 10px;
-	    color: #777;
-	    cursor: pointer;
-	}
-	
-	.tab.active {
-	    color: #4a8cff;
-	    border-bottom: 2px solid #4a8cff;
-	}
-	
-	/* 초대 모달 */
-	#inviteModal {
-	    display: none;
-	    position: absolute;
-	    left: 20px;
-	    top: 70px;
-	    width: 200px;
-	    background: white;
-	    border-radius: 8px;
-	    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-	    padding: 15px;
-	    z-index: 10;
-	}
-	
-	#closeModalBtn {
-	    position: absolute;
-	    top: 5px;
-	    right: 5px;
-	    background: none;
-	    border: none;
-	    cursor: pointer;
-	}
-	
-	#friend-list-left {
-	    margin: 10px 0;
-	    max-height: 200px;
-	    overflow-y: auto;
-	}
-	
-	#startChatBtnLeft {
-	    width: 100%;
-	    padding: 8px;
-	    background-color: #4a8cff;
-	    color: white;
-	    border: none;
-	    border-radius: 4px;
-	    cursor: pointer;
-	}
 </style>
 </head>
 <body>
@@ -545,7 +561,7 @@
                 <div class="gallery-profile-img">
                     <img src="https://via.placeholder.com/50/4a8cff/ffffff?text=파일" alt="프로필">
                 </div>
-                <h2>파일 보관함</h2>
+                <h3>파일 보관함</h3>
             </div>
         </div>
         <div class="gallery-tabs">
@@ -657,10 +673,6 @@
 	        .then(response => response.json())
 	        .then(rooms => {
 	            const list = document.querySelector(".message-list");
-	            if (!rooms || rooms.length === 0) {
-	                list.innerHTML = "<p style='padding: 20px; color: gray;'>채팅방이 없습니다</p>";
-	                return;
-	            }
 	
 	            list.innerHTML = rooms.map(room => `
 	            <div class="message-item" onclick="location.href='${pageContext.request.contextPath}/drawerSelect.do?roomId=\${room.chatId}'">
