@@ -620,7 +620,7 @@
   <script>
   
   $(document).ready(function(){
-	  console.log("집에가고싶다ㅇ   ")
+	  
 	  // 온라인 유저 조회
 	  function fetchOnlineMembers() {
 		  $.ajax({
@@ -631,6 +631,7 @@
 		    success: function(data) {
 		    	console.log(data)
 		    	console.log("push 배포 테스트 3번째")
+		    	console.log("집에가고싶다ㅇ   ")
 		      // 멤버 영역 초기화
 		      $('#online-members').empty();
 
