@@ -36,7 +36,7 @@ public class HandshakeInterceptor extends HttpSessionHandshakeInterceptor {
                     return super.beforeHandshake(request, response, wsHandler, attributes);
                 }
             }
-
+ 
             // 2. 토큰 기반 인증
             String token = servletRequest.getServletRequest().getParameter("token");
 
