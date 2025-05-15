@@ -620,7 +620,7 @@
   <script>
   
   $(document).ready(function(){
-	  
+	  console.log("집에가고싶다")
 	  // 온라인 유저 조회
 	  function fetchOnlineMembers() {
 		  $.ajax({
