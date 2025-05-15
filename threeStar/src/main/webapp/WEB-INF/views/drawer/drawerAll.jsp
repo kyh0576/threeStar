@@ -643,6 +643,34 @@
 		  }
 		});
 	</script>
+	
+	<script>
+	<!-- 채팅방 목록 -->
+	document.addEventListener("DOMContentLoaded", function () {
+	    fetch("${pageContext.request.contextPath}/chattingRoom/rooms")  // 🔁 백엔드에서 참여중인 채팅방 목록 호출
+	        .then(response => response.json())
+	        .then(rooms => {
+	            const list = document.querySelector(".message-list");
+	            if (!rooms || rooms.length === 0) {
+	                list.innerHTML = "<p style='padding: 20px; color: gray;'>채팅방이 없습니다</p>";
+	                return;
+	            }
+	
+	            list.innerHTML = rooms.map(room => `
+	            <div class="message-item" onclick="location.href='${pageContext.request.contextPath}/message/mainForm?roomId=\${room.chatId}'">
+	                <div class="profile-img"><img src="/resources/images/default-profile.png" alt="프로필"></div>
+	                <div class="message-info">
+	                    <div class="message-name">\${room.chatName}</div> <!-- ✅ 여기 수정 -->
+	                    <div class="message-preview">\${room.lastMessage || '대화를 시작하세요'}</div>
+	                </div>
+	            </div>
+	        `).join('');
+	        })
+	        .catch(err => {
+	            console.error("❌ 채팅방 목록 불러오기 실패:", err);
+	        });
+	});
+	</script>
 </body>
     
 	<script>
