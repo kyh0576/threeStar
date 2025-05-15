@@ -1079,14 +1079,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const ip = location.hostname;
     const encodedToken = encodeURIComponent(token);
 
-    const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
+    //const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
+    const wsUrl = `wss://threestar.r-e.kr/threeStar/chat/\${roomId}?token=\${encodedToken}`;
+    
     console.log("WebSocket 연결 URL:", wsUrl);
 
     socket = new WebSocket(wsUrl);
 
     socket.onopen = () => console.log("✅ WebSocket 연결 성공");
+    console.log("ㄻㄴ이ㅓㅏ;ㄻㄴ이ㅓㅏ;림ㄴ어ㅏ;림ㄴ어ㅏ;림ㄴ어ㅏ;ㅓ;라ㅣ림ㄴ어ㅏ;");
     socket.onerror = (error) => console.error("❌ WebSocket 에러", error);
     socket.onclose = () => console.log("🔌 WebSocket 종료됨");
+    
 
     const chatInput = document.querySelector(".chat-input");
     const chatSendBtn = document.querySelector(".chat-send-btn");
