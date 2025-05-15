@@ -1025,46 +1025,6 @@ function appendMessage(data, type) {
     scrollToBottom(); // ✅ 맨 아래로 이동
 }
 
-	
-
-const deleteBtn = menuWrapper.querySelector(".message-action.delete");
-deleteBtn.addEventListener("click", function () {
-    if (confirm("정말 이 메시지를 삭제하시겠습니까?")) {
-
-        // ✅ 메시지 번호를 어딘가에서 가져와야 함 (예: data.messageId)
-        const messageId = data.messageId;
-
-        fetch(`\${contextPath}/message/delete`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: `messageId=\${messageId}`
-        })
-        .then(res => res.text())
-        .then(result => {
-            if (result === "success") {
-                alert("메시지를 삭제했습니다.");
-                // ✅ 화면에서 메시지 제거
-                bubble.remove();
-            } else {
-                alert("❌ 메시지 삭제 실패");
-            }
-        })
-        .catch(err => {
-            console.error("❌ 메시지 삭제 에러:", err);
-        });
-    }
-});
-}
-	
-	
-	
-	
-	
-	
-	
-
 
 function scrollToBottom() {
     const chatBox = document.querySelector(".chat-messages");
