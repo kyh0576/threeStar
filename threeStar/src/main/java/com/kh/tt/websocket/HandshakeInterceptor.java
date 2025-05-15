@@ -23,7 +23,6 @@ public class HandshakeInterceptor extends HttpSessionHandshakeInterceptor {
                                    WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
 
         System.out.println("[HandshakeInterceptor] WebSocket 핸드셰이크 시작");
-        System.out.println("🔥 HandshakeInterceptor 호출됨");
 
         if (request instanceof ServletServerHttpRequest) {
             ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
