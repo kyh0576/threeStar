@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>채팅 메신저</title>
+  <title>ThreeStar</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- 예시: Font Awesome 불러오기 -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
