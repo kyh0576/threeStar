@@ -48,7 +48,9 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         msg.setType((String) messageMap.get("type"));
         msg.setMsChatId(Integer.parseInt(roomId));
 
-        messageService.saveMessage(msg);
+        if ("chat".equals(msg.getType())) {
+            messageService.saveMessage(msg);
+        }
 
         messageMap.put("sender", loginMember.getMemName());
         String sendPayload = objectMapper.writeValueAsString(messageMap);
