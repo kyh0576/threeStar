@@ -70,13 +70,16 @@ public class MessageController {
 
 
     // 메시지 저장 요청 처리
-    @PostMapping("/save")
+    @PostMapping("save")
     @ResponseBody
     public String saveMessage(@RequestBody Message message) {
-        System.out.println("🔔 DB 저장 요청 받은 메시지: " + message);
+    	System.out.println("🧾 originName: " + message.getOriginName());
+    	System.out.println("🧾 changeName: " + message.getChangeName());
         int result = messageService.saveMessage(message);
         return result > 0 ? "success" : "fail";
     }
+    
+    
 
     @RequestMapping("/messageForm")
     public String showMessageForm() {

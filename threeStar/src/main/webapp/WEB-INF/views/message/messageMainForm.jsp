@@ -1163,6 +1163,7 @@ document.addEventListener("DOMContentLoaded", function () {
 //==============채팅방 나가기=============================
 document.addEventListener("DOMContentLoaded", function () {
     const leaveBtn = document.getElementById("leaveRoomBtn");
+    
 
     leaveBtn.addEventListener("click", function () {
         if (confirm("정말 이 채팅방에서 나가시겠습니까?")) {
@@ -1201,6 +1202,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	
 const fileInput = document.getElementById("selectedFile");
 const fileSelectBtn = document.getElementById("fileSelectBtn");
+const roomId = new URLSearchParams(window.location.search).get("roomId");
+
 
 // 📎 버튼 클릭 → 파일 선택창 열기
 fileSelectBtn.addEventListener("click", () => {
@@ -1211,7 +1214,8 @@ fileSelectBtn.addEventListener("click", () => {
 fileInput.addEventListener("change", () => {
     const file = fileInput.files[0];
     if (!file) return;
-
+    
+    const originName = file.name;
     const formData = new FormData();
     formData.append("file", file);
 
@@ -1245,6 +1249,12 @@ fileInput.addEventListener("change", () => {
             };
 
             socket.send(JSON.stringify(payload));
+            
+            console.log("아씨발진짜"+contextPath)
+            
+                console.log("🎯 저장 요청 전송 직전");
+                console.log("originName:", file.name);
+                console.log("changeName:", changeName);
 
             // ✅ DB 저장용 요청 (Message 테이블용)
             fetch(`\${contextPath}/message/save`, {
@@ -1252,10 +1262,12 @@ fileInput.addEventListener("change", () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
+               
+                
                 body: JSON.stringify({
                     sender: nickname,
-                    messageContent: file.name,
-                    originName: file.name,
+                    messageContent: originName,
+                    originName: originName,
                     changeName: changeName,
                     fileType: file.type,
                     type: "file",
