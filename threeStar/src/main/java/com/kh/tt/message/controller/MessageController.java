@@ -205,7 +205,7 @@ public class MessageController {
         }
     }
     
-    @PostMapping("calendarInsertMessage.do")
+    @PostMapping("/calendarInsertMessage.do")
     @ResponseBody
     public Map<String, Object> insertCalendar(Calendar c, HttpSession session) {
     	Map<String, Object> response = new HashMap<>();

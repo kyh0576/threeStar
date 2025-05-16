@@ -1676,29 +1676,28 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => {
             console.log("응답 상태:", response.status);
-            console.log("응답 헤더:", response.headers);
             return response.text().then(text => {
+                console.log("원본 응답:", text);
                 try {
-                    // 응답이 JSON인지 확인
-                    const data = JSON.parse(text);
-                    console.log("응답 데이터:", data);
-                    if (data.success) {
-                        alert('일정이 저장되었습니다.');
-                        location.reload();
-                    } else {
-                        alert('저장 실패: ' + (data.message || '알 수 없는 오류'));
-                    }
-                    return data;
+                    return JSON.parse(text);
                 } catch (e) {
-                    // JSON이 아닌 경우 원본 텍스트 출력
-                    console.error("JSON 파싱 오류, 원본 응답:", text);
-                    throw new Error('서버 응답 형식 오류');
+                    console.error("JSON 파싱 오류");
+                    return { success: false, message: "응답 형식 오류" };
                 }
             });
         })
+        .then(data => {
+            console.log("처리된 응답 데이터:", data);
+            if (data.success) {
+                alert('일정이 저장되었습니다.');
+                location.reload();
+            } else {
+                alert('저장 실패: ' + (data.message || '알 수 없는 오류'));
+            }
+        })
         .catch(error => {
             console.error("일정 저장 실패:", error);
-            alert('일정 저장에 실패했습니다. 다시 시도해주세요.');
+            alert('일정 저장에 실패했습니다: ' + error.message);
         });
         
         // 폼 숨기기

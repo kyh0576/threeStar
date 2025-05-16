@@ -222,11 +222,10 @@
 	      data-theme="filled_blue"
 	      data-text="signup_with"
 	    ></div>
-		<!-- data-login_uri="http://localhost:8333/tt/signinForm.me"  -->
+		
 		<input type="hidden" id="memName" name="memName" value="${ memName }">
 		<input type="hidden" id="email" name="email" value="${ email }">
-		<input type="hidden" id="snsKey" name="snsKey" value="${ snsKey }">
-		
+		<input type="hidden" id="snsKey" name="snsKey" value="${ snsKey }">	
     </form>
 
     <script>
