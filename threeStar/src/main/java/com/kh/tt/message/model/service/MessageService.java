@@ -19,5 +19,7 @@ public interface MessageService {
     
     int deleteMessage(int messageNo);
     
+    int insertCalendar(Calendar c);
+    
     List<Calendar> getCalendarEvents(int roomId);
 }

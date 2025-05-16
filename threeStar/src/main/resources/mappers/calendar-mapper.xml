@@ -68,33 +68,38 @@
    		  and cal_writer = #{calWriter}
    </delete>
    
-   <select id="getCalendarEvents" resultMap="calendarResult">
-   		select
-			 C.cal_id
-           , C.cal_writer
-           , C.cal_title
-           , C.cal_content
-           , C.cal_start
-           , C.cal_end
-           , C.cal_chat_id
-		from calendar C
-        where cal_chat_id = #{roomId};
-   		<!--
-   		select
-			 C.cal_id
-           , C.cal_writer
-           , C.cal_title
-           , C.cal_content
-           , C.cal_start
-           , C.cal_end
-           , C.cal_chat_id
-           , 
-		from
-			calendar C
-		join member M on M.mem_no = C.cal_writer
-		join message MS on MS.MS_MEM_NO = M.mem_no
-   		where cal_chat_id = #{roomId}
-   		 -->
-   </select>
+   	<insert id="insertCalendar">
+	insert
+        into calendar
+            (
+             cal_id
+           , cal_writer
+           , cal_title
+           , cal_content
+           , cal_start
+           , cal_end
+           , cal_chat_id
+           )
+      values
+          (
+            SEQ_CAL_ID.NEXTVAL
+          , #{calWriter}
+          , #{calTitle}
+          , #{calContent}
+          , TO_DATE(#{calStart}, 'YYYY-MM-DD')
+          , TO_DATE(#{calEnd}, 'YYYY-MM-DD')
+          , #{calChatId}
+          )
+	</insert>
+
+	<select id="getCalendarEvents" resultMap="calendarResult">
+		select
+		      cal_title
+		    , cal_content
+		    , cal_start
+		    , cal_end
+		from calendar  
+		where cal_chat_id = #{roomId};
+	</select>
 
 </mapper>

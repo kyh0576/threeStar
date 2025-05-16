@@ -35,8 +35,14 @@ public class MessageDao {
     	 return sqlSession.delete("messageMapper.deleteMessage", messageNo);
     }
     
+    public int insertCalendar(SqlSessionTemplate sqlSession, Calendar c){
+    	return sqlSession.insert("calendarMapper.insertCalendar", c);
+    }
+    
     public List<Calendar> getCalendarEvents(SqlSessionTemplate sqlSession, int roomId){
     	return sqlSession.selectList("calendarMapper.getCalendarEvents", roomId);
     }
+    
+
     
 }

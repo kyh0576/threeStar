@@ -819,19 +819,44 @@
             
             <div class="file-list">
                
-                </div>
-                
             </div>
-            
+                
 			<div class="section-header">
 			    <div>캘린더</div>
-			    <div class="add-cal" style="font-size: 20px;" onclick="addCal()">+</div>
+			    <div class="add-cal" style="font-size: 20px;" onclick="showCalendarForm()">+</div>
+			</div>
+			
+			<!-- 일정 입력 폼 -->
+			<div id="calendarForm" style="display: none; padding: 15px; border: 1px solid #ccc; margin-top: 10px;">
+			    <input type="hidden" id="calId" name="calId">
+			    <div style="margin-bottom: 10px;">
+			        <label for="calTitle">제목:</label>
+			        <input type="text" id="calTitle" name="calTitle" style="width: 100%;" required>
+			    </div>
+			    <div style="margin-bottom: 10px;">
+			        <label for="calStart">시작일:</label>
+			        <input type="date" id="calStart" name="calStart" style="width: 100%;" required>
+			    </div>
+			    <div style="margin-bottom: 10px;">
+			        <label for="calEnd">종료일:</label>
+			        <input type="date" id="calEnd" name="calEnd" style="width: 100%;" required>
+			    </div>
+			    <div style="margin-bottom: 10px;">
+			        <label for="calDescription">내용:</label>
+			        <input id="calDescription" name="calContent" style="width: 100%; height: 60px;" required>
+			    </div>
+			    <input type="hidden" id="calChatId" name="calChatId" value="${ roomId }">
+			    <div style="text-align: right;">
+			    	<button onclick="addCal()">저장</button>
+			        <button onclick="cancelAddCal()">취소</button>
+			    </div>
 			</div>
 			
 			<div class="calendar-list" style="padding: 15px 20px;">
 			    <!-- JS로 일정이 렌더링됨 -->
 			</div>
-        </div>
+         </div>
+      </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1605,12 +1630,80 @@ document.addEventListener('DOMContentLoaded', function () {
 	      });
 	  });
 	});
+</script>
 
-	function addCal(){
-		  
-		  
-	}
-
+<script>
+    // 일정 입력 폼 표시
+    function showCalendarForm() {
+        document.getElementById('calendarForm').style.display = 'block';
+    }
+    
+    // 일정 입력 취소
+    function cancelAddCal() {
+        document.getElementById('calendarForm').style.display = 'none';
+    }
+    
+    // 일정 추가
+    function addCal() {
+        // 폼에서 입력값 가져오기
+        const id = document.getElementById('calId').value;
+        const title = document.getElementById('calTitle').value;
+        const startDate = document.getElementById('calStart').value;
+        const endDate = document.getElementById('calEnd').value;
+        const description = document.getElementById('calDescription').value;
+        const calChatId = document.getElementById('calChatId').value;
+        
+        // 필수 입력값 검증
+        if (!title || !startDate) {
+            alert('제목과 시작일은 필수 입력 항목입니다.');
+            return;
+        }
+        
+        // API 호출
+        fetch('/threeStar/calendarInsertMessage.do', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+            	calId: id,
+                calTitle: title,
+                calStart: startDate,
+                calEnd: endDate || startDate,
+                calContent: description,
+                calChatId: calChatId
+            })
+        })
+        .then(response => {
+            console.log("응답 상태:", response.status);
+            console.log("응답 헤더:", response.headers);
+            return response.text().then(text => {
+                try {
+                    // 응답이 JSON인지 확인
+                    const data = JSON.parse(text);
+                    console.log("응답 데이터:", data);
+                    if (data.success) {
+                        alert('일정이 저장되었습니다.');
+                        location.reload();
+                    } else {
+                        alert('저장 실패: ' + (data.message || '알 수 없는 오류'));
+                    }
+                    return data;
+                } catch (e) {
+                    // JSON이 아닌 경우 원본 텍스트 출력
+                    console.error("JSON 파싱 오류, 원본 응답:", text);
+                    throw new Error('서버 응답 형식 오류');
+                }
+            });
+        })
+        .catch(error => {
+            console.error("일정 저장 실패:", error);
+            alert('일정 저장에 실패했습니다. 다시 시도해주세요.');
+        });
+        
+        // 폼 숨기기
+        document.getElementById('calendarForm').style.display = 'none';
+    }
 </script>
 
 <script>
@@ -1628,32 +1721,34 @@ document.addEventListener('DOMContentLoaded', function () {
 	            return response.json();
 	        })
 	        .then(events => {
-	        	console.log("받아온 일정:", events);
-	            const calList = document.querySelector(".calendar-list");
-	            calList.innerHTML = "";
-	
-	            events.forEach(event => {
-	                const isToday = new Date().toISOString().slice(0, 10) === event.calStart.slice(0, 10); // 간단한 오늘 비교
-	                const html = `
-	                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-	                        <div style="font-weight: bold;">${event.calStart}</div>
-	                    </div>
-	                    <div style="background-color: #f5f5f5; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
-	                        <div style="font-weight: bold;">${event.calTitle}</div>
-	                        <div style="font-size: 12px; color: #888;">${event.calContent}</div>
-	                    </div>
-	                `;
-	                calList.innerHTML += html;
-	            });
-	        })
+			    console.log("받아온 일정:", events);
+			    const calList = document.querySelector(".calendar-list");
+			    calList.innerHTML = "";
+			
+			    if (events && events.length > 0) {
+                    events.forEach(event => {
+                        const html = `
+                            <div style="margin-bottom: 10px;">
+                                <div style="font-weight: bold;">${event.calStart}</div>
+                                <div style="font-weight: bold;">${event.calEnd}</div>
+                                <div style="background-color: #f5f5f5; padding: 10px; border-radius: 4px;">
+                                    <div>${event.calTitle}</div>
+                                    <div style="font-size: 12px; color: #888;">${event.calContent}</div>
+                                </div>
+                            </div>
+                        `;
+                        calList.innerHTML += html;
+                    });
+                } else {
+                    calList.innerHTML = "<p>등록된 일정이 없습니다.</p>";
+                }
+            })  // 세미콜론 제거
 	        .catch(err => {
 	            console.error("❌ 일정 불러오기 실패:", err);
+	            document.querySelector(".calendar-list").innerHTML = "<p>일정을 불러오는 중 오류가 발생했습니다.</p>";
 	        });
 	});
 </script>
-
-
-
 
 <!-- ------------------------------------------------------------------ -->
 

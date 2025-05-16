@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -203,12 +204,44 @@ public class MessageController {
             return "fail";
         }
     }
+    
+    @PostMapping("calendarInsertMessage.do")
+    @ResponseBody
+    public Map<String, Object> insertCalendar(Calendar c, HttpSession session) {
+    	Map<String, Object> response = new HashMap<>();
+    	
+		Member loginMember = (Member) session.getAttribute("loginMember");
+		
+	    if (loginMember == null) {
+	        response.put("success", false);
+	        response.put("message", "로그인이 필요합니다.");
+	        return response;
+	    }
+	    
+	    c.setCalWriter(loginMember.getMemNo());
+	    
+	    try {
+	        int result = messageService.insertCalendar(c);
+	        if(result > 0) {
+	        	response.put("success", true);
+	        	response.put("message", "캘린더 저장 성공.");
+	        }else {
+	        	response.put("success", false);
+	        	response.put("message", "캘린더 저장 실패.");
+	        }
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "오류가 발생했습니다: " + e.getMessage());
+	    }
+        return response;
+    }
 
-    @GetMapping("/MessageCalender.do")
+    @GetMapping("MessageCalender.do")
     @ResponseBody
     public List<Calendar> getCalendarEvents(@RequestParam("roomId") int roomId) {
         return messageService.getCalendarEvents(roomId);
     }
+    
     
     
 }

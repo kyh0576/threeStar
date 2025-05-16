@@ -53,8 +53,15 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	@Override
+	public int insertCalendar(Calendar c){
+		return mDao.insertCalendar(sqlSession, c);
+	}
+	
+	@Override
 	public List<Calendar> getCalendarEvents(int roomId){
 		return mDao.getCalendarEvents(sqlSession, roomId);
 	}
+	
+
 	
 }
