@@ -184,6 +184,24 @@ public class MessageController {
         return messageService.getFilesByRoomId(roomId);
     }
     
+    
+    @PostMapping("delete")
+    @ResponseBody
+    public String deleteMessage(@RequestParam("messageNo") int messageNo) {
+    	System.out.println("✅ [Controller] deleteMessage 호출됨 → " + messageNo);
+        try {
+            int result = messageService.deleteMessage(messageNo);  // 실제 삭제 처리
+            System.out.println("여기는 컨트롤러 " + result);
+            
+            return result > 0 ? "success" : "fail";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+    }
+
+
+    
 }
 
 
