@@ -103,7 +103,7 @@ public class ProfileController {
          session.setAttribute("cList", cList);
          
          session.setAttribute("alertMsg", "성공적으로 로그인 되었습니다.");
-         mv.setViewName("redirect:/tt/main.me");
+         mv.setViewName("redirect:/threeStar/main.me");
       }else {
          // 로그인 실패
          mv.addObject("alertMsg", "로그인 실패!");
@@ -257,7 +257,7 @@ public class ProfileController {
 				out.println("</script>");
 			}
 			out.println("<script>");
-			out.println("parent.location.href='/tt/';");
+			out.println("parent.location.href='/threeStar/';");
 			out.println("</script>");
 			out.flush();
 			return null;
