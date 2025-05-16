@@ -1096,31 +1096,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-<!-- 채팅방 목록 -->
-document.addEventListener("DOMContentLoaded", function () {
-    fetch("${pageContext.request.contextPath}/chattingRoom/rooms")  // 🔁 백엔드에서 참여중인 채팅방 목록 호출
-        .then(response => response.json())
-        .then(rooms => {
-            const list = document.querySelector(".message-list");
-            if (!rooms || rooms.length === 0) {
-                list.innerHTML = "<p style='padding: 20px; color: gray;'>채팅방이 없습니다</p>";
-                return;
-            }
-
-            list.innerHTML = rooms.map(room => `
-            <div class="message-item" onclick="location.href='${pageContext.request.contextPath}/message/mainForm?roomId=\${room.chatId}'">
-                <div class="profile-img"><img src="/resources/images/default-profile.png" alt="프로필"></div>
-                <div class="message-info">
-                    <div class="message-name">\${room.chatName}</div> <!-- ✅ 여기 수정 -->
-                    <div class="message-preview">\${room.lastMessage || '대화를 시작하세요'}</div>
-                </div>
-            </div>
-        `).join('');
-        })
-        .catch(err => {
-            console.error("❌ 채팅방 목록 불러오기 실패:", err);
-        });
-});
 
 
 
@@ -1361,97 +1336,8 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 
-<!-- +버튼 눌렀을 때 채팅방 생성 -->
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-	  const newChatBtn = document.getElementById('newChat');
-	  const inviteModalLeft = document.getElementById('inviteModal');
-	  const closeModalBtn = document.getElementById('closeModalBtn');
 
-	  newChatBtn.addEventListener('click', function () {
-	    inviteModalLeft.style.display = 'block';
-	    loadFriendListForNewChat();
-	  });
-
-	  closeModalBtn.addEventListener('click', function () {
-	    inviteModalLeft.style.display = 'none';
-	  });
-
-	  function loadFriendListForNewChat() {
-	    const container = document.getElementById('friend-list-left');
-	    container.innerHTML = '';
-
-	    fetch(`\${contextPath}/friends/list?memNo=\${myMemNo}`)
-	      .then(response => response.json())
-	      .then(data => {
-	        if (data.length === 0) {
-	          container.innerHTML = '<p>친구가 없습니다.</p>';
-	        } else {
-	          data.forEach(friend => {
-	            const label = document.createElement('label');
-	            label.classList.add('friend-item');
-	            label.innerHTML = `
-	              <input type="checkbox" class="chat-select" value="\${friend.toMem}">
-	              \${friend.toNickname}
-	            `;
-	            container.appendChild(label);
-	          });
-	        }
-	      })
-	      .catch(err => {
-	        console.error("❌ 친구 목록 로딩 실패", err);
-	      });
-	  }
-
-	  
-	  
-	  
-	  document.getElementById("startChatBtnLeft").addEventListener("click", () => {
-	    const checked = [...document.querySelectorAll(".chat-select:checked")];
-	    const selectedIds = checked.map(cb => parseInt(cb.value));
-
-	    if (selectedIds.length === 0) {
-	      alert("최소 한 명 이상 선택하세요.");
-	      return;
-	    }
-
-	    if (selectedIds.length === 1) {
-	      // =========1:1 채팅==========
-	      fetch(`\${contextPath}/chattingRoom/startChat`, {
-	        method: "POST",
-	        headers: { "Content-Type": "application/json" },
-	        body: JSON.stringify({ targetUserId: selectedIds[0] })
-	      })
-	        .then(res => res.json())
-	        .then(result => {
-	          if (result.success && result.roomId) {
-	            location.href = `\${contextPath}/message/messageForm?roomId=\${result.roomId}`;
-	          } else {
-	            alert("❌ 채팅방 생성 실패");
-	          }
-	        });
-	    
-	    } else {
-	      // =========그룹 채팅========
-	      fetch(`\${contextPath}/chattingRoom/startGroupChat`, {
-	        method: "POST",
-	        headers: { "Content-Type": "application/json" },
-	        body: JSON.stringify({
-	          initiator: myMemNo,
-	          members: selectedIds
-	        })
-	      })
-	        .then(response => response.json())
-	        .then(result => {
-	          if (result.success && result.roomId) {
-	            location.href = `\${contextPath}/message/messageForm?roomId=\${result.roomId}`;
-	          } else {
-	            alert("❌ 그룹 채팅 생성 실패");
-	          }
-	        });
-	    }
-	  });
-	});
 
 
 //=================오른쪽 +add 눌렀을 때 동작====================
