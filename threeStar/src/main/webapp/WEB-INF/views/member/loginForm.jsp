@@ -210,18 +210,21 @@
             <span>OR</span>
         </div>
         
-	    <div
+        <div
 	      id="g_id_onload"
 	      data-auto_prompt="false"
 	      data-callback="handleCredentialResponse"
 	      data-client_id="988243476840-8gjc4u9a1aahr0uvhubcc8aosff07nk1.apps.googleusercontent.com"
 	    ></div>
 		
-	    <div
-	      class="g_id_signin"
-	      data-theme="filled_blue"
-	      data-text="signup_with"
-	    ></div>
+    	<div class="g_id_signin"
+	        data-type="standard"
+	        data-size="large"
+	        data-theme="outline"
+	        data-text="sign_in_with"
+	        data-shape="rectangular"
+	        data-logo_alignment="left">
+	    </div>
 		
 		<input type="hidden" id="memName" name="memName" value="${ memName }">
 		<input type="hidden" id="email" name="email" value="${ email }">
