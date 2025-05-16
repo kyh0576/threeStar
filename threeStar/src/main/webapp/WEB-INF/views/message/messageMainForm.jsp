@@ -584,7 +584,7 @@
         <div class="chat-header">
             <div class="chat-profile">
                 <div class="chat-profile-img">
-                    <img src="https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-48f8-61f7-8fad-b0d46d7dd5a0/raw?se=2025-05-16T05%3A02%3A08Z&sp=r&sv=2024-08-04&sr=b&scid=00000000-0000-0000-0000-000000000000&skoid=732f244e-db13-47c3-bcc7-7ee02a9397bc&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-16T04%3A49%3A44Z&ske=2025-05-17T04%3A49%3A44Z&sks=b&skv=2024-08-04&sig=2AmhKhXhH6taeMg2RVS15qvpNrC15XP5kvqPu245Yno%3D" alt="프로필">
+                    <img src="../../../resources/asset/채팅방예시사진.png" alt="프로필">
                 </div>
                <h3 id="chatRoomTitle"><%= targetNickname == null ? "채팅방을 선택해주세요" : targetNickname %></h3>
 				<span  id="participantCount"> 
