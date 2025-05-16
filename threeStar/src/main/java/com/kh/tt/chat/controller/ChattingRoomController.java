@@ -71,12 +71,32 @@ public class ChattingRoomController {
     
     @GetMapping("/rooms")
     @ResponseBody
-    public List<ChattingRoom> getMyChatRooms(HttpSession session) {
+    public List<Map<String, Object>> getMyChatRooms(HttpSession session) {
         Member loginUser = (Member) session.getAttribute("loginMember");
-        if (loginUser == null) return Collections.emptyList();  // 로그인 안 한 경우
+        if (loginUser == null) return Collections.emptyList();
 
-        return chattingRoomService.getChatRoomsByMemberId(loginUser.getMemId());
+        int myMemNo = loginUser.getMemNo();
+        List<ChattingRoom> rooms = chattingRoomService.getChatRoomsByMemberId(loginUser.getMemId());
+
+        return rooms.stream().map(room -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("chatId", room.getChatId());
+            map.put("chatName", room.getChatName());
+            map.put("lastMessage", room.getLastMessage());
+
+            // ✅ 여기서 상대방 이름 가져오기
+            List<Member> members = chattingRoomService.getChatRoomMembers(room.getChatId());
+            String targetName = members.stream()
+                .filter(m -> m.getMemNo() != myMemNo)
+                .findFirst()
+                .map(Member::getMemName)
+                .orElse("이름없음");
+
+            map.put("targetName", targetName);
+            return map;
+        }).collect(Collectors.toList());
     }
+
     
     
     // ==================== ====================  

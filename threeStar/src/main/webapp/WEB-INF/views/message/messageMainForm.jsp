@@ -20,6 +20,8 @@
 
 %>
 
+
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -63,7 +65,6 @@
             align-items: center;
             flex-grow: 1;
         }
-
         .chat-profile-img {
             width: 40px;
             height: 40px;
@@ -567,6 +568,7 @@
 		    color: #4a8cff;
 		    transform: scale(1.05);
 		}
+		
 										
     </style>
 
@@ -578,14 +580,14 @@
     
 	<jsp:include page="../common/sidebar.jsp"/>
 
+	
 
     <!-- 메인 콘텐츠 - 채팅 부분 -->
     <div class="main-content">
         <div class="chat-header">
             <div class="chat-profile">
-                <div class="chat-profile-img">
-                    <img src="../../../resources/asset/채팅방예시사진.png" alt="프로필">
-                </div>
+                <div class="chat-avatar avatar-red">${ targetNickname }</div>
+                
                <h3 id="chatRoomTitle"><%= targetNickname == null ? "채팅방을 선택해주세요" : targetNickname %></h3>
 				<span  id="participantCount"> 
 				</span>
@@ -631,17 +633,16 @@
             
             <div class="member-list">
                 <div class="member-item">
-                    <div class="profile-img">
-                        <img src="https://via.placeholder.com/40/8c4aff/ffffff?text=서" alt="프로필">
-                    </div>
+                    <div class="chat-avatar avatar-red"></div>
+                    
                     <div class="member-info">
                         <div class="member-name"><%= myNickname %></div>
                     </div>
                 </div>
                 
                 <div class="member-item">
-                    <div class="profile-img">
-                        <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=팀" alt="프로필">
+                    <div class="chat-avatar avatar-red">
+                       
                     </div>
                     <div class="member-info">
                         <div class="member-name" id="targetNicknameArea">상대방 닉네임 로딩중...</div>
@@ -726,8 +727,8 @@
                     document.querySelector('.chat-header h3').textContent = name;
                     
                     // 프로필 이미지도 업데이트
-                    const profileImg = this.querySelector('.profile-img img').src;
-                    document.querySelector('.chat-profile-img img').src = profileImg;
+                    const profileImg = this.querySelector('.chat-avata avatar-red').src;
+                    document.querySelector('.chat-avatar avatar-red').src = profileImg;
                 });
             });
 
@@ -979,8 +980,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const ip = location.hostname;
     const encodedToken = encodeURIComponent(token);
 
-    //const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
-    const wsUrl = `wss://threestar.r-e.kr/threeStar/chat/\${roomId}?token=\${encodedToken}`;
+    const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
+    //const wsUrl = `wss://threestar.r-e.kr/threeStar/chat/\${roomId}?token=\${encodedToken}`;
     
 
     socket = new WebSocket(wsUrl);
@@ -1138,13 +1139,19 @@ document.addEventListener("DOMContentLoaded", function () {
       memberList.innerHTML = ""; // 초기화
 
       data.forEach(member => {
+    	  const displayName = member.memName || "이름없음";
+          const firstChar = displayName.charAt(0);
+          
+          console.log("✅ 참여자:", displayName, " → 이니셜:", firstChar);
+    	  
         const memberItem = document.createElement("div");
         memberItem.className = "member-item";
 
-        memberItem.innerHTML = `
-          <div class="profile-img">
-            <img src="\${member.profileUrl || '/tt/resources/images/profile-default.png'}" alt="프로필">
-          </div>
+          
+        memberItem.innerHTML = ` 
+          <div class="chat-avatar avatar-red">\${firstChar}</div>
+          
+          
           <div class="member-info">
             <div class="member-name">\${member.memName}</div>
           </div>

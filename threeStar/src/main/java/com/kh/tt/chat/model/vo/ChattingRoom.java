@@ -18,4 +18,5 @@ public class ChattingRoom {
 	private String status;
 	
 	private String lastMessage;
+	private String targetName; // ✅ 추가
 }

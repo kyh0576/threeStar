@@ -1179,6 +1179,7 @@
   	    if (chatIcon && chatIcon.dataset.targetUserId) {
   	        const targetUserId = chatIcon.dataset.targetUserId;
 
+  	        
   	        // 서버로 채팅방 생성 요청
   	        fetch(contextPath + '/chattingRoom/startChat', {
   	            method: 'POST',
@@ -1207,6 +1208,7 @@
   	//================= 필요 시 직접 호출용 함수 =================
 
   	function startChat(targetUserId) {
+  		
   	    fetch(contextPath + '/chattingRoom/startChat', {
   	        method: 'POST',
   	        headers: {

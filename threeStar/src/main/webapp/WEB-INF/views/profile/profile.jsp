@@ -123,6 +123,10 @@
         display: flex;
     }
 </style>
+
+</head>
+<body>
+
  <div class="profile-container">
         
         <div class="progress-container">
@@ -229,10 +233,15 @@
     	   			console.log("친구 불러오기용 ajax 통신 실패");
     	   		}
     	   	})
-
+</script>
+<script>
       //================= 프로필 채팅하기 클릭 시 =================
       	
      document.addEventListener('click', function(e) {
+    	 
+    	 const contextPath = "<%= request.getContextPath() %>";
+    	 
+    	 
 	    // #startChat 눌렀을 때만 동작
 	    const chatBtn = e.target.closest('#startChat');
 	    if (!chatBtn) return;
@@ -240,7 +249,7 @@
 	    // 이 사람과의 채팅방 ID를 서버에서 가져오거나 고정된 값을 사용
 	    const targetUserId = "${m.memNo}";
 	
-	    fetch('/tt/chattingRoom/startChat', {
+	    fetch(contextPath + '/chattingRoom/startChat', {
 	        method: 'POST',
 	        headers: {
 	            'Content-Type': 'application/json'
@@ -251,7 +260,7 @@
 	    .then(data => {
 	        if (data.success) {
 	            const roomId = data.roomId;
-	            window.parent.location.href = `/tt/message/messageForm?roomId=\${roomId}`;
+	            window.parent.location.href = `\${contextPath}/message/messageForm?roomId=\${roomId}`;
 	        } else {
 	            alert('채팅방 생성 실패');
 	        }
@@ -265,7 +274,7 @@
       
       //================= 프로필 채팅하기 클릭 시startChat 함수 실행 =================
       	function startChat(targetUserId) {
-      	  fetch('/tt/chattingRoom/startChatPro', {  // ✅ URL도 실제 컨트롤러 매핑에 맞게 /tt/message/startChat 등으로 수정
+      	  fetch(contextPath + '/chattingRoom/startChatPro', {  // ✅ URL도 실제 컨트롤러 매핑에 맞게 /tt/message/startChat 등으로 수정
       	    method: 'POST',
       	    headers: {
       	      'Content-Type': 'application/json' 
@@ -276,7 +285,7 @@
       	  .then(data => {
       	    if (data.success) {
       	      const roomId = data.roomId;
-      	    window.parent.location.href = `/tt/message/messageForm?roomId=\${roomId}`;  // ✅ 백틱(`) 사용
+      	    window.parent.location.href = `\${contextPath}/message/messageForm?roomId=\${roomId}`;  // ✅ 백틱(`) 사용
       	    } else {
       	      alert('❌ 채팅방 생성에 실패했습니다.');
       	    }
