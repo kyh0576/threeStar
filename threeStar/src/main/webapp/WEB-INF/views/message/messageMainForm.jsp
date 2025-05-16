@@ -27,7 +27,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>ThreeStar</title>
     <style>
         * {
             margin: 0;

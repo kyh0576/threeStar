@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title></title>
+<title>ThreeStar</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href='${pageContext.request.contextPath}/resources/fullcalendar-5.11.2/lib/main.css' rel='stylesheet' />
 <script src='${pageContext.request.contextPath}/resources/fullcalendar-5.11.2/lib/main.js'></script>
