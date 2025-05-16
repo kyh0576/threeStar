@@ -9,6 +9,7 @@
       <result column="cal_content" property="calContent"/>
       <result column="cal_start" property="calStart"/>
       <result column="cal_end" property="calEnd"/>
+      <result column="cal_chat_id" property="calChatId"/>
 	</resultMap>
 	
 	<insert id="InsertCalendar">
@@ -41,6 +42,7 @@
            , cal_content
            , cal_start
            , cal_end
+           , cal_chat_id
 		  from
 			calendar
    		where cal_writer = #{calWriter}
@@ -65,5 +67,34 @@
    		where cal_id = #{calId}
    		  and cal_writer = #{calWriter}
    </delete>
+   
+   <select id="getCalendarEvents" resultMap="calendarResult">
+   		select
+			 C.cal_id
+           , C.cal_writer
+           , C.cal_title
+           , C.cal_content
+           , C.cal_start
+           , C.cal_end
+           , C.cal_chat_id
+		from calendar C
+        where cal_chat_id = #{roomId};
+   		<!--
+   		select
+			 C.cal_id
+           , C.cal_writer
+           , C.cal_title
+           , C.cal_content
+           , C.cal_start
+           , C.cal_end
+           , C.cal_chat_id
+           , 
+		from
+			calendar C
+		join member M on M.mem_no = C.cal_writer
+		join message MS on MS.MS_MEM_NO = M.mem_no
+   		where cal_chat_id = #{roomId}
+   		 -->
+   </select>
 
 </mapper>

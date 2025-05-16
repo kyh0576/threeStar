@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.tt.message.model.vo.Message;
+import com.kh.tt.calendar.model.vo.Calendar;
 import com.kh.tt.chat.model.service.ChattingRoomService;
 import com.kh.tt.member.model.vo.Member;
 import com.kh.tt.message.model.service.MessageService;
@@ -200,7 +201,12 @@ public class MessageController {
         }
     }
 
-
+    @GetMapping("/MessageCalender.do")
+    @ResponseBody
+    public List<Calendar> getCalendarEvents(@RequestParam("roomId") int roomId) {
+        return messageService.getCalendarEvents(roomId);
+    }
+    
     
 }
 

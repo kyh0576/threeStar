@@ -2,6 +2,7 @@ package com.kh.tt.message.model.service;
 
 import java.util.List;
 
+import com.kh.tt.calendar.model.vo.Calendar;
 import com.kh.tt.message.model.vo.Message;
 
 public interface MessageService {
@@ -17,4 +18,6 @@ public interface MessageService {
     List<Message> getFilesByRoomId(int roomId);
     
     int deleteMessage(int messageNo);
+    
+    List<Calendar> getCalendarEvents(int roomId);
 }
