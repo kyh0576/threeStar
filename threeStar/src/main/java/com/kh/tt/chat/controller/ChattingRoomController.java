@@ -183,6 +183,21 @@ public class ChattingRoomController {
         }
     }
 
+    //=================================== 채팅방이름변경 ===================================
+    @PostMapping("rename")
+    @ResponseBody
+    public String renameChatRoom(@RequestParam int roomId, @RequestParam String newName, HttpSession session) {
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        int memNo = loginMember.getMemNo();
+
+        try {
+            int result = chattingRoomService.renameChatRoom(roomId, newName, memNo);
+            return result > 0 ? "success" : "fail";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+    }
 
     
 }

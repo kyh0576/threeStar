@@ -109,5 +109,9 @@
     ORDER BY SEND_TIME DESC
 </select>
 
-
+<delete id="deleteMessage" parameterType="_int">
+	DELETE
+	  FROM MESSAGE
+	 WHERE MESSAGE_NO = #{messageNo}
+</delete>
 </mapper>

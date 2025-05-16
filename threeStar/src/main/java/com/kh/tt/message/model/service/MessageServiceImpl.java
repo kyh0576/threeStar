@@ -42,4 +42,12 @@ public class MessageServiceImpl implements MessageService {
     public List<Message> getFilesByRoomId(int roomId) {
         return mDao.getFilesByRoomId(sqlSession,roomId);
     }
+
+
+
+	@Override
+	public int deleteMessage(int messageNo) {
+		System.out.println("여기는 서비스임플 "+messageNo);
+		return mDao.deleteMessage(sqlSession,messageNo);
+	}
 }
