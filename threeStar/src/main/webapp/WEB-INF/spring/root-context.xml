@@ -18,8 +18,13 @@ xmlns:context="http://www.springframework.org/schema/context"
 	 
 	 <bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource" destroy-method="close">
 	 	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+<<<<<<< HEAD
 	 	 <property name="url" value="jdbc:oracle:thin:@192.168.20.49:1521:xe"/>  
 	 	 <!--<property name="url" value="jdbc:oracle:thin:@localhost:1521/XEPDB1"/> -->
+=======
+	 	 <!--<property name="url" value="jdbc:oracle:thin:@192.168.20.49:1521:xe"/> -->
+	 	 <property name="url" value="jdbc:oracle:thin:@localhost:1521/XEPDB1"/> 
+>>>>>>> f7d1fbb2390108a62d6b6c8152e44cdb3b25521b
 	 	<property name="username" value="tt"/>
 	 	<property name="password" value="tt"/>
 	 </bean>

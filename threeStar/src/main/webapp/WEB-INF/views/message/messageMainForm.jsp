@@ -93,19 +93,7 @@
 
         .chat-action-btn.active {
             color: #4a8cff;
-        }
-        
-/*
-        .chat-messages {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-  */      
+        }    
   
 		.chat-messages {
 		    flex-grow: 1;   /* 나머지 공간 다 채움 */
@@ -1022,15 +1010,15 @@ document.addEventListener("DOMContentLoaded", function () {
     
     const alarmIcon = document.querySelector(".alarm-icon");
     if (alarmIcon) {
-    	 // ✅ 상태 반영 (새로고침 직후 아이콘 모양 변경)
+        // ✅ 상태 반영 (새로고침 직후 아이콘 모양 변경)
         alarmIcon.classList.toggle("muted", !window.isNotificationOn);
-    	 
+        
         // ✅ 클릭 시 상태 토글 + 저장
-    	alarmIcon.addEventListener("click", () => {
-    	    window.isNotificationOn = !window.isNotificationOn;
-    	    localStorage.setItem("isNotificationOn", window.isNotificationOn); // ✅ 이 줄 추가!
-    	    alarmIcon.classList.toggle("muted", !window.isNotificationOn);
-    	});
+       alarmIcon.addEventListener("click", () => {
+           window.isNotificationOn = !window.isNotificationOn;
+           localStorage.setItem("isNotificationOn", window.isNotificationOn); // ✅ 이 줄 추가!
+           alarmIcon.classList.toggle("muted", !window.isNotificationOn);
+       });
     }
 
     socket.onmessage = (event) => {

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="drawerMapper">
+
+<resultMap id="messageResult" type="Message">
+    <result column="message_no" property="messageNo"/>
+    <result column="message_content" property="messageContent"/>
+    <result column="create_date" property="createDate"/>
+    <result column="send_time" property="sendTime"/>
+    <result column="origin_name" property="originName"/>
+    <result column="change_name" property="changeName"/>
+    <result column="ms_chat_id" property="msChatId"/>
+    <result column="ms_mem_no" property="msMemNo"/>
+    <result column="type" property="type"/>
+    <result column="file_type" property="fileType"/>
+    <result column="sender" property="sender"/>
+    <result column="TEXT" property="text"/>
+    <result column="time" property="time"/> 
+</resultMap>
+
+<select id="selectDrawer"  resultMap="messageResult">
+    SELECT 
+          MESSAGE_NO
+        , ORIGIN_NAME
+        , CHANGE_NAME
+        , TYPE
+        , FILE_TYPE
+        , MS_CHAT_ID
+        , MS_MEM_NO
+        , SEND_TIME
+    FROM MESSAGE
+    WHERE TYPE = 'file'
+      and MS_CHAT_ID = #{roomId}
+    ORDER BY SEND_TIME DESC
+</select>
+
+<!-- 
+<select id="selectMessageFiles" resultType="MessageFile">
+    SELECT 
+        MESSAGE_NO,
+        ORIGIN_NAME,
+        CHANGE_NAME,
+        SEND_TIME,
+        FILE_TYPE
+    FROM 
+        MESSAGE
+    WHERE 
+        MS_CHAT_ID = #{chatId}
+      AND TYPE = 'file'
+    ORDER BY 
+        SEND_TIME DESC
+</select>
+ -->
+ 
+</mapper>
