@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>ThreeStar</title>
 </head>
 <body>
 	<jsp:forward page="WEB-INF/views/member/loginForm.jsp"></jsp:forward>

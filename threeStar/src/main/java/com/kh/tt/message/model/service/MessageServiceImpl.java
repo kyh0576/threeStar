@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.tt.calendar.model.vo.Calendar;
 import com.kh.tt.message.model.dao.MessageDao;
 import com.kh.tt.message.model.vo.Message;
 
@@ -50,4 +51,17 @@ public class MessageServiceImpl implements MessageService {
 		System.out.println("여기는 서비스임플 "+messageNo);
 		return mDao.deleteMessage(sqlSession,messageNo);
 	}
+	
+	@Override
+	public int insertCalendar(Calendar c){
+		return mDao.insertCalendar(sqlSession, c);
+	}
+	
+	@Override
+	public List<Calendar> getCalendarEvents(int roomId){
+		return mDao.getCalendarEvents(sqlSession, roomId);
+	}
+	
+
+	
 }

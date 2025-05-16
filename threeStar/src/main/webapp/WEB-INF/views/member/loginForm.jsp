@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>로그인</title>
+<title>ThreeStar</title>
 <!-- jQuery 라이브러리 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <style>
@@ -222,11 +222,10 @@
 	      data-theme="filled_blue"
 	      data-text="signup_with"
 	    ></div>
-		<!-- data-login_uri="http://localhost:8333/tt/signinForm.me"  -->
+		
 		<input type="hidden" id="memName" name="memName" value="${ memName }">
 		<input type="hidden" id="email" name="email" value="${ email }">
-		<input type="hidden" id="snsKey" name="snsKey" value="${ snsKey }">
-		
+		<input type="hidden" id="snsKey" name="snsKey" value="${ snsKey }">	
     </form>
 
     <script>

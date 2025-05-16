@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.tt.message.model.vo.Message;
+import com.kh.tt.calendar.model.vo.Calendar;
 import com.kh.tt.chat.model.service.ChattingRoomService;
 import com.kh.tt.member.model.vo.Member;
 import com.kh.tt.message.model.service.MessageService;
@@ -70,13 +72,16 @@ public class MessageController {
 
 
     // 메시지 저장 요청 처리
-    @PostMapping("/save")
+    @PostMapping("save")
     @ResponseBody
     public String saveMessage(@RequestBody Message message) {
-        System.out.println("🔔 DB 저장 요청 받은 메시지: " + message);
+    	System.out.println("🧾 originName: " + message.getOriginName());
+    	System.out.println("🧾 changeName: " + message.getChangeName());
         int result = messageService.saveMessage(message);
         return result > 0 ? "success" : "fail";
     }
+    
+    
 
     @RequestMapping("/messageForm")
     public String showMessageForm() {
@@ -199,8 +204,45 @@ public class MessageController {
             return "fail";
         }
     }
+    
+    @PostMapping("/calendarInsertMessage.do")
+    @ResponseBody
+    public Map<String, Object> insertCalendar(Calendar c, HttpSession session) {
+    	Map<String, Object> response = new HashMap<>();
+    	
+		Member loginMember = (Member) session.getAttribute("loginMember");
+		
+	    if (loginMember == null) {
+	        response.put("success", false);
+	        response.put("message", "로그인이 필요합니다.");
+	        return response;
+	    }
+	    
+	    c.setCalWriter(loginMember.getMemNo());
+	    
+	    try {
+	        int result = messageService.insertCalendar(c);
+	        if(result > 0) {
+	        	response.put("success", true);
+	        	response.put("message", "캘린더 저장 성공.");
+	        }else {
+	        	response.put("success", false);
+	        	response.put("message", "캘린더 저장 실패.");
+	        }
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "오류가 발생했습니다: " + e.getMessage());
+	    }
+        return response;
+    }
 
-
+    @GetMapping("MessageCalender.do")
+    @ResponseBody
+    public List<Calendar> getCalendarEvents(@RequestParam("roomId") int roomId) {
+        return messageService.getCalendarEvents(roomId);
+    }
+    
+    
     
 }
 

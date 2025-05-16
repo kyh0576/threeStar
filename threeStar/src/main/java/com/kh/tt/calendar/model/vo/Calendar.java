@@ -19,5 +19,6 @@ public class Calendar {
 	private String calContent;
 	private String calStart;
 	private String calEnd;
+	private Integer calChatId;
 
 }

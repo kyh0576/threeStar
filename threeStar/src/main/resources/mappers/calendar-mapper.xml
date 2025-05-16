@@ -9,6 +9,7 @@
       <result column="cal_content" property="calContent"/>
       <result column="cal_start" property="calStart"/>
       <result column="cal_end" property="calEnd"/>
+      <result column="cal_chat_id" property="calChatId"/>
 	</resultMap>
 	
 	<insert id="InsertCalendar">
@@ -41,6 +42,7 @@
            , cal_content
            , cal_start
            , cal_end
+           , cal_chat_id
 		  from
 			calendar
    		where cal_writer = #{calWriter}
@@ -65,5 +67,39 @@
    		where cal_id = #{calId}
    		  and cal_writer = #{calWriter}
    </delete>
+   
+   	<insert id="insertCalendar">
+	insert
+        into calendar
+            (
+             cal_id
+           , cal_writer
+           , cal_title
+           , cal_content
+           , cal_start
+           , cal_end
+           , cal_chat_id
+           )
+      values
+          (
+            SEQ_CAL_ID.NEXTVAL
+          , #{calWriter}
+          , #{calTitle}
+          , #{calContent}
+          , TO_DATE(#{calStart}, 'YYYY-MM-DD')
+          , TO_DATE(#{calEnd}, 'YYYY-MM-DD')
+          , #{calChatId}
+          )
+	</insert>
+
+	<select id="getCalendarEvents" resultMap="calendarResult">
+		select
+		      cal_title
+		    , cal_content
+		    , cal_start
+		    , cal_end
+		from calendar  
+		where cal_chat_id = #{roomId};
+	</select>
 
 </mapper>
