@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>WebSocket 테스트</title>
+    <title>ThreeStar</title>
     <style>
         #chatBox { height: 300px; border: 1px solid #ccc; overflow-y: auto; margin-bottom: 10px; padding: 10px; }
         #messageInput { width: 80%; padding: 5px; }

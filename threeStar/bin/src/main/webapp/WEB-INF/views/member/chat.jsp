@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>채팅 메신저</title>
+  <title>ThreeStar</title>
   <style>
     * {
       margin: 0;
