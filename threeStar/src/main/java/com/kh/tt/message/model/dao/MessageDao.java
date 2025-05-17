@@ -5,6 +5,7 @@ import java.util.List;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.tt.calendar.model.vo.Calendar;
 import com.kh.tt.message.model.vo.Message;
 
 @Repository
@@ -33,4 +34,15 @@ public class MessageDao {
     	System.out.println("메시지 다오 " + messageNo);
     	 return sqlSession.delete("messageMapper.deleteMessage", messageNo);
     }
+    
+    public int insertCalendar(SqlSessionTemplate sqlSession, Calendar c){
+    	return sqlSession.insert("calendarMapper.insertCalendar", c);
+    }
+    
+    public List<Calendar> getCalendarEvents(SqlSessionTemplate sqlSession, int roomId){
+    	return sqlSession.selectList("calendarMapper.getCalendarEvents", roomId);
+    }
+    
+
+    
 }

@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>ThreeStar</title>
 </head>
 <body>
 	<button onclick="location.href='loginForm.me'">로그인</button>

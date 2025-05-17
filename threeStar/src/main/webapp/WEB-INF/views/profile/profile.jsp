@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>ThreeStar</title>
 
 </head>
 <!-- Latest compiled and minified CSS -->
