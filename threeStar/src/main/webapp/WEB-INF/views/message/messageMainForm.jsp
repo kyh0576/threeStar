@@ -1128,6 +1128,11 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(res => res.text())
         .then(name => {
             document.querySelector("#chatRoomTitle").textContent = name;
+            
+            const avatarEl = document.querySelector(".chat-header .chat-avatar");
+            if (avatarEl) {
+                avatarEl.textContent = name.trim().charAt(0);
+            }
         });
 
     
@@ -1139,7 +1144,7 @@ document.addEventListener("DOMContentLoaded", function () {
       memberList.innerHTML = ""; // 초기화
 
       data.forEach(member => {
-    	  const displayName = member.memName || "이름없음";
+    	  const displayName = member.memName;
           const firstChar = displayName.charAt(0);
           
           console.log("✅ 참여자:", displayName, " → 이니셜:", firstChar);
@@ -1435,9 +1440,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	
 //========================채팅창 이름 변경 ========================
 document.getElementById("editRoomNameBtn").addEventListener("click", () => {
-    const oldName = document.getElementById("chatRoomTitle").textContent;  // ✅ 이전 이름 저장
-    const newName = prompt("채팅방 이름을 입력하세요:", oldName); // 🔁 기존 이름 보여주기
-    console.log("새로운방이름: " + newName);
+    const oldName = document.getElementById("chatRoomTitle").textContent;
+    const newName = prompt("채팅방 이름을 입력하세요:", oldName);
     if (!newName || newName === oldName) return;
 
     const roomId = new URLSearchParams(window.location.search).get("roomId");
@@ -1452,13 +1456,18 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
     .then(res => res.text())
     .then(result => {
         if (result === "success") {
+            // 상단 이름/이니셜 갱신
             document.getElementById("chatRoomTitle").textContent = newName;
+            const avatarEl = document.querySelector(".chat-header .chat-avatar");
+            if (avatarEl) avatarEl.textContent = newName.charAt(0);
 
-            // ✅ 왼쪽 메시지 목록 이름도 동기화
+            // 좌측 목록도 이름 + 이니셜 동기화
             document.querySelectorAll(".message-item").forEach(item => {
                 const nameEl = item.querySelector(".message-name");
+                const avatarEl = item.querySelector(".chat-avatar");
                 if (nameEl && nameEl.textContent === oldName) {
                     nameEl.textContent = newName;
+                    if (avatarEl) avatarEl.textContent = newName.charAt(0);
                 }
             });
 

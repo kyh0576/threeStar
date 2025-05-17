@@ -74,7 +74,7 @@ SELECT
     CR.CH_MEM_NO AS chMemNo,
     
     CASE 
-        WHEN CR.CHAT_NAME = '채팅방' THEN (
+        WHEN CR.CHAT_NAME IS NULL OR CR.CHAT_NAME = '채팅방' THEN (
             SELECT MEM_NAME 
             FROM MEMBER 
             WHERE MEM_NO = (
@@ -87,7 +87,7 @@ SELECT
         )
         ELSE CR.CHAT_NAME
     END AS chatName,
-    
+
     CR.STATUS AS status,
     M.LAST_MESSAGE AS lastMessage
 
@@ -105,6 +105,7 @@ LEFT JOIN (
 WHERE CR.CH_MEM_NO = (SELECT MEM_NO FROM MEMBER WHERE MEM_ID = #{memId})
   AND CR.STATUS = 'Y'
 </select>
+
 
 
       <!-- 상대방 멤버 가져오기 -->

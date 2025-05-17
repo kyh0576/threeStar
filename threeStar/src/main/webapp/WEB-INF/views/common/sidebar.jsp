@@ -177,8 +177,8 @@
       }
 
       list.innerHTML = rooms.map(room => {
-        const displayName = room.targetName || "이름없음";
-        const firstChar = displayName.charAt(0);
+    	  const displayName = room.chatName || "이름없음";
+    	  const firstChar = displayName.charAt(0);
 
         return `
           <div class="message-item" onclick="location.href='\${contextPath}/message/messageForm?roomId=\${room.chatId}'">
