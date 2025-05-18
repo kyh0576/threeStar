@@ -1026,9 +1026,17 @@ document.addEventListener("DOMContentLoaded", function () {
         const type = data.sender === nickname ? "sent" : "received";
         appendMessage(data, type);
 
+        // 🔁 티서랍에도 실시간 반영
+        if (data.type === "file") {
+            appendToDrawer(data);
+        }
+
+        // 알림
         if (window.isNotificationOn && data.sender !== nickname && !document.hasFocus()) {
             showNotification(data.sender, data.text || data.messageContent || "📎 파일이 도착했어요!");
         }
+        
+        
     };
 
     function showNotification(sender, message) {
@@ -1343,6 +1351,30 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("❌ 파일 목록 불러오기 실패:", err);
         });
 });
+
+//파일 전송 후 실시간으로 우측 파일 목록이 갱신
+function appendToDrawer(data) {
+    if (!data || data.type !== "file" || !data.file) return;
+
+    const fileListDiv = document.querySelector(".file-list");
+    const isImage = isImageFile(data.file.name);
+    const downloadUrl = data.file.fileUrl;
+    const fileName = data.file.name;
+
+    const html = `
+        <div class="file-item">
+            <div class="file-icon">${isImage ? "🖼️" : "📄"}</div>
+            <div class="file-info">
+                <div class="file-name">\${fileName}</div>
+            </div>
+            <a class="file-download" 
+               href="\${downloadUrl}" 
+               download="\${fileName}" 
+               target="_blank">⬇️</a>
+        </div>
+    `;
+    fileListDiv.insertAdjacentHTML("afterbegin", html);
+}
 
 </script>
 
