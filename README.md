@@ -166,16 +166,16 @@ ERD Cloud :
 <img src="./threeStar/src/main/webapp/resources/asset/채팅방나가기.gif" alt="채팅방나가기 GIF"/>
 
 ## ◽ 대화내용 삭제 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/대화내용삭제.gif" alt="대화내용삭제  GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/대화내용삭제.gif" alt="대화내용삭제 GIF"/>
 
 ## ◽ 첨부파일 전송/다운 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/첨부파일전송다운.gif" alt="첨부파일전송다운  GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/첨부파일전송다운.gif" alt="첨부파일전송다운 GIF"/>
 
 ## ◽ 대화 상대 초대 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/대화상대초대.gif" alt="대화상대초대  GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/대화상대초대.gif" alt="대화상대초대 GIF"/>
 
 ## ◽ 알람 on off <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/알람onoff.gif" alt="알람onoff GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/알람onoff.gif" alt="알림onoff GIF"/>
 
 ## ◽ 날씨 조회 <br/>
 <img src="./threeStar/src/main/webapp/resources/asset/날씨조회.gif" alt="날씨조회 GIF"/>
