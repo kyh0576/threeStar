@@ -129,22 +129,22 @@ ERD Cloud :
 <h2 style="border-bottom : none">🤎 조원 : 이용훈</h2>
 
   ## ◽ SNS 간편로그인(Google)<br/>
-<img src="./WebContent/resources/assets/googleLogin.gif" alt="자동로그인 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/googleLogin.gif" alt="자동로그인 GIF"/>
 
   ## ◽ 캘린더 - (일반, 구글캘린더)<br/>
-<img src="./WebContent/resources/assets/calendar.gif" alt="캘린더 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/calendar.gif" alt="캘린더 GIF"/>
 
   ## ◽ 티서랍<br/>
-<img src="./WebContent/resources/assets/drawer.gif" alt="파일모음집 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/drawer.gif" alt="파일모음집 GIF"/>
 
   ## ◽ MIME 타입<br/>
-<img src="./WebContent/resources/assets/MIME type.png" alt="파일형태 PNG"/>
+<img src="./threeStar/src/main/webapp/resources/asset/MIME type.png" alt="파일형태 PNG"/>
 
   ## ◽ 채팅방 내 캘린더<br/>
-<img src="./WebContent/resources/assets/messageCalendar.gif" alt="채팅방 내 캘린더 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/messageCalendar.gif" alt="채팅방 내 캘린더 GIF"/>
 
  ## ◽ 테스트코드<br/>
-<img src="./WebContent/resources/assets/TestCode.png" alt="테스트코드 PNG"/>
+<img src="./threeStar/src/main/webapp/resources/asset/TestCode.png" alt="테스트코드 PNG"/>
 
 <br/><br/>
 <br/><br/>
