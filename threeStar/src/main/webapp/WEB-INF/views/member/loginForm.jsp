@@ -175,8 +175,14 @@
          font-size: 14px;
      }
      
-     .g_id_signin iframe{
-     	align: center;
+     #googleLoginWrapper{
+     	display: flex;
+     	justify-centent: center;
+     	align-items: center;
+     }
+     
+     .g_id_signin {
+     	margin: 0 auto;
      }
 </style>
 </head>
@@ -213,25 +219,25 @@
         <div class="divider">
             <span>OR</span>
         </div>
-        
-        <div
-	      id="g_id_onload"
-	      data-auto_prompt="false"
-	      data-context="use"
-	      data-callback="handleCredentialResponse"
-	      data-client_id="988243476840-8gjc4u9a1aahr0uvhubcc8aosff07nk1.apps.googleusercontent.com"
-	    ></div>
-
-    	<div class="g_id_signin"
-	        data-type="standard"
-	        data-theme="filled_blue"
-	        data-text="continue_with"
-	        data-size="large"
-            data-logo_alignment="center"
-	        data-shape="square"
-	        data-width="368.4"
-            ></div>
-
+        <div id="googleLoginWrapper">
+	        <div
+		      id="g_id_onload"
+		      data-auto_prompt="false"
+		      data-context="use"
+		      data-callback="handleCredentialResponse"
+		      data-client_id="988243476840-8gjc4u9a1aahr0uvhubcc8aosff07nk1.apps.googleusercontent.com"
+		    ></div>
+	
+	    	<div class="g_id_signin"
+		        data-type="standard"
+		        data-theme="filled_blue"
+		        data-text="continue_with"
+		        data-size="large"
+	            data-logo_alignment="center"
+		        data-shape="square"
+		        data-width="368.4"
+	            ></div>
+		</div>
 		<input type="hidden" id="memName" name="memName" value="${ memName }">
 		<input type="hidden" id="email" name="email" value="${ email }">
 		<input type="hidden" id="snsKey" name="snsKey" value="${ snsKey }">	
