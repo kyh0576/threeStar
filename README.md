@@ -16,7 +16,7 @@ ThreeStars 프로젝트는 KH Academy 내 구성원들이 자유롭고 실시간
 
 # 🎈 구성원 및 역할
 
-<h2 style="border-bottom : none">🧡 조장 : 고영훈</h2>
+<h2 style="border-bottom : none">💙 조장 : 고영훈</h2>
 
 - 회원가입
 - 로그인
@@ -31,7 +31,7 @@ ThreeStars 프로젝트는 KH Academy 내 구성원들이 자유롭고 실시간
 - GitHub Webhook을 이용한 자동화 배포
 - SSL인증서를 이용한 HTTP -> HTTPS 변환
 
- <h2 style="border-bottom : none">🤎 조원 : 서동진</h2>
+ <h2 style="border-bottom : none">🧡 조원 : 서동진</h2>
 
   - 찜하기
   - 로그인
@@ -46,7 +46,7 @@ ThreeStars 프로젝트는 KH Academy 내 구성원들이 자유롭고 실시간
       - FAQ 
       - 공지사항
 
-  <h2 style="border-bottom : none">💙 조원 : 이용훈</h2>
+  <h2 style="border-bottom : none">🤎 조원 : 이용훈</h2>
 
 - 로그인
     - SNS 간편로그인 (Google)
@@ -92,7 +92,7 @@ ERD Cloud :
 <br/><br/><br/>
 
 # 📽 프로젝트 구현
-<h2 style="border-bottom : none">🧡 조장 : 고영훈</h2>
+<h2 style="border-bottom : none">💙 조장 : 고영훈</h2>
 
 ## ◽ 로그인 <br/>
 <img src="./threeStar/src/main/webapp/resources/asset/로그인기능.gif" alt="로그인 GIF"/>
@@ -148,7 +148,7 @@ ERD Cloud :
 <br/>
 
 # 
-<h2 style="border-bottom : none">💙 조원 : 서동진
+<h2 style="border-bottom : none">🧡 조원 : 서동진
 
  ## ◽ 카카오 로그인(API)
 
