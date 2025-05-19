@@ -147,7 +147,7 @@ ERD Cloud :
 
 <br/>
 
-# 💙 조원 : 고영훈
+# <h2 style="border-bottom : none">💙 조원 : 고영훈
  <br/>
 
  ## ◽ 카카오 로그인(API)
