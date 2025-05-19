@@ -90,11 +90,11 @@ ERD Cloud :
 <br/><br/><br/>
 
 # 📽 프로젝트 구현
-<h2 style="border-bottom : none">🧡 조장 : 서동진</h2>
+<h2 style="border-bottom : none">🧡 조장 : 고영훈</h2>
 
 ## ◽ 메인페이지 <br/>
 
-<img src="./WebContent/resources/assets/메인페이지슬라이더및PICKS.gif" alt="메인페이지 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/ERD전체.PNG" alt="메인페이지 GIF"/>
 <br/><br/>
 
 ## ◽ 로그인 <br/>
