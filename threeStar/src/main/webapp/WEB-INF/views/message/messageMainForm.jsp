@@ -1524,6 +1524,7 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
 <script>
     // 일정 입력 폼 표시
     window.showCalendarForm = function() {
+        console.log("일정삽입테스트");  
         document.getElementById('calendarForm').style.display = 'block';
     };
     
