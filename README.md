@@ -166,10 +166,10 @@ ERD Cloud :
 <img src="./threeStar/src/main/webapp/resources/asset/채팅방 나가기.gif" alt="채팅방 나가기 GIF"/>
 
 ## ◽ 대화내용 삭제 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/대화내용 삭제 .gif" alt="대화내용 삭제  GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/대화내용 삭제.gif" alt="대화내용 삭제  GIF"/>
 
 ## ◽ 대화 상대 초대 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/대화 상대 초대 .gif" alt="대화 상대 초대  GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/대화 상대 초대.gif" alt="대화 상대 초대  GIF"/>
 
 ## ◽ 알람 on off <br/>
 <img src="./threeStar/src/main/webapp/resources/asset/알람 on off.gif" alt="알람 on off GIF"/>
