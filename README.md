@@ -200,4 +200,4 @@ ERD Cloud :
 
 # 📚 최종 보고서 확인
 
-<a href="./WebContent/resources/assets/This.서고_최종보고서.pdf" download>📄 This.서고_최종보고서.pdf</a>
+<a href="./threeStar/src/main/webapp/resources/asset/threeStar최종보고서.pdf" download>📄 This.서고_최종보고서.pdf</a>
