@@ -629,9 +629,6 @@
 		    method: 'GET',
 		    dataType: 'json',
 		    success: function(data) {
-		    	console.log(data)
-		    	console.log("push 배포 테스트 3번째")
-		    	console.log("집에가지마 베이베~")
 		      // 멤버 영역 초기화
 		      $('#online-members').empty();
 
@@ -1192,7 +1189,6 @@
   	        .then(data => {
   	            if (data.success) {
   	                const roomId = data.roomId;
-  	                console.log("✅ 이동할 채팅방:", roomId);
   	                location.href = `\${contextPath}/message/messageForm?roomId=\${roomId}`;  // ✅ 수정됨
   	            } else {
   	                alert('❌ 채팅방 생성 실패');
