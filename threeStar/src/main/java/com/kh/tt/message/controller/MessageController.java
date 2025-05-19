@@ -207,7 +207,7 @@ public class MessageController {
     
     @PostMapping(value="/calendarInsertMessage.do", produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public Map<String, Object> insertCalendar(Calendar c, HttpSession session) {
+    public Map<String, Object> insertCalendar(@RequestParam("calChatId") int calChatId, Calendar c, HttpSession session) {
     	Map<String, Object> response = new HashMap<>();
     	
 		Member loginMember = (Member) session.getAttribute("loginMember");
@@ -219,6 +219,7 @@ public class MessageController {
 	    }
 	    
 	    c.setCalWriter(loginMember.getMemNo());
+	    c.setCalChatId(calChatId);
 	    
 	    try {
 	        int result = messageService.insertCalendar(c);

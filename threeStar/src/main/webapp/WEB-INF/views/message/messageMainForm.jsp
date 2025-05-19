@@ -676,14 +676,13 @@
             
 			<div class="section-header">
 			    <div>캘린더</div>
-			    <div class="add-cal" style="font-size: 20px;" onclick="showCalendarForm()">
+			    <div class="add-cal" style="font-size: 20px;" onclick='showCalendarForm()'>
 			    	+
 		    	</div>
 			</div>
 			
 			<!-- 일정 입력 폼 -->
 			<div id="calendarForm" style="display: none; padding: 15px; border: 1px solid #ccc; margin-top: 10px;">
-			    <input type="hidden" id="calId" name="calId">
 			    <div style="margin-bottom: 10px;">
 			        <label for="calTitle">제목:</label>
 			        <input type="text" id="calTitle" name="calTitle" style="width: 100%;" required>
@@ -700,7 +699,7 @@
 			        <label for="calDescription">내용:</label>
 			        <input id="calDescription" name="calContent" style="width: 100%; height: 60px;" required>
 			    </div>
-			    <input type="hidden" id="calChatId" name="calChatId" value="${ roomId }">
+			    <input type="hidden" id="calChatId" name="calChatId" value="${ roomId }" />
 			    <div style="text-align: right;">
 			    	<button onclick="addCal()">저장</button>
 			        <button onclick="cancelAddCal()">취소</button>
@@ -1524,9 +1523,9 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
 <!-- 메시지 내 캘린더 삽입 JS -->
 <script>
     // 일정 입력 폼 표시
-    function showCalendarForm() {
+    window.showCalendarForm = function() {
         document.getElementById('calendarForm').style.display = 'block';
-    }
+    };
     
     // 일정 입력 취소
     function cancelAddCal() {
@@ -1536,32 +1535,31 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
     // 일정 추가
     function addCal() {
         // 폼에서 입력값 가져오기
-        const id = document.getElementById('calId').value;
+        const contextPath = "<%= request.getContextPath() %>";
+        
         const title = document.getElementById('calTitle').value;
         const startDate = document.getElementById('calStart').value;
-        const endDate = document.getElementById('calEnd').value;
+        const endDate = document.getElementById('calEnd').value || startDate;
         const description = document.getElementById('calDescription').value;
-        const calChatId = document.getElementById('calChatId').value;
+        const calChatId = <%= roomId %>;
         
         // 필수 입력값 검증
         if (!title || !startDate) {
-            alert('제목과 시작일은 필수 입력 항목입니다.');
+            alert('제목과 날짜는 필수 입력 항목입니다.');
             return;
         }
         
         // API 호출
-        fetch('/threeStar/message/calendarInsertMessage.do', {
+        fetch(`\${contextPath}/message/calendarInsertMessage.do?calChatId=\${roomId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams({
-            	calId: id,
                 calTitle: title,
                 calStart: startDate,
                 calEnd: endDate || startDate,
-                calContent: description,
-                calChatId: calChatId
+                calContent: description
             })
         })
         .then(response => response.text())
@@ -1596,7 +1594,7 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
 	    console.log("roomId:", roomId);
 	    console.log("contextPath:", contextPath);
 	
-	    fetch(`\${contextPath}/message/MessageCalender.do?roomId=${roomId}`)
+	    fetch(`\${contextPath}/message/MessageCalender.do?roomId=\${roomId}`)
         .then(resp => {
             console.log("응답 상태:", resp.status);
             if (!resp.ok) throw new Error("서버 오류 또는 404");
@@ -1643,11 +1641,11 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
 	
 	    const itemEl   = e.target.closest(".cal-item");
 	    const calId    = itemEl.dataset.id;
-	    const context  = "<%= request.getContextPath() %>";
+	    const contextPath  = "<%= request.getContextPath() %>";
 	
 	    if (!confirm("정말 삭제할까요?")) return;
 	
-	    fetch(`\${context}/message/MessageCalenderUpdate.do`, {
+	    fetch(`\${contextPath}/message/MessageCalenderUpdate.do`, {
 	        method : "POST",
 	        headers: {"Content-Type":"application/x-www-form-urlencoded"},
 	        body   : new URLSearchParams({calId})
