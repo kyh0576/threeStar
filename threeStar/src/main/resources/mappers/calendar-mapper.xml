@@ -99,6 +99,7 @@
 		    , cal_content
 		    , TO_CHAR(cal_start, 'YYYY-MM-DD') as cal_start
 		    , TO_CHAR(cal_end, 'YYYY-MM-DD') as cal_end
+		    , cal_chat_id
 		from calendar  
 		where cal_chat_id = #{roomId}
 		order by cal_id desc
