@@ -213,7 +213,7 @@
         <div class="divider">
             <span>OR</span>
         </div>
-        
+        test
         <div
 	      id="g_id_onload"
 	      data-auto_prompt="false"
@@ -229,7 +229,7 @@
 	        data-size="large"
             data-logo_alignment="center"
 	        data-shape="square"
-	        data-width="400"
+	        data-width="368.4"
             ></div>
 		
 		<input type="hidden" id="memName" name="memName" value="${ memName }">
