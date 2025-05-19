@@ -49,14 +49,16 @@ ThreeStars 프로젝트는 KH Academy 내 구성원들이 자유롭고 실시간
   <h2 style="border-bottom : none">💙 조원 : 이용훈</h2>
 
 - 로그인
-    - SNS 간편로그인 (kakao)
-- 도서정보 상세페이지조회
-    - 리뷰 조회/작성/수정/삭제
-    - 좋아요
-    - 별점
-- 자유게시판
-    - 게시 조회/작성/수정/삭제
-- 온라인 투표
+    - SNS 간편로그인 (Google)
+    - 회원 정보 변경/탈퇴
+- 캘린더
+    - 구글 캘린더
+    - 일반 캘린더
+    - 채팅방 내 캘린더
+- 티서랍
+    - 조회
+    - 다운로드
+- 테스트코드(JUnit)
 
 <br/><br/><br/>
 
@@ -92,32 +94,27 @@ ERD Cloud :
 # 📽 프로젝트 구현
 <h2 style="border-bottom : none">🧡 조장 : 고영훈</h2>
 
-## ◽ 메인페이지 <br/>
-
-<img src="./threeStar/src/main/webapp/resources/asset/ERD전체.PNG" alt="메인페이지 GIF"/>
-<br/><br/>
-
 ## ◽ 로그인 <br/>
-<img src="./WebContent/resources/assets/네이버 SNS 로그인.gif" alt="로그인 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/로그인기능.gif" alt="로그인 GIF"/>
 <br/><br/>
 
 ## ◽ 회원가입 <br/>
-<img src="./WebContent/resources/assets/회원가입.gif" alt="로그인 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/회원가입기능.gif" alt="로그인 GIF"/>
 
-## ◽ 아이디 찾기 <br/>
-<img src="./WebContent/resources/assets/아이디찾기.gif" alt="로그인 GIF"/>
+## ◽ 아이디 / PW 찾기 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/IDPW찾기기능.gif" alt="로그인 GIF"/>
 
-## ◽ 비밀번호 찾기 <br/>
-<img src="./WebContent/resources/assets/비밀번호 재설정.gif" alt="로그인 GIF"/>
+## ◽ Class 및 사용자 조회 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/Class및사용자조회.gif" alt="로그인 GIF"/>
 
-## ◽ 베스트 셀러 <br/>
-<img src="./WebContent/resources/assets/인기도서 목록 조회2.gif" alt="로그인 GIF"/>
+## ◽ Class 일정 조회 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/Class일정.gif" alt="로그인 GIF"/>
 
-## ◽ 도서 정보 상세 페이지 <br/>
-<img src="./WebContent/resources/assets/도서 정보 상세 페이지 조회2.gif" alt="로그인 GIF"/>
+## ◽ 친구추가 및 이름변경 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/친구추가및이름변경.gif" alt="로그인 GIF"/>
 
-## ◽ 도서 검색 기능 <br/>
-<img src="./WebContent/resources/assets/도서 검색 기능2.gif" alt="로그인 GIF"/>
+## ◽ 실시간 온라인 유저 조회 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/실시간온라인유저조회.gif" alt="로그인 GIF"/>
 
 
 
@@ -128,34 +125,27 @@ ERD Cloud :
 
 
 # 
-<h2 style="border-bottom : none">🤎 조원 : 이호석</h2>
-
-
+<h2 style="border-bottom : none">🤎 조원 : 이용훈</h2>
 
   ## ◽ SNS 간편로그인(Google)<br/>
-<img src="./WebContent/resources/assets/구글로그인(완).gif" alt="찜하기 GIF"/>
+<img src="./WebContent/resources/assets/googleLogin.gif" alt="자동로그인 GIF"/>
 
+  ## ◽ 캘린더 - (일반, 구글캘린더)<br/>
+<img src="./WebContent/resources/assets/calendar.gif" alt="캘린더 GIF"/>
 
-  ## ◽ 마이페이지 - 정보변경/탈퇴<br/>
-<img src="./WebContent/resources/assets/마이페이지 회원정보 변경 및 탈퇴 (완).gif" alt="찜하기 GIF"/>
+  ## ◽ 티서랍<br/>
+<img src="./WebContent/resources/assets/drawer.gif" alt="파일모음집 GIF"/>
 
-  ## ◽ 마이페이지 - 감상문<br/>
-<img src="./WebContent/resources/assets/감상문 마이페이지에서 확인(완).gif" alt="찜하기 GIF"/>
+  ## ◽ MIME 타입<br/>
+<img src="./WebContent/resources/assets/MIME type.png" alt="파일형태 PNG"/>
 
+  ## ◽ 채팅방 내 캘린더<br/>
+<img src="./WebContent/resources/assets/messageCalendar.gif" alt="채팅방 내 캘린더 GIF"/>
 
-  ## ◽ 찜하기<br/>
-<img src="./WebContent/resources/assets/찜하기 마이페이지에서 확인 (완).gif" alt="찜하기 GIF"/>
+ ## ◽ 테스트코드<br/>
+<img src="./WebContent/resources/assets/TestCode.png" alt="테스트코드 PNG"/>
 
-
-  ## ◽ 고객센터 - 문의글 작성/조회/수정/삭제<br/>
-<img src="./WebContent/resources/assets/문의글 작성하기(완).gif" alt="찜하기 GIF"/>
-
-
-
- ## ◽ 고객센터 - F&Q<br/>
-<img src="./WebContent/resources/assets/F&Q.gif" alt="찜하기 GIF"/>
-
- <br/>
+<br/>
 
 # 💙 조원 : 고영훈
  <br/>
