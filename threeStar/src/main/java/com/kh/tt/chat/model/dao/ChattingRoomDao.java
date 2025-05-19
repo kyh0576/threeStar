@@ -114,4 +114,12 @@ public class ChattingRoomDao {
         return sqlSession.update("chatMapper.renameChatRoom", param);
     }
     
+    
+    public int restoreChatRoom(SqlSessionTemplate sqlSession, int chatId, int memNo) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("chatId", chatId);
+        param.put("memNo", memNo);
+        return sqlSession.update("chatMapper.restoreChatRoom", param);
+    }
+    
 }

@@ -987,8 +987,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const ip = location.hostname;
     const encodedToken = encodeURIComponent(token);
 
-    //const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
-    const wsUrl = `wss://threestar.r-e.kr/threeStar/chat/\${roomId}?token=\${encodedToken}`;
+    const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
+    //const wsUrl = `wss://threestar.r-e.kr/threeStar/chat/\${roomId}?token=\${encodedToken}`;
     
 
     socket = new WebSocket(wsUrl);

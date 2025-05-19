@@ -52,4 +52,12 @@ public class MessageDao {
     	return sqlSession.delete("calendarMapper.getUpdateCalendarEvents", param);
     }
     
+ // ✅ 특정 유저가 특정 채팅방에서 보낸 메시지 전부 삭제
+    public int deleteMessagesByUserInRoom(SqlSessionTemplate sqlSession, int chatId, int memNo) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("chatId", chatId);
+        param.put("memNo", memNo);
+        return sqlSession.delete("messageMapper.deleteMessagesByUserInRoom", param);
+    }
+    
 }

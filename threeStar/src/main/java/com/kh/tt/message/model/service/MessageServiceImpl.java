@@ -65,6 +65,10 @@ public class MessageServiceImpl implements MessageService {
 		return mDao.getUpdateCalendarEvents(sqlSession, calId, calWriter);
 	}
 	
-
+    // ✅ 추가: 특정 유저가 특정 채팅방에서 보낸 메시지 전체 삭제
+    @Override
+    public int deleteMessagesByUserInRoom(int chatId, int memNo) {
+        return mDao.deleteMessagesByUserInRoom(sqlSession, chatId, memNo);
+    }
 	
 }

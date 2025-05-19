@@ -241,4 +241,13 @@ AND ROWNUM = 1
     AND ch_mem_no = #{memNo}
 </update>
 
+
+
+<update id="restoreChatRoom" parameterType="map">
+  UPDATE chatting_room
+  SET status = 'Y'
+  WHERE chat_id = #{chatId}
+    AND ch_mem_no = #{memNo}
+</update>
+
 </mapper>

@@ -129,5 +129,13 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
 		public int renameChatRoom(int roomId, String newName, int memNo) {
 			 return cDao.renameChatRoom(sqlSession, roomId, memNo, newName);
 		}
+		
+		
+		@Override
+		public int restoreChatRoom(int chatId, int memNo) {
+		    return cDao.restoreChatRoom(sqlSession, chatId, memNo);
+		}
+
+		
 
 }
