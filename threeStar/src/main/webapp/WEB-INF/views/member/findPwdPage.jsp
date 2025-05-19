@@ -98,6 +98,9 @@ body * {
 					<div class="form-group text-center">
 						<button type="submit" class="btn btn-primary btn-space">
 							비밀번호 찾기<i class="fa fa-check spaceLeft"></i></button>
+						<button type="button" class="btn btn-primary btn-space">
+							<i class="fa fa-check spaceLeft" onclick="location.href='${pageContext.request.contextPath}/'">이전으로</i>
+						</button>
 					</div>
 				</div>
 			</form>
