@@ -174,6 +174,10 @@
          color: #777;
          font-size: 14px;
      }
+     
+     .g_id_signin{
+     	align-items: center;
+     }
 </style>
 </head>
 <body>
@@ -213,17 +217,19 @@
         <div
 	      id="g_id_onload"
 	      data-auto_prompt="false"
+	      data-context="use"
 	      data-callback="handleCredentialResponse"
 	      data-client_id="988243476840-8gjc4u9a1aahr0uvhubcc8aosff07nk1.apps.googleusercontent.com"
 	    ></div>
 		
     	<div class="g_id_signin"
 	        data-type="standard"
+	        data-theme="filled_blue"
+	        data-text="continue_with"
 	        data-size="large"
-            data-text="signin"
-            data-theme="filled_blue"
-	        data-shape="rectangular"
-            data-width=368.79
+            data-logo_alignment="center"
+	        data-shape="square"
+	        data-width="400"
             ></div>
 		
 		<input type="hidden" id="memName" name="memName" value="${ memName }">
@@ -259,13 +265,6 @@
                 e.preventDefault();
                 // 회원가입 페이지로 이동하는 로직
                 window.location.href = 'signinForm.me';
-            });
-            
-            googleLogin.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('구글 로그인으로 진행합니다.');
-                // 구글 로그인 로직 실행
-                // OAuth 연동 코드 필요
             });
         });
     </script>
