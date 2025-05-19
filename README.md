@@ -85,7 +85,7 @@ ThreeStars 프로젝트는 KH Academy 내 구성원들이 자유롭고 실시간
 
 # ✔ 설계
 ERD Cloud : 
-<img src="./threeStar/src/main/webapp/resources/asset/ERD전체.png" alt="ERD Cloud"/>
+<img src="./threeStar/src/main/webapp/resources/asset/ERD전체.PNG" alt="ERD Cloud"/>
 
 <br/><br/><br/>
 
