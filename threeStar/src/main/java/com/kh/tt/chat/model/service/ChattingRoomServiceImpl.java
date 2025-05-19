@@ -76,8 +76,6 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
  //=======채팅방 나가기=================================================
 		 @Override
 		    public int exitChatRoom(int chatId, int memNo) {
-		        System.out.println("🔥 받은 chatId1: " + chatId);
-		        System.out.println("🔥 받은 memNo1: " + memNo);
 		        return cDao.exitChatRoom(sqlSession,chatId, memNo);
 		        
 		    }
@@ -129,7 +127,6 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
 //==========================채팅방 이름 변경===========================
 		@Override
 		public int renameChatRoom(int roomId, String newName, int memNo) {
-			System.out.println("여긴 서비스 룸아이디"+newName);
 			 return cDao.renameChatRoom(sqlSession, roomId, memNo, newName);
 		}
 

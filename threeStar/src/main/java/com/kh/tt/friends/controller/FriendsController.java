@@ -25,9 +25,7 @@ public class FriendsController {
 	 @GetMapping("list")
 	 @ResponseBody
 	 public List<Friend> FriendsList(@RequestParam("memNo") int memNo) {
-	     System.out.println("✅ 요청 도착: memNo = " + memNo);
 	     List<Friend> result = friendService.FriendsList(memNo);
-	     System.out.println("✅ 결과 반환: " + result);
 	     return result;
 	 }
 }

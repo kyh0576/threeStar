@@ -22,7 +22,6 @@ public class FriendsServiceImpl implements FriendsService{
 
 	@Override
 	public List<Friend> FriendsList(int memNo) {
-		System.out.println("여기는 서비스용"+memNo);
 		return fDao.FriendsList(sqlSession,memNo);
 	}
 

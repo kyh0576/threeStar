@@ -53,9 +53,7 @@ public class ChattingRoomDao {
     }
     
     public List<Member> getChatRoomMembers(SqlSessionTemplate sqlSession, int roomId){
-    	System.out.println("룸아이디 : "+roomId);
     	List<Member> memmem =  sqlSession.selectList("chatMapper.getChatRoomMembers",roomId);
-    	System.out.println("반환씨발형: " + memmem);
     	return memmem;
     }
     
