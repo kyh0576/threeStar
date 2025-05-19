@@ -55,7 +55,6 @@ public class MemberController {
          mv.setViewName("member/loginForm");
       }
       
-      System.out.println("로그인 맴버 : " + loginMember);
       return mv;
    }
    
@@ -200,7 +199,6 @@ public class MemberController {
 	@ResponseBody
 	public ArrayList<Member> selectWaitingList(@RequestParam("memNo") int memNo) {
 	    ArrayList<Member> wList = mService.selectWaitingList(memNo); // friend = 'N'만 조회
-	    System.out.println(wList);
 	    return wList;
 	}
 	
