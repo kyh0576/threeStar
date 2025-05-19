@@ -1108,8 +1108,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
 
-    console.log("내 번호:", myMemNo);
-
     fetch(`${pageContext.request.contextPath}/message/history?roomId=\${roomId}`)  // ✅ 백틱 사용 → 템플릿 리터럴
         .then(response => response.json())
         .then(messages => {
@@ -1161,8 +1159,6 @@ document.addEventListener("DOMContentLoaded", function () {
       data.forEach(member => {
     	  const displayName = member.memName || "이름없음";
           const firstChar = displayName.charAt(0);
-          
-          console.log("✅ 참여자:", displayName, " → 이니셜:", firstChar);
     	  
         const memberItem = document.createElement("div");
         memberItem.className = "member-item";
@@ -1205,11 +1201,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 body: `chatId=\${roomId}&memNo=\${memNo}`
             })
             .then(res => {
-                console.log("응답 상태:", res.status);
                 return res.text();
             })
             .then(data => {
-                console.log("결과:", data);
                 if (data === "success") {
                     alert("채팅방에서 나갔습니다.");
                     window.location.href = contextPath + "/message/mainForm";
@@ -1276,12 +1270,6 @@ fileInput.addEventListener("change", () => {
             };
 
             socket.send(JSON.stringify(payload));
-            
-            console.log("아씨발진짜"+contextPath)
-            
-                console.log("🎯 저장 요청 전송 직전");
-                console.log("originName:", file.name);
-                console.log("changeName:", changeName);
 
             // ✅ DB 저장용 요청 (Message 테이블용)
             fetch(`\${contextPath}/message/save`, {
@@ -1321,9 +1309,6 @@ fileInput.addEventListener("change", () => {
 document.addEventListener("DOMContentLoaded", function () {
     const roomId = <%= roomId %>;
     const contextPath = "<%= request.getContextPath() %>";
-
-    console.log("roomId:", roomId);
-    console.log("contextPath:", contextPath);
 
     fetch(`\${contextPath}/message/download/files?roomId=\${roomId}`)
         .then(response => {
@@ -1563,7 +1548,6 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
         })
         .then(response => response.text())
 		.then(text => {
-		    console.log("받은 응답 원본:", text);
 		    try {
 		        const data = JSON.parse(text);
 		        if (data.success) {
