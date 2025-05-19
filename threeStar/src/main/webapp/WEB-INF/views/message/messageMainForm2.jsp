@@ -20,8 +20,6 @@
 
 %>
 
- 
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -29,7 +27,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>ThreeStar</title>
     <style>
         * {
             margin: 0;
@@ -44,6 +42,133 @@
             min-height: 100vh;
         }
 
+       
+        /* 메시지 목록 사이드바 */
+        .message-sidebar {
+            width: 320px; /* 기존 300px보다 살짝 넓게 */
+            background-color: white;
+            border-right: 1px solid #e1e1e1;
+            display: flex;
+            flex-direction: column;
+            }
+
+        .message-header {
+            padding: 20px;
+            border-bottom: 1px solid #e1e1e1;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .message-tabs {
+            display: flex;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background-color: #4a8cff;
+            color: white;
+        }
+
+        .message-list {
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .message-item {
+            padding: 15px;
+            border-bottom: 1px solid #f1f1f1;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .message-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .message-item.active {
+            background-color: #f0f7ff;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 20px;  /* 🔼 높이 늘림 (기존 16px → 20px) */
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #e1e1e1;
+            width: 100%;
+            box-sizing: border-box;
+            }
+            
+            .new-chat-btn {
+            width: 36px;
+            height: 36px;
+            background-color: #4a8cff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            }
+
+            .new-chat-btn:hover {
+            background-color: #367ee6;
+            transform: scale(1.1);
+            }
+
+            .new-chat-btn svg {
+            stroke: white;
+            }
+
+
+
+
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+            overflow: hidden;
+        	border: 2px solid #4a8cff;
+        }
+
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .message-info {
+            flex-grow: 1;
+        }
+
+        .message-name {
+            font-weight: bold;
+            width: 234px;
+            margin-bottom: 5px;
+        }
+
+        .message-preview {
+            color: #666;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 234px;
+        }
 
         /* 메인 콘텐츠 영역 */
 		.main-content {
@@ -65,6 +190,7 @@
             align-items: center;
             flex-grow: 1;
         }
+
         .chat-profile-img {
             width: 40px;
             height: 40px;
@@ -94,7 +220,19 @@
 
         .chat-action-btn.active {
             color: #4a8cff;
-        }    
+        }
+        
+/*
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+  */      
   
 		.chat-messages {
 		    flex-grow: 1;   /* 나머지 공간 다 채움 */
@@ -552,23 +690,6 @@
 		  background-color: #f5f5f5;
 		}
 
-
-		/*채팅방 이름 변경*/
-		#editRoomNameBtn {
-		    background: none;
-		    border: none;
-		    font-size: 16px;
-		    margin-left: 8px;
-		    cursor: pointer;
-		    color: #888;
-		    transition: color 0.2s ease;
-		}
-		
-		#editRoomNameBtn:hover {
-		    color: #4a8cff;
-		    transform: scale(1.05);
-		}
-		
 										
     </style>
 
@@ -576,22 +697,49 @@
 <body>
      <!-- 이쪽에 메뉴바 포함 할꺼임 -->
     <jsp:include page="../common/mainMenu.jsp"/>
-    
-    
-	<jsp:include page="../common/sidebar.jsp"/>
 
-	
+    <!-- 메시지 목록 사이드바 -->
+    <div class="message-sidebar">
+        <div class="message-header">
+            <span class="message-title">Messages</span>
+            <button id="newChat" class="new-chat-btn" title="새 채팅 시작">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 4v8M4 8h8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>           
+          </div>
+          
+		<div id="inviteModal">
+		  <button id="closeModalBtn">✕</button>
+		  <h3>친구 목록</h3>
+		  <div id="friend-list-left">여기에 친구 목록이 표시될 예정입니다.</div>
+		  <button id="startChatBtnLeft" style="margin-top: 10px;">✅ 선택한 친구들과 채팅 시작</button>
+		</div>
+
+  
+  <div class="message-tabs">
+    <div class="tab active">All</div>
+    <div class="tab">Group</div>
+  </div>
+        <div class="message-list">
+            
+        </div>
+    </div>
 
     <!-- 메인 콘텐츠 - 채팅 부분 -->
     <div class="main-content">
         <div class="chat-header">
             <div class="chat-profile">
-                <div class="chat-avatar avatar-red">${ targetNickname }</div>
-                
+                <div class="chat-profile-img">
+                    <img src="../../../resources/asset/채팅방예시사진.png" alt="프로필">
+                </div>
                <h3 id="chatRoomTitle"><%= targetNickname == null ? "채팅방을 선택해주세요" : targetNickname %></h3>
-				<span  id="participantCount"> 
+				<span style="color: #888;"> &nbsp;
+				    <%= memberCount %> participants
+				    <%
+					    System.out.println("✅ JSP에서 확인: chatRoomMembers = " + chatRoomMembers);
+					%>
 				</span>
-				<button id="editRoomNameBtn" style="margin-left: 10px;">✏️</button>
 
 
             </div>
@@ -633,16 +781,17 @@
             
             <div class="member-list">
                 <div class="member-item">
-                    <div class="chat-avatar avatar-red"></div>
-                    
+                    <div class="profile-img">
+                        <img src="https://via.placeholder.com/40/8c4aff/ffffff?text=서" alt="프로필">
+                    </div>
                     <div class="member-info">
                         <div class="member-name"><%= myNickname %></div>
                     </div>
                 </div>
                 
                 <div class="member-item">
-                    <div class="chat-avatar avatar-red">
-                       
+                    <div class="profile-img">
+                        <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=팀" alt="프로필">
                     </div>
                     <div class="member-info">
                         <div class="member-name" id="targetNicknameArea">상대방 닉네임 로딩중...</div>
@@ -670,10 +819,8 @@
             
             <div class="file-list">
                
-                </div>
-                
             </div>
-            
+                
 			<div class="section-header">
 			    <div>캘린더</div>
 			    <div class="add-cal" style="font-size: 20px;" onclick="showCalendarForm()">
@@ -711,6 +858,7 @@
 			    <!-- JS로 일정이 렌더링됨 -->
 			</div>
          </div>
+      </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -735,8 +883,8 @@
                     document.querySelector('.chat-header h3').textContent = name;
                     
                     // 프로필 이미지도 업데이트
-                    const profileImg = this.querySelector('.chat-avata avatar-red').src;
-                    document.querySelector('.chat-avatar avatar-red').src = profileImg;
+                    const profileImg = this.querySelector('.profile-img img').src;
+                    document.querySelector('.chat-profile-img img').src = profileImg;
                 });
             });
 
@@ -871,61 +1019,18 @@ function appendMessage(data, type) {
         menuWrapper.innerHTML = `
             <button class="message-menu-btn">⋮</button>
             <div class="message-dropdown hidden">
-                <div class="message-action delete" style="font-size=9">삭제</div>
+                <div class="message-action delete">삭제</div>
             </div>
         `;
 
         wrapper.appendChild(menuWrapper);  // 왼쪽
-        
-        const deleteBtn = menuWrapper.querySelector(".message-action.delete");
-        deleteBtn.addEventListener("click", function () {
-            if (confirm("정말 이 메시지를 삭제하시겠습니까?")) {
-
-                const messageNo = data.messageNo;
-                console.log("메segi넘버"+messageNo);
-
-                if (!messageNo) {
-                    console.warn("❌ messageNo 없음, 삭제 요청 생략");
-                    return;
-                }
-                
-                const formData = new URLSearchParams();
-                console.log("formDate si ble" + formData);
-                formData.append("messageNo", messageNo);
-
-                fetch(`\${contextPath}/message/delete`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: `messageNo=\${messageNo}`
-                })
-                .then(res => res.text())
-                .then(result => {
-                    if (result === "success") {
-                        alert("메시지를 삭제했습니다.");
-                        wrapper.remove();
-                    } else {
-                        alert("❌ 메시지 삭제 실패");
-                    }
-                })
-                .catch(err => {
-                    console.error("❌ 메시지 삭제 에러:", err);
-                });
-            }
-        });
-
-       
     }
-    
-    
     
     
     wrapper.appendChild(bubble); // 오른쪽
     document.querySelector(".chat-messages").appendChild(wrapper);
     scrollToBottom(); // ✅ 맨 아래로 이동
 }
-
 
 
 function scrollToBottom() {
@@ -962,9 +1067,6 @@ document.addEventListener("click", function (e) {
   }
 });
 
-
-
-
 </script>
 
 
@@ -991,6 +1093,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
     const wsUrl = `wss://threestar.r-e.kr/threeStar/chat/\${roomId}?token=\${encodedToken}`;
     
+    alert("WebSocket 연결 URL:" + wsUrl);
 
     socket = new WebSocket(wsUrl);
 
@@ -1010,8 +1113,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    
-    
     // 🔔 종 아이콘 클릭 → 알림 on/off 토글
     const savedNotificationState = localStorage.getItem("isNotificationOn");
     window.isNotificationOn = savedNotificationState !== null ? savedNotificationState === "true" : true;
@@ -1034,17 +1135,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const type = data.sender === nickname ? "sent" : "received";
         appendMessage(data, type);
 
-        // 🔁 티서랍에도 실시간 반영
-        if (data.type === "file") {
-            appendToDrawer(data);
-        }
-
-        // 알림
         if (window.isNotificationOn && data.sender !== nickname && !document.hasFocus()) {
             showNotification(data.sender, data.text || data.messageContent || "📎 파일이 도착했어요!");
         }
-        
-        
     };
 
     function showNotification(sender, message) {
@@ -1101,6 +1194,32 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+<!-- 채팅방 목록 -->
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("${pageContext.request.contextPath}/chattingRoom/rooms")  // 🔁 백엔드에서 참여중인 채팅방 목록 호출
+        .then(response => response.json())
+        .then(rooms => {
+            const list = document.querySelector(".message-list");
+            if (!rooms || rooms.length === 0) {
+                list.innerHTML = "<p style='padding: 20px; color: gray;'>채팅방이 없습니다</p>";
+                return;
+            }
+
+            list.innerHTML = rooms.map(room => `
+            <div class="message-item" onclick="location.href='${pageContext.request.contextPath}/message/mainForm?roomId=\${room.chatId}'">
+                <div class="profile-img"><img src="/resources/images/default-profile.png" alt="프로필"></div>
+                <div class="message-info">
+                    <div class="message-name">\${room.chatName}</div> <!-- ✅ 여기 수정 -->
+                    <div class="message-preview">\${room.lastMessage || '대화를 시작하세요'}</div>
+                </div>
+            </div>
+        `).join('');
+        })
+        .catch(err => {
+            console.error("❌ 채팅방 목록 불러오기 실패:", err);
+        });
+});
+
 
 
 
@@ -1144,11 +1263,6 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(res => res.text())
         .then(name => {
             document.querySelector("#chatRoomTitle").textContent = name;
-            
-            const avatarEl = document.querySelector(".chat-header .chat-avatar");
-            if (avatarEl) {
-                avatarEl.textContent = name.trim().charAt(0);
-            }
         });
 
     
@@ -1160,19 +1274,13 @@ document.addEventListener("DOMContentLoaded", function () {
       memberList.innerHTML = ""; // 초기화
 
       data.forEach(member => {
-    	  const displayName = member.memName || "이름없음";
-          const firstChar = displayName.charAt(0);
-          
-          console.log("✅ 참여자:", displayName, " → 이니셜:", firstChar);
-    	  
         const memberItem = document.createElement("div");
         memberItem.className = "member-item";
 
-          
-        memberItem.innerHTML = ` 
-          <div class="chat-avatar avatar-red">\${firstChar}</div>
-          
-          
+        memberItem.innerHTML = `
+          <div class="profile-img">
+            <img src="\${member.profileUrl || '/tt/resources/images/profile-default.png'}" alt="프로필">
+          </div>
           <div class="member-info">
             <div class="member-name">\${member.memName}</div>
           </div>
@@ -1360,38 +1468,103 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
-//파일 전송 후 실시간으로 우측 파일 목록이 갱신
-function appendToDrawer(data) {
-    if (!data || data.type !== "file" || !data.file) return;
-
-    const fileListDiv = document.querySelector(".file-list");
-    const isImage = isImageFile(data.file.name);
-    const downloadUrl = data.file.fileUrl;
-    const fileName = data.file.name;
-
-    const html = `
-        <div class="file-item">
-            <div class="file-icon">${isImage ? "🖼️" : "📄"}</div>
-            <div class="file-info">
-                <div class="file-name">\${fileName}</div>
-            </div>
-            <a class="file-download" 
-               href="\${downloadUrl}" 
-               download="\${fileName}" 
-               target="_blank">⬇️</a>
-        </div>
-    `;
-    fileListDiv.insertAdjacentHTML("afterbegin", html);
-}
-
 </script>
 
 
+<!-- +버튼 눌렀을 때 채팅방 생성 -->
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+	  const newChatBtn = document.getElementById('newChat');
+	  const inviteModalLeft = document.getElementById('inviteModal');
+	  const closeModalBtn = document.getElementById('closeModalBtn');
+
+	  newChatBtn.addEventListener('click', function () {
+	    inviteModalLeft.style.display = 'block';
+	    loadFriendListForNewChat();
+	  });
+
+	  closeModalBtn.addEventListener('click', function () {
+	    inviteModalLeft.style.display = 'none';
+	  });
+
+	  function loadFriendListForNewChat() {
+	    const container = document.getElementById('friend-list-left');
+	    container.innerHTML = '';
+
+	    fetch(`\${contextPath}/friends/list?memNo=\${myMemNo}`)
+	      .then(response => response.json())
+	      .then(data => {
+	        if (data.length === 0) {
+	          container.innerHTML = '<p>친구가 없습니다.</p>';
+	        } else {
+	          data.forEach(friend => {
+	            const label = document.createElement('label');
+	            label.classList.add('friend-item');
+	            label.innerHTML = `
+	              <input type="checkbox" class="chat-select" value="\${friend.toMem}">
+	              \${friend.toNickname}
+	            `;
+	            container.appendChild(label);
+	          });
+	        }
+	      })
+	      .catch(err => {
+	        console.error("❌ 친구 목록 로딩 실패", err);
+	      });
+	  }
+
+	  
+	  
+	  
+	  document.getElementById("startChatBtnLeft").addEventListener("click", () => {
+	    const checked = [...document.querySelectorAll(".chat-select:checked")];
+	    const selectedIds = checked.map(cb => parseInt(cb.value));
+
+	    if (selectedIds.length === 0) {
+	      alert("최소 한 명 이상 선택하세요.");
+	      return;
+	    }
+
+	    if (selectedIds.length === 1) {
+	      // 1:1 채팅
+	      fetch(`\${contextPath}/chattingRoom/startChat`, {
+	        method: "POST",
+	        headers: { "Content-Type": "application/json" },
+	        body: JSON.stringify({ targetUserId: selectedIds[0] })
+	      })
+	        .then(res => res.json())
+	        .then(result => {
+	          if (result.success && result.roomId) {
+	            location.href = `\${contextPath}/message/messageForm?roomId=\${result.roomId}`;
+	          } else {
+	            alert("❌ 채팅방 생성 실패");
+	          }
+	        });
+	    
+	    } else {
+	      // 그룹 채팅
+	      fetch(`\${contextPath}/chattingRoom/startGroupChat`, {
+	        method: "POST",
+	        headers: { "Content-Type": "application/json" },
+	        body: JSON.stringify({
+	          initiator: myMemNo,
+	          members: selectedIds
+	        })
+	      })
+	        .then(response => response.json())
+	        .then(result => {
+	          if (result.success && result.roomId) {
+	            location.href = `\${contextPath}/message/messageForm?roomId=\${result.roomId}`;
+	          } else {
+	            alert("❌ 그룹 채팅 생성 실패");
+	          }
+	        });
+	    }
+	  });
+	});
 
 
-
-//=================오른쪽 +add 눌렀을 때 동작====================
+//오른쪽 +add 눌렀을 때 동작
 document.addEventListener('DOMContentLoaded', function () {
 	  const addMemBtn = document.getElementById('addMem');
 	  const inviteModalRight = document.getElementById('inviteModalRight');
@@ -1456,72 +1629,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	      });
 	  });
 	});
-
-
-
-
-	document.addEventListener("DOMContentLoaded", function () {
-		  const roomId = new URLSearchParams(window.location.search).get("roomId");
-		  if (!roomId) return;
-	
-		  fetch(`\${contextPath}/chattingRoom/members?roomId=\${roomId}`)
-		    .then(res => res.json())
-		    .then(data => {
-		    	document.querySelector("#chatRoomTitle + span").innerHTML = `&nbsp;\${data.length} participants`;
-
-		    })
-		    .catch(err => {
-		      console.error("❌ 참여자 수 갱신 실패:", err);
-		    });
-		});
-
-	
-	
-	
-//========================채팅창 이름 변경 ========================
-document.getElementById("editRoomNameBtn").addEventListener("click", () => {
-    const oldName = document.getElementById("chatRoomTitle").textContent;
-    const newName = prompt("채팅방 이름을 입력하세요:", oldName);
-    if (!newName || newName === oldName) return;
-
-    const roomId = new URLSearchParams(window.location.search).get("roomId");
-
-    fetch(`\${contextPath}/chattingRoom/rename`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: `roomId=\${roomId}&newName=\${encodeURIComponent(newName)}`
-    })
-    .then(res => res.text())
-    .then(result => {
-        if (result === "success") {
-            // 상단 이름/이니셜 갱신
-            document.getElementById("chatRoomTitle").textContent = newName;
-            const avatarEl = document.querySelector(".chat-header .chat-avatar");
-            if (avatarEl) avatarEl.textContent = newName.charAt(0);
-
-            // 좌측 목록도 이름 + 이니셜 동기화
-            document.querySelectorAll(".message-item").forEach(item => {
-                const nameEl = item.querySelector(".message-name");
-                const avatarEl = item.querySelector(".chat-avatar");
-                if (nameEl && nameEl.textContent === oldName) {
-                    nameEl.textContent = newName;
-                    if (avatarEl) avatarEl.textContent = newName.charAt(0);
-                }
-            });
-
-            alert("채팅방 이름이 변경되었습니다.");
-        } else {
-            alert("❌ 채팅방 이름 변경 실패");
-        }
-    });
-});
-
-
 </script>
 
-<!-- 메시지 내 캘린더 삽입 JS -->
 <script>
     // 일정 입력 폼 표시
     function showCalendarForm() {
@@ -1587,7 +1696,6 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
     }
 </script>
 
-<!-- 메시지 내 캘린더 조회 JS -->
 <script>
 	document.addEventListener("DOMContentLoaded", function () {
 	    const roomId = <%= roomId %>;
@@ -1635,8 +1743,6 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
 	    }
 	}
 </script>
-
-<!-- 메시지 내 캘린더 삭제 JS -->
 <script>
 	document.querySelector(".calendar-list").addEventListener("click", e => {
 	    if (!e.target.classList.contains("del-btn")) return;
@@ -1667,7 +1773,7 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
 	    });
 	});
 </script>
-<!---------------------------------------------------------------------->
+<!-- ------------------------------------------------------------------ -->
 
 </body>
 </html>

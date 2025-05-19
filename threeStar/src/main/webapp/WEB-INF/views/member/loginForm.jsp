@@ -220,11 +220,11 @@
     	<div class="g_id_signin"
 	        data-type="standard"
 	        data-size="large"
-	        data-theme="outline"
-	        data-text="sign_in_with"
+            data-text="signin"
+            data-theme="filled_blue"
 	        data-shape="rectangular"
-	        data-logo_alignment="left">
-	    </div>
+            data-width=368.79
+            ></div>
 		
 		<input type="hidden" id="memName" name="memName" value="${ memName }">
 		<input type="hidden" id="email" name="email" value="${ email }">

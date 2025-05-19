@@ -44,8 +44,6 @@ public class MessageServiceImpl implements MessageService {
         return mDao.getFilesByRoomId(sqlSession,roomId);
     }
 
-
-
 	@Override
 	public int deleteMessage(int messageNo) {
 		System.out.println("여기는 서비스임플 "+messageNo);
@@ -60,6 +58,11 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public List<Calendar> getCalendarEvents(int roomId){
 		return mDao.getCalendarEvents(sqlSession, roomId);
+	}
+	
+	@Override
+	public int getUpdateCalendarEvents(int calId, int calWriter){
+		return mDao.getUpdateCalendarEvents(sqlSession, calId, calWriter);
 	}
 	
 
