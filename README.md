@@ -16,23 +16,22 @@ ThreeStars 프로젝트는 KH Academy 내 구성원들이 자유롭고 실시간
 
 # 🎈 구성원 및 역할
 
-<h2 style="border-bottom : none">🧡 조장 : 서동진</h2>
+<h2 style="border-bottom : none">🧡 조장 : 고영훈</h2>
 
 - 회원가입
-  - 주소 API (행정 안전부)
 - 로그인
-    - SNS 간편로그인 (Naver)
 - 메인페이지
-    - 필터링 / 키워드검색
-    - Pick!
+    - Class 및 사용자 조회
+    - 사용자 상세 조회 및 사용자 이름 변경(친구 등록시)
+    - 친구 추가, 수락 및 거절
+    - 실시간 온라인 유저 조회
+    - 클래스 일정 조회
 
-- book API(도서 정보 나루)
-  - 인기 도서 목록 조회
-  - 도서 정보 상세 페이지 조회
-  - 도서 검색 기능
-  - 도서관 정보 기능
+- AWS EC2를 이용한 배포
+- GitHub Webhook을 이용한 자동화 배포
+- SSL인증서를 이용한 HTTP -> HTTPS 변환
 
- <h2 style="border-bottom : none">🤎 조원 : 이호석</h2>
+ <h2 style="border-bottom : none">🤎 조원 : 서동진</h2>
 
   - 찜하기
   - 로그인
@@ -47,7 +46,7 @@ ThreeStars 프로젝트는 KH Academy 내 구성원들이 자유롭고 실시간
       - FAQ 
       - 공지사항
 
-  <h2 style="border-bottom : none">💙 조원 : 고영훈</h2>
+  <h2 style="border-bottom : none">💙 조원 : 이용훈</h2>
 
 - 로그인
     - SNS 간편로그인 (kakao)
