@@ -11,7 +11,7 @@ ThreeStars 프로젝트는 KH Academy 내 구성원들이 자유롭고 실시간
 
 # ⏱ 개발기간
 
-<img src="./WebContent/resources/assets/개발기간.PNG" alt="개발기간"/>
+<img src="./threeStar/src/main/webapp/resources/asset/작업 일정표.png" alt="개발기간"/>
 <br/><br/><br/>
 
 # 🎈 구성원 및 역할
