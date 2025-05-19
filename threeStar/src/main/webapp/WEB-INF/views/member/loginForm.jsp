@@ -175,8 +175,8 @@
          font-size: 14px;
      }
      
-     .g_id_signin{
-     	align-items: center;
+     .g_id_signin iframe{
+     	align: center;
      }
 </style>
 </head>
@@ -213,7 +213,7 @@
         <div class="divider">
             <span>OR</span>
         </div>
-        test
+        
         <div
 	      id="g_id_onload"
 	      data-auto_prompt="false"
@@ -221,7 +221,7 @@
 	      data-callback="handleCredentialResponse"
 	      data-client_id="988243476840-8gjc4u9a1aahr0uvhubcc8aosff07nk1.apps.googleusercontent.com"
 	    ></div>
-		
+
     	<div class="g_id_signin"
 	        data-type="standard"
 	        data-theme="filled_blue"
@@ -231,7 +231,7 @@
 	        data-shape="square"
 	        data-width="368.4"
             ></div>
-		
+
 		<input type="hidden" id="memName" name="memName" value="${ memName }">
 		<input type="hidden" id="email" name="email" value="${ email }">
 		<input type="hidden" id="snsKey" name="snsKey" value="${ snsKey }">	
