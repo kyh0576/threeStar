@@ -157,25 +157,28 @@ ERD Cloud :
 <br/><br/>
 
 ## ◽ 채팅방 생성 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/채팅방생성" alt="채팅방 생성 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅방생성" alt="채팅방생성 GIF"/>
 
 ## ◽ 채팅방 이름 변경 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/채팅방이름변경" alt="채팅방 이름 변경 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅방이름변경" alt="채팅방이름변경 GIF"/>
 
 ## ◽ 채팅방 나가기 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/채팅방나가기" alt="채팅방 나가기 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅방나가기" alt="채팅방나가기 GIF"/>
 
 ## ◽ 대화내용 삭제 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/대화내용삭제" alt="대화내용 삭제  GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/대화내용삭제" alt="대화내용삭제  GIF"/>
+
+## ◽ 첨부파일 전송/다운 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/첨부파일전송다운" alt="첨부파일전송다운  GIF"/>
 
 ## ◽ 대화 상대 초대 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/대화상대초대" alt="대화 상대 초대  GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/대화상대초대" alt="대화상대초대  GIF"/>
 
 ## ◽ 알람 on off <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/알람onoff" alt="알람 on off GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/알람onoff" alt="알람onoff GIF"/>
 
 ## ◽ 날씨 조회 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/날씨조회" alt="날씨 조회 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/날씨조회" alt="날씨조회 GIF"/>
 
 <br/><br/><br/>
 
