@@ -62,11 +62,12 @@ ThreeStars 프로젝트는 KH Academy 내 구성원들이 자유롭고 실시간
 
 # ⚙ 개발 환경 
 - OS : Windows10/11
-- Developer Tools : Eclipse / VS Code / SqlDeveloper
+- Developer Tools : Eclipse / VS Code / SqlDeveloper / STS
 - Server : (Apach Tomcat 9.0)
 - DBMS : Oracle
 - Front-end : HTML5 / CSS3 / JavaScript / jQuery
-- BackEnd : Java 11, JSP & Servlet
+- BackEnd : Java 11, JSP & Servlet, Mybatis
+- Framework : Spring
 - UseCase Diagram : StarUML
 - E-R Diagram : ERD CLOUD
 - Management : GitHub
@@ -84,7 +85,7 @@ ThreeStars 프로젝트는 KH Academy 내 구성원들이 자유롭고 실시간
 
 # ✔ 설계
 ERD Cloud : 
-![ERD Cloud](https://www.erdcloud.com/d/cwC3dM5W3tQNLPx55)
+<img src="./threeStar/src/main/webapp/resources/asset/ERD전체.png" alt="개발기간"/>
 
 <br/><br/><br/>
 
