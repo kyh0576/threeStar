@@ -108,7 +108,7 @@ ERD Cloud :
 <img src="./threeStar/src/main/webapp/resources/asset/Class및사용자조회.gif" alt="로그인 GIF"/>
 
 ## ◽ Class 일정 조회 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/Class일정.gif" alt="로그인 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/class일정.gif" alt="로그인 GIF"/>
 
 ## ◽ 친구추가 및 이름변경 <br/>
 <img src="./threeStar/src/main/webapp/resources/asset/친구추가및이름변경.gif" alt="로그인 GIF"/>
