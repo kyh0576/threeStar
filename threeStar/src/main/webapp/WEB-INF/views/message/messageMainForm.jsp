@@ -1534,7 +1534,7 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
         }
         
         // API 호출
-        fetch(`\${pageContext.request.contextPath}/message/calendarInsertMessage.do?calChatId=\${roomId}`, {
+        fetch(`\${request.contextPath}/message/calendarInsertMessage.do?calChatId=\${roomId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
