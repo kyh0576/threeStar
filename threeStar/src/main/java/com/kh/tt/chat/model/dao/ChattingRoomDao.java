@@ -62,7 +62,7 @@ public class ChattingRoomDao {
         Map<String, Object> param = new HashMap<>();
         param.put("chatId", chatId);
         param.put("memNo", memNo);
-        return sqlSession.delete("chatMapper.exitChatRoom", param);
+        return sqlSession.update("chatMapper.exitChatRoom", param);
     }
     
     

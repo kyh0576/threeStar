@@ -153,11 +153,12 @@ AND ROWNUM = 1
 
 
 <!-- chatMapper.xml -->
-<delete id="exitChatRoom" parameterType="map">
-    DELETE FROM chatting_room
+<update id="exitChatRoom" parameterType="map">
+    UPDATE chatting_room
+    SET status = 'N'
     WHERE chat_id = #{chatId}
       AND ch_mem_no = #{memNo}
-</delete>
+</update>
 
 <!-- 채팅방 생성 전 동일한 채팅방 있는지 확인 -->
 <select id="findGroupChatRoom" parameterType="list" resultType="int">
