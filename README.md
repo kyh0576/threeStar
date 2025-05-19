@@ -175,7 +175,7 @@ ERD Cloud :
 <img src="./threeStar/src/main/webapp/resources/asset/알람 on off.gif" alt="알람 on off GIF"/>
 
 ## ◽ 날씨 조회 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/날씨 조회.gif" alt="날씨 조회 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/날씨 조회.gif" alt="날씨 조회.gif"/>
 
 <br/><br/><br/>
 
