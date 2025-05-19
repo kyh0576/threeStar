@@ -151,51 +151,30 @@ ERD Cloud :
 # 
 <h2 style="border-bottom : none">🧡 조원 : 서동진
 
- ## ◽ 카카오 로그인(API)
+## ◽ 채팅 기능 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅기능.gif" alt="채팅기능 GIF"/>
+<br/><br/>
 
-<img src="./WebContent/resources/assets/카카오 로그인.gif" alt="카카오 로그인 GIF"/>
+## ◽ 채팅방 생성 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅방 생성.gif" alt="채팅방 생성 GIF"/>
 
-<br/>
+## ◽ 채팅방 이름 변경 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅방 이름 변경.gif" alt="채팅방 이름 변경 GIF"/>
 
- ## ◽ 자유 게시판(작성, 수정, 삭제)
+## ◽ 채팅방 나가기 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅방 나가기.gif" alt="채팅방 나가기 GIF"/>
 
-<img src="./WebContent/resources/assets/자유게시판 작성.gif" alt="자유게시판 GIF"/>
+## ◽ 대화내용 삭제 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/대화내용 삭제 .gif" alt="대화내용 삭제  GIF"/>
 
-<br/>
+## ◽ 대화 상대 초대 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/대화 상대 초대 .gif" alt="대화 상대 초대  GIF"/>
 
- ## ◽ 자유 게시판 (댓글 기능)
+## ◽ 알람 on off <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/알람 on off.gif" alt="알람 on off GIF"/>
 
-<img src="./WebContent/resources/assets/자유게시판 댓글 작성.gif" alt="자유 게시판 (댓글 기능) GIF"/>
-
-<br/>
-
- ## ◽ 온라인 투표 (작성, 수정, 삭제)
-
-<img src="./WebContent/resources/assets/온라인투표 작성.gif" alt="온라인 투표 (작성, 수정, 삭제) GIF"/>
-
-<br/>
-
- ## ◽ 온라인 투표 (댓글 기능)
-
-<img src="./WebContent/resources/assets/온라인투표 댓글 기능.gif" alt="온라인 투표 (댓글 기능) GIF"/>
-
-<br/>
-
- ## ◽ 온라인 투표 (투표 기능)
-
-<img src="./WebContent/resources/assets/온라인투표 투표 기능.gif" alt="온라인 투표 (투표 기능) GIF"/>
-
-<br/>
-
- ## ◽ 책 리뷰 작성
-
-<img src="./WebContent/resources/assets/책 리뷰 작성.gif" alt="책 리뷰 작성 GIF"/>
-
-<br/>
-
- ## ◽ 팔로우 / 언팔로우 기능
-
-<img src="./WebContent/resources/assets/팔로우 언팔로우 기능.gif" alt="팔로우 / 언팔로우 기능 GIF"/>
+## ◽ 날씨 조회 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/날씨 조회.gif" alt="날씨 조회 GIF"/>
 
 <br/><br/><br/>
 
