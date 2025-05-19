@@ -1520,12 +1520,14 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
     
     // 일정 추가
     function addCal() {
-        // 폼에서 입력값 가져오기       
+        // 폼에서 입력값 가져오기
+        const contextPath = "<%= request.getContextPath() %>";
+        
         const title = document.getElementById('calTitle').value;
         const startDate = document.getElementById('calStart').value;
         const endDate = document.getElementById('calEnd').value || startDate;
         const description = document.getElementById('calDescription').value;
-        const calChatId = <%= roomId %>;
+        const calChatId = document.getElementById('calChatId').value;
         
         // 필수 입력값 검증
         if (!title || !startDate) {
@@ -1534,7 +1536,7 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
         }
         
         // API 호출
-        fetch(`\${pageContext.request.contextPath}/message/calendarInsertMessage.do?calChatId=\${roomId}`, {
+        fetch(`\${contextPath}/message/calendarInsertMessage.do?calChatId=\${roomId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -1577,7 +1579,7 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
 	    console.log("roomId:", roomId);
 	    console.log("contextPath:", contextPath);
 	
-	    fetch(`\${pageContext.request.contextPath}/message/MessageCalender.do?roomId=\${roomId}`)
+	    fetch(`\${contextPath}/message/MessageCalender.do?roomId=\${roomId}`)
         .then(resp => {
             console.log("응답 상태:", resp.status);
             if (!resp.ok) throw new Error("서버 오류 또는 404");
@@ -1628,7 +1630,7 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
 	
 	    if (!confirm("정말 삭제할까요?")) return;
 	
-	    fetch(`\${pageContext.request.contextPath}/message/MessageCalenderUpdate.do`, {
+	    fetch(`\${contextPath}/message/MessageCalenderUpdate.do`, {
 	        method : "POST",
 	        headers: {"Content-Type":"application/x-www-form-urlencoded"},
 	        body   : new URLSearchParams({calId})
