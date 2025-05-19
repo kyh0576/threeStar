@@ -175,8 +175,8 @@
          font-size: 14px;
      }
      
-     #g_id_onload, .g_id_signin{
-     	align: center;
+     .g_id_signin{
+     	align-items: center;
      }
 </style>
 </head>
@@ -217,17 +217,19 @@
         <div
 	      id="g_id_onload"
 	      data-auto_prompt="false"
+	      data-context="use"
 	      data-callback="handleCredentialResponse"
 	      data-client_id="988243476840-8gjc4u9a1aahr0uvhubcc8aosff07nk1.apps.googleusercontent.com"
 	    ></div>
 		
     	<div class="g_id_signin"
-	        data-type="icon"
+	        data-type="standard"
+	        data-theme="filled_blue"
+	        data-text="continue_with"
 	        data-size="large"
-            data-text="signin"
-            data-theme="filled_blue"
-	        data-shape="rectangular"
-            data-width=368.79
+            data-logo_alignment="center"
+	        data-shape="square"
+	        data-width="400"
             ></div>
 		
 		<input type="hidden" id="memName" name="memName" value="${ memName }">
