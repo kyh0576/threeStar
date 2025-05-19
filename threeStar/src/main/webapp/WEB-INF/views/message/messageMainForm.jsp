@@ -1621,7 +1621,6 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
 <!-- 메시지 내 캘린더 삭제 JS -->
 <script>
 	document.querySelector(".calendar-list").addEventListener("click", e => {
-		console.log("안녕하세요 ㅇㅇㅇ" );
 	    if (!e.target.classList.contains("del-btn")) return;
 	
 	    const itemEl   = e.target.closest(".cal-item");
