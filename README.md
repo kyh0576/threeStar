@@ -1,5 +1,5 @@
 <!-- Heading -->
-![서고 로고](./threeStar/src/main/webapp/resources/asset/팀로고.png)
+![서고 로고](./threeStar/src/main/webapp/resources/asset/logo.png)
 
 # 📘 프로젝트 소개
 
