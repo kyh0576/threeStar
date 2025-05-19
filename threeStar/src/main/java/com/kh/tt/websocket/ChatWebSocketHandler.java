@@ -28,7 +28,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         Member loginMember = (Member) session.getAttributes().get("loginMember");
         String roomId = getRoomId(session);
 
-        System.out.println("✅ 연결됨 - RoomId: " + roomId + ", 유저: " + loginMember);
 
         ChatRoomManager.addSession(roomId, session);
     }
