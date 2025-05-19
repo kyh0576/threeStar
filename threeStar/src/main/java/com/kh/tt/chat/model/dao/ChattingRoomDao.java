@@ -53,9 +53,7 @@ public class ChattingRoomDao {
     }
     
     public List<Member> getChatRoomMembers(SqlSessionTemplate sqlSession, int roomId){
-    	System.out.println("룸아이디 : "+roomId);
     	List<Member> memmem =  sqlSession.selectList("chatMapper.getChatRoomMembers",roomId);
-    	System.out.println("반환씨발형: " + memmem);
     	return memmem;
     }
     
@@ -64,7 +62,7 @@ public class ChattingRoomDao {
         Map<String, Object> param = new HashMap<>();
         param.put("chatId", chatId);
         param.put("memNo", memNo);
-        return sqlSession.delete("chatMapper.exitChatRoom", param);
+        return sqlSession.update("chatMapper.exitChatRoom", param);
     }
     
     
@@ -114,6 +112,14 @@ public class ChattingRoomDao {
         param.put("memNo", memNo); // ✅ 추가
         param.put("newName", newName);
         return sqlSession.update("chatMapper.renameChatRoom", param);
+    }
+    
+    
+    public int restoreChatRoom(SqlSessionTemplate sqlSession, int chatId, int memNo) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("chatId", chatId);
+        param.put("memNo", memNo);
+        return sqlSession.update("chatMapper.restoreChatRoom", param);
     }
     
 }

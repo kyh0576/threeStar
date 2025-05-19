@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kh.tt.chat.model.service.ChattingRoomService;
 import com.kh.tt.chat.model.vo.ChattingRoom;
 import com.kh.tt.member.model.vo.Member;
+import com.kh.tt.message.model.service.MessageService;
 
 @Controller
 @RequestMapping("/chattingRoom")
@@ -28,6 +29,9 @@ public class ChattingRoomController {
 	
 	@Autowired
     private ChattingRoomService chattingRoomService;
+	
+	@Autowired
+	private MessageService messageService;
 	
 	 // ==================== 채팅관련 ====================
 
@@ -51,10 +55,17 @@ public class ChattingRoomController {
 
             int roomId;
             if (existingRoomId != null) {
+                // ✅ 메시지 삭제
+                messageService.deleteMessagesByUserInRoom(existingRoomId, myMemNo);
+
+                // ✅ 복구
+                chattingRoomService.restoreChatRoom(existingRoomId, myMemNo);
+
                 roomId = existingRoomId;
             } else {
-            	roomId = chattingRoomService.createChatRoom(myMemNo, targetMemNo);
+                roomId = chattingRoomService.createChatRoom(myMemNo, targetMemNo);
             }
+
 
             response.put("success", true);
             response.put("roomId", roomId);
@@ -137,8 +148,6 @@ public class ChattingRoomController {
     @ResponseBody
     public String exitChatRoom(@RequestParam("chatId") int chatId,
                                @RequestParam("memNo") int memNo) {
-        System.out.println("🔥 받은 chatId: " + chatId);
-        System.out.println("🔥 받은 memNo: " + memNo);
         
         int result = chattingRoomService.exitChatRoom(chatId, memNo);
         return result > 0 ? "success" : "fail";

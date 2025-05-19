@@ -17,6 +17,8 @@
 	     , sc_class_code
 	  from schedule
 	 where sc_class_code = #{scClassCode}
+	 order
+	    by sc_date
    </select>
    
 	<insert id="insertSchedule">

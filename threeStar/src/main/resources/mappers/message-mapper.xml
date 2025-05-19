@@ -114,4 +114,11 @@
 	  FROM MESSAGE
 	 WHERE MESSAGE_NO = #{messageNo}
 </delete>
+
+
+<delete id="deleteMessagesByUserInRoom" parameterType="map">
+  DELETE FROM MESSAGE
+  WHERE MS_CHAT_ID = #{chatId}
+    AND MS_MEM_NO = #{memNo}
+</delete>
 </mapper>

@@ -205,9 +205,9 @@ public class MessageController {
         }
     }
     
-    @PostMapping("/calendarInsertMessage.do")
+    @PostMapping(value="/calendarInsertMessage.do", produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public Map<String, Object> insertCalendar(Calendar c, HttpSession session) {
+    public Map<String, Object> insertCalendar(@RequestParam("calChatId") int calChatId, Calendar c, HttpSession session) {
     	Map<String, Object> response = new HashMap<>();
     	
 		Member loginMember = (Member) session.getAttribute("loginMember");
@@ -219,6 +219,7 @@ public class MessageController {
 	    }
 	    
 	    c.setCalWriter(loginMember.getMemNo());
+	    c.setCalChatId(calChatId);
 	    
 	    try {
 	        int result = messageService.insertCalendar(c);
@@ -236,12 +237,30 @@ public class MessageController {
         return response;
     }
 
-    @GetMapping("MessageCalender.do")
+    @GetMapping(value="/MessageCalender.do")
     @ResponseBody
     public List<Calendar> getCalendarEvents(@RequestParam("roomId") int roomId) {
-        return messageService.getCalendarEvents(roomId);
+    	List<Calendar> list = messageService.getCalendarEvents(roomId);
+    	return list;
     }
     
+    @PostMapping(value="/MessageCalenderUpdate.do", produces="application/json; charset=UTF-8")
+    @ResponseBody
+    public Map<String, Object> getUpdateCalendarEvents(@RequestParam int calId, HttpSession session) {
+    	Map<String, Object> map = new HashMap<>();
+    	Member loginMember = (Member)session.getAttribute("loginMember");
+    	if(loginMember == null) {
+    		map.put("success", false);
+    		map.put("message", "로그인이 필요합니다.");
+    		return map;
+    	}
+    	
+    	int result = messageService.getUpdateCalendarEvents(calId, loginMember.getMemNo());
+    	
+    	map.put("success", result>0);
+    	map.put("message", result>0 ? "삭제 성공" : "삭제 실패");
+    	return map;
+    }
     
     
 }

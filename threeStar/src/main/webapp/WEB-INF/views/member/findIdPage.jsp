@@ -86,7 +86,7 @@ body * {
 							<i class="fa fa-check spaceLeft">아이디 찾기</i>
 						</button>
 						<button type="button" class="btn btn-primary btn-space">
-							<i class="fa fa-check spaceLeft" onclick="location.href='/tt/'">이전으로</i>
+							<i class="fa fa-check spaceLeft" onclick="location.href='${pageContext.request.contextPath}/'">이전으로</i>
 						</button>
 					</div>
 				</div>

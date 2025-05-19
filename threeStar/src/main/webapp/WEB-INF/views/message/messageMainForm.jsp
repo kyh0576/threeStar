@@ -20,7 +20,7 @@
 
 %>
 
-
+ 
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -674,35 +674,42 @@
                 
             </div>
             
-            <div class="section-header">
-                <div>캘린더</div>
-                <div class="add-cal" style="font-size: 20px;" onclick="addCal()">+</div>
-            </div>
-            
-            <div style="padding: 15px 20px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                    <div style="font-weight: bold;">4.16</div>
-                    <div style="font-size: 12px; color: #ff8c4a;">오늘</div>
-                </div>
-                <div style="background-color: #f5f5f5; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
-                    <div style="font-weight: bold;">물리 중간고사</div>
-                    <div style="font-size: 12px; color: #888;">KH정보교육원 강남실험 1관</div>
-                </div>
-                
-                
-                
-                
-                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                    <div style="font-weight: bold;">4.16</div>
-                    <div style="font-size: 12px; color: #ff8c4a;">오늘</div>
-                </div>
-                <div style="background-color: #f5f5f5; padding: 10px; border-radius: 4px;">
-                    <div style="font-weight: bold;">화학 중간고사</div>
-                    <div style="font-size: 12px; color: #888;">KH정보교육원 강남실험 1관</div>
-                </div>
-            </div>
-        </div>
-    </div>
+			<div class="section-header">
+			    <div>캘린더</div>
+			    <div class="add-cal" style="font-size: 20px;" onclick='showCalendarForm()'>
+			    	+
+		    	</div>
+			</div>
+			
+			<!-- 일정 입력 폼 -->
+			<div id="calendarForm" style="display: none; padding: 15px; border: 1px solid #ccc; margin-top: 10px;">
+			    <div style="margin-bottom: 10px;">
+			        <label for="calTitle">제목:</label>
+			        <input type="text" id="calTitle" name="calTitle" style="width: 100%;" required>
+			    </div>
+			    <div style="margin-bottom: 10px;">
+			        <label for="calStart">시작일:</label>
+			        <input type="date" id="calStart" name="calStart" style="width: 100%;" required>
+			    </div>
+			    <div style="margin-bottom: 10px;">
+			        <label for="calEnd">종료일:</label>
+			        <input type="date" id="calEnd" name="calEnd" style="width: 100%;" required>
+			    </div>
+			    <div style="margin-bottom: 10px;">
+			        <label for="calDescription">내용:</label>
+			        <input id="calDescription" name="calContent" style="width: 100%; height: 60px;" required>
+			    </div>
+			    <input type="hidden" id="calChatId" name="calChatId" value="${ roomId }" />
+			    <div style="text-align: right;">
+			    	<button onclick="addCal()">저장</button>
+			        <button onclick="cancelAddCal()">취소</button>
+			    </div>
+			</div>
+			
+			<div class="calendar-list" style="padding: 15px 20px;">
+			    <!-- JS로 일정이 렌더링됨 -->
+			</div>
+         </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1026,9 +1033,17 @@ document.addEventListener("DOMContentLoaded", function () {
         const type = data.sender === nickname ? "sent" : "received";
         appendMessage(data, type);
 
+        // 🔁 티서랍에도 실시간 반영
+        if (data.type === "file") {
+            appendToDrawer(data);
+        }
+
+        // 알림
         if (window.isNotificationOn && data.sender !== nickname && !document.hasFocus()) {
             showNotification(data.sender, data.text || data.messageContent || "📎 파일이 도착했어요!");
         }
+        
+        
     };
 
     function showNotification(sender, message) {
@@ -1093,8 +1108,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("roomId");
 
-    console.log("내 번호:", myMemNo);
-
     fetch(`${pageContext.request.contextPath}/message/history?roomId=\${roomId}`)  // ✅ 백틱 사용 → 템플릿 리터럴
         .then(response => response.json())
         .then(messages => {
@@ -1146,8 +1159,6 @@ document.addEventListener("DOMContentLoaded", function () {
       data.forEach(member => {
     	  const displayName = member.memName || "이름없음";
           const firstChar = displayName.charAt(0);
-          
-          console.log("✅ 참여자:", displayName, " → 이니셜:", firstChar);
     	  
         const memberItem = document.createElement("div");
         memberItem.className = "member-item";
@@ -1190,11 +1201,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 body: `chatId=\${roomId}&memNo=\${memNo}`
             })
             .then(res => {
-                console.log("응답 상태:", res.status);
                 return res.text();
             })
             .then(data => {
-                console.log("결과:", data);
                 if (data === "success") {
                     alert("채팅방에서 나갔습니다.");
                     window.location.href = contextPath + "/message/mainForm";
@@ -1261,12 +1270,6 @@ fileInput.addEventListener("change", () => {
             };
 
             socket.send(JSON.stringify(payload));
-            
-            console.log("아씨발진짜"+contextPath)
-            
-                console.log("🎯 저장 요청 전송 직전");
-                console.log("originName:", file.name);
-                console.log("changeName:", changeName);
 
             // ✅ DB 저장용 요청 (Message 테이블용)
             fetch(`\${contextPath}/message/save`, {
@@ -1307,9 +1310,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const roomId = <%= roomId %>;
     const contextPath = "<%= request.getContextPath() %>";
 
-    console.log("roomId:", roomId);
-    console.log("contextPath:", contextPath);
-
     fetch(`\${contextPath}/message/download/files?roomId=\${roomId}`)
         .then(response => {
             if (!response.ok) throw new Error("404 or server error");
@@ -1343,6 +1343,30 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("❌ 파일 목록 불러오기 실패:", err);
         });
 });
+
+//파일 전송 후 실시간으로 우측 파일 목록이 갱신
+function appendToDrawer(data) {
+    if (!data || data.type !== "file" || !data.file) return;
+
+    const fileListDiv = document.querySelector(".file-list");
+    const isImage = isImageFile(data.file.name);
+    const downloadUrl = data.file.fileUrl;
+    const fileName = data.file.name;
+
+    const html = `
+        <div class="file-item">
+            <div class="file-icon">${isImage ? "🖼️" : "📄"}</div>
+            <div class="file-info">
+                <div class="file-name">\${fileName}</div>
+            </div>
+            <a class="file-download" 
+               href="\${downloadUrl}" 
+               download="\${fileName}" 
+               target="_blank">⬇️</a>
+        </div>
+    `;
+    fileListDiv.insertAdjacentHTML("afterbegin", html);
+}
 
 </script>
 
@@ -1481,11 +1505,152 @@ document.getElementById("editRoomNameBtn").addEventListener("click", () => {
 
 </script>
 
+<!-- 메시지 내 캘린더 삽입 JS -->
+<script>
+    // 일정 입력 폼 표시
+    window.showCalendarForm = function() {
+        console.log("일정삽입테스트");  
+        document.getElementById('calendarForm').style.display = 'block';
+    };
+    
+    // 일정 입력 취소
+    function cancelAddCal() {
+        document.getElementById('calendarForm').style.display = 'none';
+    }
+    
+    // 일정 추가
+    function addCal() {
+        // 폼에서 입력값 가져오기
+        const contextPath = "<%= request.getContextPath() %>";
+        
+        const title = document.getElementById('calTitle').value;
+        const startDate = document.getElementById('calStart').value;
+        const endDate = document.getElementById('calEnd').value || startDate;
+        const description = document.getElementById('calDescription').value;
+        const calChatId = document.getElementById('calChatId').value;
+        
+        // 필수 입력값 검증
+        if (!title || !startDate) {
+            alert('제목과 날짜는 필수 입력 항목입니다.');
+            return;
+        }
+        
+        // API 호출
+        fetch(`\${contextPath}/message/calendarInsertMessage.do?calChatId=\${roomId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                calTitle: title,
+                calStart: startDate,
+                calEnd: endDate || startDate,
+                calContent: description
+            })
+        })
+        .then(response => response.text())
+		.then(text => {
+		    try {
+		        const data = JSON.parse(text);
+		        if (data.success) {
+		            alert('일정이 저장되었습니다.');
+		            location.reload();
+		        } else {
+		            alert('저장 실패: ' + (data.message || '알 수 없는 오류'));
+		        }
+		    } catch (e) {
+		        alert('JSON 파싱 실패. 원본 응답을 확인하세요.');
+		        console.error("파싱 오류:", e);
+		        console.log("서버 응답 내용:", text); // 이걸 통해 정확한 HTML/에러 내용을 볼 수 있음
+		    }
+		})
+        
+        // 폼 숨기기
+        document.getElementById('calendarForm').style.display = 'none';
+    }
+</script>
 
+<!-- 메시지 내 캘린더 조회 JS -->
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+	    const roomId = <%= roomId %>;
+	    const contextPath = "<%= request.getContextPath() %>";
+	    
+	    console.log("roomId:", roomId);
+	    console.log("contextPath:", contextPath);
+	
+	    fetch(`\${contextPath}/message/MessageCalender.do?roomId=\${roomId}`)
+        .then(resp => {
+            console.log("응답 상태:", resp.status);
+            if (!resp.ok) throw new Error("서버 오류 또는 404");
+            return resp.json();
+        })
+        .then(renderEvents)
+        .catch(err => {
+            console.error("❌ 일정 불러오기 실패:", err);
+            document.querySelector(".calendar-list").innerHTML =
+                "<p>일정을 불러오는 중 오류가 발생했습니다.</p>";
+        });
+	});
+	
+	function renderEvents(events) {
+	    const calList = document.querySelector(".calendar-list");
+	    calList.innerHTML = "";
 
+	    if (events?.length) {
+	        events.forEach(ev => {
+	        	calList.insertAdjacentHTML(
+       			  "beforeend",
+       			  `<div class="cal-item" data-id="\${ev.calId}" style="margin-bottom:10px">
+       			       <div style="font-size:12px;color:#888;">\${ev.calStart} ~ \${ev.calEnd}</div>
+       			       <div style="font-weight:bold;background:#f5f5f5;padding:10px;border-radius:4px;position:relative">
+       			           <div>\${ev.calTitle}</div>
+       			           <div style="font-size:12px;color:#888">\${ev.calContent}</div>
+       			           <button class="del-btn" style="position:absolute;top:8px;right:8px;font-size:11px">
+       			               삭제
+       			           </button>
+       			       </div>
+       			   </div>`
+       			);
+	        });
+	    } else {
+	        calList.innerHTML = "<p>등록된 일정이 없습니다.</p>";
+	    }
+	}
+</script>
 
-
-<!-- ------------------------------------------------------------------ -->
+<!-- 메시지 내 캘린더 삭제 JS -->
+<script>
+	document.querySelector(".calendar-list").addEventListener("click", e => {
+	    if (!e.target.classList.contains("del-btn")) return;
+	
+	    const itemEl   = e.target.closest(".cal-item");
+	    const calId    = itemEl.dataset.id;
+	    const contextPath  = "<%= request.getContextPath() %>";
+	
+	    if (!confirm("정말 삭제할까요?")) return;
+	
+	    fetch(`\${contextPath}/message/MessageCalenderUpdate.do`, {
+	        method : "POST",
+	        headers: {"Content-Type":"application/x-www-form-urlencoded"},
+	        body   : new URLSearchParams({calId})
+	    })
+	    .then(r => r.json())
+	    .then(res => {
+	        if (res.success) {
+	            itemEl.remove();                    // 화면에서 바로 제거
+	            alert("삭제되었습니다.");
+	        } else {
+	            alert("삭제 실패: " + res.message);
+	        }
+	    })
+	    .catch(err => {
+	        console.error(err);
+	        alert("통신 오류가 발생했습니다.");
+	    });
+	});
+</script>
+<!---------------------------------------------------------------------->
 
 </body>
 </html>

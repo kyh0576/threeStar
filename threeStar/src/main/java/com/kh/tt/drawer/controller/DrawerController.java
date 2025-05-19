@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,10 +12,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.tt.chat.model.service.ChattingRoomService;
 import com.kh.tt.drawer.model.service.DrawerServiceImpl;
@@ -64,30 +73,26 @@ public class DrawerController {
 		}
 	}
 	
-    @RequestMapping(value="fileDownload.do")
-    public void fileDownload(@RequestParam("fileName") String fileName, HttpServletRequest request, HttpServletResponse response) {
-        String rootPath = request.getSession().getServletContext().getRealPath("resources");
-        String filePath = rootPath + "/uploads/message/";
-        
-        File file = new File(filePath + fileName);
-        
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-        response.setContentLength((int) file.length());
-        
-        try (FileInputStream fis = new FileInputStream(file);
-             OutputStream out = response.getOutputStream()) {
-            
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            
-            while ((bytesRead = fis.read(buffer)) != -1) {
-                out.write(buffer, 0, bytesRead);
-            }
-            out.flush();
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	@RequestMapping(value="fileDownload.do")
+	public ResponseEntity<Resource> download(@RequestParam("fileName") String fileName, HttpServletRequest request) throws IOException {
+		String savePath = request.getSession().getServletContext().getRealPath("/resources/uploadFiles/");
+		File file = new File(savePath, fileName);
+		
+		if (!file.exists()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+	
+		Resource resource = new FileSystemResource(file);
+		
+		String encodedFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		
+		// ✅ UTF-8로 명시적으로 처리 (브라우저 호환성 ↑)
+		headers.add("Content-Disposition", "attachment; filename*=UTF-8''" + encodedFileName);
+	
+		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+	}
 
 }

@@ -41,5 +41,5 @@ public interface ChattingRoomService {
     //채팅방 이름 변경
 	int renameChatRoom(int roomId, String newName, int memNo);
     
-    
+	int restoreChatRoom(int chatId, int memNo);
 }

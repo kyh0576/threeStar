@@ -12,7 +12,6 @@ import com.kh.tt.profile.model.vo.Friend;
 public class FriendsDao {
 	
 	public List<Friend> FriendsList(SqlSessionTemplate sqlSession,int memNo){
-		System.out.println("여기는 dao용 " + memNo);
 		return sqlSession.selectList("friendMapper.FriendsList",memNo);
 	}
 }

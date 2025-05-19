@@ -520,6 +520,23 @@
 	    padding: 50px;
 	    color: #999;
 	}
+	
+	    .chat-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 16px;
+      font-weight: 500;
+      margin-right: 15px;
+      background-color : red;
+    }
+
+	
+	
 </style>
 </head>
 <body>
@@ -545,10 +562,6 @@
 		</div>
 
   
-		<div class="message-tabs">
-			<div class="tab active">All</div>
-			<div class="tab">Group</div>
-		</div>
 			<div class="message-list">
 			    
 			</div>
@@ -558,9 +571,6 @@
     <div class="main-content">
         <div class="gallery-header">
             <div class="gallery-profile">
-                <div class="gallery-profile-img">
-                    <img src="https://via.placeholder.com/50/4a8cff/ffffff?text=파일" alt="프로필">
-                </div>
                 <h3>파일 보관함</h3>
             </div>
         </div>
@@ -580,7 +590,7 @@
             
             <c:if test="${not empty list}">
                 <c:forEach var="file" items="${list}">
-                    <div class="gallery-item" data-file-type="${file.fileType}">
+                    <div class="gallery-item" data-file-type="${file.fileType}" data-origin-name="${file.originName}" data-change-name="${file.changeName}">
                         <c:choose>
                             <c:when test="${file.fileType.startsWith('image/')}">
                                 <img class="gallery-thumbnail" src="${pageContext.request.contextPath}/resources/uploadFiles/${file.changeName}" alt="${file.originName}">
@@ -602,6 +612,11 @@
     </div>
     
     <script src="${pageContext.request.contextPath}/resources/js/drawer.js"></script>
+    
+    
+    
+    
+    
         <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 탭 전환 기능
@@ -667,27 +682,38 @@
 	</script>
 	
 	<script>
-	<!-- 채팅방 목록 -->
-	document.addEventListener("DOMContentLoaded", function () {
-	    fetch("${pageContext.request.contextPath}/chattingRoom/rooms")  // 🔁 백엔드에서 참여중인 채팅방 목록 호출
-	        .then(response => response.json())
-	        .then(rooms => {
-	            const list = document.querySelector(".message-list");
+	  const contextPath = "${pageContext.request.contextPath}";
+	</script>
 	
-	            list.innerHTML = rooms.map(room => `
-	            <div class="message-item" onclick="location.href='${pageContext.request.contextPath}/drawerSelect.do?roomId=\${room.chatId}'">
-	                <div class="profile-img"><img src="/resources/images/default-profile.png" alt="프로필"></div>
-	                <div class="message-info">
-	                    <div class="message-name">\${room.chatName}</div> <!-- ✅ 여기 수정 -->
-	                    <div class="message-preview">\${room.lastMessage || '대화를 시작하세요'}</div>
-	                </div>
-	            </div>
-	        `).join('');
-	        })
-	        .catch(err => {
-	            console.error("❌ 채팅방 목록 불러오기 실패:", err);
-	        });
-	});
+	<script>
+	<!-- 채팅방 목록 -->
+	fetch(`\${contextPath}/chattingRoom/rooms`)
+    .then(res => res.json())
+    .then(rooms => {
+      const list = document.querySelector(".message-list");
+      if (!rooms || rooms.length === 0) {
+        list.innerHTML = "<p style='padding: 20px; color: gray;'>채팅방이 없습니다</p>";
+        return;
+      }
+
+      list.innerHTML = rooms.map(room => {
+    	  const displayName = room.chatName || "이름없음";
+    	  const firstChar = displayName.charAt(0);
+
+        return `
+          <div class="message-item" onclick="location.href='${pageContext.request.contextPath}/drawerSelect.do?roomId=\${room.chatId}'">
+            <div class="chat-avatar avatar-red">\${firstChar}</div>
+            <div class="message-info">
+              <div class="message-name">\${room.chatName}</div>
+              <div class="message-preview">\${room.lastMessage || '대화를 시작하세요'}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    })
+    .catch(err => {
+      console.error("❌ 채팅방 목록 불러오기 실패:", err);
+    });
 	</script>
 </body>
     
@@ -721,16 +747,22 @@
 		    
 		    // 파일 아이템 클릭 시 상세 보기
 		    $('.gallery-item').click(function() {
-		        const fileName = $(this).find('.file-title').text();
-		        const fileType = $(this).data('file-type');
-		        const filePath = $(this).find('img').attr('src');
+		    	const item = $(this);
+		    	const fileType = item.data('file-type');
+		    	const fileTitle = item.find('.file-title')
+		        const fileChangeName = item.data('change-name'); // 변경된 파일 이름 추출
+		        const filePath = item.find('img').attr('src'); // 이미지가 존재
+		        const contextPath = "${pageContext.request.contextPath}";
 		        
+		        // file-info를 클릭한 경우 → 다운로드
+		        if ($(event.target).closest('.file-info').length > 0) {
+		            	window.location.href = contextPath + '/fileDownload.do?fileName=' + encodeURIComponent(fileChangeName);
+		            return;
+		        }
+		        
+		        // 이미지 타입이면 → 미리보기
 		        if (fileType && fileType.startsWith('image/')) {
-		            // 이미지 파일 미리보기
-		            openImagePreview(filePath, fileName);
-		        } else {
-		            // 파일 다운로드
-		            window.location.href = 'fileDownload.do?fileName=' + encodeURIComponent($(this).find('.file-title').text());
+		            openImagePreview(filePath, fileTitle);
 		        }
 		    });
 		    
@@ -760,7 +792,8 @@
 		}
 		
 		// 이미지 미리보기 함수
-		function openImagePreview(imageSrc, imageTitle) {
+		// function openImagePreview(imageSrc, imageTitle) {
+		function openImagePreview(imageSrc) {
 		    // 기존 모달 제거
 		    $('#imagePreviewModal').remove();
 		    
@@ -772,13 +805,14 @@
 		    const closeBtn = $('<button class="preview-close">✕</button>');
 		    
 		    // 이미지 제목
-		    const title = $('<h3 class="preview-title"></h3>').text(imageTitle);
+		    // const title = $('<h3 class="preview-title"></h3>').text(imageTitle);
 		    
 		    // 이미지
 		    const image = $('<img class="preview-image">').attr('src', imageSrc);
 		    
 		    // 모달에 요소 추가
-		    container.append(closeBtn, title, image);
+		    // container.append(closeBtn, title, image);
+		    container.append(closeBtn, image);
 		    modal.append(container);
 		    
 		    // 모달을 body에 추가

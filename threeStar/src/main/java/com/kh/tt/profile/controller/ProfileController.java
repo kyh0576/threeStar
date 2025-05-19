@@ -281,7 +281,6 @@ public class ProfileController {
 	@RequestMapping(value = "profileFriend.do", produces = "application/json; charset=UTF-8")
 	public Member selectFriend(Friend friend) {
 	    Member m = pService.selectFriend(friend);
- 	    System.out.println(m);
 	    return m;
 	   
    }

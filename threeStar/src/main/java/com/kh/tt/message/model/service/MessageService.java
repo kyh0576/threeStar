@@ -22,4 +22,9 @@ public interface MessageService {
     int insertCalendar(Calendar c);
     
     List<Calendar> getCalendarEvents(int roomId);
+    
+    int getUpdateCalendarEvents(int calId, int calWriter);
+    
+ // 특정 유저가 특정 채팅방에서 보낸 메시지 전체 삭제
+    int deleteMessagesByUserInRoom(int chatId, int memNo);
 }
