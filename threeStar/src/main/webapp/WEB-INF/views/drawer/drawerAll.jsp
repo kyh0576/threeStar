@@ -580,7 +580,7 @@
             
             <c:if test="${not empty list}">
                 <c:forEach var="file" items="${list}">
-                    <div class="gallery-item" data-file-type="${file.fileType}">
+                    <div class="gallery-item" data-file-type="${file.fileType}" data-origin-name="${file.originName}" data-change-name="${file.changeName}">
                         <c:choose>
                             <c:when test="${file.fileType.startsWith('image/')}">
                                 <img class="gallery-thumbnail" src="${pageContext.request.contextPath}/resources/uploadFiles/${file.changeName}" alt="${file.originName}">
@@ -721,16 +721,22 @@
 		    
 		    // 파일 아이템 클릭 시 상세 보기
 		    $('.gallery-item').click(function() {
-		        const fileName = $(this).find('.file-title').text();
-		        const fileType = $(this).data('file-type');
-		        const filePath = $(this).find('img').attr('src');
+		    	const item = $(this);
+		    	const fileType = item.data('file-type');
+		    	const fileTitle = item.find('.file-title')
+		        const fileChangeName = item.data('change-name'); // 변경된 파일 이름 추출
+		        const filePath = item.find('img').attr('src'); // 이미지가 존재
+		        const contextPath = "${pageContext.request.contextPath}";
 		        
+		        // file-info를 클릭한 경우 → 다운로드
+		        if ($(event.target).closest('.file-info').length > 0) {
+		            	window.location.href = contextPath + '/fileDownload.do?fileName=' + encodeURIComponent(fileChangeName);
+		            return;
+		        }
+		        
+		        // 이미지 타입이면 → 미리보기
 		        if (fileType && fileType.startsWith('image/')) {
-		            // 이미지 파일 미리보기
-		            openImagePreview(filePath, fileName);
-		        } else {
-		            // 파일 다운로드
-		            window.location.href = 'fileDownload.do?fileName=' + encodeURIComponent($(this).find('.file-title').text());
+		            openImagePreview(filePath, fileTitle);
 		        }
 		    });
 		    
@@ -760,7 +766,8 @@
 		}
 		
 		// 이미지 미리보기 함수
-		function openImagePreview(imageSrc, imageTitle) {
+		// function openImagePreview(imageSrc, imageTitle) {
+		function openImagePreview(imageSrc) {
 		    // 기존 모달 제거
 		    $('#imagePreviewModal').remove();
 		    
@@ -772,13 +779,14 @@
 		    const closeBtn = $('<button class="preview-close">✕</button>');
 		    
 		    // 이미지 제목
-		    const title = $('<h3 class="preview-title"></h3>').text(imageTitle);
+		    // const title = $('<h3 class="preview-title"></h3>').text(imageTitle);
 		    
 		    // 이미지
 		    const image = $('<img class="preview-image">').attr('src', imageSrc);
 		    
 		    // 모달에 요소 추가
-		    container.append(closeBtn, title, image);
+		    // container.append(closeBtn, title, image);
+		    container.append(closeBtn, image);
 		    modal.append(container);
 		    
 		    // 모달을 body에 추가

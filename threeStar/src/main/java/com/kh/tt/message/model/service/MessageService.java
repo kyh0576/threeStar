@@ -22,4 +22,6 @@ public interface MessageService {
     int insertCalendar(Calendar c);
     
     List<Calendar> getCalendarEvents(int roomId);
+    
+    int getUpdateCalendarEvents(int calId, int calWriter);
 }

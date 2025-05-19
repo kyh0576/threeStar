@@ -1,6 +1,8 @@
 package com.kh.tt.message.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -43,6 +45,11 @@ public class MessageDao {
     	return sqlSession.selectList("calendarMapper.getCalendarEvents", roomId);
     }
     
-
+    public int getUpdateCalendarEvents(SqlSessionTemplate sqlSession, int calId, int calWriter){
+    	Map<String, Object> param = new HashMap<>();
+    	param.put("calId", calId);
+    	param.put("calWriter", calWriter);
+    	return sqlSession.delete("calendarMapper.getUpdateCalendarEvents", param);
+    }
     
 }
