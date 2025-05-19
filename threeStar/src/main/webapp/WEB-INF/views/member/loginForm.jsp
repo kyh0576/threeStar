@@ -213,7 +213,7 @@
         <div class="divider">
             <span>OR</span>
         </div>
-        
+        test
         <div
 	      id="g_id_onload"
 	      data-auto_prompt="false"
@@ -221,7 +221,7 @@
 	      data-callback="handleCredentialResponse"
 	      data-client_id="988243476840-8gjc4u9a1aahr0uvhubcc8aosff07nk1.apps.googleusercontent.com"
 	    ></div>
-		
+
     	<div class="g_id_signin"
 	        data-type="standard"
 	        data-theme="filled_blue"
