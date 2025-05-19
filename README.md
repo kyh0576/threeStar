@@ -153,29 +153,29 @@ ERD Cloud :
 <h2 style="border-bottom : none">🧡 조원 : 서동진
 
 ## ◽ 채팅 기능 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/채팅기능.gif" alt="채팅기능 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅기능" alt="채팅기능 GIF"/>
 <br/><br/>
 
 ## ◽ 채팅방 생성 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/채팅방 생성.gif" alt="채팅방 생성 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅방 생성" alt="채팅방 생성 GIF"/>
 
 ## ◽ 채팅방 이름 변경 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/채팅방 이름 변경.gif" alt="채팅방 이름 변경 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅방 이름 변경" alt="채팅방 이름 변경 GIF"/>
 
 ## ◽ 채팅방 나가기 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/채팅방 나가기.gif" alt="채팅방 나가기 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅방 나가기" alt="채팅방 나가기 GIF"/>
 
 ## ◽ 대화내용 삭제 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/대화내용 삭제.gif" alt="대화내용 삭제  GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/대화내용 삭제" alt="대화내용 삭제  GIF"/>
 
 ## ◽ 대화 상대 초대 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/대화 상대 초대.gif" alt="대화 상대 초대  GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/대화 상대 초대" alt="대화 상대 초대  GIF"/>
 
 ## ◽ 알람 on off <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/알람 on off.gif" alt="알람 on off GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/알람 on off" alt="알람 on off GIF"/>
 
 ## ◽ 날씨 조회 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/날씨 조회.gif" alt="날씨 조회 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/날씨 조회" alt="날씨 조회 GIF"/>
 
 <br/><br/><br/>
 
