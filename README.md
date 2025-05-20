@@ -78,11 +78,7 @@ ThreeStars 프로젝트는 KH Academy 내 구성원들이 자유롭고 실시간
 <br/><br/><br/>
 
 # ⚙ API
-- [네이버 개발자 센터](https://developers.naver.com/main/)
-- [카카오 개발자 센터](https://developers.kakao.com/)
-- [구글 개발자 센터 (한국어)](https://developers.google.com/?hl=ko)
-- [도로명주소 API](https://business.juso.go.kr/addrlink/openApi/apiReqst.do)
-- [국립중앙도서관 - 공공데이터](https://www.data4library.kr/)
+- [기상청_단기예보 - 공공데이터](https://www.data4library.kr/)
 - [구글 로그인 HTML API](https://developers.google.com/identity/gsi/web/reference/html-reference?hl=ko)
 - [구글 캘린더 API](https://console.cloud.google.com/apis/library/calendar-json.googleapis.com?hl=ko)
 
