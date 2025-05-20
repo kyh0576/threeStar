@@ -903,6 +903,12 @@ function appendMessage(data, type) {
                 .then(result => {
                     if (result === "success") {
                         alert("메시지를 삭제했습니다.");
+                        
+                        socket.send(JSON.stringify({
+                            type: "messageDeleted",
+                            messageNo: messageNo
+                        }));
+                        
                         wrapper.remove();
                     } else {
                         alert("❌ 메시지 삭제 실패");
@@ -1030,6 +1036,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
+        
+        if (data.type === "messageDeleted") {
+            const target = document.querySelector(`[data-message-id="\${data.messageNo}"]`);
+            if (target) target.remove();  // 다른 사용자 화면에서도 삭제됨
+            return; // 더 이상 처리하지 않음
+        }
+        
+        
         const type = data.sender === nickname ? "sent" : "received";
         appendMessage(data, type);
 
