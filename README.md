@@ -158,7 +158,7 @@ ERD Cloud :
 <img src="./threeStar/src/main/webapp/resources/asset/채팅방생성.gif" alt="채팅방생성GIF"/>
 
 ## ◽ 채팅방 이름 변경 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/채팅방이름변경.gif" alt="채팅방이름변경 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅방 이름 변경.gif" alt="채팅방이름변경 GIF"/>
 
 ## ◽ 채팅방 나가기 <br/>
 <img src="./threeStar/src/main/webapp/resources/asset/채팅방나가기.gif" alt="채팅방나가기 GIF"/>
