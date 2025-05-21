@@ -78,11 +78,9 @@ ThreeStars 프로젝트는 KH Academy 내 구성원들이 자유롭고 실시간
 <br/><br/><br/>
 
 # ⚙ API
-- [네이버 개발자 센터](https://developers.naver.com/main/)
-- [카카오 개발자 센터](https://developers.kakao.com/)
-- [구글 개발자 센터 (한국어)](https://developers.google.com/?hl=ko)
-- [도로명주소 API](https://business.juso.go.kr/addrlink/openApi/apiReqst.do)
-- [국립중앙도서관 - 공공데이터](https://www.data4library.kr/)
+- [기상청_단기예보 - 공공데이터](https://www.data4library.kr/)
+- [구글 로그인 HTML API](https://developers.google.com/identity/gsi/web/reference/html-reference?hl=ko)
+- [구글 캘린더 API](https://console.cloud.google.com/apis/library/calendar-json.googleapis.com?hl=ko)
 
 <br/><br/><br/>
 
@@ -129,73 +127,56 @@ ERD Cloud :
 <h2 style="border-bottom : none">🤎 조원 : 이용훈</h2>
 
   ## ◽ SNS 간편로그인(Google)<br/>
-<img src="./WebContent/resources/assets/googleLogin.gif" alt="자동로그인 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/googleLogin.gif" alt="자동로그인 GIF"/>
 
   ## ◽ 캘린더 - (일반, 구글캘린더)<br/>
-<img src="./WebContent/resources/assets/calendar.gif" alt="캘린더 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/calendar.gif" alt="캘린더 GIF"/>
 
   ## ◽ 티서랍<br/>
-<img src="./WebContent/resources/assets/drawer.gif" alt="파일모음집 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/drawer.gif" alt="파일모음집 GIF"/>
 
   ## ◽ MIME 타입<br/>
-<img src="./WebContent/resources/assets/MIME type.png" alt="파일형태 PNG"/>
+<img src="./threeStar/src/main/webapp/resources/asset/MIME type.png" alt="파일형태 PNG"/>
 
   ## ◽ 채팅방 내 캘린더<br/>
-<img src="./WebContent/resources/assets/messageCalendar.gif" alt="채팅방 내 캘린더 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/messageCalendar.gif" alt="채팅방 내 캘린더 GIF"/>
 
  ## ◽ 테스트코드<br/>
-<img src="./WebContent/resources/assets/TestCode.png" alt="테스트코드 PNG"/>
+<img src="./threeStar/src/main/webapp/resources/asset/TestCode.png" alt="테스트코드 PNG"/>
 
-<br/>
+<br/><br/>
+<br/><br/>
 
 # 
 <h2 style="border-bottom : none">🧡 조원 : 서동진
 
- ## ◽ 카카오 로그인(API)
+## ◽ 채팅 기능 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅기능.gif" alt="채팅기능 GIF"/>
+<br/><br/>
 
-<img src="./WebContent/resources/assets/카카오 로그인.gif" alt="카카오 로그인 GIF"/>
+## ◽ 채팅방 생성 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅방생성.gif" alt="채팅방생성GIF"/>
 
-<br/>
+## ◽ 채팅방 이름 변경 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅방이름변경.gif" alt="채팅방이름변경 GIF"/>
 
- ## ◽ 자유 게시판(작성, 수정, 삭제)
+## ◽ 채팅방 나가기 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅방나가기.gif" alt="채팅방나가기 GIF"/>
 
-<img src="./WebContent/resources/assets/자유게시판 작성.gif" alt="자유게시판 GIF"/>
+## ◽ 대화내용 삭제 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/대화내용삭제.gif" alt="대화내용삭제 GIF"/>
 
-<br/>
+## ◽ 첨부파일 전송/다운 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/첨부파일전송다운.gif" alt="첨부파일전송다운 GIF"/>
 
- ## ◽ 자유 게시판 (댓글 기능)
+## ◽ 대화 상대 초대 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/대화상대초대.gif" alt="대화상대초대 GIF"/>
 
-<img src="./WebContent/resources/assets/자유게시판 댓글 작성.gif" alt="자유 게시판 (댓글 기능) GIF"/>
+## ◽ 알람 on off <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/알람onoff.gif" alt="알람onoff GIF"/>
 
-<br/>
-
- ## ◽ 온라인 투표 (작성, 수정, 삭제)
-
-<img src="./WebContent/resources/assets/온라인투표 작성.gif" alt="온라인 투표 (작성, 수정, 삭제) GIF"/>
-
-<br/>
-
- ## ◽ 온라인 투표 (댓글 기능)
-
-<img src="./WebContent/resources/assets/온라인투표 댓글 기능.gif" alt="온라인 투표 (댓글 기능) GIF"/>
-
-<br/>
-
- ## ◽ 온라인 투표 (투표 기능)
-
-<img src="./WebContent/resources/assets/온라인투표 투표 기능.gif" alt="온라인 투표 (투표 기능) GIF"/>
-
-<br/>
-
- ## ◽ 책 리뷰 작성
-
-<img src="./WebContent/resources/assets/책 리뷰 작성.gif" alt="책 리뷰 작성 GIF"/>
-
-<br/>
-
- ## ◽ 팔로우 / 언팔로우 기능
-
-<img src="./WebContent/resources/assets/팔로우 언팔로우 기능.gif" alt="팔로우 / 언팔로우 기능 GIF"/>
+## ◽ 날씨 조회 <br/>
+<img src="./threeStar/src/main/webapp/resources/asset/날씨조회.gif" alt="날씨조회 GIF"/>
 
 <br/><br/><br/>
 

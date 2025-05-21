@@ -56,7 +56,7 @@ public class ChattingRoomController {
             int roomId;
             if (existingRoomId != null) {
                 // ✅ 메시지 삭제
-                messageService.deleteMessagesByUserInRoom(existingRoomId, myMemNo);
+                //messageService.deleteMessagesByUserInRoom(existingRoomId, myMemNo);
 
                 // ✅ 복구
                 chattingRoomService.restoreChatRoom(existingRoomId, myMemNo);
