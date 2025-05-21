@@ -12,10 +12,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	  var calendarEl = document.getElementById('calendar');
 
 	  var calendar = new FullCalendar.Calendar(calendarEl, {
-	    googleCalendarApiKey: 'AIzaSyAL5jWY-JDKMgxsm6H7YuK4NUuEZ_z0gqU',
+	    googleCalendarApiKey: '',
 	    eventSources: [
 	    	{
-	          googleCalendarId: 'ko.south_korea#holiday@group.v.calendar.google.com',
+	          googleCalendarId: '',
 	          className: '',
 	          color: '#be5683', //rgb,#ffffff 등의 형식으로 할 수 있어요.
 	          //textColor: 'black' 
