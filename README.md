@@ -65,7 +65,7 @@ ThreeStars 프로젝트는 KH Academy 내 구성원들이 자유롭고 실시간
 
 # ⚙ 개발 환경 
 - OS : Windows10/11
-- Developer Tools : Eclipse / VS Code / SqlDeveloper / STS
+- Developer Tools : STS / VS Code / SqlDeveloper
 - Server : (Apach Tomcat 9.0)
 - DBMS : Oracle
 - Front-end : HTML5 / CSS3 / JavaScript / jQuery
