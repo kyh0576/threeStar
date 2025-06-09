@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="messageMapper">
+
+<resultMap id="messageResult" type="Message">
+    <result column="message_no" property="messageNo"/>
+    <result column="message_content" property="messageContent"/>
+    <result column="create_date" property="createDate"/>
+    <result column="send_time" property="sendTime"/>
+    <result column="origin_name" property="originName"/>
+    <result column="change_name" property="changeName"/>
+    <result column="ms_chat_id" property="msChatId"/>
+    <result column="ms_mem_no" property="msMemNo"/>
+    <result column="type" property="type"/> <!-- ✅ 추가 -->
+    <result column="file_type" property="fileType"/> <!-- ✅ 추가 -->
+    <result column="sender" property="sender"/>
+    <result column="TEXT" property="text"/>
+    <result column="time" property="time"/>
+    
+</resultMap>
+
+    <insert id="insertMessage" parameterType="Message">
+    INSERT INTO MESSAGE (
+        MESSAGE_NO, 
+        MESSAGE_CONTENT, 
+        ORIGIN_NAME, 
+        CHANGE_NAME, 
+        MS_CHAT_ID, 
+        MS_MEM_NO,
+        TYPE,        <!-- ✅ 추가 -->
+        FILE_TYPE    <!-- ✅ 추가 -->
+    ) VALUES (
+        SEQ_MESSAGE_NO.NEXTVAL,
+        #{messageContent},
+        #{originName},
+        #{changeName},
+        #{msChatId},
+        #{msMemNo},
+        #{type},       <!-- ✅ 추가 -->
+        #{fileType}    <!-- ✅ 추가 -->
+    )
+    </insert>
+
+<!-- messageMapper.xml -->
+<select id="sendMessage" parameterType="_int" resultMap="messageResult">
+  SELECT 
+    MS.MESSAGE_NO,
+    MS.MESSAGE_CONTENT,
+    MS.CREATE_DATE,
+    MS.SEND_TIME,
+    MS.ORIGIN_NAME,
+    MS.CHANGE_NAME,
+    MS.TYPE,
+    MS.FILE_TYPE,
+    MS.MS_CHAT_ID,
+    MS.MS_MEM_NO,
+    M.MEM_NAME AS sender,
+    
+    CASE 
+        WHEN MS.TYPE = 'chat' THEN MS.MESSAGE_CONTENT 
+        ELSE NULL 
+    END AS text,
+    
+    CASE 
+        WHEN MS.TYPE = 'file' THEN MS.CHANGE_NAME
+        ELSE NULL
+    END AS fileUrl,     -- ✅ 요거 추가해서 프론트랑 딱 맞게!
+
+    TO_CHAR(MS.SEND_TIME, 'YYYY-MM-DD"T"HH24:MI:SS') AS time
+  FROM MESSAGE MS
+  JOIN MEMBER M ON MS.MS_MEM_NO = M.MEM_NO
+  WHERE MS.MS_CHAT_ID = #{roomId}
+  ORDER BY MS.SEND_TIME
+</select>
+
+
+<select id="getUploadedFiles" parameterType="_int" resultMap="messageResult">
+    SELECT 
+        MESSAGE_NO,
+        MESSAGE_CONTENT,
+        CREATE_DATE,
+        SEND_TIME,
+        ORIGIN_NAME,
+        CHANGE_NAME,
+        FILE_TYPE,
+        MS_CHAT_ID,
+        MS_MEM_NO,
+        TYPE,
+        TO_CHAR(SEND_TIME, 'YYYY-MM-DD\"T\"HH24:MI:SS') AS TIME
+    FROM MESSAGE
+    WHERE MS_CHAT_ID = #{roomId}
+      AND TYPE = 'file'
+    ORDER BY SEND_TIME
+</select>
+
+
+<select id="getFilesByRoomId" parameterType="_int" resultMap="messageResult">
+    SELECT 
+        MESSAGE_NO,
+        ORIGIN_NAME,
+        CHANGE_NAME,
+        FILE_TYPE,
+        MS_CHAT_ID,
+        MS_MEM_NO,
+        SEND_TIME
+    FROM MESSAGE
+    WHERE MS_CHAT_ID = #{roomId}
+      AND TYPE = 'file'
+    ORDER BY SEND_TIME DESC
+</select>
+
+<delete id="deleteMessage" parameterType="_int">
+	DELETE
+	  FROM MESSAGE
+	 WHERE MESSAGE_NO = #{messageNo}
+</delete>
+
+
+<delete id="deleteMessagesByUserInRoom" parameterType="map">
+  DELETE FROM MESSAGE
+  WHERE MS_CHAT_ID = #{chatId}
+    AND MS_MEM_NO = #{memNo}
+</delete>
+</mapper>

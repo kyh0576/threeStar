@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chatMapper">
+
+   <resultMap id="chatResult" type="Chat">
+      <result column="chat_id" property="chatId"/>
+      <result column="ch_mem_no" property="chMemNo"/>
+      <result column="chat_name" property="chatName"/>
+      <result column="status" property="status"/>
+   </resultMap>
+   
+   <resultMap id="chatRoomMemberMap" type="Member">
+  <result property="memNo" column="MEM_NO"/>
+  <result property="memName" column="MEM_NAME"/>
+</resultMap>
+   
+   <!-- 1. 기존 채팅방 있는지 조회 -->
+   <select id="findChatRoom" parameterType="map" resultType="int">
+	SELECT cr.CHAT_ID
+	FROM chatting_room cr
+	WHERE cr.CH_MEM_NO = #{myMemNo}
+	  AND cr.CHAT_ID IN (
+     SELECT cr2.CHAT_ID 
+     FROM chatting_room cr2 
+     WHERE cr2.CH_MEM_NO = #{targetMemNo}
+	  )
+	   AND cr.CHAT_ID IN (
+	    SELECT CHAT_ID 
+	    FROM chatting_room 
+	    GROUP BY CHAT_ID 
+	    HAVING COUNT(*) = 2
+	  )
+   </select>
+
+   <!-- 2. 내 채팅방 INSERT (내가 먼저 생성) -->
+   <insert id="createChatRoom" parameterType="map">
+       INSERT INTO CHATTING_ROOM (
+           CHAT_ID,
+           CH_MEM_NO,
+           CHAT_NAME,
+           STATUS
+       ) VALUES (
+           SEQ_CHAT_ID.NEXTVAL,
+           #{memNo},
+           #{chatName},
+           'Y'
+       )
+   </insert>
+
+   <!-- 3. 방금 생성한 CHAT_ID 가져오기 -->
+   <select id="selectLastChatId" resultType="int">
+       SELECT SEQ_CHAT_ID.CURRVAL FROM dual
+   </select>
+
+   <!-- 4. 상대방도 같은 CHAT_ID로 INSERT -->
+   <insert id="createTargetChatRoom" parameterType="map">
+       INSERT INTO CHATTING_ROOM (
+           CHAT_ID,
+           CH_MEM_NO,
+           CHAT_NAME,
+           STATUS
+       ) VALUES (
+           #{chatId},
+           #{targetMemNo},
+           #{chatName},
+           'Y'
+       )
+   </insert>
+  
+   
+<select id="selectRoomsByMemberId" parameterType="String" resultType="Chat">
+SELECT 
+    CR.CHAT_ID AS chatId,
+    CR.CH_MEM_NO AS chMemNo,
+    
+    CASE 
+        WHEN CR.CHAT_NAME IS NULL OR CR.CHAT_NAME = '채팅방' THEN (
+            SELECT MEM_NAME 
+            FROM MEMBER 
+            WHERE MEM_NO = (
+                SELECT CH_MEM_NO 
+                FROM CHATTING_ROOM 
+                WHERE CHAT_ID = CR.CHAT_ID 
+                AND CH_MEM_NO != CR.CH_MEM_NO
+                AND ROWNUM = 1
+            )
+        )
+        ELSE CR.CHAT_NAME
+    END AS chatName,
+
+    CR.STATUS AS status,
+    M.LAST_MESSAGE AS lastMessage
+
+FROM CHATTING_ROOM CR
+
+LEFT JOIN (
+    SELECT MS_CHAT_ID, MESSAGE_CONTENT AS LAST_MESSAGE
+    FROM (
+        SELECT MS_CHAT_ID, MESSAGE_CONTENT, ROW_NUMBER() OVER (PARTITION BY MS_CHAT_ID ORDER BY SEND_TIME DESC) AS RN
+        FROM MESSAGE
+    )
+    WHERE RN = 1
+) M ON CR.CHAT_ID = M.MS_CHAT_ID
+
+WHERE CR.CH_MEM_NO = (SELECT MEM_NO FROM MEMBER WHERE MEM_ID = #{memId})
+  AND CR.STATUS = 'Y'
+</select>
+
+
+
+      <!-- 상대방 멤버 가져오기 -->
+   <select id="findTargetMember" parameterType="map" resultType="Member">
+       SELECT 
+	       	MEM_NO AS memNo,
+	        MEM_ID AS memId,
+	        MEM_PWD AS memPwd,
+	        MEM_NAME AS memName,  -- ✅ 이거 중요!!
+	        EMAIL AS email,
+	        PHONE AS phone,
+	        MEM_CLASS_CODE AS memClassCode,
+	        SNS_KEY AS snsKey,
+	        STATUS AS status,
+	        ONLINE_ST AS onlineSt,
+	        ADMIN_YN AS adminYN,
+	        PROFILE_URL AS profileURL
+       FROM MEMBER
+       WHERE MEM_NO IN (
+           SELECT CH_MEM_NO FROM CHATTING_ROOM
+           WHERE CHAT_ID = #{roomId}
+           AND CH_MEM_NO != #{myMemNo}
+       )
+   </select>
+
+<select id="selectChatRoomById" parameterType="_int" resultType="Chat">
+SELECT 
+    CHAT_ID AS chatId,
+    CH_MEM_NO AS chMemNo,
+    CHAT_NAME AS chatName,
+    STATUS AS status
+FROM CHATTING_ROOM
+WHERE CHAT_ID = #{roomId}
+AND ROWNUM = 1
+
+</select>
+
+
+<select id="getChatRoomMembers" parameterType="_int" resultMap="chatRoomMemberMap">
+  SELECT M.MEM_NO, M.MEM_NAME, M.PROFILE_URL
+  FROM CHATTING_ROOM CR
+  JOIN MEMBER M ON CR.CH_MEM_NO = M.MEM_NO
+  WHERE CR.CHAT_ID = #{roomId}
+</select>
+
+
+<!-- chatMapper.xml -->
+<update id="exitChatRoom" parameterType="map">
+    UPDATE chatting_room
+    SET status = 'N'
+    WHERE chat_id = #{chatId}
+      AND ch_mem_no = #{memNo}
+</update>
+
+<!-- 채팅방 생성 전 동일한 채팅방 있는지 확인 -->
+<select id="findGroupChatRoom" parameterType="list" resultType="int">
+  SELECT CHAT_ID
+  FROM (
+      SELECT CHAT_ID
+      FROM CHATTING_ROOM
+      GROUP BY CHAT_ID
+      HAVING COUNT(*) = #{memberCount}
+         AND SUM(CASE WHEN CH_MEM_NO IN 
+             <foreach item="memNo" collection="list" open="(" separator="," close=")">
+               #{memNo}
+             </foreach>
+             THEN 1 ELSE 0 END
+         ) = #{memberCount}
+  )
+</select>
+
+<!-- 그룹채팅방 생성 -->
+<insert id="insertChatRoom" parameterType="map" useGeneratedKeys="false">
+    INSERT INTO CHATTING_ROOM (
+        CHAT_ID,
+        CH_MEM_NO,
+        CHAT_NAME,
+        STATUS
+    ) VALUES (
+        SEQ_CHAT_ID.NEXTVAL,
+        #{memNo},
+        #{chatName},
+        'Y'
+    )
+</insert>
+
+<!--  방에 사람 초대 -->
+<insert id="insertRoomMember" parameterType="map">
+    INSERT INTO CHATTING_ROOM (
+        CHAT_ID,
+        CH_MEM_NO,
+        CHAT_NAME,
+        STATUS
+    ) VALUES (
+        #{chatId},
+        #{memNo},
+        #{chatName},
+        'Y'
+    )
+</insert>
+
+<!-- 채팅방 멤버 존재 여부 확인 -->
+<select id="findExistingMembersInRoom" resultType="int">
+  SELECT CH_MEM_NO
+  FROM CHATTING_ROOM
+  WHERE CHAT_ID = #{chatId}
+    AND CH_MEM_NO IN
+    <foreach item="memNo" collection="memNos" open="(" separator="," close=")">
+        #{memNo}
+    </foreach>
+</select>
+
+<!-- 채팅방 멤버 이름 리스트 가져오기 -->
+<select id="findMemberNamesInRoom" parameterType="int" resultType="string">
+  SELECT M.MEM_NAME
+  FROM CHATTING_ROOM CR
+  JOIN MEMBER M ON CR.CH_MEM_NO = M.MEM_NO
+  WHERE CR.CHAT_ID = #{chatId}
+</select>
+
+<!-- 채팅방 이름 업데이트 -->
+<update id="updateChatRoomName" parameterType="map">
+  UPDATE CHATTING_ROOM
+  SET CHAT_NAME = #{chatName}
+  WHERE CHAT_ID = #{chatId}
+</update>
+
+<!-- 채팅방 이름 변경 -->
+<update id="renameChatRoom" parameterType="map">
+    UPDATE chatting_room
+    SET chat_name = #{newName}
+    WHERE chat_id = #{roomId}
+    AND ch_mem_no = #{memNo}
+</update>
+
+
+
+<update id="restoreChatRoom" parameterType="map">
+  UPDATE chatting_room
+  SET status = 'Y'
+  WHERE chat_id = #{chatId}
+    AND ch_mem_no = #{memNo}
+</update>
+
+</mapper>

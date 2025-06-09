@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="profileMapper">
+
+	<resultMap id="profileResult" type="Member">
+		<result column="MEM_ID" property="memId" />
+		<result column="MEM_NAME" property="memName" />
+		<result column="PHONE" property="phone" />
+		<result column="EMAIL" property="email" />
+		<result column="MEM_PWD" property="memPwd" />
+	</resultMap>
+	
+   <resultMap id="memberResult" type="Member">
+      <result column="mem_no" property="memNo"/>
+      <result column="mem_id" property="memId"/>
+      <result column="mem_pwd" property="memPwd"/>
+      <result column="mem_name" property="memName"/>
+      <result column="email" property="email"/>
+      <result column="phone" property="phone"/>
+      <result column="mem_class_code" property="memClassCode"/>
+      <result column="sns_key" property="snsKey"/>
+      <result column="status" property="status"/>
+      <result column="online_st" property="onlineSt"/>
+      <result column="admin_yn" property="adminYN"/>
+      <result column="profile_url" property="profileURL"/>
+      <result column="to_Nickname" property="toNickname"/>
+   </resultMap>
+
+   <resultMap id="friendResult" type="Friend">
+   		<result column="from_mem" property="fromMem"/>
+  		<result column="to_mem" property="toMem"/>
+  		<result column="arw_we_friend" property="areWeFriend"/>
+  		<result column="to_nickname" property="toNickname"/>
+   </resultMap>
+	
+	<select id="selectProfile" resultMap="memberResult">
+	SELECT *
+	FROM (
+	    SELECT
+	        MEM_NO,
+	        MEM_ID,
+	        MEM_NAME,
+	        TO_NICKNAME
+	    FROM MEMBER
+	    LEFT JOIN FRIENDS ON MEM_NO = TO_MEM
+	    WHERE STATUS = 'Y'
+	      AND MEM_NO = #{memNo}
+        order
+           by to_nickname
+	)
+	WHERE ROWNUM = 1
+	</select>
+	
+	<select id="detailProfile" resultMap="memberResult">
+		select
+			  MEM_ID
+			, MEM_PWD
+		from MEMBER
+		where MEM_ID = #{memId}
+		  and status = 'Y'
+	</select>
+	
+	
+   <select id="loginMember" resultMap="memberResult">
+      select
+             mem_no
+           , mem_id
+           , mem_pwd
+           , mem_name
+           , email
+           , phone
+           , mem_class_code
+           , sns_key
+           , status
+           , online_st
+           , admin_yn
+        from member
+       where status = 'Y'
+         and mem_id = #{memId}
+   </select>
+	
+	<update id="updateProfile">
+		update
+			  member
+		  set
+		  	    mem_name = #{memName}
+			  , phone = #{phone}
+			  , email = #{email}
+			  , mem_pwd = #{memPwd}
+		where mem_id = #{memId}
+	</update>
+	
+	<insert id="insertFriend">
+	    INSERT ALL
+	        INTO FRIENDS (FROM_MEM, TO_MEM, ARE_WE_FRIEND, RECEIVER) VALUES (#{fromMem}, #{toMem}, 'N', #{toMem})
+	        INTO FRIENDS (FROM_MEM, TO_MEM, ARE_WE_FRIEND, RECEIVER) VALUES (#{toMem}, #{fromMem}, 'N', #{toMem})
+	    SELECT * FROM DUAL
+	</insert>
+	
+	<update id="deleteProfile">
+		update
+			  member
+			set
+			    status = 'N'
+			  , online_st = 'N'
+		where mem_id = #{memId}
+	</update>
+
+	<delete id="deleteFriend" parameterType="map">
+	    DELETE FROM FRIENDS
+	    WHERE (FROM_MEM = #{fromMem} AND TO_MEM = #{toMem})
+	       OR (FROM_MEM = #{toMem} AND TO_MEM = #{fromMem})
+	</delete>
+	
+	<select id="selectWaitingList" resultMap="friendResult">
+		select
+	       from_mem
+	     , to_mem
+	     , are_we_friend
+	     , to_nickname
+	  from friends
+	 where from_mem = #{fromMem}
+	   and to_mem = #{toMem}
+       and are_we_friend = 'N'
+	</select>
+	
+	<update id="updateFriendName">
+	update
+		   friends
+	   set
+		   to_nickname = #{toNickname}
+	 where to_mem = #{toMem}
+	   and from_mem = #{fromMem}
+	   and are_we_friend = 'Y'
+	</update>
+	
+ 	<select id="selectFriend" resultMap="memberResult">
+	   select 
+	          mem_no
+	        , mem_id
+	        , mem_pwd
+	        , mem_name
+	        , email
+	        , phone
+	        , mem_class_code
+	        , sns_key
+	        , status
+	        , online_st
+	        , admin_yn
+	        , profile_url
+	        , to_Nickname
+	     from member
+	     join friends on (to_mem = mem_no)
+	    where are_we_friend = 'Y'
+	      and from_mem = #{fromMem}
+	      and to_mem = #{toMem}
+   </select>
+	
+</mapper>
