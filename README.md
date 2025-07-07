@@ -65,7 +65,7 @@ ThreeStars 프로젝트는 KH Academy 내 구성원들이 자유롭고 실시간
 
 # ⚙ 개발 환경 
 - OS : Windows10/11
-- Developer Tools : Eclipse / VS Code / SqlDeveloper / STS
+- Developer Tools : STS / VS Code / SqlDeveloper
 - Server : (Apach Tomcat 9.0)
 - DBMS : Oracle
 - Front-end : HTML5 / CSS3 / JavaScript / jQuery
@@ -158,7 +158,7 @@ ERD Cloud :
 <img src="./threeStar/src/main/webapp/resources/asset/채팅방생성.gif" alt="채팅방생성GIF"/>
 
 ## ◽ 채팅방 이름 변경 <br/>
-<img src="./threeStar/src/main/webapp/resources/asset/채팅방이름변경.gif" alt="채팅방이름변경 GIF"/>
+<img src="./threeStar/src/main/webapp/resources/asset/채팅방 이름 변경.gif" alt="채팅방이름변경 GIF"/>
 
 ## ◽ 채팅방 나가기 <br/>
 <img src="./threeStar/src/main/webapp/resources/asset/채팅방나가기.gif" alt="채팅방나가기 GIF"/>

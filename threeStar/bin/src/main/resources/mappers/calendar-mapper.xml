@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="calendarMapper">
+
+	<resultMap id="calendarResult" type="Calendar">
+      <result column="cal_id" property="calId"/>
+      <result column="cal_writer" property="calWriter"/>
+      <result column="cal_title" property="calTitle"/>
+      <result column="cal_content" property="calContent"/>
+      <result column="cal_start" property="calStart"/>
+      <result column="cal_end" property="calEnd"/>
+      <result column="cal_chat_id" property="calChatId"/>
+	</resultMap>
+	
+	<insert id="InsertCalendar">
+      insert
+        into calendar
+            (
+             cal_id
+           , cal_writer
+           , cal_title
+           , cal_content
+           , cal_start
+           , cal_end
+           )
+      values
+          (
+            SEQ_CAL_ID.NEXTVAL
+          , #{calWriter}
+          , #{calTitle}
+          , #{calContent}
+          , TO_DATE(#{calStart}, 'YYYY-MM-DD')
+          , TO_DATE(#{calEnd}, 'YYYY-MM-DD')
+          )
+   </insert>
+   
+   <select id="SelectCalendar" resultMap="calendarResult">
+		select
+			 cal_id
+           , cal_writer
+           , cal_title
+           , cal_content
+           , cal_start
+           , cal_end
+           , cal_chat_id
+		  from
+			calendar
+   		where cal_writer = #{calWriter}
+   </select>
+   
+   <update id="updateCalendar">
+   		update
+   			calendar
+   		set
+   			 cal_title = #{calTitle}
+           , cal_content = #{calContent}
+           , cal_start = TO_DATE(#{calStart}, 'YYYY-MM-DD')
+           , cal_end = TO_DATE(#{calEnd}, 'YYYY-MM-DD')
+       	where cal_id = #{calId}
+       	  and cal_writer = #{calWriter}
+   </update>
+   
+   <delete id="deleteCalendar">
+   		delete
+   		from
+   			calendar
+   		where cal_id = #{calId}
+   		  and cal_writer = #{calWriter}
+   </delete>
+   
+   	<insert id="insertCalendar">
+	insert
+        into calendar
+            (
+             cal_id
+           , cal_writer
+           , cal_title
+           , cal_content
+           , cal_start
+           , cal_end
+           , cal_chat_id
+           )
+      values
+          (
+            SEQ_CAL_ID.NEXTVAL
+          , #{calWriter}
+          , #{calTitle}
+          , #{calContent}
+          , TO_DATE(#{calStart}, 'YYYY-MM-DD')
+          , TO_DATE(#{calEnd}, 'YYYY-MM-DD')
+          , #{calChatId}
+          )
+	</insert>
+
+	<select id="getCalendarEvents" resultMap="calendarResult">
+		select
+		      cal_id
+		    , cal_title
+		    , cal_content
+		    , TO_CHAR(cal_start, 'YYYY-MM-DD') as cal_start
+		    , TO_CHAR(cal_end, 'YYYY-MM-DD') as cal_end
+		    , cal_chat_id
+		from calendar  
+		where cal_chat_id = #{roomId}
+		order by cal_id desc
+	</select>
+	
+	<delete id="getUpdateCalendarEvents">
+		delete
+   		from
+   			calendar
+   		where cal_id = #{calId}
+   		  and cal_Writer = #{calWriter}
+	</delete>
+
+</mapper>

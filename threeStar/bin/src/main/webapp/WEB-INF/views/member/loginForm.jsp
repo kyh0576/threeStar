@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>ThreeStar</title>
+<!-- jQuery 라이브러리 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <style>
      * {
          margin: 0;
@@ -91,7 +94,7 @@
          color: white;
          background-color: #53a2dd;
          cursor: pointer;
-         margin-bottom: 30px;
+         margin-bottom: 20px;
          transition: background-color 0.3s;
      }
      
@@ -99,8 +102,28 @@
          background-color: #4590c7;
      }
      
+     .signup-btn {
+         width: 100%;
+         padding: 15px;
+         border: none;
+         border-radius: 50px;
+         font-size: 16px;
+         font-weight: bold;
+         color: #53a2dd;
+         background-color: white;
+         cursor: pointer;
+         margin-bottom: 30px;
+         transition: all 0.3s;
+         border: 2px solid #53a2dd;
+     }
+     
+     .signup-btn:hover {
+         background-color: #f0f7fc;
+     }
+     
      .social-login {
          text-align: center;
+         margin-top: 20px;
      }
      
      .social-login p {
@@ -109,47 +132,70 @@
          font-size: 14px;
      }
      
-     .social-icons {
-         display: flex;
-         justify-content: center;
-         gap: 15px;
-     }
-     
      .social-icon {
-         width: 40px;
-         height: 40px;
-         border-radius: 50%;
+         width: 100%;
+         height: 45px;
+         border-radius: 50px;
          display: flex;
          align-items: center;
          justify-content: center;
          color: white;
          cursor: pointer;
          transition: transform 0.3s ease;
+         background-color: #ea4335;
+         font-weight: bold;
+         font-size: 16px;
      }
      
      .social-icon:hover {
-         transform: scale(1.1);
-     }
-     
-     .facebook {
-         background-color: #3b5998;
-     }
-     
-     .twitter {
-         background-color: #1da1f2;
+         transform: scale(1.03);
      }
      
      .google {
          background-color: #ea4335;
      }
      
-     .apple {
-         background-color: #53a2dd;
+     .divider {
+         display: flex;
+         align-items: center;
+         text-align: center;
+         margin: 30px 0;
      }
- </style>
+     
+     .divider::before,
+     .divider::after {
+         content: '';
+         flex: 1;
+         border-bottom: 1px solid #ddd;
+     }
+     
+     .divider span {
+         padding: 0 10px;
+         color: #777;
+         font-size: 14px;
+     }
+     
+     #googleLoginWrapper{
+     	display: flex;
+     	justify-centent: center;
+     	align-items: center;
+     }
+     
+     .g_id_signin {
+     	margin: 0 auto;
+     }
+</style>
 </head>
 <body>
-    <form class="login-container" action="login.me" method="GET">
+
+	<c:if test="${ not empty alertMsg }">
+		<script>
+			alert("${ alertMsg }");
+		</script>
+		<c:remove var="alertMsg" scope="session"/> <!-- scope 생략시 모든 scope의 있는 alertMsg를 지움 -->
+	</c:if>
+	
+    <form class="login-container" action="login.me" method="POST">
         <h1>Login</h1>
         
         <div class="input-group">
@@ -163,31 +209,51 @@
         </div>
         
         <div class="help-links">
-            <a href="#" id="find-id">아이디 찾기</a>
-            <a href="#" id="find-password">비밀번호 찾기</a>
+            <a href="findIdPage.me" id="find-id">아이디 찾기</a>
+            <a href="findPwdPage.me" id="find-password">비밀번호 찾기</a>
         </div>
         
-        <button class="login-btn">LOGIN</button>
+        <button type="submit" class="login-btn">LOGIN</button>
+        <button type="button" id="signup-btn" class="signup-btn">회원가입</button>
         
-        <div class="social-login">
-            <p>Or Sign Up Using</p>
-            <div class="social-icons">
-                <div class="social-icon facebook"></div>
-                <div class="social-icon twitter"></div>
-                <div class="social-icon google"></div>
-                <div class="social-icon apple"></div>
-            </div>
+        <div class="divider">
+            <span>OR</span>
         </div>
+        <div id="googleLoginWrapper">
+	        <div
+		      id="g_id_onload"
+		      data-auto_prompt="false"
+		      data-context="use"
+		      data-callback="handleCredentialResponse"
+		      data-client_id="988243476840-8gjc4u9a1aahr0uvhubcc8aosff07nk1.apps.googleusercontent.com"
+		    ></div>
+	
+	    	<div class="g_id_signin"
+		        data-type="standard"
+		        data-theme="filled_blue"
+		        data-text="continue_with"
+		        data-size="large"
+	            data-logo_alignment="center"
+		        data-shape="square"
+		        data-width="368.4"
+	            ></div>
+		</div>
+		<input type="hidden" id="memName" name="memName" value="${ memName }">
+		<input type="hidden" id="email" name="email" value="${ email }">
+		<input type="hidden" id="snsKey" name="snsKey" value="${ snsKey }">	
     </form>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const loginBtn = document.querySelector('.login-btn');
+            const signupBtn = document.getElementById('signup-btn');
             const usernameInput = document.querySelector('input[type="text"]');
             const passwordInput = document.querySelector('input[type="password"]');
             const findIdLink = document.getElementById('find-id');
             const findPasswordLink = document.getElementById('find-password');
+            const googleLogin = document.getElementById('google-login');
             
+            /*
             findIdLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 alert('아이디 찾기 페이지로 이동합니다.');
@@ -199,7 +265,101 @@
                 alert('비밀번호 찾기 페이지로 이동합니다.');
                 // 비밀번호 찾기 페이지로 이동하는 로직
             });
+            */
+            
+            signupBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // 회원가입 페이지로 이동하는 로직
+                window.location.href = 'signinForm.me';
+            });
         });
     </script>
+    
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- <script type="text/javascript" src="js/loginGoogleAPI.js" defer></script>  -->
+    
+    <script>
+		function handleCredentialResponse(response) {
+			// decodeJwtResponse() is a custom function defined by you
+			// to decode the credential response.
+			const id_token = response.credential;
+			console.log("토큰값 : " + id_token);
+			
+			const responsePayload = decodeJwtResponse(id_token);
+			
+			console.log("unique identifier: " + responsePayload.jti)
+			console.log("ID: " + responsePayload.sub);
+			console.log('Full Name: ' + responsePayload.name);
+			console.log('Given Name: ' + responsePayload.given_name);
+			console.log('Family Name: ' + responsePayload.family_name);
+			console.log("Image URL: " + responsePayload.picture);
+			console.log("Email: " + responsePayload.email);
+			
+			sendforwardGooglelogin(id_token, responsePayload.name, responsePayload.email)
+		}
+		
+		// 디코딩 함수
+		function decodeJwtResponse(id_token) {
+			console.log('decodeJwtResponse 호출');
+			// 받아온 토큰 값을 디코딩하여 정보 전송
+			// id_token을 '.'으로 나누어 중간에 있는 payload 부분(base64Url)을 추출
+			const base64Url = id_token.split('.')[1];
+			// URL-safe Base64 형식에서 표준 Base64 형식으로 변환 ('-' -> '+', '_' -> '/')
+			const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+			// Base64로 인코딩된 문자열을 디코딩하고 각 문자의 유니코드 값을 %인코딩된 형식으로 변환한 후, 이를 다시 문자열로 조합하여 JSON 형식의 payload로 만듦
+			const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+				// 각 문자의 유니코드 값을 %XX 형식으로 변환
+				return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+			}).join('')); //변환된 값을 하나의 문자열로 조합
+			// 최종적으로 JSON 타입으로 변환해 반환
+			return JSON.parse(jsonPayload);
+		}
+	    
+		// 받아온 값을 보내는 함수
+		function sendforwardGooglelogin(snsKey, fullname, email) {
+		    // 새로운 폼 요소 생성합니다.
+		    let googleloginForm = document.createElement("form");
+			googleloginForm.style.display = "none";
+		    googleloginForm.method = "POST"; // POST 요청 방식
+		    // googleloginForm.action = "signinForm.me"; // 요청을 보낼 URL
+		   	googleloginForm.action = "googleLogin.do";
+
+			// 토큰 값을 보낼 input태그 만들기
+		    let snsKeyField = document.createElement("input");
+		    snsKeyField.type = "hidden"; // 폼에 표시되지 않도록 숨김 필드로 설정
+		    snsKeyField.name = "snsKey"; // 서버에서 받을 변수 이름
+		    snsKeyField.value = snsKey; // 보낼 데이터
+		    
+		    // 이름 값을 보낼 input태그 만들기
+		    let nameField = document.createElement("input");
+		    nameField.type = "hidden"; // 폼에 표시되지 않도록 숨김 필드로 설정
+		    nameField.name = "memName"; // 서버에서 받을 변수 이름
+		    nameField.value = fullname; // 보낼 데이터
+
+		    // 이메일값을 보낼 input태그 만들기
+		    let emailField = document.createElement("input");
+		    emailField.type = "hidden";
+		    emailField.name = "email";
+		    emailField.value = email;
+			
+		    // 구글 로그인임을 알려줄 input태그 만들기
+		    let typeField = document.createElement("input");
+		    typeField.type = "hidden";
+		    typeField.name = "type";
+		    typeField.value = "googleLogin";
+
+			// 만든 input태그를 form에 추가합니다.
+			googleloginForm.appendChild(snsKeyField);
+		    googleloginForm.appendChild(nameField);
+		    googleloginForm.appendChild(emailField);
+		    googleloginForm.appendChild(typeField);
+		    
+		    // 폼을 현재 페이지에 추가한 후 전송합니다.
+		    document.body.appendChild(googleloginForm);
+		    googleloginForm.submit();
+		    
+		}
+	</script>
+    
 </body>
 </html>

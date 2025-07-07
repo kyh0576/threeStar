@@ -1,10 +1,35 @@
+<%@page import="com.kh.tt.member.model.vo.Member"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%> 
+    
+
+
+<%
+    com.kh.tt.member.model.vo.Member loginMember = (com.kh.tt.member.model.vo.Member) session.getAttribute("loginMember");
+    String myNickname = loginMember.getMemName();   // 내 닉네임
+    String targetNickname = (String) request.getAttribute("targetNickname"); // 상대방 닉네임
+    
+    String roomIdParam = request.getParameter("roomId");
+    int roomId = roomIdParam != null ? Integer.parseInt(roomIdParam) : -1;
+%>
+
+<%
+    List<Member> chatRoomMembers = (List<Member>) request.getAttribute("chatRoomMembers");
+    int memberCount = chatRoomMembers != null ? chatRoomMembers.size() : 0;
+
+%>
+
+ 
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ThreeStar</title>
+<title>Insert title here</title>
     <style>
         * {
             margin: 0;
@@ -19,104 +44,16 @@
             min-height: 100vh;
         }
 
-       
-        /* 메시지 목록 사이드바 */
-        .message-sidebar {
-            width: 300px;
-            background-color: white;
-            border-right: 1px solid #e1e1e1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .message-header {
-            padding: 20px;
-            border-bottom: 1px solid #e1e1e1;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .message-tabs {
-            display: flex;
-            border-bottom: 1px solid #e1e1e1;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            background-color: #f5f5f5;
-            cursor: pointer;
-        }
-
-        .tab.active {
-            background-color: #4a8cff;
-            color: white;
-        }
-
-        .message-list {
-            overflow-y: auto;
-            flex-grow: 1;
-        }
-
-        .message-item {
-            padding: 15px;
-            border-bottom: 1px solid #f1f1f1;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .message-item:hover {
-            background-color: #f9f9f9;
-        }
-
-        .message-item.active {
-            background-color: #f0f7ff;
-        }
-
-        .profile-img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 15px;
-            overflow: hidden;
-        }
-
-        .profile-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .message-info {
-            flex-grow: 1;
-        }
-
-        .message-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .message-preview {
-            color: #666;
-            font-size: 14px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
 
         /* 메인 콘텐츠 영역 */
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
-        }
-
+		.main-content {
+		    display: flex;
+		    flex-direction: column;
+		    flex-grow: 1;
+		    height: 100vh;  /* 전체 높이 지정 */
+		}
         .chat-header {
-            padding: 15px 20px;
+            padding: 18px 20px;
             border-bottom: 1px solid #e1e1e1;
             display: flex;
             align-items: center;
@@ -128,7 +65,6 @@
             align-items: center;
             flex-grow: 1;
         }
-
         .chat-profile-img {
             width: 40px;
             height: 40px;
@@ -158,17 +94,17 @@
 
         .chat-action-btn.active {
             color: #4a8cff;
-        }
-
-        .chat-messages {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        }    
+  
+		.chat-messages {
+		    flex-grow: 1;   /* 나머지 공간 다 채움 */
+		    overflow-y: auto;
+		    padding: 20px;
+		    gap: 15px;
+		    background-color: #f5f5f5;
+		    display: flex;
+		    flex-direction: column;
+		}
 
         .message-bubble {
             max-width: 70%;
@@ -275,7 +211,7 @@
         }
 
         .right-sidebar-header {
-            padding: 15px 20px;
+            padding: 25px 20px;
             border-bottom: 1px solid #e1e1e1;
             display: flex;
             align-items: center;
@@ -350,6 +286,10 @@
             gap: 10px;
             cursor: pointer;
         }
+        
+        .add-cal {
+        	cursor: pointer;
+        }
 
         .file-item {
             padding: 10px 20px;
@@ -413,147 +353,266 @@
             height: 1px;
             background-color: #e1e1e1;
         }
+        
+        
+        
+        /* 채팅 친구 리스트 등*/
+
+		/* ✅ 왼쪽 모달 (새 채팅용) */
+		#inviteModal {
+		  position: fixed;
+		  top: 120px;
+		  left: 100px;
+		  z-index: 9999;
+		  background: white;
+		  padding: 20px;
+		  border-radius: 8px;
+		  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+		  display: none;
+		  min-width: 300px;
+		}
+		
+		/* ✅ 왼쪽 닫기 버튼 */
+		#closeModalBtn {
+		  float: right;
+		  font-size: 18px;
+		  font-weight: bold;
+		  cursor: pointer;
+		  background: none;
+		  border: none;
+		  color: #888;
+		}
+		#closeModalBtn:hover {
+		  color: #ff4444;
+		}
+		
+		/* ✅ 왼쪽 친구 리스트 */
+		#friend-list-left {
+		  margin-top: 15px;
+		  max-height: 300px;
+		  overflow-y: auto;
+		}
+		
+		/* ✅ 오른쪽 모달 (초대용) */
+		#inviteModalRight {
+		  position: fixed;
+		  top: 120px;
+		  right: 320px;
+		  z-index: 9999;
+		  background: white;
+		  padding: 20px;
+		  border-radius: 8px;
+		  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+		  display: none;
+		  min-width: 300px;
+		}
+		
+		/* ✅ 오른쪽 닫기 버튼 */
+		#inviteModalRight .close-modal {
+		  float: right;
+		  font-size: 18px;
+		  font-weight: bold;
+		  cursor: pointer;
+		  background: none;
+		  border: none;
+		  color: #888;
+		}
+		#inviteModalRight .close-modal:hover {
+		  color: #ff4444;
+		}
+		
+		/* ✅ 오른쪽 친구 리스트 */
+		#friend-list-right {
+		  margin-top: 15px;
+		  max-height: 300px;
+		  overflow-y: auto;
+		}
+		
+		/* ✅ 친구 항목 공통 */
+		.friend-item {
+		  padding: 10px;
+		  border-radius: 5px;
+		  margin-bottom: 6px;
+		  background-color: #f8f9fa;
+		  cursor: pointer;
+		  transition: background-color 0.2s;
+		}
+		.friend-item:hover {
+		  background-color: #e6f0ff;
+		}
+		
+		/* ✅ 버튼: 공통 적용 가능 */
+		#startChatBtnLeft,
+		#startChatBtnRight {
+		  display: block;
+		  width: 100%;
+		  padding: 12px 16px;
+		  margin-top: 15px;
+		  background-color: #4a8cff;
+		  color: white;
+		  font-size: 16px;
+		  font-weight: bold;
+		  border: none;
+		  border-radius: 6px;
+		  cursor: pointer;
+		  transition: background-color 0.2s ease;
+		  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+		#startChatBtnLeft:hover,
+		#startChatBtnRight:hover {
+		  background-color: #367ee6 ;
+		}
+		#startChatBtnLeft:active,
+		#startChatBtnRight:active {
+		  background-color: #2c6dd9;
+		}
+
+		/* ✅ 공통 친구 리스트 스타일 */
+		#friend-list-left,
+		#friend-list-right {
+		  margin-top: 15px;
+		  max-height: 300px; /* 세로 길이 제한 */
+		  overflow-y: auto;  /* 스크롤 */
+		  display: flex;
+		  flex-direction: column;
+		  gap: 6px;
+		}
+		
+		/* ✅ label 스타일 세로 정렬 + 카드 스타일 */
+		#friend-list-left label,
+		#friend-list-right label {
+		  display: flex;
+		  align-items: center;
+		  padding: 10px;
+		  background-color: #f8f9fa;
+		  border-radius: 6px;
+		  cursor: pointer;
+		  transition: background-color 0.2s;
+		}
+		
+		#friend-list-left label:hover,
+		#friend-list-right label:hover {
+		  background-color: #e6f0ff;
+		}
+		
+		#friend-list-left input[type="checkbox"],
+		#friend-list-right input[type="checkbox"] {
+		  margin-right: 10px;
+		}
+				
+		
+		/* 메시지 삭제 */
+		.message-wrapper {
+		  display: flex;
+		  align-items: center;
+		  position: relative;
+		  gap: 8px;
+		}
+		
+		.message-wrapper.sent {
+		  justify-content: flex-end;
+		}
+		
+		.message-menu-wrapper {
+		  position: relative;
+		}
+		
+		.message-menu-btn {
+		  background: none;
+		  border: none;
+		  font-size: 18px;
+		  color: #777;
+		  cursor: pointer;
+		}
+		
+		.message-dropdown {
+		  position: absolute;
+		  top: 20px;
+		  left: 0;
+		  background: white;
+		  border: 1px solid #ddd;
+		  border-radius: 6px;
+		  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+		  display: none;
+		  min-width: 80px;
+		  z-index: 1000;
+		}
+		
+		.message-dropdown.show {
+		  display: block;
+		}
+		
+		.message-action {
+		  padding: 8px 12px;
+		  font-size: 14px;
+		  cursor: pointer;
+		}
+		
+		.message-action:hover {
+		  background-color: #f5f5f5;
+		}
+
+
+		/*채팅방 이름 변경*/
+		#editRoomNameBtn {
+		    background: none;
+		    border: none;
+		    font-size: 16px;
+		    margin-left: 8px;
+		    cursor: pointer;
+		    color: #888;
+		    transition: color 0.2s ease;
+		}
+		
+		#editRoomNameBtn:hover {
+		    color: #4a8cff;
+		    transform: scale(1.05);
+		}
+		
+										
     </style>
 
 </head>
 <body>
      <!-- 이쪽에 메뉴바 포함 할꺼임 -->
     <jsp:include page="../common/mainMenu.jsp"/>
+    
+    
+	<jsp:include page="../common/sidebar.jsp"/>
 
-    <!-- 메시지 목록 사이드바 -->
-    <div class="message-sidebar" >
-        <div class="message-header">Messages</div>
-        <div class="message-tabs">
-            <div class="tab active">All</div>
-            <div class="tab">Group</div>
-        </div>
-        <div class="message-list">
-            <div class="message-item active">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=팀" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">집주인 첫째 딸</div>
-                    <div class="message-preview">아 어디야</div>
-                </div>
-            </div>
-            <div class="message-item">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/ff4a8c/ffffff?text=여" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">여자친구❤</div>
-                    <div class="message-preview">어디야</div>
-                </div>
-            </div>
-            <div class="message-item">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/8cff4a/000000?text=집" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">집주인</div>
-                    <div class="message-preview">일마 오늘 맛있는거 사와</div>
-                </div>
-            </div>
-            <div class="message-item">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/ff8c4a/ffffff?text=F" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">fire egg friend</div>
-                    <div class="message-preview">야 근일님 ㄷㄷ ㄹㅇ</div>
-                </div>
-            </div>
-            <div class="message-item">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/4aff8c/000000?text=GD" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">고명훈</div>
-                    <div class="message-preview">일마 포샵 GD네 ㅋㅋ</div>
-                </div>
-            </div>
-            <div class="message-item">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/8c4aff/ffffff?text=AI" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">스승님</div>
-                    <div class="message-preview">아? 뭐 아? 하면 되는데 그걸 못해?</div>
-                </div>
-            </div>
-            <div class="message-item">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=간" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">간성훈</div>
-                    <div class="message-preview">내 위에 바보</div>
-                </div>
-            </div>
-            <div class="message-item">
-                <div class="profile-img">
-                    <img src="https://via.placeholder.com/40/ffd700/000000?text=새" alt="프로필">
-                </div>
-                <div class="message-info">
-                    <div class="message-name">세미 프로젝트 조</div>
-                    <div class="message-preview">이효석 : 나는 원래 잘생겼...</div>
-                </div>
-            </div>
-        </div>
-    </div>
+	
 
     <!-- 메인 콘텐츠 - 채팅 부분 -->
     <div class="main-content">
         <div class="chat-header">
             <div class="chat-profile">
-                <div class="chat-profile-img">
-                    <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=팀" alt="프로필">
-                </div>
-                <h3>집주인 첫째 딸</h3>
-                <span style="margin-left: 10px; color: #888; font-size: 14px;">2 participants</span>
+                <div class="chat-avatar avatar-red">${ targetNickname }</div>
+                
+               <h3 id="chatRoomTitle"><%= targetNickname == null ? "채팅방을 선택해주세요" : targetNickname %></h3>
+				<span  id="participantCount"> 
+				</span>
+				<button id="editRoomNameBtn" style="margin-left: 10px;">✏️</button>
+
+
             </div>
+            
             <div class="chat-actions">
-                <button class="chat-action-btn">🔍</button>
+                <button class="chat-action-btn" id="leaveRoomBtn"> 🚪</button>
                 <button class="chat-action-btn" id="toggleRightSidebar">👥</button>
                 <button class="chat-action-btn" id="toggleMenu">⋮</button>
             </div>
         </div>
 
         <div class="chat-messages">
-            <div class="message-bubble received">
-                <div>아 어디야</div>
-                <div class="message-time">08:00</div>
-            </div>
             
-            <div class="message-bubble sent">
-                <div>이거 어때? 밑에 브라켓과 담장 툴리 왜 망가남</div>
-                <div class="chat-attachment">
-                    <img src="https://via.placeholder.com/400x300/eee/888?text=가구+이미지" alt="가구 이미지">
-                </div>
-                <div class="message-time">1:12 PM</div>
-            </div>
-            
-            <div class="message-bubble received">
-                <div>너 연습돼 더 해야겠다. 저소스 혹시 못써니?</div>
-                <div class="message-time">2:12 PM</div>
-            </div>
-            
-            <div class="message-bubble sent">
-                <div>그냥 갤러리 나눠지 괜찮, 이거나 고쳐봐봐</div>
-                <div class="message-time">1:17 PM</div>
-            </div>
-            
-            <div class="message-bubble received">
-                <div>맞음레도 쉬버서 해야지 작식이 힘거니니아</div>
-                <div class="message-time">2:12 PM</div>
-            </div>
         </div>
         
         <div class="chat-input-container">
             <div class="chat-input-actions">
-                <button class="chat-input-btn">➕</button>
-                <button class="chat-input-btn">📎</button>
+            
+            	<input type="file" id="selectedFile" style="display: none;" />
+				<button type="button" class="chat-input-btn" id="fileSelectBtn">📎</button>
+                
             </div>
             <input type="text" class="chat-input" placeholder="Type a message...">
             <button class="chat-send-btn">➤</button>
@@ -569,88 +628,88 @@
         
         <div class="right-sidebar-content">
             <div class="section-header">
-                <div>Member <span>2</span></div>
-                <div class="section-toggle">^</div>
+                <div>Member</div>
             </div>
             
             <div class="member-list">
                 <div class="member-item">
-                    <div class="profile-img">
-                        <img src="https://via.placeholder.com/40/8c4aff/ffffff?text=서" alt="프로필">
-                    </div>
+                    <div class="chat-avatar avatar-red"></div>
+                    
                     <div class="member-info">
-                        <div class="member-name">서동진</div>
-                        <div class="member-status">온라인</div>
+                        <div class="member-name"><%= myNickname %></div>
                     </div>
                 </div>
                 
                 <div class="member-item">
-                    <div class="profile-img">
-                        <img src="https://via.placeholder.com/40/4a8cff/ffffff?text=팀" alt="프로필">
+                    <div class="chat-avatar avatar-red">
+                       
                     </div>
                     <div class="member-info">
-                        <div class="member-name">집주인 첫째 딸</div>
-                        <div class="member-status">온라인</div>
+                        <div class="member-name" id="targetNicknameArea">상대방 닉네임 로딩중...</div>
                     </div>
-                </div>
-                
-                <div class="add-member">
-                    <div style="font-size: 20px;">+</div>
-                    <div>Add</div>
                 </div>
             </div>
             
+                <div class="add-member" id ="addMem">
+				  <div style="font-size: 20px;">+</div>
+				  <div> Add </div>
+				</div>
+				
+				<!-- 오른쪽: 그룹 채팅용 -->
+				<div id="inviteModalRight" class="invite-modal">
+				  <button class="close-modal">✕</button>
+				  <h3>친구 목록</h3>
+				  <div id="friend-list-right">여기에 친구 목록이 표시될 예정입니다.</div>
+				  <button id="startChatBtnRight" style="margin-top: 10px;">선택한 친구 초대</button>
+				</div>
+            
+            
             <div class="section-header">
-                <div>디서함</div>
-                <div class="section-toggle">^</div>
+                <div>티서랍</div>
             </div>
             
             <div class="file-list">
-                <div class="file-item">
-                    <div class="file-icon">📄</div>
-                    <div class="file-info">
-                        <div class="file-name">자소서.pdf</div>
-                        <div class="file-meta">120 kB</div>
-                    </div>
-                    <div class="file-download">⬇️</div>
+               
                 </div>
                 
-                <div class="file-item">
-                    <div class="file-icon">📄</div>
-                    <div class="file-info">
-                        <div class="file-name">수정본.pdf</div>
-                        <div class="file-meta">150 kB</div>
-                    </div>
-                    <div class="file-download">⬇️</div>
-                </div>
             </div>
             
-            <div class="section-header">
-                <div>캘린더</div>
-                <div class="section-toggle">^</div>
-            </div>
-            
-            <div style="padding: 15px 20px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                    <div style="font-weight: bold;">4.16</div>
-                    <div style="font-size: 12px; color: #ff8c4a;">오늘</div>
-                </div>
-                <div style="background-color: #f5f5f5; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
-                    <div style="font-weight: bold;">물리 중간고사</div>
-                    <div style="font-size: 12px; color: #888;">KH정보교육원 강남실험 1관</div>
-                </div>
-                
-                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                    <div style="font-weight: bold;">4.16</div>
-                    <div style="font-size: 12px; color: #ff8c4a;">오늘</div>
-                </div>
-                <div style="background-color: #f5f5f5; padding: 10px; border-radius: 4px;">
-                    <div style="font-weight: bold;">화학 중간고사</div>
-                    <div style="font-size: 12px; color: #888;">KH정보교육원 강남실험 1관</div>
-                </div>
-            </div>
-        </div>
-    </div>
+			<div class="section-header">
+			    <div>캘린더</div>
+			    <div class="add-cal" style="font-size: 20px;" onclick='showCalendarForm()'>
+			    	+
+		    	</div>
+			</div>
+			
+			<!-- 일정 입력 폼 -->
+			<div id="calendarForm" style="display: none; padding: 15px; border: 1px solid #ccc; margin-top: 10px;">
+			    <div style="margin-bottom: 10px;">
+			        <label for="calTitle">제목:</label>
+			        <input type="text" id="calTitle" name="calTitle" style="width: 100%;" required>
+			    </div>
+			    <div style="margin-bottom: 10px;">
+			        <label for="calStart">시작일:</label>
+			        <input type="date" id="calStart" name="calStart" style="width: 100%;" required>
+			    </div>
+			    <div style="margin-bottom: 10px;">
+			        <label for="calEnd">종료일:</label>
+			        <input type="date" id="calEnd" name="calEnd" style="width: 100%;" required>
+			    </div>
+			    <div style="margin-bottom: 10px;">
+			        <label for="calDescription">내용:</label>
+			        <input id="calDescription" name="calContent" style="width: 100%; height: 60px;" required>
+			    </div>
+			    <input type="hidden" id="calChatId" name="calChatId" value="${ roomId }" />
+			    <div style="text-align: right;">
+			    	<button onclick="addCal()">저장</button>
+			        <button onclick="cancelAddCal()">취소</button>
+			    </div>
+			</div>
+			
+			<div class="calendar-list" style="padding: 15px 20px;">
+			    <!-- JS로 일정이 렌더링됨 -->
+			</div>
+         </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -675,8 +734,8 @@
                     document.querySelector('.chat-header h3').textContent = name;
                     
                     // 프로필 이미지도 업데이트
-                    const profileImg = this.querySelector('.profile-img img').src;
-                    document.querySelector('.chat-profile-img img').src = profileImg;
+                    const profileImg = this.querySelector('.chat-avata avatar-red').src;
+                    document.querySelector('.chat-avatar avatar-red').src = profileImg;
                 });
             });
 
@@ -704,6 +763,908 @@
             });
         });
     </script>
+    
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const logout = document.querySelector(".logout-icon");
+  if (logout) {
+    logout.addEventListener("click", function () {
+      window.location.href = "/logout.me"; // ✅ 절대경로
+    });
+  }
+});
+</script>
+
+<!-- ✅ 닉네임 설정: WebSocket 연결 전에! -->
+
+<script>
+    const nickname = "<%= ((com.kh.tt.member.model.vo.Member)session.getAttribute("loginMember")).getMemName() %>";
+    const myMemNo = "<%= ((com.kh.tt.member.model.vo.Member)session.getAttribute("loginMember")).getMemNo() %>";
+</script>
+
+<script>
+//✅ 전역에서 사용 가능하게
+function isImageFile(filename) {
+    return /\.(jpg|jpeg|png|gif)$/i.test(filename);
+}
+
+function appendMessage(data, type) {
+    let content = "";
+    
+    const contextPath = "${pageContext.request.contextPath}";
+
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("message-wrapper", type); // 감싸는 div
+    wrapper.dataset.messageId = data.messageNo ?? "";
+
+    const bubble = document.createElement("div");
+    bubble.classList.add("message-bubble", type);
+
+    
+    // 발신자 표시 (받은 메시지일 경우)
+    if (type === 'received') {
+        content += `<div><strong>\${data.sender}</strong></div>`;
+    }
+
+    
+
+ // ✅ 새로 보낸 파일 → 이미지 처리
+    if (data.type === "file" && data.file && data.file.type.startsWith("image")) {
+        const imageUrl = data.file.fileUrl;
+        const fileName = data.file.name;
+
+        content += `
+            <a href="\${imageUrl}" download="\${fileName}" class="chat-attachment">
+                <img src="\${imageUrl}" alt="\${fileName}" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" />
+            </a>`;
+    }
+    // ✅ 이전 메시지 → originName + changeName 둘다 있으면 이미지
+    else if (data.changeName && isImageFile(data.changeName)) {
+        const imageUrl = contextPath + "/resources/uploadFiles/" + data.changeName;
+        const fileName = data.originName ?? "";
+
+        content += `
+            <a href="\${imageUrl}" download="\${fileName}" class="chat-attachment">
+                <img src="\${imageUrl}" alt="\${fileName}" style="max-width: 200px; border-radius: 8px; margin-top: 5px;" />
+            </a>`;
+            
+            
+    }else if(data.type === "file" && data.file){
+    	const fileUrl = data.file.fileUrl;
+        const fileName = data.file.name;
+        
+        content += `
+            <a href="\${fileUrl}" download="\${fileName}" class="chat-attachment"
+               style="display: inline-block; background: #eaeaea; padding: 10px; border-radius: 10px; margin-top: 5px;">
+                📄 \${fileName}
+            </a>`;
+            
+            
+    }else if(data.changeName && !isImageFile(data.changeName)){
+    	const fileUrl = contextPath + "/resources/uploadFiles/" + data.changeName;
+        const fileName = data.originName;
+        
+        content += `
+            <a href="\${fileUrl}" download="\${fileName}" class="chat-attachment"
+               style="display: inline-block; background: #eaeaea; padding: 10px; border-radius: 10px; margin-top: 5px;">
+                📄 \${fileName}
+            </a>`;
+    }
+ 
+
+    // ✅ 일반 텍스트
+    else {
+        const textContent = data.text ?? data.messageContent ?? '';
+        content += `<div>\${textContent}</div>`;
+    }
+
+    content += `<div class="message-time">\${formatTime(data.time || data.sendTime)}</div>`;
+    
+    bubble.innerHTML = content;
+    
+    // 삭제 ⋮ 버튼 (보낸 메시지만)
+    if (type === "sent") {
+        const menuWrapper = document.createElement("div");
+        menuWrapper.className = "message-menu-wrapper";
+
+        menuWrapper.innerHTML = `
+            <button class="message-menu-btn">⋮</button>
+            <div class="message-dropdown hidden">
+                <div class="message-action delete" style="font-size=9">삭제</div>
+            </div>
+        `;
+
+        wrapper.appendChild(menuWrapper);  // 왼쪽
+        
+        const deleteBtn = menuWrapper.querySelector(".message-action.delete");
+        deleteBtn.addEventListener("click", function () {
+            if (confirm("정말 이 메시지를 삭제하시겠습니까?")) {
+
+                const messageNo = data.messageNo;
+                console.log("메segi넘버"+messageNo);
+
+                if (!messageNo) {
+                    console.warn("❌ messageNo 없음, 삭제 요청 생략");
+                    return;
+                }
+                
+                const formData = new URLSearchParams();
+                console.log("formDate si ble" + formData);
+                formData.append("messageNo", messageNo);
+
+                fetch(`\${contextPath}/message/delete`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `messageNo=\${messageNo}`
+                })
+                .then(res => res.text())
+                .then(result => {
+                    if (result === "success") {
+                        alert("메시지를 삭제했습니다.");
+                        
+                        socket.send(JSON.stringify({
+                            type: "messageDeleted",
+                            messageNo: messageNo
+                        }));
+                        
+                        wrapper.remove();
+                    } else {
+                        alert("❌ 메시지 삭제 실패");
+                    }
+                })
+                .catch(err => {
+                    console.error("❌ 메시지 삭제 에러:", err);
+                });
+            }
+        });
+
+       
+    }
+    
+    
+    
+    
+    wrapper.appendChild(bubble); // 오른쪽
+    document.querySelector(".chat-messages").appendChild(wrapper);
+    scrollToBottom(); // ✅ 맨 아래로 이동
+}
+
+
+
+function scrollToBottom() {
+    const chatBox = document.querySelector(".chat-messages");
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+
+
+
+function formatTime(isoString) {
+    const date = new Date(isoString);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+
+//메시지 삭제
+document.addEventListener("click", function (e) {
+  // 메뉴 열기
+  if (e.target.matches(".message-menu-btn")) {
+    const dropdown = e.target.nextElementSibling;
+    dropdown.classList.toggle("show");
+  }
+
+  // 삭제 처리
+  if (e.target.classList.contains("delete")) {
+    const bubble = e.target.closest(".message-bubble");
+    if (bubble) bubble.remove(); // 👉 필요 시 DB 삭제 요청 추가
+  }
+
+  // 드롭다운 외부 클릭 시 닫기
+  if (!e.target.closest(".message-menu-wrapper")) {
+    document.querySelectorAll(".message-dropdown").forEach(el => el.classList.remove("show"));
+  }
+});
+
+
+
+
+</script>
+
+
+<!-- ================웹소켓====================== -->
+<script>
+    const contextPath = "<%= request.getContextPath() %>";
+</script>
+
+<script>
+window.isNotificationOn = true;// 🔔 기본 ON 상태
+let socket;
+
+document.addEventListener("DOMContentLoaded", function () {
+    const contextPath = '${pageContext.request.contextPath}';
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get("roomId");
+    const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbmEiLCJtZW1ObyI6MSwibWVtTmFtZSI6Iuq0gOumrOyekCJ9.GrFjymLAjAiEyIZYnRX7uSU5TRSu6bcs9GvBgHxCOX4"; // JWT 토큰 (생략 가능)
+
+    if (!roomId) return;
+
+    const ip = location.hostname;
+    const encodedToken = encodeURIComponent(token);
+
+    //const wsUrl = `ws://\${ip}:8333\${contextPath}/chat/\${roomId}?token=\${encodedToken}`;
+    const wsUrl = `wss://threestar.r-e.kr/threeStar/chat/\${roomId}?token=\${encodedToken}`;
+    
+
+    socket = new WebSocket(wsUrl);
+
+    socket.onopen = () => console.log("✅ WebSocket 연결 성공");
+    socket.onerror = (error) => console.error("❌ WebSocket 에러", error);
+    socket.onclose = () => console.log("🔌 WebSocket 종료됨");
+    
+
+    const chatInput = document.querySelector(".chat-input");
+    const chatSendBtn = document.querySelector(".chat-send-btn");
+
+    chatSendBtn.addEventListener("click", sendMessage);
+    chatInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    
+    
+    // 🔔 종 아이콘 클릭 → 알림 on/off 토글
+    const savedNotificationState = localStorage.getItem("isNotificationOn");
+    window.isNotificationOn = savedNotificationState !== null ? savedNotificationState === "true" : true;
+    
+    const alarmIcon = document.querySelector(".alarm-icon");
+    if (alarmIcon) {
+        // ✅ 상태 반영 (새로고침 직후 아이콘 모양 변경)
+        alarmIcon.classList.toggle("muted", !window.isNotificationOn);
+        
+        // ✅ 클릭 시 상태 토글 + 저장
+       alarmIcon.addEventListener("click", () => {
+           window.isNotificationOn = !window.isNotificationOn;
+           localStorage.setItem("isNotificationOn", window.isNotificationOn); // ✅ 이 줄 추가!
+           alarmIcon.classList.toggle("muted", !window.isNotificationOn);
+       });
+    }
+
+    socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        
+        if (data.type === "messageDeleted") {
+            const target = document.querySelector(`[data-message-id="\${data.messageNo}"]`);
+            if (target) target.remove();  // 다른 사용자 화면에서도 삭제됨
+            return; // 더 이상 처리하지 않음
+        }
+        
+        
+        const type = data.sender === nickname ? "sent" : "received";
+        appendMessage(data, type);
+
+        // 🔁 티서랍에도 실시간 반영
+        if (data.type === "file") {
+            appendToDrawer(data);
+        }
+
+        // 알림
+        if (window.isNotificationOn && data.sender !== nickname && !document.hasFocus()) {
+            showNotification(data.sender, data.text || data.messageContent || "📎 파일이 도착했어요!");
+        }
+        
+        
+    };
+
+    function showNotification(sender, message) {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    createNotification(sender, message);
+                }
+            });
+        } else {
+            createNotification(sender, message);
+        }
+    }
+
+    function createNotification(sender, message) {
+        const notification = new Notification(`💬 \${sender}님이 보낸 메시지`, {
+            body: message,
+            icon: contextPath + '/resources/images/chat-icon.png'
+        });
+
+        notification.onclick = () => window.focus();
+    }
+
+
+
+    
+    
+    
+    
+
+    function sendMessage() { 
+        const msg = chatInput.value.trim();
+        if (!msg) return;
+
+        const payload = {
+            sender: nickname,
+            text: msg,
+            time: new Date().toISOString(),
+            type: "chat"
+        };
+
+        socket.send(JSON.stringify(payload));
+        chatInput.value = "";
+        
+     // 채팅방 preview 갱신
+        const previewSelector = `.message-item .message-name`;
+        document.querySelectorAll(previewSelector).forEach(nameEl => {
+          if (nameEl.textContent === document.querySelector("#chatRoomTitle").textContent) {
+            const previewEl = nameEl.parentElement.querySelector(".message-preview");
+            if (previewEl) previewEl.textContent = msg;
+          }
+        });
+    }
+});
+
+
+
+
+
+<!-- 이전채팅가져오기 -->
+document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get("roomId");
+
+    fetch(`${pageContext.request.contextPath}/message/history?roomId=\${roomId}`)  // ✅ 백틱 사용 → 템플릿 리터럴
+        .then(response => response.json())
+        .then(messages => {
+            console.log("가져온 이전 메시지들:", messages);
+
+            messages.forEach(msg => {
+                console.log("메시지 보낸 사람:", msg.msMemNo, "내 회원번호:", myMemNo);
+
+                // ✅ 회원번호로 보낸 사람 판별
+                const type = parseInt(msg.msMemNo) === parseInt(myMemNo) ? "sent" : "received";
+
+                appendMessage(msg, type);
+            });
+            scrollToBottom(); // ✅ 로딩 끝나고 아래로 이동
+        })
+        .catch(err => {
+            console.error("❌ 이전 메시지 불러오기 실패:", err);
+        });
+});
+
+
+
+<!-- ------------------------------------------------------------------ -->
+<!-- 채팅방 이름 채팅방 內 사용자 이름 변경 -->
+document.addEventListener("DOMContentLoaded", function () {
+    const roomId = new URLSearchParams(window.location.search).get("roomId");
+    if (!roomId) return;
+
+    // 채팅방 이름 설정
+    fetch(`\${contextPath}/chattingRoom/roomName?roomId=\${roomId}`)
+        .then(res => res.text())
+        .then(name => {
+            document.querySelector("#chatRoomTitle").textContent = name;
+            
+            const avatarEl = document.querySelector(".chat-header .chat-avatar");
+            if (avatarEl) {
+                avatarEl.textContent = name.trim().charAt(0);
+            }
+        });
+
+    
+    // 채팅방 참여자 목록 표시
+    fetch(`\${contextPath}/chattingRoom/members?roomId=\${roomId}`)
+    .then(response => response.json() )
+    .then(data => {
+      const memberList = document.querySelector(".member-list");
+      memberList.innerHTML = ""; // 초기화
+
+      data.forEach(member => {
+    	  const displayName = member.memName || "이름없음";
+          const firstChar = displayName.charAt(0);
+    	  
+        const memberItem = document.createElement("div");
+        memberItem.className = "member-item";
+
+          
+        memberItem.innerHTML = ` 
+          <div class="chat-avatar avatar-red">\${firstChar}</div>
+          
+          
+          <div class="member-info">
+            <div class="member-name">\${member.memName}</div>
+          </div>
+        `;
+
+        memberList.appendChild(memberItem);
+      });
+    })
+    .catch(err => {
+      console.error("❌ 채팅방 멤버 목록 가져오기 실패:", err);
+    });
+});
+
+
+
+//==============채팅방 나가기=============================
+document.addEventListener("DOMContentLoaded", function () {
+    const leaveBtn = document.getElementById("leaveRoomBtn");
+    
+
+    leaveBtn.addEventListener("click", function () {
+        if (confirm("정말 이 채팅방에서 나가시겠습니까?")) {
+            const roomId = new URLSearchParams(window.location.search).get("roomId");
+            const memNo = myMemNo;
+
+            fetch("${pageContext.request.contextPath}/chattingRoom/exit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `chatId=\${roomId}&memNo=\${memNo}`
+            })
+            .then(res => {
+                return res.text();
+            })
+            .then(data => {
+                if (data === "success") {
+                    alert("채팅방에서 나갔습니다.");
+                    window.location.href = contextPath + "/message/mainForm";
+                } else {
+                    alert("채팅방 나가기 실패");
+                }
+            })
+            .catch(err => {
+                console.error("❌ 채팅방 나가기 에러:", err);
+            });
+        }
+    });
+});
+
+
+//==이미지 업로드 時====
+	
+const fileInput = document.getElementById("selectedFile");
+const fileSelectBtn = document.getElementById("fileSelectBtn");
+const roomId = new URLSearchParams(window.location.search).get("roomId");
+
+
+// 📎 버튼 클릭 → 파일 선택창 열기
+fileSelectBtn.addEventListener("click", () => {
+    fileInput.click();
+});
+
+// 파일 선택 후 이벤트
+fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    
+    const originName = file.name;
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // ✅ 안정화 위한 딜레이 (UI 렌더링 고려)
+    setTimeout(() => {
+        fetch(`\${contextPath}/message/upload`, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.imageUrl) {
+                console.error("❌ 이미지 업로드 실패");
+                return;
+            }
+
+            const fileUrl = data.imageUrl;
+            const changeName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+
+            // ✅ WebSocket으로 실시간 전송
+            const payload = {
+                sender: nickname,
+                text: file.name,
+                time: new Date().toISOString(),
+                type: "file",
+                file: {
+                    name: changeName,
+                    type: file.type,
+                    fileUrl: fileUrl
+                }
+            };
+
+            socket.send(JSON.stringify(payload));
+
+            // ✅ DB 저장용 요청 (Message 테이블용)
+            fetch(`\${contextPath}/message/save`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+               
+                
+                body: JSON.stringify({
+                    sender: nickname,
+                    messageContent: originName,
+                    originName: originName,
+                    changeName: changeName,
+                    fileType: file.type,
+                    type: "file",
+                    msChatId: roomId,
+                    msMemNo: myMemNo
+                })
+            })
+            .then(res => res.text())
+            .then(result => {
+                if (result !== "success") {
+                    console.error("❌ DB 저장 실패");
+                }
+            });
+
+        })
+        .catch(err => {
+            console.error("❌ 업로드 또는 전송 실패:", err);
+        });
+    }, 100);
+});
+
+
+//티 서랍==============================================================
+document.addEventListener("DOMContentLoaded", function () {
+    const roomId = <%= roomId %>;
+    const contextPath = "<%= request.getContextPath() %>";
+
+    fetch(`\${contextPath}/message/download/files?roomId=\${roomId}`)
+        .then(response => {
+            if (!response.ok) throw new Error("404 or server error");
+            return response.json();
+        })
+        .then(files => {
+            const fileListDiv = document.querySelector(".file-list");
+            fileListDiv.innerHTML = "";
+
+            files.forEach(file => {
+                const isImage = /\.(jpg|jpeg|png|gif)$/i.test(file.originName);
+                const fileSizeKb = file.fileSize ? Math.round(file.fileSize / 1024) : "?";
+                const downloadUrl = `\${contextPath}/message/download?fileName=\${encodeURIComponent(file.changeName)}`;
+
+                const html = `
+                    <div class="file-item">
+                        <div class="file-icon">${isImage ? "🖼️" : "📄"}</div>
+                        <div class="file-info">
+                            <div class="file-name">\${file.originName}</div>
+                        </div>
+                        <a class="file-download" 
+                           href="\${downloadUrl}" 
+                           download="\${file.originName}" 
+                           target="_blank">⬇️</a>
+                    </div>
+                `;
+                fileListDiv.innerHTML += html;
+            });
+        })
+        .catch(err => {
+            console.error("❌ 파일 목록 불러오기 실패:", err);
+        });
+});
+
+//파일 전송 후 실시간으로 우측 파일 목록이 갱신
+function appendToDrawer(data) {
+    if (!data || data.type !== "file" || !data.file) return;
+
+    const fileListDiv = document.querySelector(".file-list");
+    const isImage = isImageFile(data.file.name);
+    const downloadUrl = data.file.fileUrl;
+    const fileName = data.file.name;
+
+    const html = `
+        <div class="file-item">
+            <div class="file-icon">${isImage ? "🖼️" : "📄"}</div>
+            <div class="file-info">
+                <div class="file-name">\${fileName}</div>
+            </div>
+            <a class="file-download" 
+               href="\${downloadUrl}" 
+               download="\${fileName}" 
+               target="_blank">⬇️</a>
+        </div>
+    `;
+    fileListDiv.insertAdjacentHTML("afterbegin", html);
+}
+
+</script>
+
+
+<script>
+
+
+
+//=================오른쪽 +add 눌렀을 때 동작====================
+document.addEventListener('DOMContentLoaded', function () {
+	  const addMemBtn = document.getElementById('addMem');
+	  const inviteModalRight = document.getElementById('inviteModalRight');
+	  const closeModalRight = inviteModalRight.querySelector('.close-modal');
+
+	  addMemBtn.addEventListener('click', () => {
+	    inviteModalRight.style.display = 'block';
+	    loadFriendListForInvite();
+	  });
+
+	  closeModalRight.addEventListener('click', () => {
+	    inviteModalRight.style.display = 'none';
+	  });
+
+	  function loadFriendListForInvite() {
+	    const container = document.getElementById('friend-list-right');
+	    container.innerHTML = '';
+
+	    fetch(`\${contextPath}/friends/list?memNo=\${myMemNo}`)
+	      .then(response => response.json())
+	      .then(data => {
+	        data.forEach(friend => {
+	          const label = document.createElement('label');
+	          label.classList.add('friend-item');
+	          label.innerHTML = `
+	            <input type="checkbox" class="invite-select" value="\${friend.toMem}">
+	            \${friend.toNickname}
+	          `;
+	          container.appendChild(label);
+	        });
+	      });
+	  }
+
+	  
+	  document.getElementById("startChatBtnRight").addEventListener("click", () => {
+	    const checked = [...document.querySelectorAll(".invite-select:checked")];
+	    const selectedIds = checked.map(cb => parseInt(cb.value));
+
+	    if (selectedIds.length === 0) {
+	      alert("초대할 친구를 선택하세요.");
+	      return;
+	    }
+
+	    const roomId = new URLSearchParams(window.location.search).get("roomId");
+
+	    fetch(`\${contextPath}/chattingRoom/invite`, {
+	      method: "POST",
+	      headers: { "Content-Type": "application/json" },
+	      body: JSON.stringify({
+	        chatId: roomId,
+	        members: selectedIds
+	      })
+	    })
+	      .then(result => result.text())
+	      .then(result => {
+	        if (result === "success") {
+	          alert("✅ 초대 완료");
+	          location.reload(); //현재 페이지 리로드하기
+	        } else {
+	          alert("❌ 초대 실패");
+	        }
+	      });
+	  });
+	});
+
+
+
+
+	document.addEventListener("DOMContentLoaded", function () {
+		  const roomId = new URLSearchParams(window.location.search).get("roomId");
+		  if (!roomId) return;
+	
+		  fetch(`\${contextPath}/chattingRoom/members?roomId=\${roomId}`)
+		    .then(res => res.json())
+		    .then(data => {
+		    	document.querySelector("#chatRoomTitle + span").innerHTML = `&nbsp;\${data.length} participants`;
+
+		    })
+		    .catch(err => {
+		      console.error("❌ 참여자 수 갱신 실패:", err);
+		    });
+		});
+
+	
+	
+	
+//========================채팅창 이름 변경 ========================
+document.getElementById("editRoomNameBtn").addEventListener("click", () => {
+    const oldName = document.getElementById("chatRoomTitle").textContent;
+    const newName = prompt("채팅방 이름을 입력하세요:", oldName);
+    if (!newName || newName === oldName) return;
+
+    const roomId = new URLSearchParams(window.location.search).get("roomId");
+
+    fetch(`\${contextPath}/chattingRoom/rename`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `roomId=\${roomId}&newName=\${encodeURIComponent(newName)}`
+    })
+    .then(res => res.text())
+    .then(result => {
+        if (result === "success") {
+            // 상단 이름/이니셜 갱신
+            document.getElementById("chatRoomTitle").textContent = newName;
+            const avatarEl = document.querySelector(".chat-header .chat-avatar");
+            if (avatarEl) avatarEl.textContent = newName.charAt(0);
+
+            // 좌측 목록도 이름 + 이니셜 동기화
+            document.querySelectorAll(".message-item").forEach(item => {
+                const nameEl = item.querySelector(".message-name");
+                const avatarEl = item.querySelector(".chat-avatar");
+                if (nameEl && nameEl.textContent === oldName) {
+                    nameEl.textContent = newName;
+                    if (avatarEl) avatarEl.textContent = newName.charAt(0);
+                }
+            });
+
+            alert("채팅방 이름이 변경되었습니다.");
+        } else {
+            alert("❌ 채팅방 이름 변경 실패");
+        }
+    });
+});
+
+
+</script>
+
+<!-- 메시지 내 캘린더 삽입 JS -->
+<script>
+    // 일정 입력 폼 표시
+    window.showCalendarForm = function() {
+        console.log("일정삽입테스트");  
+        document.getElementById('calendarForm').style.display = 'block';
+    };
+    
+    // 일정 입력 취소
+    function cancelAddCal() {
+        document.getElementById('calendarForm').style.display = 'none';
+    }
+    
+    // 일정 추가
+    function addCal() {
+        // 폼에서 입력값 가져오기
+        const contextPath = "<%= request.getContextPath() %>";
+        
+        const title = document.getElementById('calTitle').value;
+        const startDate = document.getElementById('calStart').value;
+        const endDate = document.getElementById('calEnd').value || startDate;
+        const description = document.getElementById('calDescription').value;
+        const calChatId = document.getElementById('calChatId').value;
+        
+        // 필수 입력값 검증
+        if (!title || !startDate) {
+            alert('제목과 날짜는 필수 입력 항목입니다.');
+            return;
+        }
+        
+        // API 호출
+        fetch(`\${contextPath}/message/calendarInsertMessage.do?calChatId=\${roomId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                calTitle: title,
+                calStart: startDate,
+                calEnd: endDate || startDate,
+                calContent: description
+            })
+        })
+        .then(response => response.text())
+		.then(text => {
+		    try {
+		        const data = JSON.parse(text);
+		        if (data.success) {
+		            alert('일정이 저장되었습니다.');
+		            location.reload();
+		        } else {
+		            alert('저장 실패: ' + (data.message || '알 수 없는 오류'));
+		        }
+		    } catch (e) {
+		        alert('JSON 파싱 실패. 원본 응답을 확인하세요.');
+		        console.error("파싱 오류:", e);
+		        console.log("서버 응답 내용:", text); // 이걸 통해 정확한 HTML/에러 내용을 볼 수 있음
+		    }
+		})
+        
+        // 폼 숨기기
+        document.getElementById('calendarForm').style.display = 'none';
+    }
+</script>
+
+<!-- 메시지 내 캘린더 조회 JS -->
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+	    const roomId = <%= roomId %>;
+	    const contextPath = "<%= request.getContextPath() %>";
+	    
+	    console.log("roomId:", roomId);
+	    console.log("contextPath:", contextPath);
+	
+	    fetch(`\${contextPath}/message/MessageCalender.do?roomId=\${roomId}`)
+        .then(resp => {
+            console.log("응답 상태:", resp.status);
+            if (!resp.ok) throw new Error("서버 오류 또는 404");
+            return resp.json();
+        })
+        .then(renderEvents)
+        .catch(err => {
+            console.error("❌ 일정 불러오기 실패:", err);
+            document.querySelector(".calendar-list").innerHTML =
+                "<p>일정을 불러오는 중 오류가 발생했습니다.</p>";
+        });
+	});
+	
+	function renderEvents(events) {
+	    const calList = document.querySelector(".calendar-list");
+	    calList.innerHTML = "";
+
+	    if (events?.length) {
+	        events.forEach(ev => {
+	        	calList.insertAdjacentHTML(
+       			  "beforeend",
+       			  `<div class="cal-item" data-id="\${ev.calId}" style="margin-bottom:10px">
+       			       <div style="font-size:12px;color:#888;">\${ev.calStart} ~ \${ev.calEnd}</div>
+       			       <div style="font-weight:bold;background:#f5f5f5;padding:10px;border-radius:4px;position:relative">
+       			           <div>\${ev.calTitle}</div>
+       			           <div style="font-size:12px;color:#888">\${ev.calContent}</div>
+       			           <button class="del-btn" style="position:absolute;top:8px;right:8px;font-size:11px">
+       			               삭제
+       			           </button>
+       			       </div>
+       			   </div>`
+       			);
+	        });
+	    } else {
+	        calList.innerHTML = "<p>등록된 일정이 없습니다.</p>";
+	    }
+	}
+</script>
+
+<!-- 메시지 내 캘린더 삭제 JS -->
+<script>
+	document.querySelector(".calendar-list").addEventListener("click", e => {
+	    if (!e.target.classList.contains("del-btn")) return;
+	
+	    const itemEl   = e.target.closest(".cal-item");
+	    const calId    = itemEl.dataset.id;
+	    const contextPath  = "<%= request.getContextPath() %>";
+	
+	    if (!confirm("정말 삭제할까요?")) return;
+	
+	    fetch(`\${contextPath}/message/MessageCalenderUpdate.do`, {
+	        method : "POST",
+	        headers: {"Content-Type":"application/x-www-form-urlencoded"},
+	        body   : new URLSearchParams({calId})
+	    })
+	    .then(r => r.json())
+	    .then(res => {
+	        if (res.success) {
+	            itemEl.remove();                    // 화면에서 바로 제거
+	            alert("삭제되었습니다.");
+	        } else {
+	            alert("삭제 실패: " + res.message);
+	        }
+	    })
+	    .catch(err => {
+	        console.error(err);
+	        alert("통신 오류가 발생했습니다.");
+	    });
+	});
+</script>
+<!---------------------------------------------------------------------->
 
 </body>
 </html>

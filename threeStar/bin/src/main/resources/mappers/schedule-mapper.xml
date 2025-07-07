@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="scheduleMapper">
+
+   <resultMap id="scheduleResult" type="Schedule">
+      <result column="sc_id" property="scId"/>
+      <result column="sc_title" property="scTitle"/>
+      <result column="sc_date" property="scDate"/>
+      <result column="sc_class_code" property="scClassCode"/>
+   </resultMap>
+   
+    <select id="selectScheduleList" resultMap="scheduleResult">
+	select
+	       sc_id
+	     , sc_title
+	     , sc_date
+	     , sc_class_code
+	  from schedule
+	 where sc_class_code = #{scClassCode}
+	 order
+	    by sc_date
+   </select>
+   
+	<insert id="insertSchedule">
+	   INSERT INTO SCHEDULE (
+	        SC_ID,
+	        SC_TITLE,
+	        SC_DATE,
+	        SC_CLASS_CODE
+	   )
+	   VALUES (
+	        SEQ_SC_ID.NEXTVAL,
+	        #{scTitle},
+	        TO_DATE(#{scDate}, 'YYYY-MM-DD'),
+	        #{scClassCode}
+	   )
+	</insert>
+   
+   <delete id="deleteSchedule">
+	DELETE FROM SCHEDULE
+	WHERE SC_ID = #{scId}
+   </delete>
+   
+   <update id="updateSchedule">
+      update schedule
+         set sc_title = #{scTitle}
+           , sc_date = TO_DATE(#{scDate}, 'YYYY-MM-DD')
+        where sc_id = #{scId}   
+   </update>
+</mapper>

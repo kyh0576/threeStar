@@ -7,7 +7,6 @@
 <title>ThreeStar</title>
 </head>
 <body>
-	<button onclick="location.href='loginForm.me'">로그인</button>
-	<button onclick="location.href='signinForm.me'">회원가입</button>
+	<jsp:forward page="WEB-INF/views/member/loginForm.jsp"></jsp:forward>
 </body>
 </html>
